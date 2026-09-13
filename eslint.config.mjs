@@ -1,5 +1,6 @@
 // @ts-check
 import js from '@eslint/js';
+import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
@@ -147,10 +148,6 @@ export default tseslint.config(
       'storybook-static/**',
       'coverage/**',
       '.storybook/**',
-      'scripts/**',
-      '**/*.test.{ts,tsx}',
-      '**/*.stories.{ts,tsx}',  // stories use raw values for demos
-      'src/stories/**',         // docs stories also excluded
       '**/*.d.ts',
     ],
   },
@@ -173,7 +170,7 @@ export default tseslint.config(
   // ─── Free Security & A11y Reviewer ──────────────────────────────────────────
   jsxA11y.flatConfigs.recommended,
   security.configs.recommended,
-  // @ts-ignore - sonarjs.configs is defined at runtime but missing from some type definitions
+  // @ts-expect-error - sonarjs.configs is defined at runtime but missing from some type definitions
   sonarjs.configs?.recommended || {},
 
   // ─── Component source: design token enforcement ────────────────────────────
@@ -207,6 +204,82 @@ export default tseslint.config(
             'React.ElementRef is deprecated in React 19. Use React.ComponentRef<typeof X> instead.',
         },
       ],
+    },
+  },
+
+  // ─── Test files ────────────────────────────────────────────────────────────
+  {
+    files: ['**/*.test.{ts,tsx}', '**/__tests__/**'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+      'security/detect-object-injection': 'off',
+      'security/detect-non-literal-fs-filename': 'off',
+      'sonarjs/no-clear-text-protocols': 'off',
+      'sonarjs/no-collection-size-mischeck': 'off',
+      'react-hooks/rules-of-hooks': 'off',
+      'react-hooks/globals': 'off',
+      'design-tokens/no-hardcoded-colors': 'off',
+      'design-tokens/no-hardcoded-fonts': 'off',
+      'design-tokens/no-unsafe-tokens': 'off',
+    },
+  },
+
+  // ─── Stories ───────────────────────────────────────────────────────────────
+  {
+    files: ['**/*.stories.{ts,tsx}', 'src/stories/**'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+      'react-hooks/rules-of-hooks': 'off',
+      'design-tokens/no-hardcoded-colors': 'off',
+      'design-tokens/no-hardcoded-fonts': 'off',
+      'design-tokens/no-unsafe-tokens': 'off',
+      'security/detect-object-injection': 'off',
+      'sonarjs/no-nested-conditional': 'off',
+      'sonarjs/no-nested-template-literals': 'off',
+      'sonarjs/no-unused-vars': 'off',
+    },
+  },
+
+  // ─── Build & Verification Scripts ──────────────────────────────────────────
+  {
+    files: ['scripts/**/*.{js,mjs}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      'no-console': 'off',
+      'security/detect-non-literal-fs-filename': 'off',
+      'security/detect-child-process': 'off',
+      'security/detect-object-injection': 'off',
+      'security/detect-non-literal-regexp': 'off',
+      'sonarjs/os-command': 'off',
+      'sonarjs/slow-regex': 'off',
+      'sonarjs/concise-regex': 'off',
+      'sonarjs/cognitive-complexity': 'off',
+      'sonarjs/no-nested-conditional': 'off',
+      'sonarjs/no-nested-template-literals': 'off',
+      'sonarjs/no-redundant-optional': 'off',
+      'sonarjs/prefer-regexp-exec': 'off',
+      'sonarjs/no-duplicate-string': 'off',
+      'sonarjs/no-identical-functions': 'off',
+    },
+  },
+
+  // ─── Config Files ──────────────────────────────────────────────────────────
+  {
+    files: ['*.config.{ts,js,mjs}'],
+    rules: {
+      'security/detect-unsafe-regex': 'off',
     },
   },
 );

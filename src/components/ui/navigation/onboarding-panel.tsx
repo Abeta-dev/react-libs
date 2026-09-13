@@ -10,18 +10,18 @@ export interface OnboardingPanelProps extends Omit<React.HTMLAttributes<HTMLElem
   activeStep: number;
   steps: StepItem[];
   title: React.ReactNode;
-  subtitle?: React.ReactNode;
-  isFirstStep?: boolean;
-  isLastStep?: boolean;
-  nextDisabled?: boolean;
-  nextLabel?: string;
-  nextLoading?: boolean;
-  onBack?: () => void;
-  onContinue?: () => void;
-  onStepChange?: (stepIndex: number) => void;
-  onLogout?: () => void;
+  subtitle?: React.ReactNode | undefined;
+  isFirstStep?: boolean | undefined;
+  isLastStep?: boolean | undefined;
+  nextDisabled?: boolean | undefined;
+  nextLabel?: string | undefined;
+  nextLoading?: boolean | undefined;
+  onBack?: (() => void) | undefined;
+  onContinue?: (() => void) | undefined;
+  onStepChange?: ((stepIndex: number) => void) | undefined;
+  onLogout?: (() => void) | undefined;
   children: React.ReactNode;
-  scrollContainerRef?: React.RefObject<HTMLDivElement | null>;
+  scrollContainerRef?: React.RefObject<HTMLDivElement | null> | undefined;
 }
 
 export function OnboardingPanel({

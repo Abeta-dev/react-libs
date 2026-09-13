@@ -16,23 +16,23 @@ export interface DatePickerWithRangeProps extends Omit<
   React.HTMLAttributes<HTMLDivElement>,
   "onSelect"
 > {
-  date?: DateRange;
-  defaultDate?: DateRange;
-  setDate?: (date: DateRange | undefined) => void;
-  onSelect?: (date: DateRange | undefined) => void;
-  variant?: ButtonProps["variant"];
-  placeholder?: string;
-  triggerClassName?: string;
-  calendarClassName?: string;
-  cancelLabel?: string;
-  applyLabel?: string;
-  align?: PopoverContentProps["align"];
-  numberOfMonths?: number;
-  disabled?: CalendarComponentProps["disabled"];
-  defaultMonth?: Date;
-  showOutsideDays?: CalendarComponentProps["showOutsideDays"];
-  triggerAriaLabel?: string;
-  dialogAriaLabel?: string;
+  date?: DateRange | undefined;
+  defaultDate?: DateRange | undefined;
+  setDate?: ((date: DateRange | undefined) => void) | undefined;
+  onSelect?: ((date: DateRange | undefined) => void) | undefined;
+  variant?: ButtonProps["variant"] | undefined;
+  placeholder?: string | undefined;
+  triggerClassName?: string | undefined;
+  calendarClassName?: string | undefined;
+  cancelLabel?: string | undefined;
+  applyLabel?: string | undefined;
+  align?: PopoverContentProps["align"] | undefined;
+  numberOfMonths?: number | undefined;
+  disabled?: CalendarComponentProps["disabled"] | undefined;
+  defaultMonth?: Date | undefined;
+  showOutsideDays?: CalendarComponentProps["showOutsideDays"] | undefined;
+  triggerAriaLabel?: string | undefined;
+  dialogAriaLabel?: string | undefined;
 }
 
 function isSameDateRange(a?: DateRange, b?: DateRange): boolean {
@@ -151,6 +151,8 @@ export const DatePickerWithRange = React.forwardRef<
     return <span>{placeholder}</span>;
   }, [activeDate, placeholder]);
 
+  const resolvedDefaultMonth = defaultMonth ?? tempDate?.from ?? activeDate?.from;
+
   return (
     <div ref={ref} className={cn("grid gap-2", className)} {...props}>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -177,13 +179,13 @@ export const DatePickerWithRange = React.forwardRef<
         >
           <Calendar
             showOutsideDays={showOutsideDays}
-            className={calendarClassName}
+            {...(calendarClassName ? { className: calendarClassName } : {})}
             mode="range"
-            defaultMonth={defaultMonth ?? tempDate?.from ?? activeDate?.from}
-            selected={tempDate}
+            {...(resolvedDefaultMonth ? { defaultMonth: resolvedDefaultMonth } : {})}
+            {...(tempDate ? { selected: tempDate } : {})}
             onSelect={setTempDate}
             numberOfMonths={numberOfMonths}
-            disabled={disabled}
+            {...(disabled ? { disabled } : {})}
           />
           <div className="p-3 border-t flex justify-end gap-2 bg-muted/30">
             <Button variant="ghost" size="sm" onClick={() => setIsOpen(false)}>

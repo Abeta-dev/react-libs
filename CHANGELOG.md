@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-09-13
+
+### Changed
+- Adopted `"exactOptionalPropertyTypes": true` across the entire codebase (`tsconfig.json`) per ADR 0007, resolving all 28 type discrepancies across headless wrappers, DOM fetch calls, and internal interface definitions.
+- Expanded ESLint scope to cover 100% of repository assets (including tests, stories, and build scripts) with zero warnings (`eslint . --max-warnings 0`).
+- Documented 5 standalone primitive subpaths (`@umesh0492/react-libs/button`, `@umesh0492/react-libs/dialog`, `@umesh0492/react-libs/card`, `@umesh0492/react-libs/badge`, `@umesh0492/react-libs/input`) in the README subpath matrix and clarified modern ESM tree-shaking boundaries.
+- Streamlined Vitest runner concurrency in `vitest.config.ts`.
+- Cleaned up redundant regex escape characters in `scripts/docs-match-tree.mjs` and `scripts/inventory-symbols.mjs`.
+
+### Fixed
+- Fixed unescaped regular expressions and unused imports across build and truth-gate scripts (`scripts/build-css.mjs`, `scripts/docs-match-tree.mjs`, `scripts/inventory-symbols.mjs`).
+- Resolved Storybook accessibility issues in tabs and hover-card stories.
+- Updated ADR 0007 status to "Adopted" with domain resolutions.
+
 ## [0.6.1] - 2026-09-13
 
 ### Fixed

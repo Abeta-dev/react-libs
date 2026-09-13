@@ -8,23 +8,23 @@ import { formatBytes } from "../../../lib/formatters";
 export interface FileItem {
   id: string;
   file: File;
-  previewUrl?: string;
-  progress?: number;
-  error?: string;
+  previewUrl?: string | undefined;
+  progress?: number | undefined;
+  error?: string | undefined;
 }
 
 export interface FileUploadProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue"> {
-  value?: FileItem[];
-  defaultValue?: FileItem[];
-  onChange?: (files: FileItem[]) => void;
-  accept?: string;
-  maxSize?: number; // in bytes
-  maxFiles?: number;
-  multiple?: boolean;
-  disabled?: boolean;
-  label?: string;
-  description?: string;
-  error?: string;
+  value?: FileItem[] | undefined;
+  defaultValue?: FileItem[] | undefined;
+  onChange?: ((files: FileItem[]) => void) | undefined;
+  accept?: string | undefined;
+  maxSize?: number | undefined; // in bytes
+  maxFiles?: number | undefined;
+  multiple?: boolean | undefined;
+  disabled?: boolean | undefined;
+  label?: string | undefined;
+  description?: string | undefined;
+  error?: string | undefined;
 }
 
 export const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(

@@ -5,7 +5,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     // Controlled worker concurrency matching standard 2-vCPU CI runners to prevent process contention
-    maxWorkers: process.env.CI ? 2 : 2,
+    maxWorkers: 2,
     testTimeout: 20000,
     hookTimeout: 20000,
     setupFiles: ['./src/test/setup.ts'],

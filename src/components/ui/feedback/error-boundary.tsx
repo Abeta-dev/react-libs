@@ -11,11 +11,11 @@ export interface FallbackProps {
 export type FallbackRender = (props: FallbackProps) => React.ReactNode;
 
 export interface ErrorBoundaryProps {
-  children?: React.ReactNode;
-  fallback?: React.ReactNode | FallbackRender;
-  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
-  onReset?: () => void;
-  resetKeys?: unknown[];
+  children?: React.ReactNode | undefined;
+  fallback?: React.ReactNode | FallbackRender | undefined;
+  onError?: ((error: Error, errorInfo: React.ErrorInfo) => void) | undefined;
+  onReset?: (() => void) | undefined;
+  resetKeys?: unknown[] | undefined;
 }
 
 export interface ErrorBoundaryState {

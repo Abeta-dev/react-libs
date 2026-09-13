@@ -9,8 +9,8 @@ type CalendarStoryArgs = Omit<
   React.ComponentProps<typeof Calendar>,
   "selected" | "onSelect" | "mode"
 > & {
-  selected?: Date | DateRange | Date[];
-  mode?: "single" | "range" | "multiple";
+  selected?: Date | DateRange | Date[] | undefined;
+  mode?: "single" | "range" | "multiple" | undefined;
   onSelect?: unknown;
 };
 

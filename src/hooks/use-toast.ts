@@ -33,11 +33,11 @@ type Action =
     }
   | {
       type: "DISMISS_TOAST"
-      toastId?: ToasterToast["id"]
+      toastId?: ToasterToast["id"] | undefined
     }
   | {
       type: "REMOVE_TOAST"
-      toastId?: ToasterToast["id"]
+      toastId?: ToasterToast["id"] | undefined
     }
 
 interface State {

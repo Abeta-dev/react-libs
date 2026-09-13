@@ -93,7 +93,7 @@ export const MultiSection: Story = {
     return (
       <div className="w-[420px] p-4 space-y-2">
         {sections.map(s => (
-          <CollapsibleCard key={s.key} open={openSections[s.key]} onOpenChange={() => toggle(s.key)}>
+          <CollapsibleCard key={s.key} open={openSections[s.key] ?? false} onOpenChange={() => toggle(s.key)}>
             <CollapsibleCardTrigger>{s.title}</CollapsibleCardTrigger>
             <CollapsibleCardContent>
               <div className="px-4 py-3 text-sm text-muted-foreground">{s.content}</div>

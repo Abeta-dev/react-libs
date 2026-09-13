@@ -87,7 +87,7 @@ export const Default: Story = {
         variant={args.variant}
         size={args.size}
         disabled={args.disabled}
-        onPressedChange={args.onPressedChange}
+        {...(args.onPressedChange ? { onPressedChange: args.onPressedChange } : {})}
       >
         <Bold className="h-4 w-4" />
         <span className="ml-1 text-sm">Bold</span>

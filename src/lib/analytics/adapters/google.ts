@@ -1,7 +1,7 @@
 import type { AnalyticsAdapter, AnalyticsEvent } from "../types";
 
 export interface GoogleAnalyticsAdapterOptions {
-  measurementId?: string;
+  measurementId?: string | undefined;
 }
 
 declare global {
@@ -13,7 +13,7 @@ declare global {
 
 export class GoogleAnalyticsAdapter implements AnalyticsAdapter {
   public name = "google_analytics";
-  private measurementId?: string;
+  private measurementId?: string | undefined;
 
   constructor(options: GoogleAnalyticsAdapterOptions = {}) {
     this.measurementId = options.measurementId;

@@ -93,8 +93,8 @@ export const Default: Story = {
           <h3 className="font-semibold">Settings</h3>
           <p className="text-sm text-muted-foreground">Configure your project and team preferences.</p>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Project name</label>
-            <input className="w-full border rounded px-2 py-1 text-sm" defaultValue="My Project" />
+            <label htmlFor="project-name-input" className="text-sm font-medium">Project name</label>
+            <input id="project-name-input" className="w-full border rounded px-2 py-1 text-sm" defaultValue="My Project" />
           </div>
         </TabsContent>
       </Tabs>

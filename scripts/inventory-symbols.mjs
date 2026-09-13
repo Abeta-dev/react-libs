@@ -185,7 +185,7 @@ export function verifyChangelogSymbols() {
       const bullet = line.trim().slice(2);
 
       // 1. If bullet references a dist/ artifact property, ensure verify-directives.mjs asserts it
-      const distMatches = bullet.match(/dist\/[A-Za-z0-9_\-\.\/]+/g);
+      const distMatches = bullet.match(/dist\/[A-Za-z0-9_./-]+/g);
       if (distMatches) {
         for (const distArtifact of distMatches) {
           if (!verifyDirectivesContent.includes(distArtifact)) {
@@ -199,7 +199,7 @@ export function verifyChangelogSymbols() {
 
       // If bullet asserts 'use client' directive on a subpath, verify verify-directives.mjs asserts it
       if (bullet.includes("'use client'") || bullet.includes('"use client"')) {
-        const subpathMatch = bullet.match(/@umesh0492\/react-libs\/([A-Za-z0-9_\-\/]+)/);
+        const subpathMatch = bullet.match(/@umesh0492\/react-libs\/([A-Za-z0-9_/-]+)/);
         if (subpathMatch) {
           const subpath = subpathMatch[1];
           const expectedFilePattern = `dist/${subpath}`;

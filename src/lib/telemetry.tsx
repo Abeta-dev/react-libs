@@ -2,12 +2,12 @@ import * as React from "react";
 
 export interface AuditTrailPayload {
   actionName: string;
-  entityId?: string;
-  entityType?: string;
-  userId?: string;
-  userName?: string;
-  role?: string;
-  timestamp?: string;
+  entityId?: string | undefined;
+  entityType?: string | undefined;
+  userId?: string | undefined;
+  userName?: string | undefined;
+  role?: string | undefined;
+  timestamp?: string | undefined;
   [key: string]: unknown;
 }
 
@@ -21,10 +21,10 @@ export function setGlobalAuditLogger(logger: AuditLogger | null) {
 
 export interface WithAuditTrailProps {
   actionName: string;
-  entityId?: string;
-  entityType?: string;
-  auditLogger?: AuditLogger;
-  onClick?: (e: React.MouseEvent) => void;
+  entityId?: string | undefined;
+  entityType?: string | undefined;
+  auditLogger?: AuditLogger | undefined;
+  onClick?: ((e: React.MouseEvent) => void) | undefined;
   [key: string]: unknown;
 }
 
@@ -44,7 +44,7 @@ export function withAuditTrail<P extends object, Ref = unknown>(
           const payload: AuditTrailPayload = {
             actionName,
             entityType: entityType ?? "Unknown",
-            entityId: entityId ?? undefined,
+            ...(entityId !== undefined ? { entityId } : {}),
             timestamp: new Date().toISOString(),
           };
 

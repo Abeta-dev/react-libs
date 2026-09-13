@@ -38,24 +38,24 @@ export interface DataTableProps<T> extends React.HTMLAttributes<HTMLDivElement> 
   columns: DataTableColumn<T>[]
   data: T[]
   /** Row key extractor — defaults to index if not provided */
-  rowKey?: (row: T, index: number) => string | number
-  isLoading?: boolean
-  emptyMessage?: string
-  emptyIcon?: React.ReactNode
+  rowKey?: ((row: T, index: number) => string | number) | undefined
+  isLoading?: boolean | undefined
+  emptyMessage?: string | undefined
+  emptyIcon?: React.ReactNode | undefined
   /** Number of skeleton rows to show while loading */
-  skeletonRows?: number
-  pagination?: DataTablePaginationProps
+  skeletonRows?: number | undefined
+  pagination?: DataTablePaginationProps | undefined
   /** Current sort state */
-  sortKey?: string
-  sortDirection?: SortDirection
-  onSort?: (key: string, direction: SortDirection) => void
-  className?: string
+  sortKey?: string | undefined
+  sortDirection?: SortDirection | undefined
+  onSort?: ((key: string, direction: SortDirection) => void) | undefined
+  className?: string | undefined
   /** Highlight rows on hover (default: true) */
-  hoverable?: boolean
+  hoverable?: boolean | undefined
   /** Callback when a row is clicked */
-  onRowClick?: (row: T) => void
+  onRowClick?: ((row: T) => void) | undefined
   /** Optional table caption */
-  caption?: string
+  caption?: string | undefined
 }
 
 function SortIcon({ active, direction }: { active: boolean; direction: SortDirection }) {

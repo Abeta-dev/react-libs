@@ -3,7 +3,7 @@
 > **React 19 component library with Tailwind CSS v4 & Radix UI primitives.**  
 > Single source of truth for visual components, design tokens, hooks, formatters, and behavioral analytics across web applications.
 
-[![Version](https://img.shields.io/badge/version-0.6.1-blue)](https://www.npmjs.com/package/@umesh0492/react-libs)
+[![Version](https://img.shields.io/badge/version-0.7.0-blue)](https://www.npmjs.com/package/@umesh0492/react-libs)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#testing)
 [![React](https://img.shields.io/badge/react-19-blue)](https://react.dev)
 [![Tailwind](https://img.shields.io/badge/tailwind-v4-38bdf8)](https://tailwindcss.com)
@@ -16,6 +16,7 @@
 1. [Installation](#installation)
 2. [Quick Start & Imports](#quick-start--imports)
    - [Subpath Reference Table](#subpath-reference-table)
+   - [Tree-Shaking Scope & Standalone Primitives](#tree-shaking-scope--standalone-primitives)
    - [SSR Compatibility & Hydration Architecture](#ssr-compatibility--hydration-architecture)
    - [Dedicated Client Subpath for PdfViewer](#dedicated-client-subpath-for-pdfviewer)
    - [Dual ESM & CommonJS Support](#dual-esm--commonjs-support)
@@ -70,8 +71,26 @@ The library exposes dedicated entry points for UI components, server-safe utilit
 | `@umesh0492/react-libs/analytics/react` | ESM (`import`), CJS (`require`) | **Client Components** (`'use client'`) | React integration layer for analytics: `AnalyticsProvider`, `useAnalytics`, `TrackArea`, and `PageViewTracker`. |
 | `@umesh0492/react-libs/pdf` | ESM (`import`), CJS (`require`) | **Client-Only** (`'use client'`) | Dedicated client subpath for `PdfViewer`. Isolated from root to prevent Node SSR from executing browser-only PDF workers (`pdfjs-dist`). |
 | `@umesh0492/react-libs/hooks/use-toast` | ESM (`import`), CJS (`require`) | **Client Hook** (`'use client'`) | Standalone imperative toast notification hook (`useToast`, `toast`). |
+| `@umesh0492/react-libs/button` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Button primitive with zero Radix dependency overhead for micro-bundle budgets. |
+| `@umesh0492/react-libs/dialog` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Dialog primitive with isolated Radix Dialog dependency. |
+| `@umesh0492/react-libs/card` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Card primitive with zero Radix dependency overhead. |
+| `@umesh0492/react-libs/badge` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Badge primitive with zero Radix dependency overhead. |
+| `@umesh0492/react-libs/input` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Input primitive with zero Radix dependency overhead. |
 | `@umesh0492/react-libs/style.css` | CSS | N/A | Standalone pre-compiled stylesheet with all Tailwind utility classes and design tokens. |
 | `@umesh0492/react-libs/styles/theme.css` | CSS | N/A | Design system theme variables and color tokens for Tailwind CSS v4 projects (`@import`). |
+
+### Tree-Shaking Scope & Standalone Primitives
+
+Modern bundlers (Vite, Next.js, Rollup, Webpack 5) automatically perform dead-code elimination and tree-shake unreferenced components from the primary entry point (`@umesh0492/react-libs`).
+
+For consumer environments with strict per-route bundle budgets or legacy bundlers without deep tree-shaking, 5 high-frequency primitives provide **dedicated standalone entry points** with zero barrel overhead:
+- `@umesh0492/react-libs/button`
+- `@umesh0492/react-libs/dialog`
+- `@umesh0492/react-libs/card`
+- `@umesh0492/react-libs/badge`
+- `@umesh0492/react-libs/input`
+
+All other UI components (such as `DataTable`, `Sidebar`, `Calendar`, etc.) are imported directly from `@umesh0492/react-libs`, relying on modern ESM bundler tree-shaking.
 
 ### SSR Compatibility & Hydration Architecture
 
@@ -574,7 +593,7 @@ Explore our formal design decisions in [`docs/adr/`](./docs/adr/):
 
 ## Community & Contributing
 
-- **[Migration Guide](./MIGRATION.md)**: Upgrading to v0.6.1.
+- **[Migration Guide](./MIGRATION.md)**: Upgrading to v0.7.0.
 - **[Code of Conduct](./CODE_OF_CONDUCT.md)**: We are committed to providing a friendly, safe, and welcoming environment for all contributors.
 - **[Security Policy](./SECURITY.md)**: Guidelines for reporting security vulnerabilities responsibly.
 - **[Contributing Guide](./CONTRIBUTING.md)**: Step-by-step instructions for adding components, writing tests, and filing pull requests.

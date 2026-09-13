@@ -205,9 +205,7 @@ type Story = StoryObj<typeof meta>;
 
 /** Opens the popover and exposes the calendar footer actions. */
 export const Default: Story = {
-  args: {
-    defaultDate: undefined,
-  },
+  args: {},
   render: (args) => (
     <CenteredStory>
       <DatePickerWithRange {...args} showOutsideDays={args.showOutsideDays} />

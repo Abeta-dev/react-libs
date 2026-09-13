@@ -13,11 +13,11 @@ export class AnalyticsEngine {
   private config: AnalyticsConfig;
   private sessionManager: SessionManager;
   private queue: AnalyticsQueue;
-  private domTracker?: DomTracker;
+  private domTracker?: DomTracker | undefined;
   private globalMetadata: Record<string, unknown> = {};
-  private originalPushState?: typeof history.pushState;
-  private originalReplaceState?: typeof history.replaceState;
-  private popStateListener?: () => void;
+  private originalPushState?: (typeof history.pushState) | undefined;
+  private originalReplaceState?: (typeof history.replaceState) | undefined;
+  private popStateListener?: (() => void) | undefined;
   private isInitialized = false;
 
   constructor(config: AnalyticsConfig = {}) {

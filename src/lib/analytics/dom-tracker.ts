@@ -6,7 +6,7 @@ export interface DomTrackerOptions {
     component: ComponentContext,
     interactionMetadata: Record<string, unknown>
   ) => void;
-  maskPatterns?: RegExp[];
+  maskPatterns?: RegExp[] | undefined;
 }
 
 export class DomTracker {

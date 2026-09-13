@@ -84,11 +84,11 @@ export const Default: Story = {
       <p className="text-sm font-semibold mb-3">Display density</p>
       <RadioGroup
         className="space-y-2"
-        disabled={args.disabled}
-        defaultValue={args.defaultValue}
-        onValueChange={args.onValueChange}
+        {...(args.disabled !== undefined ? { disabled: args.disabled } : {})}
+        {...(args.defaultValue !== undefined ? { defaultValue: args.defaultValue } : {})}
+        {...(args.onValueChange ? { onValueChange: args.onValueChange } : {})}
         aria-labelledby="Display Density"
-        orientation={args.orientation}
+        {...(args.orientation ? { orientation: args.orientation } : {})}
       >
         {[
           { value: "default", label: "Default", hint: "Standard spacing" },
@@ -136,10 +136,10 @@ export const Horizontal: Story = {
     <div className="p-4">
       <p className="text-sm font-semibold mb-3">Subscription plan</p>
       <RadioGroup
-        defaultValue={args.defaultValue}
+        {...(args.defaultValue !== undefined ? { defaultValue: args.defaultValue } : {})}
         orientation="horizontal"
         className="flex gap-6"
-        onValueChange={args.onValueChange}
+        {...(args.onValueChange ? { onValueChange: args.onValueChange } : {})}
         aria-labelledby="plans"
       >
         <div className="flex items-center gap-2">

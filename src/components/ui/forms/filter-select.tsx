@@ -17,25 +17,23 @@ export interface FilterOption {
 
 export interface FilterSelectProps {
   /** The currently selected value */
-  value?: string;
+  value?: string | undefined;
   /** Function to call when the value changes */
-  onChange?: (value: string) => void;
+  onChange?: ((value: string) => void) | undefined;
   /** The list of options to display */
   options: FilterOption[];
   /** Optional placeholder text when no value is selected */
-  placeholder?: string;
+  placeholder?: string | undefined;
   /** Optional custom CSS classes for the trigger */
-  className?: string;
+  className?: string | undefined;
   /** Optional id or name for the select */
-  id?: string;
+  id?: string | undefined;
   /** Optional disabled state */
-  disabled?: boolean;
+  disabled?: boolean | undefined;
 }
 
 /**
- * FilterSelect - A standardized wrapper over Radix Select
- * designed specifically for quickly replacing native <select> elements
- * used frequently in filter bars and tables.
+ * FilterSelect component for consistent dropdown filtering across data views.
  */
 export function FilterSelect({
   value,
@@ -56,9 +54,9 @@ export function FilterSelect({
 
   return (
     <Select
-      value={safeValue}
+      {...(safeValue !== undefined ? { value: safeValue } : {})}
       onValueChange={handleValueChange}
-      disabled={disabled}
+      {...(disabled !== undefined ? { disabled } : {})}
     >
       <SelectTrigger id={id} className={cn("bg-white", className)}>
         <SelectValue placeholder={placeholder} />

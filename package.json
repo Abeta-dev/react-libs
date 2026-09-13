@@ -1,6 +1,6 @@
 {
   "name": "@umesh0492/react-libs",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "React 19 component library with Tailwind CSS v4 & Radix UI primitives.",
   "keywords": [
     "react",
@@ -101,8 +101,8 @@
     "extract:release-notes": "node scripts/extract-release-notes.mjs",
     "check:truth": "node scripts/docs-match-tree.mjs",
     "docs-match-tree": "node scripts/docs-match-tree.mjs",
-    "lint": "eslint \"src/**/*.{ts,tsx}\" --max-warnings 0",
-    "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
     "perf:open": "node scripts/generate-performance-report.mjs && open docs/performance-report.md"
   },
   "exports": {

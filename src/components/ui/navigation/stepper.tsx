@@ -6,17 +6,17 @@ import { cn } from "../../../lib/utils";
 
 export interface StepItem {
   title: string;
-  description?: string;
-  icon?: React.ReactNode;
-  isError?: boolean;
+  description?: string | undefined;
+  icon?: React.ReactNode | undefined;
+  isError?: boolean | undefined;
 }
 
 export interface StepperProps extends React.HTMLAttributes<HTMLDivElement> {
   steps: StepItem[];
   activeStep: number;
-  onStepClick?: (stepIndex: number) => void;
-  orientation?: "horizontal" | "vertical";
-  clickable?: boolean;
+  onStepClick?: ((stepIndex: number) => void) | undefined;
+  orientation?: "horizontal" | "vertical" | undefined;
+  clickable?: boolean | undefined;
 }
 
 function renderStepMarker(step: StepItem, index: number, isCompleted: boolean) {
@@ -39,7 +39,7 @@ interface StepRowProps {
   stepsCount: number;
   isVertical: boolean;
   clickable: boolean;
-  onStepClick?: (stepIndex: number) => void;
+  onStepClick?: ((stepIndex: number) => void) | undefined;
   renderStepMarker: (step: StepItem, index: number, isCompleted: boolean) => React.ReactNode;
 }
 
@@ -64,7 +64,7 @@ function StepLabelContent({
   isVertical,
 }: {
   title: string;
-  description?: string;
+  description?: string | undefined;
   isActive: boolean;
   isError: boolean;
   isVertical: boolean;

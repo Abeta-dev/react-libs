@@ -23,10 +23,10 @@ interface CalendarContextValue {
   direction: NavigationDirection;
   setDirection: React.Dispatch<React.SetStateAction<NavigationDirection>>;
   baseYear: number;
-  startMonth?: Date;
-  endMonth?: Date;
+  startMonth?: Date | undefined;
+  endMonth?: Date | undefined;
   weeksRef: React.RefObject<HTMLTableSectionElement | null>;
-  height?: number;
+  height?: number | undefined;
 }
 
 const CalendarContext = React.createContext<CalendarContextValue | null>(null);

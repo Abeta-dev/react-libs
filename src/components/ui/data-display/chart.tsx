@@ -36,11 +36,11 @@ function useChart() {
   return context
 }
 
-export type ChartContainerProps = React.ComponentProps<"div"> & {
+export type ChartContainerProps = Omit<React.ComponentProps<"div">, "onError"> & {
   config: ChartConfig
   children: React.ReactElement
-  fallback?: React.ReactNode | FallbackRender
-  onError?: (error: Error, errorInfo: React.ErrorInfo) => void
+  fallback?: React.ReactNode | FallbackRender | undefined
+  onError?: ((error: Error, errorInfo: React.ErrorInfo) => void) | undefined
 }
 
 const ChartContainer = React.forwardRef<

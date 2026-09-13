@@ -194,7 +194,7 @@ export async function downloadFileSecurely(
   const response = await fetch(`${fullEndpoint}?${new URLSearchParams(queryParams).toString()}`, {
     method: 'GET',
     headers: { 'Authorization': `Bearer ${token}` },
-    signal,
+    ...(signal ? { signal } : {}),
   });
 
   if (!response.ok) throw new Error(`Download failed: ${response.statusText}`);

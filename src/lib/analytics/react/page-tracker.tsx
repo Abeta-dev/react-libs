@@ -17,8 +17,8 @@ export function PageViewTracker({
   React.useEffect(() => {
     trackPageView(
       {
-        title: pageTitle,
-        path,
+        ...(pageTitle !== undefined ? { title: pageTitle } : {}),
+        ...(path !== undefined ? { path } : {}),
       },
       metadata
     );

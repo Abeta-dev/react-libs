@@ -203,7 +203,7 @@ export const Alignments: Story = {
       },
     },
   },
-  render: (args) => (
+  render: ({ side, ...args }) => (
     <div className="w-[520px] rounded-lg border bg-muted/20 p-8">
       <div className="flex justify-center">
         {(["start", "center", "end"] as const).map((align) => (
@@ -218,7 +218,7 @@ export const Alignments: Story = {
                 aria-labelledby={`popover-align-${align}-title`}
                 {...args}
                 align={align}
-                side={args.side}
+                {...(side !== undefined ? { side } : {})}
               >
                 <div className="space-y-1">
                   <h4

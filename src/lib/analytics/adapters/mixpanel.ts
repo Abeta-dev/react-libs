@@ -10,7 +10,7 @@ export interface MixpanelClient {
 }
 
 export interface MixpanelAdapterOptions {
-  client?: MixpanelClient;
+  client?: MixpanelClient | undefined;
 }
 
 declare global {
@@ -21,7 +21,7 @@ declare global {
 
 export class MixpanelAdapter implements AnalyticsAdapter {
   public name = "mixpanel";
-  private customClient?: MixpanelClient;
+  private customClient?: MixpanelClient | undefined;
 
   constructor(options: MixpanelAdapterOptions = {}) {
     this.customClient = options.client;

@@ -278,7 +278,7 @@ function checkGitHubActions() {
   }
 
   const workflowFiles = readdirSync(WORKFLOWS_DIR).filter((f) => f.endsWith('.yml') || f.endsWith('.yaml'));
-  const actionRegex = /uses:\s+([a-zA-Z0-9_\-\/]+)@([a-zA-Z0-9_\.\-]+)/g;
+  const actionRegex = /uses:\s+([a-zA-Z0-9_/-]+)@([a-zA-Z0-9_.-]+)/g;
 
   for (const wfFile of workflowFiles) {
     const fullPath = join(WORKFLOWS_DIR, wfFile);
@@ -315,7 +315,7 @@ function checkGitHubActions() {
   }
 
   // Check documentation for unpinned / fake action versions (e.g. actions/checkout@v99)
-  const docActionMatches = readme.matchAll(/actions\/[a-zA-Z0-9_\-]+@v(\d+)/g);
+  const docActionMatches = readme.matchAll(/actions\/[a-zA-Z0-9_-]+@v(\d+)/g);
   for (const m of docActionMatches) {
     const major = parseInt(m[1], 10);
     if (major > 10) {

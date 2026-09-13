@@ -417,7 +417,7 @@ describe("Accessibility Feature Verifications", () => {
 
       // Pause on mouse enter
       fireEvent.mouseEnter(region);
-      const track = container.querySelector('[style*="animation-play-state"]') || container.querySelector('.animate-\[marquee_linear_infinite\]');
+      const track = container.querySelector('[style*="animation-play-state"]') || container.querySelector('[class*="animate-"]');
       expect(track).toHaveStyle({ animationPlayState: 'paused' });
 
       // Resume on mouse leave
@@ -525,8 +525,8 @@ describe("Accessibility Feature Verifications", () => {
 
     it("Checkbox with label has 0 accessibility violations", async () => {
       const { container } = render(
-        <label>
-          <Checkbox aria-label="Accept terms and conditions" />
+        <label htmlFor="accept-terms">
+          <Checkbox id="accept-terms" aria-label="Accept terms and conditions" />
           <span>Accept terms and conditions</span>
         </label>
       );

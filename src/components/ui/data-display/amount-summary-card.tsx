@@ -28,29 +28,29 @@ export interface AmountSummaryDeductionItem {
 }
 
 export interface AmountSummaryCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  baseAmount?: number;
+  baseAmount?: number | undefined;
   /** Direct single tax amount or list of individual tax components */
-  taxAmount?: number;
-  taxLabel?: string;
-  taxes?: AmountSummaryTaxItem[];
-  shippingCost?: number;
+  taxAmount?: number | undefined;
+  taxLabel?: string | undefined;
+  taxes?: AmountSummaryTaxItem[] | undefined;
+  shippingCost?: number | undefined;
   /** @deprecated Alias for `shippingCost` */
-  transportCost?: number;
+  transportCost?: number | undefined;
   /** Percentage of tax or withholding deduction */
-  withholdingPercentage?: number;
+  withholdingPercentage?: number | undefined;
   /** @deprecated Alias for `withholdingPercentage` */
-  tdsPercentage?: number;
+  tdsPercentage?: number | undefined;
   /** Custom deductions list */
-  deductions?: AmountSummaryDeductionItem[];
+  deductions?: AmountSummaryDeductionItem[] | undefined;
   /** Flag to indicate urgent processing */
-  isUrgent?: boolean;
-  urgentLabel?: string;
+  isUrgent?: boolean | undefined;
+  urgentLabel?: string | undefined;
   /** Explicit net payable override */
-  netPayable?: number;
-  isTaxInclusive?: boolean;
-  items?: AmountSummaryItem[];
-  size?: "sm" | "default";
-  maskFormatter?: (val: number | string) => string;
+  netPayable?: number | undefined;
+  isTaxInclusive?: boolean | undefined;
+  items?: AmountSummaryItem[] | undefined;
+  size?: "sm" | "default" | undefined;
+  maskFormatter?: ((val: number | string) => string) | undefined;
 }
 
 function calculateItemTax(item: AmountSummaryItem, isTaxInclusive: boolean) {
@@ -155,7 +155,7 @@ function computeAmounts({
 }
 
 interface TaxBreakdownProps {
-  taxes?: Array<{ label: string; amount: number }>;
+  taxes?: Array<{ label: string; amount: number }> | undefined;
   finalTaxAmount: number;
   taxLabel: string;
   fmt: (num: number) => string;
@@ -196,7 +196,7 @@ function TaxBreakdownSection({ taxes, finalTaxAmount, taxLabel, fmt }: TaxBreakd
 
 interface TotalPayableSectionProps {
   isUrgent: boolean;
-  urgentLabel?: string;
+  urgentLabel?: string | undefined;
   isSm: boolean;
   totalValue: number;
   fmt: (num: number) => string;

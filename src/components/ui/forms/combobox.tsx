@@ -115,7 +115,7 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
                   <CommandItem
                     key={option.value}
                     value={option.label}
-                    disabled={option.disabled}
+                    {...(option.disabled !== undefined ? { disabled: option.disabled } : {})}
                     onSelect={() => handleSelect(option.value)}
                   >
                     <Check

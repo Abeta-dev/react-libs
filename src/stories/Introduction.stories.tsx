@@ -25,7 +25,7 @@ type Story = StoryObj<typeof meta>;
 
 // ─── Sub-components ────────────────────────────────────────────────────────────
 
-function Badge({ children, accent }: { children: React.ReactNode; accent?: boolean }) {
+function Badge({ children, accent }: { children: React.ReactNode; accent?: boolean | undefined }) {
   return (
     <span
       style={{

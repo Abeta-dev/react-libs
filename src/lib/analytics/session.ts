@@ -23,7 +23,7 @@ export class SessionManager {
   private sessionId: string;
   private lastActiveTimestamp: number;
   private activePageId: string;
-  private userId?: string;
+  private userId?: string | undefined;
   private componentInteractionCounts = new Map<string, number>();
 
   constructor(prefix = "va_analytics", sessionTimeoutMs = 30 * 60 * 1000) {

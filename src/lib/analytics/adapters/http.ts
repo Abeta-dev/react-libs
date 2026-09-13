@@ -2,17 +2,17 @@ import type { AnalyticsAdapter, AnalyticsEvent } from "../types";
 
 export interface HttpAdapterOptions {
   endpoint: string;
-  headers?: Record<string, string>;
-  getHeaders?: () => Record<string, string> | Promise<Record<string, string>>;
-  credentials?: RequestCredentials;
+  headers?: Record<string, string> | undefined;
+  getHeaders?: (() => Record<string, string> | Promise<Record<string, string>>) | undefined;
+  credentials?: RequestCredentials | undefined;
 }
 
 export class HttpAdapter implements AnalyticsAdapter {
   public name = "http";
   private endpoint: string;
   private headers: Record<string, string>;
-  private getHeaders?: () => Record<string, string> | Promise<Record<string, string>>;
-  private credentials?: RequestCredentials;
+  private getHeaders?: (() => Record<string, string> | Promise<Record<string, string>>) | undefined;
+  private credentials?: RequestCredentials | undefined;
 
   constructor(options: HttpAdapterOptions) {
     this.endpoint = options.endpoint;
@@ -49,7 +49,7 @@ export class HttpAdapter implements AnalyticsAdapter {
       method: "POST",
       headers,
       body: payload,
-      credentials: this.credentials,
+      ...(this.credentials !== undefined ? { credentials: this.credentials } : {}),
       keepalive: true,
     });
 

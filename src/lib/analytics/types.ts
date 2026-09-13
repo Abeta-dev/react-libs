@@ -20,8 +20,8 @@ export interface AnalyticsEvent {
   sessionId: string;
   pageId: string;
   anonymousId: string;
-  userId?: string;
-  component?: ComponentContext;
+  userId?: string | undefined;
+  component?: ComponentContext | undefined;
   page: PageContext;
   metadata: Record<string, unknown>;
 }
@@ -36,20 +36,20 @@ export interface AnalyticsAdapter {
 }
 
 export interface AnalyticsConfig {
-  appId?: string;
-  adapters?: AnalyticsAdapter[];
-  batchSize?: number;
-  flushIntervalMs?: number;
-  sessionTimeoutMs?: number;
-  maxOfflineQueue?: number;
-  storagePrefix?: string;
-  globalMetadata?: Record<string, unknown>;
-  autoTrackDom?: boolean;
-  autoTrackPages?: boolean;
+  appId?: string | undefined;
+  adapters?: AnalyticsAdapter[] | undefined;
+  batchSize?: number | undefined;
+  flushIntervalMs?: number | undefined;
+  sessionTimeoutMs?: number | undefined;
+  maxOfflineQueue?: number | undefined;
+  storagePrefix?: string | undefined;
+  globalMetadata?: Record<string, unknown> | undefined;
+  autoTrackDom?: boolean | undefined;
+  autoTrackPages?: boolean | undefined;
   /**
    * @warning Monkey-patching window.history.pushState/replaceState can cause conflicts with client-side routers (Next.js App Router, Remix, React Router). Defaults to false.
    */
-  patchHistory?: boolean;
-  maskPatterns?: RegExp[];
-  onError?: (error: unknown) => void;
+  patchHistory?: boolean | undefined;
+  maskPatterns?: RegExp[] | undefined;
+  onError?: ((error: unknown) => void) | undefined;
 }

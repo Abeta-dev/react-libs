@@ -2,11 +2,11 @@ import type { AnalyticsAdapter, AnalyticsEvent } from "./types";
 
 export interface AnalyticsQueueOptions {
   adapters: AnalyticsAdapter[];
-  batchSize?: number;
-  flushIntervalMs?: number;
-  maxOfflineQueue?: number;
-  storagePrefix?: string;
-  onError?: (err: unknown) => void;
+  batchSize?: number | undefined;
+  flushIntervalMs?: number | undefined;
+  maxOfflineQueue?: number | undefined;
+  storagePrefix?: string | undefined;
+  onError?: ((err: unknown) => void) | undefined;
 }
 
 export class AnalyticsQueue {
@@ -15,7 +15,7 @@ export class AnalyticsQueue {
   private flushIntervalMs: number;
   private maxOfflineQueue: number;
   private storageKey: string;
-  private onError?: (err: unknown) => void;
+  private onError?: ((err: unknown) => void) | undefined;
 
   private memoryQueue: AnalyticsEvent[] = [];
   private flushTimer: ReturnType<typeof setInterval> | null = null;

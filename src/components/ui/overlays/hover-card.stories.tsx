@@ -18,10 +18,11 @@ export const Default: Story = {
       <HoverCard openDelay={0} closeDelay={0}>
         <HoverCardTrigger asChild>
           <a
-            href="#"
+            href="https://github.com/umesh0492/react-libs"
             id="hover-card-trigger"
             className="text-sm font-medium underline underline-offset-4 cursor-pointer"
-            onClick={(e) => e.preventDefault()}
+            target="_blank"
+            rel="noreferrer"
           >
             @react-lib
           </a>
