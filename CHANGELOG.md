@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2026-09-13
+
+### Fixed
+- Eliminated duplicate `'use client'` directives in source files (`Button`, `Dialog`, `Input`) ensuring single-directive banners across ESM and CJS bundles.
+- Resolved initial render state tearing in `AnalyticsProvider` by synchronously initializing `initAnalytics` in `useState` lazy initializer with zero render-time ref mutations for full React 19 compiler compliance.
+- Replaced unsafe `any` casting in test DOMMatrix polyfill (`src/test/setup.ts`) to satisfy strict ESLint rules (`--max-warnings 0`).
+- Exported `Sonner` component alias from `@umesh0492/react-libs` root barrel to guarantee 100% symbol parity with `README.md`.
+
+### Security
+- Hardened `scripts/verify-release-version.mjs` to match strictly against topmost `CHANGELOG.md` release to prevent historical version rollback bypasses.
+- Hardened `scripts/check-exports.mjs` to assert leading `export` keywords, blocking commented-out exports from passing verification.
+- Enforced non-zero CI exit on test failures in `scripts/generate-performance-report.mjs` so benchmark runners cannot swallow errors.
+- Expanded `scripts/verify-directives.mjs` to inspect all 20 client entries and 6 server entries across both ESM (`.js`) and CJS (`.cjs`) outputs, asserting at most one directive on Line 1 and zero leaks in server modules.
+- Hardened `scripts/inventory-symbols.mjs` and `scripts/docs-match-tree.mjs` with an automated `verifyReadmeComponents()` gate cross-referencing all 71 documented components in `README.md` against the exported AST symbol tree.
+- Synchronized `.github/workflows/publish.yml` with the complete 13-step CI quality and truth gate suite prior to package distribution.
+
+### Changed
+- Tightened per-component bundle size budgets in `scripts/check-bundle-size.mjs` (`button`: 8 KB, `dialog`: 15 KB, `card`: 8 KB, `badge`: 6 KB, `input`: 6 KB) and introduced a dedicated budget for `@umesh0492/react-libs/analytics/react` (35 KB raw, 10 KB gzip).
+
 ## [0.6.0] - 2026-09-11
 
 ### Added
