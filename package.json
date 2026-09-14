@@ -89,6 +89,7 @@
     "src/styles"
   ],
   "scripts": {
+    "prepare": "node -e \"if (!fs.existsSync('dist/index.d.ts')) { const cp = require('child_process'); cp.execSync('npm run build', { stdio: 'inherit' }); }\"",
     "build": "node -e \"fs.rmSync('dist', { recursive: true, force: true })\" && tsup && node scripts/build-css.mjs",
     "prepack": "node -e \"if (!fs.existsSync('dist/index.d.ts')) { const cp = require('child_process'); cp.execSync('npm run build', { stdio: 'inherit' }); }\"",
     "prepublishOnly": "npm run build",
