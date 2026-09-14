@@ -166,3 +166,30 @@ Deprecated `minLakhs`, `fixedLakhs`, and `esopsLakhs` props have been replaced w
   <span>Hover me</span>
 </BilingualTooltip>
 ```
+
+---
+
+## Upgrading to v0.9.0
+
+`v0.9.0` is 100% backward-compatible with `v0.8.0` and introduces dedicated entry points and layer ordering presets:
+
+### 1. Isolated `DataTable` Subpath (`@umesh0492/react-libs/data-table`)
+
+Consumers with strict bundle budgets can now import `DataTable` from its standalone subpath to isolate `@tanstack/react-table` from lighter pages:
+
+```tsx
+// Backward compatible (still supported):
+import { DataTable } from "@umesh0492/react-libs";
+
+// Recommended for micro-bundle budgets / data dashboards:
+import { DataTable } from "@umesh0492/react-libs/data-table";
+```
+
+### 2. Standard Cascade Layer Ordering Preset
+
+If using custom cascade layers, import or declare the standard layer sequence preset in your global stylesheet:
+
+```css
+@layer reset, base, react-libs, components, utilities, overrides;
+```
+

@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-09-15
+
+### Added
+- Dedicated standalone subpath `@umesh0492/react-libs/data-table` (`DataTable`) isolating `@tanstack/react-table` for data-heavy pages.
+- Pre-configured CSS cascade layer ordering preset in `src/styles/theme.css` (`@layer reset, base, react-libs, components, utilities, overrides;`).
+- Complete Storybook coverage across 100% of UI components (29 new story files for feedback, mobile PWA, and complex data-display primitives).
+- Enterprise full-application integration recipe (`docs/recipes/full-app-integration.md`) covering React 19 / Next.js 15, multi-brand theming, and composite workflows.
+- Continuous automated visual regression testing architecture guide (`docs/recipes/visual-regression-testing.md`) with Playwright snapshot runner and Chromatic CI review gates.
+
 ## [0.8.0] - 2026-09-14
 
 ### Added
@@ -14,9 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cross-platform runtime detection and device interaction helpers: `isIOS`, `isAndroid`, `isMobile`, `isStandalone`, `platformName`, `hasTouch`, `triggerHaptic`, and `nativeShare`.
 - Mobile and PWA hooks: `usePlatform`, `usePWAInstall`, and `useOfflineQueue` (IndexedDB + localStorage mutation queue with retry limits and automatic online flush).
 - Mobile and PWA components: `InstallPwaBanner`, `AppSplashScreen`, and `MobileBottomNav`.
-- Dedicated standalone subpath `@umesh0492/react-libs/data-table` (`DataTable`) isolating `@tanstack/react-table` for data-heavy pages.
-- Pre-configured CSS cascade layer ordering preset in `src/styles/theme.css` (`@layer reset, base, react-libs, components, utilities, overrides;`).
-- Complete Storybook coverage across 100% of UI components (29 new story files for feedback, mobile PWA, and complex data-display primitives).
 
 ## [0.7.0] - 2026-09-13
 
