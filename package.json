@@ -71,6 +71,9 @@
       ],
       "input": [
         "./dist/input.d.ts"
+      ],
+      "data-table": [
+        "./dist/data-table.d.ts"
       ]
     }
   },
@@ -234,6 +237,16 @@
       "require": {
         "types": "./dist/input.d.cts",
         "default": "./dist/input.cjs"
+      }
+    },
+    "./data-table": {
+      "import": {
+        "types": "./dist/data-table.d.ts",
+        "default": "./dist/data-table.js"
+      },
+      "require": {
+        "types": "./dist/data-table.d.cts",
+        "default": "./dist/data-table.cjs"
       }
     },
     "./style.css": "./dist/style.css"

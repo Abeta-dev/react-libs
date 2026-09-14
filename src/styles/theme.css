@@ -7,6 +7,8 @@
  *   @import "@umesh0492/react-libs/src/styles/theme.css";
  */
 
+@layer reset, base, react-libs, components, utilities, overrides;
+
 @theme inline {
   --spacing-page: var(--page-padding);
   --radius-sm: calc(var(--radius) - 4px);

@@ -36,4 +36,16 @@ describe('CSS Layer Encapsulation (@layer react-libs)', () => {
     expect(content).toContain('--background');
     expect(content).toContain('--primary');
   });
+
+  it('declares full layer sequence preset in theme.css and preserves layer order in dist/style.css', () => {
+    const themeContent = readFileSync(join(ROOT, 'src', 'styles', 'theme.css'), 'utf8');
+    expect(themeContent).toContain('@layer reset, base, react-libs, components, utilities, overrides;');
+
+    const distContent = readFileSync(DIST_STYLE_CSS, 'utf8');
+    const hasLayerOrder =
+      distContent.includes('@layer reset, base, react-libs, components, utilities, overrides;') ||
+      distContent.includes('@layer reset,base,react-libs,components,utilities,overrides;') ||
+      distContent.includes('@layer reset,react-libs,overrides;');
+    expect(hasLayerOrder).toBe(true);
+  });
 });

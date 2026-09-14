@@ -77,6 +77,7 @@ The library exposes dedicated entry points for UI components, server-safe utilit
 | `@umesh0492/react-libs/card` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Card primitive with zero Radix dependency overhead. |
 | `@umesh0492/react-libs/badge` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Badge primitive with zero Radix dependency overhead. |
 | `@umesh0492/react-libs/input` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Input primitive with zero Radix dependency overhead. |
+| `@umesh0492/react-libs/data-table` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone DataTable component isolating `@tanstack/react-table` for data-heavy pages. |
 | `@umesh0492/react-libs/style.css` | CSS | N/A | Standalone pre-compiled stylesheet with all Tailwind utility classes and design tokens. |
 | `@umesh0492/react-libs/styles/theme.css` | CSS | N/A | Design system theme variables and color tokens for Tailwind CSS v4 projects (`@import`). |
 
@@ -84,14 +85,15 @@ The library exposes dedicated entry points for UI components, server-safe utilit
 
 Modern bundlers (Vite, Next.js, Rollup, Webpack 5) automatically perform dead-code elimination and tree-shake unreferenced components from the primary entry point (`@umesh0492/react-libs`).
 
-For consumer environments with strict per-route bundle budgets or legacy bundlers without deep tree-shaking, 5 high-frequency primitives provide **dedicated standalone entry points** with zero barrel overhead:
+For consumer environments with strict per-route bundle budgets or legacy bundlers without deep tree-shaking, high-frequency primitives and heavy components provide **dedicated standalone entry points** with zero barrel overhead:
 - `@umesh0492/react-libs/button`
 - `@umesh0492/react-libs/dialog`
 - `@umesh0492/react-libs/card`
 - `@umesh0492/react-libs/badge`
 - `@umesh0492/react-libs/input`
+- `@umesh0492/react-libs/data-table`
 
-All other UI components (such as `DataTable`, `Sidebar`, `Calendar`, etc.) are imported directly from `@umesh0492/react-libs`, relying on modern ESM bundler tree-shaking.
+All other UI components (such as `Sidebar`, `Calendar`, etc.) are imported directly from `@umesh0492/react-libs`, relying on modern ESM bundler tree-shaking.
 
 ### SSR Compatibility & Hydration Architecture
 
@@ -215,9 +217,9 @@ import "@umesh0492/react-libs/dist/style.css";
 > **CSS Cascade Layer Isolation (`@layer react-libs`)**:
 > `dist/style.css` is encapsulated in `@layer react-libs { ... }` per the W3C CSS Cascading and Inheritance Level 5 specification. Because unlayered styles have higher precedence than layered styles in the CSS cascade, your application's custom CSS classes and local Tailwind utilities will naturally override library styles without specificity wars or `!important`.
 >
-> If your application uses multiple cascade layers, you can define layer ordering in your root stylesheet:
+> If your application uses multiple cascade layers, `@umesh0492/react-libs/styles/theme.css` pre-declares the standard layer ordering preset:
 > ```css
-> @layer reset, react-libs, components, utilities;
+> @layer reset, base, react-libs, components, utilities, overrides;
 > ```
 
 > [!NOTE]

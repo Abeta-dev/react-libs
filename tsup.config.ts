@@ -40,6 +40,7 @@ export default defineConfig([
       card: 'src/components/ui/layout/card.tsx',
       badge: 'src/components/ui/data-display/badge.tsx',
       input: 'src/components/ui/forms/input.tsx',
+      'data-table': 'src/components/ui/data-display/data-table.tsx',
     },
     format: ['esm', 'cjs'],
     dts: true,

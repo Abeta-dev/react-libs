@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cross-platform runtime detection and device interaction helpers: `isIOS`, `isAndroid`, `isMobile`, `isStandalone`, `platformName`, `hasTouch`, `triggerHaptic`, and `nativeShare`.
 - Mobile and PWA hooks: `usePlatform`, `usePWAInstall`, and `useOfflineQueue` (IndexedDB + localStorage mutation queue with retry limits and automatic online flush).
 - Mobile and PWA components: `InstallPwaBanner`, `AppSplashScreen`, and `MobileBottomNav`.
+- Dedicated standalone subpath `@umesh0492/react-libs/data-table` (`DataTable`) isolating `@tanstack/react-table` for data-heavy pages.
+- Pre-configured CSS cascade layer ordering preset in `src/styles/theme.css` (`@layer reset, base, react-libs, components, utilities, overrides;`).
+- Complete Storybook coverage across 100% of UI components (29 new story files for feedback, mobile PWA, and complex data-display primitives).
 
 ## [0.7.0] - 2026-09-13
 

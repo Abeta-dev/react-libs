@@ -99,6 +99,12 @@ const BUDGETS = [
     maxGzipKb: 2,
   },
   {
+    file: 'dist/data-table.js',
+    label: 'DataTable Subpath (ESM)',
+    maxRawKb: 20,
+    maxGzipKb: 6,
+  },
+  {
     file: 'dist/style.css',
     label: 'Compiled Tailwind CSS',
     maxRawKb: 180,

@@ -44,6 +44,8 @@ const CLIENT_FILES = [
   'dist/badge.cjs',
   'dist/input.js',
   'dist/input.cjs',
+  'dist/data-table.js',
+  'dist/data-table.cjs',
 ];
 
 const UNIVERSAL_FILES = [

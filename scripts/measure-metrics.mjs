@@ -74,6 +74,7 @@ export function measureMetrics() {
     'dist/card.js',
     'dist/badge.js',
     'dist/input.js',
+    'dist/data-table.js',
     'dist/style.css',
   ];
 
