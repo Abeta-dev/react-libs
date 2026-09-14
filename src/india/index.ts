@@ -13,3 +13,4 @@ export * from "./validators";
 export * from "./tax";
 export * from "./constants";
 export * from "./locations";
+export * from "./whatsapp";

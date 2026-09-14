@@ -9,12 +9,16 @@ export * from "./lib/blob-storage";
 export * from "./lib/masking";
 export * from "./lib/telemetry";
 export * from "./lib/analytics";
+export * from "./lib/platform";
 
 // ─── Hooks ───────────────────────────────────────────────────────────────────
 export * from "./hooks/use-mobile";
 export * from "./hooks/use-debounce";
 export * from "./hooks/use-local-storage";
 export * from "./hooks/use-toast";
+export * from "./hooks/use-platform";
+export * from "./hooks/use-pwa-install";
+export * from "./hooks/use-offline-queue";
 
 // ─── Forms & Inputs ──────────────────────────────────────────────────────────
 export * from "./components/ui/forms/async-select";
@@ -101,6 +105,7 @@ export * from "./components/ui/navigation/persona-dropdown";
 export * from "./components/ui/navigation/sidebar";
 export * from "./components/ui/navigation/stepper";
 export * from "./components/ui/navigation/tabs";
+export * from "./components/ui/navigation/mobile-bottom-nav";
 
 // ─── Overlays & Drawers ──────────────────────────────────────────────────────
 export * from "./components/ui/overlays/alert-dialog";
@@ -117,6 +122,7 @@ export * from "./components/ui/overlays/tooltip";
 
 // ─── Feedback, Loading & Status ──────────────────────────────────────────────
 export * from "./components/ui/feedback/alert";
+export * from "./components/ui/feedback/app-splash-screen";
 export * from "./components/ui/feedback/banner";
 export * from "./components/ui/feedback/copy-button";
 export * from "./components/ui/feedback/empty";
@@ -124,6 +130,7 @@ export * from "./components/ui/feedback/empty-state";
 export * from "./components/ui/feedback/error-boundary";
 export * from "./components/ui/feedback/error-state";
 export * from "./components/ui/feedback/impersonation-banner";
+export * from "./components/ui/feedback/install-pwa-banner";
 export * from "./components/ui/feedback/loading-state";
 export * from "./components/ui/feedback/onboarding-notice";
 export * from "./components/ui/feedback/progress";

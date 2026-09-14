@@ -29,8 +29,8 @@ const BUDGETS = [
   {
     file: 'dist/utils.js',
     label: 'RSC Pure Utils (ESM)',
-    maxRawKb: 12,
-    maxGzipKb: 4,
+    maxRawKb: 20,
+    maxGzipKb: 5,
   },
   {
     file: 'dist/india/index.js',

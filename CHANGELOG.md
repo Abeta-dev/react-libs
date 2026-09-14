@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-09-14
+
+### Added
+- Bilingual form validation system (`ValidationLanguage = 'en' | 'hi'`) with Hindi localized message dictionaries (`VALIDATION_MESSAGES_HI`, `VALIDATION_MESSAGES_IN_HI`).
+- Generic form validators: `cleanPhoneNumber`, `isValidEmail`, `isValidPhone`, `validatePassword`, `validatePositiveNumber`, `validateDateRange`, `validateTimeRange`, and `validateRequired`.
+- India WhatsApp utilities: `generateWhatsAppUrl`, `generateWhatsAppAppUrl`, `openWhatsApp`, and template interpolator `formatWhatsAppTemplate`.
+- Cross-platform runtime detection and device interaction helpers: `isIOS`, `isAndroid`, `isMobile`, `isStandalone`, `platformName`, `hasTouch`, `triggerHaptic`, and `nativeShare`.
+- Mobile and PWA hooks: `usePlatform`, `usePWAInstall`, and `useOfflineQueue` (IndexedDB + localStorage mutation queue with retry limits and automatic online flush).
+- Mobile and PWA components: `InstallPwaBanner`, `AppSplashScreen`, and `MobileBottomNav`.
+
 ## [0.7.0] - 2026-09-13
 
 ### Changed

@@ -180,4 +180,70 @@ describe("Universal Validators & Regex", () => {
       expect(validateUrl("badurl")).toBe(VALIDATION_MESSAGES.url);
     });
   });
+
+  describe("Extended Validators & Bilingual Support", () => {
+    it("validates passwords and reports strength", async () => {
+      const { validatePassword } = await import("../validators");
+      const weak = validatePassword("short");
+      expect(weak.isValid).toBe(false);
+      expect(weak.strength).toBe("weak");
+
+      const noNum = validatePassword("purelettersonly");
+      expect(noNum.isValid).toBe(false);
+
+      const med = validatePassword("Password123");
+      expect(med.isValid).toBe(true);
+      expect(med.strength).toBe("medium");
+
+      const strong = validatePassword("P@ssw0rd12345!!");
+      expect(strong.isValid).toBe(true);
+      expect(strong.strength).toBe("strong");
+
+      const hiError = validatePassword("123", { language: "hi" });
+      expect(hiError.error).toContain("पासवर्ड");
+    });
+
+    it("validates positive numbers and bounds", async () => {
+      const { validatePositiveNumber } = await import("../validators");
+      expect(validatePositiveNumber(500, "Amount").isValid).toBe(true);
+      expect(validatePositiveNumber("1500.50", "Amount").isValid).toBe(true);
+      expect(validatePositiveNumber(-10, "Amount").isValid).toBe(false);
+      expect(validatePositiveNumber(0, "Amount", { allowZero: false }).isValid).toBe(false);
+      expect(validatePositiveNumber(0, "Amount", { allowZero: true }).isValid).toBe(true);
+      expect(validatePositiveNumber(5, "Amount", { min: 10 }).isValid).toBe(false);
+      expect(validatePositiveNumber(100, "Amount", { max: 50 }).isValid).toBe(false);
+      expect(validatePositiveNumber("abc", "Amount").isValid).toBe(false);
+    });
+
+    it("validates date and time ranges chronologically", async () => {
+      const { validateDateRange, validateTimeRange } = await import("../validators");
+      expect(validateDateRange("2026-09-01", "2026-09-10").isValid).toBe(true);
+      expect(validateDateRange("2026-09-10", "2026-09-01").isValid).toBe(false);
+      expect(validateDateRange("", "2026-09-10").isValid).toBe(false);
+
+      expect(validateTimeRange("09:00", "10:30").isValid).toBe(true);
+      expect(validateTimeRange("10:30", "09:00").isValid).toBe(false);
+      expect(validateTimeRange("09:00", "09:00").isValid).toBe(false);
+    });
+
+    it("validates required strings and length limits", async () => {
+      const { validateRequired } = await import("../validators");
+      expect(validateRequired("Hello", "Title", 2, 50).isValid).toBe(true);
+      expect(validateRequired("", "Title", 1).isValid).toBe(false);
+      expect(validateRequired("A", "Title", 3).isValid).toBe(false);
+      expect(validateRequired("Very long string", "Title", 1, 5).isValid).toBe(false);
+    });
+
+    it("provides boolean fast checkers isValidEmail and isValidPhone", async () => {
+      const { isValidEmail, isValidPhone } = await import("../validators");
+      expect(isValidEmail("user@example.com")).toBe(true);
+      expect(isValidEmail("invalid")).toBe(false);
+
+      expect(isValidPhone("9876543210", "IN")).toBe(true);
+      expect(isValidPhone("+91 98765 43210", "IN")).toBe(true);
+      expect(isValidPhone("12345", "IN")).toBe(false);
+      expect(isValidPhone("+14155552671", "INTL")).toBe(true);
+    });
+  });
 });
+

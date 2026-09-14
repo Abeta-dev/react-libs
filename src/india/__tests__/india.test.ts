@@ -85,7 +85,38 @@ describe("@umesh0492/react-libs/india", () => {
       expect(validatePincode("")).toBe("Pincode is required");
       expect(validatePincode("011001")).toBe(VALIDATION_MESSAGES_IN.pincode);
     });
+
+    it("cleans phone numbers and handles Hindi error messages", async () => {
+      const { cleanPhoneNumber, validatePhoneIN, validateGSTIN, VALIDATION_MESSAGES_IN_HI } = await import("../index");
+      expect(cleanPhoneNumber("+91 98765-43210")).toBe("9876543210");
+      expect(cleanPhoneNumber("09876543210")).toBe("9876543210");
+      expect(cleanPhoneNumber("+91 (987) 654-3210")).toBe("9876543210");
+
+      expect(validatePhoneIN("+91 98765 43210")).toBeUndefined();
+      expect(validatePhoneIN("09876543210")).toBeUndefined();
+      expect(validatePhoneIN("12345", { language: "hi" })).toBe(VALIDATION_MESSAGES_IN_HI.phone);
+      expect(validateGSTIN("INVALID", { language: "hi" })).toBe(VALIDATION_MESSAGES_IN_HI.gstin);
+    });
+
+    it("formats WhatsApp URLs and templates", async () => {
+      const { formatPhoneForWhatsApp, generateWhatsAppUrl, generateWhatsAppAppUrl, formatWhatsAppTemplate } = await import("../index");
+      expect(formatPhoneForWhatsApp("9876543210")).toBe("919876543210");
+      expect(formatPhoneForWhatsApp("+91 98765 43210")).toBe("919876543210");
+
+      const webUrl = generateWhatsAppUrl("9876543210", "Hello World");
+      expect(webUrl).toBe("https://wa.me/919876543210?text=Hello%20World");
+
+      const appUrl = generateWhatsAppAppUrl("9876543210", "Hello World");
+      expect(appUrl).toBe("whatsapp://send?phone=919876543210&text=Hello%20World");
+
+      const templated = formatWhatsAppTemplate("Hi {{name}}, your balance is {{balance}}.", {
+        name: "Rahul",
+        balance: 500,
+      });
+      expect(templated).toBe("Hi Rahul, your balance is 500.");
+    });
   });
+
 
   describe("Tax Calculations", () => {
     it("calculates intra-state GST split (CGST + SGST)", () => {

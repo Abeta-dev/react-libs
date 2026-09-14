@@ -5,6 +5,10 @@
  * including GSTIN, PAN, IFSC, Mobile numbers, FSSAI, and PIN codes.
  */
 
+import { cleanPhoneNumber, type ValidationLanguage } from "../lib/validators";
+
+export { cleanPhoneNumber };
+
 export const REGEX_GSTIN = /^\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[\dA-Z]$/;
 export const REGEX_PAN = /^[A-Z]{5}\d{4}[A-Z]$/;
 export const REGEX_PHONE_IN = /^[6-9]\d{9}$/;
@@ -23,43 +27,69 @@ export const VALIDATION_MESSAGES_IN = {
   pincode: "Enter a valid 6-digit pincode",
 } as const;
 
-export function validateGSTIN(value: string): string | undefined {
-  const v = value.trim().toUpperCase();
-  if (!v) return "GST Number is required";
-  if (!REGEX_GSTIN.test(v)) return VALIDATION_MESSAGES_IN.gstin;
+export const VALIDATION_MESSAGES_IN_HI = {
+  gstin: "कृपया एक वैध 15-अक्षरों का GSTIN दर्ज करें (उदा. 27AADCA1234D1Z5)",
+  pan: "कृपया एक वैध 10-अक्षरों का PAN दर्ज करें (उदा. AADCA1234D)",
+  phone: "भारतीय मोबाइल नंबर 10 अंकों का और 6, 7, 8 या 9 से शुरू होना चाहिए",
+  ifsc: "कृपया एक वैध IFSC कोड दर्ज करें (उदा. HDFC0001234)",
+  bankAccount: "बैंक खाता संख्या 9 से 18 अंकों की होनी चाहिए",
+  fssai: "FSSAI लाइसेंस संख्या ठीक 14 अंकों की होनी चाहिए",
+  pincode: "कृपया एक वैध 6-अंकों का पिनकोड दर्ज करें",
+} as const;
+
+export interface IndiaValidationOptions {
+  language?: ValidationLanguage;
 }
 
-export function validatePAN(value: string): string | undefined {
+export function validateGSTIN(value: string, options: IndiaValidationOptions = {}): string | undefined {
   const v = value.trim().toUpperCase();
-  if (!v) return "PAN Number is required";
-  if (!REGEX_PAN.test(v)) return VALIDATION_MESSAGES_IN.pan;
+  const lang = options.language ?? 'en';
+  if (!v) return lang === 'hi' ? "GST नंबर आवश्यक है" : "GST Number is required";
+  if (!REGEX_GSTIN.test(v)) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.gstin : VALIDATION_MESSAGES_IN.gstin;
 }
 
-export function validatePhoneIN(value: string): string | undefined {
+export function validatePAN(value: string, options: IndiaValidationOptions = {}): string | undefined {
+  const v = value.trim().toUpperCase();
+  const lang = options.language ?? 'en';
+  if (!v) return lang === 'hi' ? "PAN नंबर आवश्यक है" : "PAN Number is required";
+  if (!REGEX_PAN.test(v)) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.pan : VALIDATION_MESSAGES_IN.pan;
+}
+
+export function validatePhoneIN(value: string, options: IndiaValidationOptions = {}): string | undefined {
+  const raw = value.trim();
+  const lang = options.language ?? 'en';
+  if (!raw) return lang === 'hi' ? "फ़ोन नंबर आवश्यक है" : "Phone number is required";
+  
+  const cleaned = cleanPhoneNumber(raw);
+  if (!cleaned || cleaned.length !== 10 || !REGEX_PHONE_IN.test(cleaned)) {
+    return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.phone : VALIDATION_MESSAGES_IN.phone;
+  }
+}
+
+export function validateIFSC(value: string, options: IndiaValidationOptions = {}): string | undefined {
+  const v = value.trim().toUpperCase();
+  const lang = options.language ?? 'en';
+  if (!v) return lang === 'hi' ? "IFSC कोड आवश्यक है" : "IFSC code is required";
+  if (!REGEX_IFSC.test(v)) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.ifsc : VALIDATION_MESSAGES_IN.ifsc;
+}
+
+export function validateBankAccountIN(value: string, options: IndiaValidationOptions = {}): string | undefined {
   const v = value.trim().replace(/\s/g, "");
-  if (!v) return "Phone number is required";
-  if (!REGEX_PHONE_IN.test(v)) return VALIDATION_MESSAGES_IN.phone;
+  const lang = options.language ?? 'en';
+  if (!v) return lang === 'hi' ? "बैंक खाता संख्या आवश्यक है" : "Account number is required";
+  if (!REGEX_BANK_ACCOUNT_IN.test(v)) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.bankAccount : VALIDATION_MESSAGES_IN.bankAccount;
 }
 
-export function validateIFSC(value: string): string | undefined {
-  const v = value.trim().toUpperCase();
-  if (!v) return "IFSC code is required";
-  if (!REGEX_IFSC.test(v)) return VALIDATION_MESSAGES_IN.ifsc;
-}
-
-export function validateBankAccountIN(value: string): string | undefined {
-  const v = value.trim();
-  if (!v) return "Account number is required";
-  if (!REGEX_BANK_ACCOUNT_IN.test(v)) return VALIDATION_MESSAGES_IN.bankAccount;
-}
-
-export function validateFSSAI(value: string): string | undefined {
+export function validateFSSAI(value: string, options: IndiaValidationOptions = {}): string | undefined {
   if (!value || !value.trim()) return undefined;
-  if (!REGEX_FSSAI.test(value.trim())) return VALIDATION_MESSAGES_IN.fssai;
+  const lang = options.language ?? 'en';
+  if (!REGEX_FSSAI.test(value.trim())) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.fssai : VALIDATION_MESSAGES_IN.fssai;
 }
 
-export function validatePincode(value: string): string | undefined {
+export function validatePincode(value: string, options: IndiaValidationOptions = {}): string | undefined {
   const v = value.trim();
-  if (!v) return "Pincode is required";
-  if (!REGEX_PINCODE.test(v)) return VALIDATION_MESSAGES_IN.pincode;
+  const lang = options.language ?? 'en';
+  if (!v) return lang === 'hi' ? "पिनकोड आवश्यक है" : "Pincode is required";
+  if (!REGEX_PINCODE.test(v)) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.pincode : VALIDATION_MESSAGES_IN.pincode;
 }
+
