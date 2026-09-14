@@ -15,6 +15,7 @@
 
 1. [Installation](#installation)
 2. [Quick Start & Imports](#quick-start--imports)
+   - [Enterprise Integration Recipe](docs/recipes/full-app-integration.md)
    - [Subpath Reference Table](#subpath-reference-table)
    - [Tree-Shaking Scope & Standalone Primitives](#tree-shaking-scope--standalone-primitives)
    - [SSR Compatibility & Hydration Architecture](#ssr-compatibility--hydration-architecture)
@@ -210,6 +211,15 @@ If your project uses Tailwind CSS v3, Vite, Webpack, Create React App, or standa
 import "@umesh0492/react-libs/dist/style.css";
 ```
 
+> [!TIP]
+> **CSS Cascade Layer Isolation (`@layer react-libs`)**:
+> `dist/style.css` is encapsulated in `@layer react-libs { ... }` per the W3C CSS Cascading and Inheritance Level 5 specification. Because unlayered styles have higher precedence than layered styles in the CSS cascade, your application's custom CSS classes and local Tailwind utilities will naturally override library styles without specificity wars or `!important`.
+>
+> If your application uses multiple cascade layers, you can define layer ordering in your root stylesheet:
+> ```css
+> @layer reset, react-libs, components, utilities;
+> ```
+
 > [!NOTE]
 > `@umesh0492/react-libs/dist/style.css` contains all pre-compiled Tailwind utility classes and design tokens. It requires zero PostCSS or Tailwind build plugins on the consumer end, making it plug-and-play in any React project.
 
@@ -239,7 +249,7 @@ Add `.theme-orange` (or customized brand classes) to switch accent branding seam
 
 ## Component Reference
 
-> Interactive documentation & stories: [Storybook Playground](https://umesh0492.github.io/react-libs) · Comprehensive guide: [WIKI.md](./WIKI.md)
+> Interactive documentation & stories: [Storybook Playground](https://umesh0492.github.io/react-libs) · Comprehensive guide: [WIKI.md](./WIKI.md) · Architecture Recipe: [Enterprise App Integration](docs/recipes/full-app-integration.md)
 
 > [!NOTE]
 > **SSR Compatibility**: Root `@umesh0492/react-libs` UI components are tagged with `'use client'` directives and guard browser APIs to avoid server hydration mismatches in Next.js App Router and Remix. Pure utilities under `@umesh0492/react-libs/utils` run safely in server contexts with zero DOM/React dependencies. Browser-only components such as `PdfViewer` are exported through dedicated client subpaths (`@umesh0492/react-libs/pdf`) to prevent server runtime issues.
@@ -442,7 +452,10 @@ export function InvoiceViewer() {
 
 ## Pluggable Behavioral Analytics
 
-The library includes a client behavioral analytics engine with automated DOM tracking, batching, offline resilience, and pluggable destination adapters:
+The library includes a client behavioral analytics engine with automated DOM tracking, batching, offline resilience, and pluggable destination adapters.
+
+> [!TIP]
+> For a complete, production-ready recipe showing how to configure `AnalyticsProvider`, route tracking with `<PageViewTracker />`, click scoping with `<TrackArea />`, and multi-brand theming, see [Enterprise Integration Recipe](docs/recipes/full-app-integration.md).
 
 ```tsx
 import {

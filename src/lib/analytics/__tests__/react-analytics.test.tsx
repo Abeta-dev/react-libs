@@ -78,6 +78,19 @@ describe("React Analytics Integration", () => {
     );
   });
 
+  it("renders TrackArea with area prop as alias for journey", () => {
+    const { container } = render(
+      <TrackArea area="invoice_management" step="review">
+        <span>Invoice Content</span>
+      </TrackArea>
+    );
+
+    const area = container.querySelector("[data-track-area]");
+    expect(area).toBeInTheDocument();
+    expect(area).toHaveAttribute("data-track-area-journey", "invoice_management");
+    expect(area).toHaveAttribute("data-track-area-step", "review");
+  });
+
   it("PageViewTracker automatically dispatches page view on mount", async () => {
     const engine = initAnalytics({
       adapters: [mockAdapter],

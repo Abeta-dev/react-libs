@@ -9,7 +9,7 @@
  */
 
 import { execSync } from 'node:child_process';
-import { existsSync, readFileSync, appendFileSync, statSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, appendFileSync, statSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -60,6 +60,11 @@ async function buildCss() {
     console.log('ℹ️  No dist/index.css found to append.');
   }
 
+  // 3. Encapsulate entire bundle inside @layer react-libs
+  console.log('🛡️  Encapsulating dist/style.css in @layer react-libs...');
+  const compiledCss = readFileSync(OUTPUT_CSS, 'utf8');
+  const layeredCss = `@layer react-libs {\n${compiledCss}\n}\n`;
+  writeFileSync(OUTPUT_CSS, layeredCss, 'utf8');
 
   // 4. Verify output
   if (!existsSync(OUTPUT_CSS)) {
@@ -71,12 +76,24 @@ async function buildCss() {
   const sizeKb = (stats.size / 1024).toFixed(2);
   const content = readFileSync(OUTPUT_CSS, 'utf8');
 
-  // Verify utility classes (e.g. flex)
-  const utilityChecks = ['flex'];
+  // Verify @layer react-libs encapsulation
+  const isLayered = content.startsWith('@layer react-libs') || content.includes('@layer react-libs');
+  if (!isLayered) {
+    console.error('❌ Verification failed: dist/style.css is not encapsulated in @layer react-libs');
+    process.exit(1);
+  }
+
+  if (!content.trim().endsWith('}')) {
+    console.error('❌ Verification failed: dist/style.css does not properly close the @layer block');
+    process.exit(1);
+  }
+
+  // Verify utility classes (e.g. flex) and theme tokens
+  const utilityChecks = ['flex', '--background', '--primary'];
   const missing = utilityChecks.filter((cls) => !content.includes(cls));
 
   if (missing.length > 0) {
-    console.error(`❌ Verification failed: missing expected utility classes (${missing.join(', ')})`);
+    console.error(`❌ Verification failed: missing expected utility classes/tokens (${missing.join(', ')})`);
     process.exit(1);
   }
 
@@ -87,7 +104,8 @@ async function buildCss() {
 
   console.log(`✅ dist/style.css successfully generated and verified!`);
   console.log(`   Final size: ${sizeKb} KB (${stats.size.toLocaleString()} bytes)`);
-  console.log(`   Verified utilities: ${utilityChecks.join(', ')} present.`);
+  console.log(`   Encapsulated: @layer react-libs wrapper verified.`);
+  console.log(`   Verified utilities & tokens: ${utilityChecks.join(', ')} present.`);
 
   process.exit(0);
 }
