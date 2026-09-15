@@ -1,7 +1,8 @@
 # @umesh0492/react-libs
 
-> **React 19 component library with Tailwind CSS v4 & Radix UI primitives.**  
-> Single source of truth for visual components, design tokens, hooks, formatters, and behavioral analytics across web applications.
+> **Enterprise B2B Design System & Application Engine for React 19.**  
+> Built for multi-tenant vendor portals, procurement dashboards, statutory compliance, and financial workflows.
+> Combines accessible Tailwind CSS v4 & Radix UI primitives, India statutory validation (GSTIN, PAN, IFSC), pluggable behavioral telemetry, and offline-resilient PWA mutations into isolated, tree-shakeable subpaths.
 
 [![Version](https://img.shields.io/badge/version-0.9.0-blue)](https://www.npmjs.com/package/@umesh0492/react-libs)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#testing)
@@ -32,6 +33,33 @@
 10. [Testing](#testing)
 11. [Publishing](#publishing)
 12. [Architecture & Accessibility](#architecture--accessibility)
+
+---
+
+## Enterprise Architecture & Subpath Matrix
+
+`@umesh0492/react-libs` addresses the complete domain stack required to power multi-tenant vendor portals, procurement suites, and compliance engines. Rather than imposing a heavy monolithic dependency, every domain capability is isolated into **strictly decoupled subpaths** so consumers only bundle what they import:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                   @umesh0492/react-libs Module Matrix                  │
+├────────────────────────────────────────────────────────────────────────┤
+│ 1. Core UI Layer (@umesh0492/react-libs)                               │
+│    Accessible, themeable Tailwind v4 components, layouts & data tables │
+├────────────────────────────────────────────────────────────────────────┤
+│ 2. Standalone Primitives (/button, /card, /dialog, /data-table, etc.)  │
+│    Micro-bundle entry points for strict per-route dashboard budgets    │
+├────────────────────────────────────────────────────────────────────────┤
+│ 3. India Statutory Compliance & Regional Logic (/india)                │
+│    Zero-DOM GSTIN, PAN, IFSC, Lakhs/Crores, and WhatsApp tools         │
+├────────────────────────────────────────────────────────────────────────┤
+│ 4. Behavioral Analytics & Event Telemetry (/analytics)                 │
+│    Headless audit log tracker, batch queue & DOM auto-capture          │
+├────────────────────────────────────────────────────────────────────────┤
+│ 5. Pure Headless Utilities (/utils)                                    │
+│    Universal string formatters, masks & validators (RSC / Server-safe) │
+└────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 

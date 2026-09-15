@@ -100,6 +100,7 @@
     "check:types-pkg": "npx --yes @arethetypeswrong/cli --pack .",
     "check:directives": "node scripts/verify-directives.mjs && npm run check:ssr",
     "check:ssr": "vitest run src/__tests__/ssr-smoke.test.tsx",
+    "test:visual": "vitest run src/__tests__/visual-smoke.test.tsx",
     "check:size": "node scripts/check-bundle-size.mjs",
     "verify:release": "node scripts/verify-release-version.mjs",
     "extract:release-notes": "node scripts/extract-release-notes.mjs",

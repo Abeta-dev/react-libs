@@ -78,6 +78,9 @@ jobs:
       - name: Execute Vitest (Full Test Suite + Coverage)
         run: npm run test
 
+      - name: Visual & Layout Smoke Regression Gate
+        run: npm run test:visual
+
       - name: Build Storybook
         run: npm run build-storybook
 
