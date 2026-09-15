@@ -106,6 +106,13 @@ The library exposes dedicated entry points for UI components, server-safe utilit
 | `@umesh0492/react-libs/badge` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Badge primitive with zero Radix dependency overhead. |
 | `@umesh0492/react-libs/input` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Input primitive with zero Radix dependency overhead. |
 | `@umesh0492/react-libs/data-table` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone DataTable component with high-performance client-side sorting, multi-column search, pagination, and skeleton loading. |
+| `@umesh0492/react-libs/charts` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Chart container and tooltip primitives (`ChartContainer`, `ChartTooltip`, `ChartLegend`), isolating Recharts peer dependency. |
+| `@umesh0492/react-libs/command` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Command palette primitives (`Command`, `CommandInput`, `CommandList`), isolating cmdk peer dependency. |
+| `@umesh0492/react-libs/drawer` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Drawer overlay primitives (`Drawer`, `DrawerContent`, `DrawerHeader`), isolating Vaul peer dependency. |
+| `@umesh0492/react-libs/carousel` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Carousel primitives (`Carousel`, `CarouselContent`, `CarouselItem`), isolating Embla Carousel peer dependency. |
+| `@umesh0492/react-libs/calendar` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Calendar date picker primitive (`Calendar`), isolating react-day-picker peer dependency. |
+| `@umesh0492/react-libs/date-picker` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone DateRangePicker primitive (`DateRangePicker`), isolating react-day-picker and date-fns peer dependencies. |
+| `@umesh0492/react-libs/form` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Form field and form context primitives (`Form`, `FormField`, `FormItem`, `FormLabel`), isolating react-hook-form peer dependency. |
 | `@umesh0492/react-libs/style.css` | CSS | N/A | Standalone pre-compiled stylesheet with all Tailwind utility classes and design tokens. |
 | `@umesh0492/react-libs/styles/theme.css` | CSS | N/A | Design system theme variables and color tokens for Tailwind CSS v4 projects (`@import`). |
 
@@ -113,15 +120,22 @@ The library exposes dedicated entry points for UI components, server-safe utilit
 
 Modern bundlers (Vite, Next.js, Rollup, Webpack 5) automatically perform dead-code elimination and tree-shake unreferenced components from the primary entry point (`@umesh0492/react-libs`).
 
-For consumer environments with strict per-route bundle budgets or legacy bundlers without deep tree-shaking, high-frequency primitives and heavy components provide **dedicated standalone entry points** with zero barrel overhead:
-- `@umesh0492/react-libs/button`
-- `@umesh0492/react-libs/dialog`
-- `@umesh0492/react-libs/card`
-- `@umesh0492/react-libs/badge`
-- `@umesh0492/react-libs/input`
-- `@umesh0492/react-libs/data-table`
+For consumer environments with strict per-route bundle budgets, zero optional peer dependencies, or legacy bundlers without deep tree-shaking, high-frequency primitives and heavy components provide **dedicated standalone entry points** with zero barrel overhead:
+- `@umesh0492/react-libs/button` (Micro-bundle: ~2.5 KB)
+- `@umesh0492/react-libs/dialog` (Micro-bundle: ~3.3 KB)
+- `@umesh0492/react-libs/card` (Micro-bundle: ~3.7 KB)
+- `@umesh0492/react-libs/badge` (Micro-bundle: ~1.6 KB)
+- `@umesh0492/react-libs/input` (Micro-bundle: ~1.1 KB)
+- `@umesh0492/react-libs/data-table` (Isolated data table: ~12.6 KB)
+- `@umesh0492/react-libs/charts` (Isolates `recharts` peer dependency)
+- `@umesh0492/react-libs/command` (Isolates `cmdk` peer dependency)
+- `@umesh0492/react-libs/drawer` (Isolates `vaul` peer dependency)
+- `@umesh0492/react-libs/carousel` (Isolates `embla-carousel-react` peer dependency)
+- `@umesh0492/react-libs/calendar` (Isolates `react-day-picker` peer dependency)
+- `@umesh0492/react-libs/date-picker` (Isolates `react-day-picker` + `date-fns` peer dependencies)
+- `@umesh0492/react-libs/form` (Isolates `react-hook-form` peer dependency)
 
-All other UI components (such as `Sidebar`, `Calendar`, etc.) are imported directly from `@umesh0492/react-libs`, relying on modern ESM bundler tree-shaking.
+All other UI components are imported directly from `@umesh0492/react-libs`, relying on modern ESM bundler tree-shaking.
 
 ### SSR Compatibility & Hydration Architecture
 

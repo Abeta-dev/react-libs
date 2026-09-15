@@ -75,6 +75,13 @@ export function measureMetrics() {
     'dist/badge.js',
     'dist/input.js',
     'dist/data-table.js',
+    'dist/charts.js',
+    'dist/command.js',
+    'dist/drawer.js',
+    'dist/carousel.js',
+    'dist/calendar.js',
+    'dist/date-picker.js',
+    'dist/form.js',
     'dist/style.css',
   ];
 

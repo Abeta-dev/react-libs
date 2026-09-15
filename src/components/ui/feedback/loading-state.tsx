@@ -18,6 +18,8 @@ export function LoadingState({
 }: LoadingStateProps) {
   return (
     <Card
+      role="status"
+      aria-live="polite"
       className={cn(
         "flex min-h-48 flex-col items-center justify-center gap-3 px-6 py-10 text-slate-500 dark:text-slate-400",
         className

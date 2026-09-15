@@ -101,9 +101,9 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
               type="button"
               onClick={handleDismiss}
               aria-label="Dismiss banner"
-              className="p-1 rounded hover:bg-black/5 dark:hover:bg-white/10 opacity-70 hover:opacity-100 transition-opacity"
+              className="p-1 rounded hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring opacity-70 hover:opacity-100 transition-all"
             >
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4" aria-hidden="true" />
             </button>
           )}
         </div>

@@ -46,6 +46,20 @@ const CLIENT_FILES = [
   'dist/input.cjs',
   'dist/data-table.js',
   'dist/data-table.cjs',
+  'dist/charts.js',
+  'dist/charts.cjs',
+  'dist/command.js',
+  'dist/command.cjs',
+  'dist/drawer.js',
+  'dist/drawer.cjs',
+  'dist/carousel.js',
+  'dist/carousel.cjs',
+  'dist/calendar.js',
+  'dist/calendar.cjs',
+  'dist/date-picker.js',
+  'dist/date-picker.cjs',
+  'dist/form.js',
+  'dist/form.cjs',
 ];
 
 const UNIVERSAL_FILES = [

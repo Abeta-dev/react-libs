@@ -27,6 +27,57 @@ export interface FileUploadProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   error?: string | undefined;
 }
 
+function isFileTypeAccepted(file: File, accept?: string): boolean {
+  if (!accept) return true;
+  const acceptedTypes = accept
+    .split(",")
+    .map((t) => t.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (acceptedTypes.length === 0) return true;
+
+  const fileName = file.name.toLowerCase();
+  const fileType = file.type.toLowerCase();
+
+  return acceptedTypes.some((pattern) => {
+    if (pattern.startsWith(".")) {
+      return fileName.endsWith(pattern);
+    }
+    if (pattern.endsWith("/*")) {
+      const mainType = pattern.split("/")[0];
+      return fileType.startsWith(`${mainType}/`);
+    }
+    return fileType === pattern;
+  });
+}
+
+function validateFile(file: File, accept?: string, maxSize?: number): string | null {
+  if (accept && !isFileTypeAccepted(file, accept)) {
+    return `File "${file.name}" is not an accepted file type`;
+  }
+  if (maxSize && file.size > maxSize) {
+    return `File "${file.name}" exceeds max allowed size of ${formatBytes(maxSize)}`;
+  }
+  return null;
+}
+
+function createFileItem(file: File, createdUrls: Set<string>): FileItem {
+  const isImage = file.type.startsWith("image/");
+  const previewUrl = isImage ? URL.createObjectURL(file) : undefined;
+  if (previewUrl) {
+    createdUrls.add(previewUrl);
+  }
+
+  return {
+    id: typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : `${file.name}-${file.lastModified}-${file.size}-${Date.now()}`,
+    file,
+    previewUrl,
+    progress: 100,
+  };
+}
+
 export const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
   (
     {
@@ -85,32 +136,24 @@ export const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
         const validFiles: FileItem[] = [];
 
         for (const file of incoming) {
-          if (maxSize && file.size > maxSize) {
-            setErrorMessage(`File "${file.name}" exceeds max allowed size of ${formatBytes(maxSize)}`);
+          const fileErr = validateFile(file, accept, maxSize);
+          if (fileErr) {
+            setErrorMessage(fileErr);
             return;
           }
-
-          const isImage = file.type.startsWith("image/");
-          const previewUrl = isImage ? URL.createObjectURL(file) : undefined;
-          if (previewUrl) {
-            createdUrlsRef.current.add(previewUrl);
-          }
-
-          validFiles.push({
-            id: typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
-              ? crypto.randomUUID()
-              : `${file.name}-${file.lastModified}-${file.size}-${Date.now()}`,
-            file,
-            previewUrl,
-            progress: 100,
-          });
+          validFiles.push(createFileItem(file, createdUrlsRef.current));
         }
 
         const updated = multiple ? [...value, ...validFiles] : validFiles;
         updateFiles(updated);
       },
-      [value, updateFiles, maxSize, maxFiles, multiple]
+      [value, updateFiles, maxSize, maxFiles, multiple, accept]
     );
+
+    const handleDragEnter = (e: React.DragEvent) => {
+      e.preventDefault();
+      if (!disabled) setIsDragging(true);
+    };
 
     const handleDragOver = (e: React.DragEvent) => {
       e.preventDefault();
@@ -187,6 +230,7 @@ export const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
 
         <div
           onClick={() => !disabled && inputRef.current?.click()}
+          onDragEnter={handleDragEnter}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}

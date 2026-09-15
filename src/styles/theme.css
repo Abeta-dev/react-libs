@@ -57,6 +57,20 @@
   --font-display: 'Outfit', sans-serif;
 }
 
+/* ─── Accessibility: Reduced Motion (WCAG 2.2 / Web Interface Guidelines) ─ */
+@layer base {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
 /* ─── Light Mode Tokens ─────────────────────────────────────────────────── */
 :root {
   --background: 210 20% 98%;
@@ -70,10 +84,10 @@
   --popover-foreground: 222.2 84% 4.9%;
   --popover-border: 214.3 31.8% 91.4%;
 
-  /* Primary Emerald Brand Theme */
-  --primary: 142.1 76.2% 36.3%;
+  /* Primary Emerald Brand Theme (recalibrated to 28% lightness for WCAG 2.1 AA >= 4.5:1 contrast) */
+  --primary: 142.1 76.2% 28%;
   --primary-foreground: 355.7 100% 97.3%;
-  --primary-border: 142.1 76.2% 30%;
+  --primary-border: 142.1 76.2% 22%;
 
   --secondary: 210 40% 96.1%;
   --secondary-foreground: 222.2 47.4% 11.2%;
@@ -92,19 +106,19 @@
 
   --border: 214.3 31.8% 91.4%;
   --input: 214.3 31.8% 91.4%;
-  --ring: 142.1 76.2% 36.3%;
+  --ring: 142.1 76.2% 28%;
 
-  /* Data Visualization */
-  --chart-1: 142.1 76.2% 36.3%;
-  --chart-2: 38 92% 50%;
-  --chart-3: 200 98% 39%;
-  --chart-4: 0 84% 60%;
-  --chart-5: 27 87% 67%;
+  /* Data Visualization (Okabe-Ito Colorblind Accessible Palette) */
+  --chart-1: 210 100% 35%; /* Cobalt Blue #0072b2 */
+  --chart-2: 38 100% 45%;  /* Amber Orange #e69f00 */
+  --chart-3: 164 100% 31%; /* Teal Green #009e73 */
+  --chart-4: 26 100% 42%;  /* Vermillion Red #d55e00 */
+  --chart-5: 202 80% 63%;  /* Sky Blue #56b4e9 */
 
   /* Sidebar */
   --sidebar: 0 0% 100%;
   --sidebar-foreground: 222.2 84% 4.9%;
-  --sidebar-primary: 142.1 76.2% 36.3%;
+  --sidebar-primary: 142.1 76.2% 28%;
   --sidebar-primary-foreground: 355.7 100% 97.3%;
   --sidebar-accent: 210 40% 96.1%;
   --sidebar-accent-foreground: 222.2 47.4% 11.2%;
@@ -149,19 +163,20 @@
   --accent-foreground: 210 40% 98%;
   --accent-border: 217.2 32.6% 25%;
 
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --destructive-border: 0 62.8% 40%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 222.2 84% 4.9%;
+  --destructive-border: 0 84.2% 50%;
 
   --border: 217.2 32.6% 17.5%;
   --input: 217.2 32.6% 17.5%;
   --ring: 142.1 70.6% 45.3%;
 
-  --chart-1: 142.1 70.6% 45.3%;
-  --chart-2: 35 92% 53%;
-  --chart-3: 199 89% 48%;
-  --chart-4: 0 84% 60%;
-  --chart-5: 25 85% 65%;
+  /* Data Visualization (Calibrated Okabe-Ito for Dark Mode) */
+  --chart-1: 205 100% 65%; /* Cobalt Blue Light */
+  --chart-2: 38 100% 55%;  /* Amber Orange Bright */
+  --chart-3: 164 80% 50%;  /* Teal Green Bright */
+  --chart-4: 26 100% 60%;  /* Vermillion Red Bright */
+  --chart-5: 202 90% 70%;  /* Sky Blue Bright */
 
   --sidebar: 222.2 84% 4.9%;
   --sidebar-foreground: 210 40% 98%;

@@ -5,6 +5,7 @@ import {
   clearBlobStorageConfig,
   uploadFileToStorage,
   downloadFileFromStorage,
+  sanitizeStoragePath,
 } from "../blob-storage";
 
 describe("Blob Storage Utilities", () => {
@@ -116,5 +117,40 @@ describe("Blob Storage Utilities", () => {
     expect(revokeObjectURL).toHaveBeenCalledWith(
       "blob:http://localhost/test-uuid"
     );
+  });
+
+  describe("sanitizeStoragePath (CWE-22 defense)", () => {
+    it("strips directory traversal dots and leading/trailing slashes", () => {
+      expect(sanitizeStoragePath("../../../etc/passwd")).toBe("etc/passwd");
+      expect(sanitizeStoragePath("/documents/subfolder/")).toBe("documents/subfolder");
+      expect(sanitizeStoragePath("..\\..\\malicious")).toBe("malicious");
+      expect(sanitizeStoragePath("docs/../nested")).toBe("docs/nested");
+      expect(sanitizeStoragePath("")).toBe("");
+    });
+
+    it("sanitizes folderPath passed to uploadFileToStorage", async () => {
+      vi.spyOn(global, "fetch")
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({
+            storage_base_url: "https://storage.example.com",
+            storage_secret_key: "secret",
+          }),
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({
+            status_code: 200,
+            data: [{ url: "https://storage.example.com/ok", fileName: "f.pdf", originalName: "f.pdf" }],
+          }),
+        } as Response);
+
+      const file = new File(["test"], "f.pdf", { type: "application/pdf" });
+      await uploadFileToStorage(file, "../../dangerous_folder/");
+
+      const uploadCall = (global.fetch as any).mock.calls[1];
+      const formData = uploadCall[1].body as FormData;
+      expect(formData.get("folderPath")).toBe("dangerous_folder");
+    });
   });
 });

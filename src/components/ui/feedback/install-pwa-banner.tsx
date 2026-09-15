@@ -82,6 +82,8 @@ export function InstallPwaBanner({
 
   return (
     <aside
+      role="region"
+      aria-live="polite"
       aria-label={`Install ${appName} Banner`}
       className={cn(
         "fixed bottom-20 md:bottom-6 right-4 left-4 md:left-auto md:w-96 z-40",
@@ -127,11 +129,12 @@ export function InstallPwaBanner({
         </div>
 
         <button
+          type="button"
           onClick={handleDismiss}
           aria-label="Dismiss banner"
-          className="text-muted-foreground hover:text-foreground p-1 rounded-lg transition-colors -mr-1 -mt-1"
+          className="text-muted-foreground hover:text-foreground p-1 rounded-lg transition-colors -mr-1 -mt-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         >
-          <X className="w-4 h-4" />
+          <X className="w-4 h-4" aria-hidden="true" />
         </button>
       </div>
 

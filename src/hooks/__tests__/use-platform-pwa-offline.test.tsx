@@ -47,6 +47,243 @@ describe("usePlatform, usePWAInstall, useOfflineQueue & Platform/WhatsApp utilit
       expect(info).toHaveProperty("isStandalone");
     });
 
+    it("handles SSR fallback behaviors when window or navigator is undefined", async () => {
+      const originalWindow = global.window;
+      const originalNavigator = global.navigator;
+
+      try {
+        // 1. Simulating SSR environment where window is undefined
+        delete (global as Record<string, unknown>).window;
+
+        const ssrPlatform = getPlatformInfo();
+        expect(ssrPlatform).toEqual({
+          isIOS: false,
+          isAndroid: false,
+          isMobile: false,
+          isStandalone: false,
+          platformName: "desktop",
+          hasTouch: false,
+        });
+
+        expect(() => triggerHaptic("medium")).not.toThrow();
+        expect(await nativeShare({ title: "SSR Test" })).toBe(false);
+
+        // 2. Simulating environment where window is present but navigator is undefined
+        (global as Record<string, unknown>).window = originalWindow;
+        delete (global as Record<string, unknown>).navigator;
+
+        const navUndefinedPlatform = getPlatformInfo();
+        expect(navUndefinedPlatform).toEqual({
+          isIOS: false,
+          isAndroid: false,
+          isMobile: false,
+          isStandalone: false,
+          platformName: "desktop",
+          hasTouch: false,
+        });
+
+        expect(() => triggerHaptic("error")).not.toThrow();
+        expect(await nativeShare({ title: "No Nav Test" })).toBe(false);
+      } finally {
+        global.window = originalWindow;
+        global.navigator = originalNavigator;
+      }
+    });
+
+    it("detects devices correctly across iOS, Android, macOS, and Windows", () => {
+      const setDeviceEnv = ({
+        userAgent,
+        platform,
+        maxTouchPoints = 0,
+        innerWidth = 1024,
+        hasTouch = false,
+      }: {
+        userAgent: string;
+        platform: string;
+        maxTouchPoints?: number;
+        innerWidth?: number;
+        hasTouch?: boolean;
+      }) => {
+        Object.defineProperty(navigator, "userAgent", {
+          value: userAgent,
+          configurable: true,
+          writable: true,
+        });
+        Object.defineProperty(navigator, "platform", {
+          value: platform,
+          configurable: true,
+          writable: true,
+        });
+        Object.defineProperty(navigator, "maxTouchPoints", {
+          value: maxTouchPoints,
+          configurable: true,
+          writable: true,
+        });
+        Object.defineProperty(window, "innerWidth", {
+          value: innerWidth,
+          configurable: true,
+          writable: true,
+        });
+
+        if (hasTouch) {
+          (window as unknown as Record<string, unknown>).ontouchstart = () => {};
+        } else {
+          Reflect.deleteProperty(window, "ontouchstart");
+        }
+      };
+
+      // 1. iOS iPhone
+      setDeviceEnv({
+        userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148",
+        platform: "iPhone",
+        maxTouchPoints: 5,
+        innerWidth: 390,
+        hasTouch: true,
+      });
+      const iPhoneInfo = getPlatformInfo();
+      expect(iPhoneInfo.isIOS).toBe(true);
+      expect(iPhoneInfo.isAndroid).toBe(false);
+      expect(iPhoneInfo.isMobile).toBe(true);
+      expect(iPhoneInfo.platformName).toBe("ios");
+      expect(iPhoneInfo.hasTouch).toBe(true);
+
+      // 2. iPadOS desktop Safari mode spoofing MacIntel with touch points
+      setDeviceEnv({
+        userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15",
+        platform: "MacIntel",
+        maxTouchPoints: 5,
+        innerWidth: 1024,
+      });
+      const iPadOSInfo = getPlatformInfo();
+      expect(iPadOSInfo.isIOS).toBe(true);
+      expect(iPadOSInfo.isAndroid).toBe(false);
+      expect(iPadOSInfo.isMobile).toBe(true);
+      expect(iPadOSInfo.platformName).toBe("ios");
+      expect(iPadOSInfo.hasTouch).toBe(true);
+
+      // 3. Android phone
+      setDeviceEnv({
+        userAgent: "Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 Chrome/120.0 Mobile Safari/537.36",
+        platform: "Linux armv8l",
+        maxTouchPoints: 5,
+        innerWidth: 412,
+      });
+      const androidInfo = getPlatformInfo();
+      expect(androidInfo.isAndroid).toBe(true);
+      expect(androidInfo.isIOS).toBe(false);
+      expect(androidInfo.isMobile).toBe(true);
+      expect(androidInfo.platformName).toBe("android");
+      expect(androidInfo.hasTouch).toBe(true);
+
+      // 4. macOS Desktop
+      setDeviceEnv({
+        userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
+        platform: "MacIntel",
+        maxTouchPoints: 0,
+        innerWidth: 1440,
+      });
+      const macDesktopInfo = getPlatformInfo();
+      expect(macDesktopInfo.isIOS).toBe(false);
+      expect(macDesktopInfo.isAndroid).toBe(false);
+      expect(macDesktopInfo.isMobile).toBe(false);
+      expect(macDesktopInfo.platformName).toBe("desktop");
+      expect(macDesktopInfo.hasTouch).toBe(false);
+
+      // 5. Windows Desktop
+      setDeviceEnv({
+        userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
+        platform: "Win32",
+        maxTouchPoints: 0,
+        innerWidth: 1920,
+      });
+      const winDesktopInfo = getPlatformInfo();
+      expect(winDesktopInfo.isIOS).toBe(false);
+      expect(winDesktopInfo.isAndroid).toBe(false);
+      expect(winDesktopInfo.isMobile).toBe(false);
+      expect(winDesktopInfo.platformName).toBe("desktop");
+      expect(winDesktopInfo.hasTouch).toBe(false);
+
+      // 6. Standalone PWA detection modes
+      // MatchMedia display-mode: standalone
+      vi.spyOn(window, "matchMedia").mockImplementation((query) => ({
+        matches: query.includes("display-mode: standalone"),
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }));
+      expect(getPlatformInfo().isStandalone).toBe(true);
+
+      // iOS standalone navigator property
+      vi.spyOn(window, "matchMedia").mockReturnValue({
+        matches: false,
+        media: "",
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      });
+      Object.defineProperty(navigator, "standalone", {
+        value: true,
+        configurable: true,
+      });
+      expect(getPlatformInfo().isStandalone).toBe(true);
+
+      // Android TWA referrer
+      Object.defineProperty(navigator, "standalone", {
+        value: false,
+        configurable: true,
+      });
+      Object.defineProperty(document, "referrer", {
+        value: "android-app://com.example.twa",
+        configurable: true,
+      });
+      expect(getPlatformInfo().isStandalone).toBe(true);
+    });
+
+    it("updates usePlatform hook when window resize occurs", () => {
+      Object.defineProperty(window, "innerWidth", {
+        value: 1200,
+        configurable: true,
+        writable: true,
+      });
+      Object.defineProperty(navigator, "userAgent", {
+        value: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        configurable: true,
+        writable: true,
+      });
+      Object.defineProperty(navigator, "platform", {
+        value: "Win32",
+        configurable: true,
+        writable: true,
+      });
+      Object.defineProperty(navigator, "maxTouchPoints", {
+        value: 0,
+        configurable: true,
+        writable: true,
+      });
+
+      const { result } = renderHook(() => usePlatform());
+      expect(result.current.isMobile).toBe(false);
+
+      // Resize window to mobile viewport width
+      act(() => {
+        Object.defineProperty(window, "innerWidth", {
+          value: 480,
+          configurable: true,
+          writable: true,
+        });
+        window.dispatchEvent(new Event("resize"));
+      });
+
+      expect(result.current.isMobile).toBe(true);
+    });
+
     it("handles nativeShare with supported and rejected states", async () => {
       // 1. When navigator.share is undefined
       // @ts-expect-error test unset
@@ -101,30 +338,49 @@ describe("usePlatform, usePWAInstall, useOfflineQueue & Platform/WhatsApp utilit
   });
 
   describe("usePWAInstall", () => {
+    it("returns unsupported outcome when promptInstall is called before prompt event", async () => {
+      const { result } = renderHook(() => usePWAInstall());
+      expect(result.current.canInstall).toBe(false);
+
+      let promptRes: { outcome: string } | undefined;
+      await act(async () => {
+        promptRes = await result.current.promptInstall();
+      });
+
+      expect(promptRes?.outcome).toBe("unsupported");
+    });
+
     it("handles beforeinstallprompt and appinstalled events", async () => {
       const { result } = renderHook(() => usePWAInstall());
       expect(result.current.canInstall).toBe(false);
 
       // Mock BeforeInstallPromptEvent
       const promptMock = vi.fn().mockResolvedValue(undefined);
-      const fakeEvent = new Event("beforeinstallprompt") as any;
+      const fakeEvent = new Event("beforeinstallprompt") as unknown as {
+        preventDefault: () => void;
+        prompt: () => Promise<void>;
+        userChoice: Promise<{ outcome: string; platform: string }>;
+      };
+      const preventDefaultSpy = vi.spyOn(fakeEvent, "preventDefault");
       fakeEvent.prompt = promptMock;
       fakeEvent.userChoice = Promise.resolve({ outcome: "accepted", platform: "web" });
 
       await act(async () => {
-        window.dispatchEvent(fakeEvent);
+        window.dispatchEvent(fakeEvent as unknown as Event);
       });
 
+      expect(preventDefaultSpy).toHaveBeenCalled();
       expect(result.current.canInstall).toBe(true);
 
       // Trigger promptInstall
-      let outcomeResult: any;
+      let outcomeResult: { outcome: string } | undefined;
       await act(async () => {
         outcomeResult = await result.current.promptInstall();
       });
 
       expect(promptMock).toHaveBeenCalled();
-      expect(outcomeResult.outcome).toBe("accepted");
+      expect(outcomeResult?.outcome).toBe("accepted");
+      expect(result.current.canInstall).toBe(false);
 
       // Trigger appinstalled
       await act(async () => {
@@ -133,6 +389,77 @@ describe("usePlatform, usePWAInstall, useOfflineQueue & Platform/WhatsApp utilit
 
       expect(result.current.isInstalled).toBe(true);
       expect(result.current.canInstall).toBe(false);
+    });
+
+    it("handles user dismissal of the install prompt and resets deferred prompt", async () => {
+      const { result } = renderHook(() => usePWAInstall());
+
+      const promptMock = vi.fn().mockResolvedValue(undefined);
+      const fakeEvent = new Event("beforeinstallprompt") as unknown as {
+        preventDefault: () => void;
+        prompt: () => Promise<void>;
+        userChoice: Promise<{ outcome: string; platform: string }>;
+      };
+      fakeEvent.prompt = promptMock;
+      fakeEvent.userChoice = Promise.resolve({ outcome: "dismissed", platform: "web" });
+
+      await act(async () => {
+        window.dispatchEvent(fakeEvent as unknown as Event);
+      });
+
+      expect(result.current.canInstall).toBe(true);
+
+      let outcomeResult: { outcome: string } | undefined;
+      await act(async () => {
+        outcomeResult = await result.current.promptInstall();
+      });
+
+      expect(outcomeResult?.outcome).toBe("dismissed");
+
+      // Calling promptInstall a second time should now return unsupported
+      let secondOutcome: { outcome: string } | undefined;
+      await act(async () => {
+        secondOutcome = await result.current.promptInstall();
+      });
+      expect(secondOutcome?.outcome).toBe("unsupported");
+    });
+
+    it("gracefully catches exceptions thrown during prompt execution", async () => {
+      const { result } = renderHook(() => usePWAInstall());
+
+      const fakeEvent = new Event("beforeinstallprompt") as unknown as {
+        prompt: () => Promise<void>;
+        userChoice: Promise<{ outcome: string; platform: string }>;
+      };
+      fakeEvent.prompt = vi.fn().mockRejectedValue(new Error("Browser prompt failure"));
+      fakeEvent.userChoice = Promise.resolve({ outcome: "dismissed", platform: "web" });
+
+      await act(async () => {
+        window.dispatchEvent(fakeEvent as unknown as Event);
+      });
+
+      let outcomeResult: { outcome: string } | undefined;
+      await act(async () => {
+        outcomeResult = await result.current.promptInstall();
+      });
+
+      expect(outcomeResult?.outcome).toBe("dismissed");
+    });
+
+    it("removes beforeinstallprompt and appinstalled event listeners upon unmount", () => {
+      const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
+      const { unmount } = renderHook(() => usePWAInstall());
+
+      unmount();
+
+      expect(removeEventListenerSpy).toHaveBeenCalledWith(
+        "beforeinstallprompt",
+        expect.any(Function)
+      );
+      expect(removeEventListenerSpy).toHaveBeenCalledWith(
+        "appinstalled",
+        expect.any(Function)
+      );
     });
   });
 

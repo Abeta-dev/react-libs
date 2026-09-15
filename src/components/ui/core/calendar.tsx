@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker, useDayPicker } from "react-day-picker";
@@ -108,6 +106,9 @@ function CalendarMonthCaption({
     }
   }, [openYear]);
 
+  // eslint-disable-next-line security/detect-object-injection
+  const currentMonthLabel = months[currentMonth]?.label ?? "";
+
   return (
     <div className={cn("flex items-center gap-2 pl-1", className)} {...captionProps}>
       {/* Month Popover */}
@@ -121,11 +122,11 @@ function CalendarMonthCaption({
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="h-8 px-2 text-sm font-semibold hover:bg-accent rounded-md flex items-center gap-1"
+            aria-label={`Select month, currently ${currentMonthLabel}`}
+            className="h-8 px-2 text-sm font-semibold hover:bg-accent rounded-md flex items-center gap-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
-            {/* eslint-disable-next-line security/detect-object-injection */}
-            {months[currentMonth]?.label}
-            <ChevronDown className="h-3 w-3 opacity-60" />
+            {currentMonthLabel}
+            <ChevronDown className="h-3 w-3 opacity-60" aria-hidden="true" />
           </button>
         </PopoverTrigger>
 
@@ -169,10 +170,11 @@ function CalendarMonthCaption({
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="h-8 px-2 text-sm font-semibold hover:bg-accent rounded-md flex items-center gap-1"
+            aria-label={`Select year, currently ${currentYear}`}
+            className="h-8 px-2 text-sm font-semibold hover:bg-accent rounded-md flex items-center gap-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             {currentYear}
-            <ChevronDown className="h-3 w-3 opacity-60" />
+            <ChevronDown className="h-3 w-3 opacity-60" aria-hidden="true" />
           </button>
         </PopoverTrigger>
 

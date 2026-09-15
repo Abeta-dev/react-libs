@@ -29,6 +29,7 @@ export interface ComboboxProps {
   defaultValue?: string;
   options: ComboboxOption[];
   onChange?: (value: string) => void;
+  readOnly?: boolean;
   placeholder?: string;
   disabled?: boolean;
   emptyText?: string;
@@ -44,6 +45,7 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
       defaultValue,
       options = [],
       onChange,
+      readOnly = false,
       placeholder = "Select an option",
       disabled = false,
       emptyText = "No options found.",
@@ -61,6 +63,36 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
     const isControlled = valueProp !== undefined;
     const value = isControlled ? valueProp : uncontrolledValue;
 
+    const initialControlledRef = React.useRef(isControlled);
+    const hasWarnedRef = React.useRef(false);
+
+    React.useEffect(() => {
+      if (typeof process !== "undefined" && (process as { env?: { NODE_ENV?: string } }).env?.NODE_ENV !== "production") {
+        if (initialControlledRef.current !== isControlled && !hasWarnedRef.current) {
+          hasWarnedRef.current = true;
+          const from = initialControlledRef.current ? "controlled" : "uncontrolled";
+          const to = isControlled ? "controlled" : "uncontrolled";
+          console.warn(
+            `[react-libs] A component is changing an ${from} Combobox to be ${to}. ` +
+            `This is likely caused by the value changing from undefined to a defined value (or vice versa). ` +
+            `Decide between using a controlled or uncontrolled Combobox for the lifetime of the component.`
+          );
+        }
+      }
+    }, [isControlled]);
+
+    React.useEffect(() => {
+      if (typeof process !== "undefined" && (process as { env?: { NODE_ENV?: string } }).env?.NODE_ENV !== "production") {
+        if (isControlled && !onChange && !readOnly) {
+          console.warn(
+            `[react-libs] You provided a \`value\` prop to <Combobox /> without an \`onChange\` handler. ` +
+            `This will render a read-only field. If the field should be mutable use \`defaultValue\`. ` +
+            `Otherwise, set either \`onChange\` or \`readOnly\`.`
+          );
+        }
+      }
+    }, [isControlled, onChange, readOnly]);
+
     const selectedOption = options.find((option) => option.value === value);
 
     const handleSelect = (optionValue: string) => {
@@ -72,7 +104,7 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
     };
 
     return (
-      <Popover modal={false} open={open} onOpenChange={setOpen}>
+      <Popover modal={false} open={readOnly ? false : open} onOpenChange={(next) => { if (!readOnly) setOpen(next); }}>
         <PopoverTrigger asChild>
           <Button
             ref={ref}
@@ -80,7 +112,15 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
             variant="outline"
             role="combobox"
             aria-expanded={open}
+            aria-readonly={readOnly || undefined}
             disabled={disabled}
+            onKeyDown={(e) => {
+              if (readOnly || disabled) return;
+              if ((e.key === "ArrowDown" || e.key === "ArrowUp") && !open) {
+                e.preventDefault();
+                setOpen(true);
+              }
+            }}
             className={cn(
               "w-full justify-between bg-white font-normal text-left dark:bg-slate-950 dark:border-slate-800",
               !selectedOption && "text-slate-500 dark:text-slate-400",

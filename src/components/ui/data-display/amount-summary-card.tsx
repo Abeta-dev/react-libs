@@ -206,6 +206,8 @@ function TotalPayableSection({ isUrgent, urgentLabel, isSm, totalValue, fmt }: T
   return (
     <>
       <div
+        role="status"
+        aria-live="polite"
         className={cn(
           "mt-2 p-3.5 rounded-xl border flex justify-between items-center shadow-xs transition-all",
           isUrgent

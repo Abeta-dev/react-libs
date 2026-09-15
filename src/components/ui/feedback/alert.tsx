@@ -51,11 +51,11 @@ const Alert = React.forwardRef<
         onClick={onDismiss}
         aria-label="Dismiss alert"
         className={cn(
-          "absolute right-3 top-3 rounded p-0.5 opacity-60 transition-opacity hover:opacity-100",
-          "focus:outline-none focus:ring-1 focus:ring-ring"
+          "absolute right-3 top-3 rounded p-1 opacity-60 transition-opacity hover:opacity-100",
+          "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         )}
       >
-        <X className="h-3.5 w-3.5" />
+        <X className="h-3.5 w-3.5" aria-hidden="true" />
       </button>
     )}
   </div>

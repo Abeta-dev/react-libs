@@ -97,10 +97,10 @@ export function PipelineKanban({
                 <button
                   type="button"
                   onClick={() => onAddCard(col.id)}
-                  className="rounded p-1 text-slate-400 hover:bg-slate-200 hover:text-slate-700 dark:hover:bg-slate-800"
+                  className="rounded p-1 text-slate-400 hover:bg-slate-200 hover:text-slate-700 dark:hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                   aria-label={`Add item to ${col.title}`}
                 >
-                  <Plus className="h-3.5 w-3.5" />
+                  <Plus className="h-3.5 w-3.5" aria-hidden="true" />
                 </button>
               )}
             </div>

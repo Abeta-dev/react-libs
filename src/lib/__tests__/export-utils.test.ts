@@ -370,6 +370,24 @@ describe('exportData — XLSX', () => {
       'XLSX export requires the "xlsx" package. Please install it: npm install xlsx'
     );
   });
+
+  it('neutralizes spreadsheet formula injection in XLSX cells (CWE-1236)', async () => {
+    const maliciousData = [
+      { id: '1', formula: '=cmd|\'/c calc\'!A0', plus: '+1234-5678', at: '@SUM(A1:A10)', tab: '\tEVIL' },
+    ];
+    await exportData(maliciousData, 'security-xlsx', 'xlsx');
+    expect(xlsxStub.utils.aoa_to_sheet).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.arrayContaining([
+          '1',
+          "'=cmd|'/c calc'!A0",
+          "'+1234-5678",
+          "'@SUM(A1:A10)",
+          "'\tEVIL",
+        ])
+      ])
+    );
+  });
 });
 
 // ─── exportData — PDF ────────────────────────────────────────────────────────

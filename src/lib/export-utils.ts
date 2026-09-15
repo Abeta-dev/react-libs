@@ -40,6 +40,19 @@ export interface ExportOptions {
  *   ]
  * })
  */
+/**
+ * Neutralize spreadsheet formula injection triggers (=, +, -, @, \t, \r) (CWE-1236).
+ * Numeric values and booleans are preserved. Strings starting with trigger characters are prepended with a single quote.
+ */
+export function sanitizeSpreadsheetValue(val: unknown): unknown {
+  if (val == null) return "";
+  if (typeof val === "number" || typeof val === "boolean") return val;
+  const str = String(val);
+  const isFormula = /^[=+\-@\t\r]/.test(str);
+  const isNumber = !isNaN(Number(str)) && str.trim() !== "";
+  return isFormula && !isNumber ? `'${str}` : val;
+}
+
 export async function exportData(
   data: Record<string, unknown>[],
   filename: string,
@@ -57,12 +70,9 @@ export async function exportData(
   if (format === "csv") {
     const sanitizeCell = (val: unknown) => {
       if (val == null) return '""';
-      const str = String(val);
-      // Neutralize formula triggers: =, +, -, @, \t, \r (unless it's a standard number)
-      const isFormula = /^[=+\-@\t\r]/.test(str);
-      const isNumber = !isNaN(Number(str)) && str.trim() !== "";
-      const safeStr = isFormula && !isNumber ? `'${str}` : str;
-      return `"${safeStr.replace(/"/g, '""')}"`;
+      const safe = sanitizeSpreadsheetValue(val);
+      const str = String(safe);
+      return `"${str.replace(/"/g, '""')}"`;
     };
 
     const rows: string[] = [
@@ -99,8 +109,16 @@ export async function exportData(
         'XLSX export requires the "xlsx" package. Please install it: npm install xlsx'
       );
     }
-    // eslint-disable-next-line security/detect-object-injection
-    const wsData = [headers, ...data.map((row) => keys.map((k) => row[k]))];
+    const sanitizedHeaders = headers.map((h) => sanitizeSpreadsheetValue(h));
+    const wsData = [
+      sanitizedHeaders,
+      ...data.map((row) =>
+        keys.map((k) => {
+          // eslint-disable-next-line security/detect-object-injection
+          return sanitizeSpreadsheetValue(row[k]);
+        })
+      ),
+    ];
     const ws = XLSX.utils.aoa_to_sheet(wsData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");

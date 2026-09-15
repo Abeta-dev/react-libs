@@ -10,6 +10,7 @@ type SliderProps = React.ComponentPropsWithoutRef<
 > & {
   thumbLabels?: string[];
   getThumbAriaLabel?: (index: number) => string;
+  readOnly?: boolean;
 };
 
 const Slider = React.forwardRef<
@@ -23,6 +24,9 @@ const Slider = React.forwardRef<
       defaultValue,
       thumbLabels,
       getThumbAriaLabel,
+      readOnly = false,
+      disabled = false,
+      onValueChange,
       ...props
     },
     ref,
@@ -32,7 +36,8 @@ const Slider = React.forwardRef<
     const thumbCount = (value ?? defaultValue ?? [0]).length;
 
     const thumbClass = cn(
-      "block h-4 w-4 rounded-full border border-primary/50 bg-background shadow",
+      "relative block h-4 w-4 rounded-full border border-primary/50 bg-background shadow",
+      "before:absolute before:-inset-3 before:content-['']",
       "transition-all duration-150",
       "hover:border-primary hover:shadow-[0_0_0_3px_hsl(var(--primary)/0.15)]",
       "active:scale-95",
@@ -44,6 +49,9 @@ const Slider = React.forwardRef<
     return (
       <SliderPrimitive.Root
         ref={ref}
+        disabled={disabled}
+        {...(readOnly ? { "aria-readonly": true } : {})}
+        {...(!readOnly && onValueChange !== undefined ? { onValueChange } : {})}
         {...(value !== undefined ? { value } : {})}
         {...(defaultValue !== undefined ? { defaultValue } : {})}
         className={cn(
@@ -78,6 +86,14 @@ const Slider = React.forwardRef<
               key={i}
               className={thumbClass}
               aria-label={ariaLabel}
+              aria-readonly={readOnly || undefined}
+              onKeyDown={
+                readOnly
+                  ? (e) => {
+                      e.preventDefault();
+                    }
+                  : undefined
+              }
             />
           );
         })}

@@ -152,7 +152,11 @@ function DataTableInternal<T extends Record<string, unknown>>(
   return (
     <div ref={ref} className={cn("w-full", className)} {...props}>
       <div className="rounded-md border">
-        <Table aria-busy={isLoading}>
+        <Table
+          aria-busy={isLoading}
+          aria-rowcount={pagination ? pagination.total : data.length}
+          aria-colcount={columns.length}
+        >
           {caption ? <TableCaption>{caption}</TableCaption> : null}
           <TableHeader>
             <TableRow className="hover:bg-transparent">
@@ -230,9 +234,21 @@ function DataTableInternal<T extends Record<string, unknown>>(
                   key={rowKey ? rowKey(row, i) : i}
                   className={cn(
                     hoverable && "cursor-default",
-                    onRowClick && "cursor-pointer"
+                    onRowClick && "cursor-pointer focus-visible:outline-none focus-visible:bg-muted/50"
                   )}
+                  tabIndex={onRowClick ? 0 : undefined}
+                  role={onRowClick ? "button" : undefined}
                   onClick={onRowClick ? () => onRowClick(row) : undefined}
+                  onKeyDown={
+                    onRowClick
+                      ? (e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            onRowClick(row);
+                          }
+                        }
+                      : undefined
+                  }
                   data-state={undefined}
                 >
                   {columns.map((col) => (
@@ -250,7 +266,10 @@ function DataTableInternal<T extends Record<string, unknown>>(
 
       {/* ── Pagination — always single-row ─────────────────────────────── */}
       {pagination && totalPages > 1 && (
-        <div className="mt-3 flex items-center justify-between gap-2 text-sm text-muted-foreground">
+        <nav
+          aria-label="Table pagination"
+          className="mt-3 flex items-center justify-between gap-2 text-sm text-muted-foreground"
+        >
           {/* Left: record count */}
           <span className="shrink-0 tabular-nums">
             {Math.min((pagination.page - 1) * safePageSize + 1, pagination.total)}–
@@ -325,7 +344,7 @@ function DataTableInternal<T extends Record<string, unknown>>(
               →
             </button>
           </div>
-        </div>
+        </nav>
       )}
     </div>
   )

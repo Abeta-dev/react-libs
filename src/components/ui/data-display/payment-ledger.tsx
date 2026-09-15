@@ -158,9 +158,10 @@ export function PaymentLedger({
                             if (onReferenceClick) onReferenceClick(refId);
                             else if (onGRNClick) onGRNClick(refId);
                           }}
-                          className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400"
+                          aria-label={`View details for reference ${entry.reference_id || entry.grn_id}`}
+                          className="text-primary hover:text-primary/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded p-0.5 inline-flex items-center justify-center transition-colors"
                         >
-                          <ExternalLink className="h-3 w-3 inline" />
+                          <ExternalLink className="h-3 w-3 inline" aria-hidden="true" />
                         </button>
                       )}
                     </div>

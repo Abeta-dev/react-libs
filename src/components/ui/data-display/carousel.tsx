@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
@@ -378,7 +376,7 @@ const CarouselDots = React.forwardRef<
             aria-label={`Go to slide ${i + 1}`}
             aria-current={isActive ? "true" : undefined}
             className={cn(
-              "rounded-full transition-all duration-200",
+              "relative rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary before:absolute before:-inset-2 before:content-['']",
               isHorizontal ? "h-1.5" : "w-1.5",
               sizingClass
             )}

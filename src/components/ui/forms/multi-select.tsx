@@ -17,9 +17,11 @@ export interface MultiSelectProps
   value?: string[];
   defaultValue?: string[];
   onChange?: (value: string[]) => void;
+  readOnly?: boolean;
   placeholder?: string;
   searchPlaceholder?: string;
   maxCount?: number;
+  maxSelected?: number;
   disabled?: boolean;
   className?: string;
   error?: boolean | string;
@@ -32,9 +34,11 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
       value: valueProp,
       defaultValue,
       onChange,
+      readOnly = false,
       placeholder = "Select options...",
       searchPlaceholder = "Search options...",
       maxCount = 3,
+      maxSelected,
       disabled = false,
       className,
       error,
@@ -45,6 +49,37 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
     const isControlled = valueProp !== undefined;
     const [uncontrolledValue, setUncontrolledValue] = React.useState<string[]>(defaultValue ?? []);
     const value = isControlled ? valueProp : uncontrolledValue;
+    const safeValue = React.useMemo(() => (Array.isArray(value) ? value : []), [value]);
+
+    const initialControlledRef = React.useRef(isControlled);
+    const hasWarnedRef = React.useRef(false);
+
+    React.useEffect(() => {
+      if (typeof process !== "undefined" && (process as { env?: { NODE_ENV?: string } }).env?.NODE_ENV !== "production") {
+        if (initialControlledRef.current !== isControlled && !hasWarnedRef.current) {
+          hasWarnedRef.current = true;
+          const from = initialControlledRef.current ? "controlled" : "uncontrolled";
+          const to = isControlled ? "controlled" : "uncontrolled";
+          console.warn(
+            `[react-libs] A component is changing an ${from} MultiSelect to be ${to}. ` +
+            `This is likely caused by the value changing from undefined to a defined value (or vice versa). ` +
+            `Decide between using a controlled or uncontrolled MultiSelect for the lifetime of the component.`
+          );
+        }
+      }
+    }, [isControlled]);
+
+    React.useEffect(() => {
+      if (typeof process !== "undefined" && (process as { env?: { NODE_ENV?: string } }).env?.NODE_ENV !== "production") {
+        if (isControlled && !onChange && !readOnly) {
+          console.warn(
+            `[react-libs] You provided a \`value\` prop to <MultiSelect /> without an \`onChange\` handler. ` +
+            `This will render a read-only field. If the field should be mutable use \`defaultValue\`. ` +
+            `Otherwise, set either \`onChange\` or \`readOnly\`.`
+          );
+        }
+      }
+    }, [isControlled, onChange, readOnly]);
 
     const [isOpen, setIsOpen] = React.useState(false);
     const [searchQuery, setSearchQuery] = React.useState("");
@@ -60,12 +95,13 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
 
     const updateValue = React.useCallback(
       (nextValue: string[]) => {
+        if (disabled || readOnly) return;
         if (!isControlled) {
           setUncontrolledValue(nextValue);
         }
         onChange?.(nextValue);
       },
-      [isControlled, onChange]
+      [disabled, readOnly, isControlled, onChange]
     );
 
     // Reset active index when dropdown closes
@@ -116,33 +152,39 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
     };
 
     const handleToggle = (optionValue: string) => {
-      if (disabled) return;
-      const isSelected = value.includes(optionValue);
+      if (disabled || readOnly) return;
+      const isSelected = safeValue.includes(optionValue);
+      if (!isSelected && maxSelected !== undefined && safeValue.length >= maxSelected) {
+        return;
+      }
       const nextValue = isSelected
-        ? value.filter((v) => v !== optionValue)
-        : [...value, optionValue];
+        ? safeValue.filter((v) => v !== optionValue)
+        : [...safeValue, optionValue];
       updateValue(nextValue);
     };
 
-    const handleRemoveTag = (optionValue: string, e: React.MouseEvent) => {
-      e.stopPropagation();
-      if (disabled) return;
-      updateValue(value.filter((v) => v !== optionValue));
+    const handleRemoveTag = (optionValue: string, e?: React.MouseEvent | React.KeyboardEvent) => {
+      e?.stopPropagation();
+      if (disabled || readOnly) return;
+      updateValue(safeValue.filter((v) => v !== optionValue));
     };
 
     const handleClearAll = (e: React.MouseEvent) => {
       e.stopPropagation();
-      if (disabled) return;
+      if (disabled || readOnly) return;
       updateValue([]);
     };
 
     const handleSelectAll = () => {
-      if (disabled) return;
-      const enabledValues = options.filter((o) => !o.disabled).map((o) => o.value);
+      if (disabled || readOnly) return;
+      let enabledValues = options.filter((o) => !o.disabled).map((o) => o.value);
+      if (maxSelected !== undefined) {
+        enabledValues = enabledValues.slice(0, maxSelected);
+      }
       updateValue(enabledValues);
     };
 
-    const selectedOptions = options.filter((o) => value.includes(o.value));
+    const selectedOptions = options.filter((o) => safeValue.includes(o.value));
     const visibleTags = selectedOptions.slice(0, maxCount);
     const hiddenCount = selectedOptions.length - maxCount;
 
@@ -183,6 +225,10 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
       } else if (e.key === "Escape") {
         e.preventDefault();
         handleCloseAndRestoreFocus();
+      } else if (e.key === "Backspace" && !isOpen && safeValue.length > 0) {
+        if (readOnly) return;
+        e.preventDefault();
+        updateValue(safeValue.slice(0, -1));
       }
     };
 
@@ -204,6 +250,7 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
             aria-controls={listboxId}
             aria-activedescendant={activeOptionId}
             aria-disabled={disabled}
+            aria-readonly={readOnly || undefined}
             aria-label={props["aria-label"] || placeholder}
             tabIndex={disabled ? -1 : 0}
             onClick={() => {
@@ -234,7 +281,15 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
                       <button
                         type="button"
                         onClick={(e) => handleRemoveTag(opt.value, e)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Backspace" || e.key === "Delete") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleRemoveTag(opt.value, e);
+                          }
+                        }}
                         disabled={disabled}
+                        aria-disabled={disabled || readOnly || undefined}
                         aria-label={`Remove ${opt.label}`}
                         className="rounded-full hover:bg-muted-foreground/20 p-0.5"
                       >
@@ -334,7 +389,9 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
                   </li>
                 ) : (
                   filteredOptions.map((option, idx) => {
-                    const isSelected = value.includes(option.value);
+                    const isSelected = safeValue.includes(option.value);
+                    const isMaxReached = !isSelected && maxSelected !== undefined && safeValue.length >= maxSelected;
+                    const isItemDisabled = option.disabled || isMaxReached;
                     const isCurrentActive = activeIndex === idx;
                     return (
                       <li
@@ -343,20 +400,20 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
                         role="option"
                         tabIndex={-1}
                         aria-selected={isSelected}
-                        aria-disabled={option.disabled}
+                        aria-disabled={isItemDisabled}
                         onMouseEnter={() => setActiveIndex(idx)}
-                        onClick={() => !option.disabled && handleToggle(option.value)}
+                        onClick={() => !isItemDisabled && handleToggle(option.value)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter" || e.key === " ") {
                             e.preventDefault();
-                            if (!option.disabled) handleToggle(option.value);
+                            if (!isItemDisabled) handleToggle(option.value);
                           }
                         }}
                         className={cn(
                           "relative flex items-center justify-between rounded-sm px-2 py-1.5 text-sm cursor-pointer select-none transition-colors",
                           "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:outline-none",
                           (isSelected || isCurrentActive) && "bg-accent/50 font-medium",
-                          option.disabled && "pointer-events-none opacity-50"
+                          isItemDisabled && "pointer-events-none opacity-50"
                         )}
                       >
                         <span>{option.label}</span>

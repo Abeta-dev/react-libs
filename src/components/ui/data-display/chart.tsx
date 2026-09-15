@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react"
 import { ResponsiveContainer, Tooltip, Legend } from "recharts"
 import type { TooltipPayloadEntry, LegendPayload } from "recharts"
@@ -63,8 +61,8 @@ const ChartContainer = React.forwardRef<
         )}
         {...props}
       >
-        <ChartStyle id={chartId} config={config} />
         <ErrorBoundary fallback={fallback} onError={onError}>
+          <ChartStyle id={chartId} config={config} />
           <ResponsiveContainer>
             {children}
           </ResponsiveContainer>
@@ -76,9 +74,13 @@ const ChartContainer = React.forwardRef<
 ChartContainer.displayName = "Chart"
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
+  if (!config || typeof config !== "object") {
+    return null
+  }
+
   const colorConfig = Object.entries(config).filter(
     ([, itemConfig]) =>
-      Boolean(("theme" in itemConfig && itemConfig.theme) || ("color" in itemConfig && itemConfig.color))
+      Boolean(itemConfig && (("theme" in itemConfig && itemConfig.theme) || ("color" in itemConfig && itemConfig.color)))
   )
 
   if (!colorConfig.length) {

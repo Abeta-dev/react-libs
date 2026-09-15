@@ -87,6 +87,23 @@ export interface BlobUploadResult {
 }
 
 /**
+ * Sanitize destination folder path to mitigate Directory Traversal (CWE-22).
+ * Strips null bytes, backslashes, directory traversal sequences ('..'),
+ * and limits characters to safe directory naming conventions.
+ */
+export function sanitizeStoragePath(path: string): string {
+  if (!path) return "";
+  const segments = path
+    .replace(/\0/g, "")
+    .split(/[/\\]+/)
+    .filter((segment) => segment !== "" && segment !== "." && segment !== "..")
+    .map((segment) => segment.replace(/[^a-zA-Z0-9_-]/g, ""))
+    .filter((segment) => segment.length > 0);
+
+  return segments.join("/");
+}
+
+/**
  * Upload a file to Blob Storage directly from the browser.
  *
  * The secret key is retrieved from the backend via /api/config (authenticated) and
@@ -103,8 +120,9 @@ export async function uploadFileToStorage(
 ): Promise<BlobUploadResult> {
   const { storageBaseUrl, storageSecretKey } = await fetchBlobStorageConfig(apiBase);
 
+  const safeFolderPath = sanitizeStoragePath(folderPath);
   const form = new FormData();
-  form.append("folderPath", folderPath);
+  form.append("folderPath", safeFolderPath);
   form.append("file", file);
 
   const res = await fetch(`${storageBaseUrl}/api/admin/upload_file`, {

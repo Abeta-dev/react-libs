@@ -23,8 +23,8 @@ const BUDGETS = [
   {
     file: 'dist/index.js',
     label: 'Root UI Bundle (ESM)',
-    maxRawKb: 460,
-    maxGzipKb: 95,
+    maxRawKb: 480,
+    maxGzipKb: 100,
   },
   {
     file: 'dist/utils.js',
@@ -103,6 +103,48 @@ const BUDGETS = [
     label: 'DataTable Subpath (ESM)',
     maxRawKb: 20,
     maxGzipKb: 6,
+  },
+  {
+    file: 'dist/charts.js',
+    label: 'Charts Subpath (ESM)',
+    maxRawKb: 30,
+    maxGzipKb: 10,
+  },
+  {
+    file: 'dist/command.js',
+    label: 'Command Subpath (ESM)',
+    maxRawKb: 10,
+    maxGzipKb: 4,
+  },
+  {
+    file: 'dist/drawer.js',
+    label: 'Drawer Subpath (ESM)',
+    maxRawKb: 10,
+    maxGzipKb: 4,
+  },
+  {
+    file: 'dist/carousel.js',
+    label: 'Carousel Subpath (ESM)',
+    maxRawKb: 20,
+    maxGzipKb: 6,
+  },
+  {
+    file: 'dist/calendar.js',
+    label: 'Calendar Subpath (ESM)',
+    maxRawKb: 20,
+    maxGzipKb: 6,
+  },
+  {
+    file: 'dist/date-picker.js',
+    label: 'Date-Picker Subpath (ESM)',
+    maxRawKb: 25,
+    maxGzipKb: 8,
+  },
+  {
+    file: 'dist/form.js',
+    label: 'Form Subpath (ESM)',
+    maxRawKb: 15,
+    maxGzipKb: 5,
   },
   {
     file: 'dist/style.css',
