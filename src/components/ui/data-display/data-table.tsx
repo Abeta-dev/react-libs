@@ -142,9 +142,12 @@ function DataTableInternal<T extends Record<string, unknown>>(
     }
   }
 
-  const totalPages = pagination
-    ? Math.ceil(pagination.total / pagination.pageSize)
-    : 0
+  const safePageSize = Math.max(1, pagination?.pageSize || 10);
+  let totalPages = 0;
+  if (pagination) {
+    const total = Number.isFinite(pagination.total) ? pagination.total : 0;
+    totalPages = Math.max(1, Math.ceil(total / safePageSize));
+  }
 
   return (
     <div ref={ref} className={cn("w-full", className)} {...props}>
@@ -250,8 +253,8 @@ function DataTableInternal<T extends Record<string, unknown>>(
         <div className="mt-3 flex items-center justify-between gap-2 text-sm text-muted-foreground">
           {/* Left: record count */}
           <span className="shrink-0 tabular-nums">
-            {Math.min((pagination.page - 1) * pagination.pageSize + 1, pagination.total)}–
-            {Math.min(pagination.page * pagination.pageSize, pagination.total)}{" "}
+            {Math.min((pagination.page - 1) * safePageSize + 1, pagination.total)}–
+            {Math.min(pagination.page * safePageSize, pagination.total)}{" "}
             <span className="hidden sm:inline">of {pagination.total}</span>
           </span>
 
@@ -278,8 +281,10 @@ function DataTableInternal<T extends Record<string, unknown>>(
 
               const pages: (number | "…")[] = []
               if (start > 1) { pages.push(1); if (start > 2) pages.push("…") }
-              for (let p = start; p <= end; p++) pages.push(p)
-              if (end < totalPages) {
+              if (Number.isFinite(start) && Number.isFinite(end) && start <= end) {
+                for (let p = start; p <= end; p++) pages.push(p)
+              }
+              if (end < totalPages && Number.isFinite(totalPages)) {
                 if (end < totalPages - 1) {
                   pages.push("…");
                 }

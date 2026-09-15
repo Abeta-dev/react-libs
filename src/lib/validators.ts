@@ -103,8 +103,8 @@ export interface ValidationOptions {
 
 /** Returns undefined if valid, or an error string if invalid. */
 
-export function validateEmail(value: string, options: ValidationOptions = {}): string | undefined {
-  const v = value.trim();
+export function validateEmail(value?: string | null, options: ValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim() : '';
   const lang = options.language ?? 'en';
   if (!v) return lang === 'hi' ? 'ईमेल पता आवश्यक है' : 'Email address is required';
   if (!REGEX_EMAIL.test(v)) {
@@ -112,8 +112,8 @@ export function validateEmail(value: string, options: ValidationOptions = {}): s
   }
 }
 
-export function validatePhone(value: string, options: ValidationOptions = {}): string | undefined {
-  const v = value.trim().replace(/[\s()-]/g, "");
+export function validatePhone(value?: string | null, options: ValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim().replace(/[\s()-]/g, "") : '';
   const lang = options.language ?? 'en';
   if (!v) return lang === 'hi' ? 'फ़ोन नंबर आवश्यक है' : 'Phone number is required';
   if (!REGEX_PHONE.test(v)) {
@@ -121,8 +121,8 @@ export function validatePhone(value: string, options: ValidationOptions = {}): s
   }
 }
 
-export function validatePostalCode(value: string, options: ValidationOptions = {}): string | undefined {
-  const v = value.trim();
+export function validatePostalCode(value?: string | null, options: ValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim() : '';
   const lang = options.language ?? 'en';
   if (!v) return lang === 'hi' ? 'पोस्टल कोड आवश्यक है' : 'Postal code is required';
   if (!REGEX_POSTAL_CODE.test(v)) {
@@ -130,8 +130,8 @@ export function validatePostalCode(value: string, options: ValidationOptions = {
   }
 }
 
-export function validateTaxId(value: string, options: ValidationOptions = {}): string | undefined {
-  const v = value.trim();
+export function validateTaxId(value?: string | null, options: ValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim() : '';
   const lang = options.language ?? 'en';
   if (!v) return lang === 'hi' ? 'टैक्स आईडी आवश्यक है' : 'Tax ID is required';
   if (!REGEX_TAX_ID.test(v)) {
@@ -139,8 +139,8 @@ export function validateTaxId(value: string, options: ValidationOptions = {}): s
   }
 }
 
-export function validateBankAccount(value: string, options: ValidationOptions = {}): string | undefined {
-  const v = value.trim().replace(/\s/g, "");
+export function validateBankAccount(value?: string | null, options: ValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim().replace(/\s/g, "") : '';
   const lang = options.language ?? 'en';
   if (!v) return lang === 'hi' ? 'बैंक खाता संख्या आवश्यक है' : 'Bank account number is required';
   if (!REGEX_BANK_ACCOUNT.test(v)) {
@@ -148,8 +148,8 @@ export function validateBankAccount(value: string, options: ValidationOptions = 
   }
 }
 
-export function validateRoutingCode(value: string, options: ValidationOptions = {}): string | undefined {
-  const v = value.trim();
+export function validateRoutingCode(value?: string | null, options: ValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim() : '';
   const lang = options.language ?? 'en';
   if (!v) return lang === 'hi' ? 'रूटिंग कोड आवश्यक है' : 'Routing code is required';
   if (!REGEX_ROUTING_CODE.test(v)) {
@@ -157,8 +157,8 @@ export function validateRoutingCode(value: string, options: ValidationOptions = 
   }
 }
 
-export function validateUrl(value: string, options: ValidationOptions = {}): string | undefined {
-  const v = value.trim();
+export function validateUrl(value?: string | null, options: ValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim() : '';
   const lang = options.language ?? 'en';
   if (!v) return lang === 'hi' ? 'URL आवश्यक है' : 'URL is required';
   if (!REGEX_URL.test(v)) {
@@ -177,18 +177,27 @@ export interface ValidationResult {
  * Validates passwords for account authentication and creation.
  */
 export function validatePassword(
-  password: string,
+  password?: string | null,
   options: { minLength?: number; language?: ValidationLanguage } = {}
 ): ValidationResult & { strength: 'weak' | 'medium' | 'strong' } {
   const { minLength = 8, language = 'en' } = options;
-  const pass = password || '';
+  const pass = typeof password === 'string' ? password.trim() : '';
 
-  if (pass.length < minLength) {
+  if (!pass) {
     return {
       isValid: false,
-      error: language === 'hi'
-        ? `पासवर्ड कम से कम ${minLength} अक्षरों का होना चाहिए।`
-        : `Password must be at least ${minLength} characters long.`,
+      error: language === 'hi' ? 'पासवर्ड आवश्यक है।' : 'Password is required.',
+      strength: 'weak'
+    };
+  }
+
+  if (pass.length < minLength) {
+    const errorMsg = language === 'hi'
+      ? `पासवर्ड कम से कम ${minLength} अक्षरों का होना चाहिए।`
+      : `Password must be at least ${minLength} characters long.`;
+    return {
+      isValid: false,
+      error: errorMsg,
       strength: 'weak'
     };
   }
@@ -227,7 +236,7 @@ export function validateRequired(
   options: { language?: ValidationLanguage } = {}
 ): ValidationResult & { value: string } {
   const { language = 'en' } = options;
-  const trimmed = (value || '').trim();
+  const trimmed = typeof value === 'string' ? value.trim() : '';
 
   if (!trimmed || trimmed.length < minLength) {
     let errorMsg = `${fieldName} is required.`;
@@ -307,12 +316,26 @@ function checkNumberBounds(
  * Validates a positive numeric value (e.g., fee amount, capacity, price).
  */
 export function validatePositiveNumber(
-  value: number | string,
-  fieldName: string,
+  value?: number | string | null,
+  fieldName: string = 'Value',
   options: { allowZero?: boolean; min?: number; max?: number; language?: ValidationLanguage } = {}
 ): ValidationResult & { numberValue: number } {
   const { language = 'en' } = options;
-  const num = typeof value === 'number' ? value : parseFloat(String(value));
+  if (value === null || value === undefined || (typeof value === 'string' && !value.trim())) {
+    return {
+      isValid: false,
+      error: language === 'hi' ? `${fieldName} आवश्यक है।` : `${fieldName} is required.`,
+      numberValue: 0
+    };
+  }
+  let num: number;
+  if (typeof value === 'number') {
+    num = value;
+  } else if (typeof value === 'string') {
+    num = parseFloat(value.trim());
+  } else {
+    num = parseFloat(String(value));
+  }
 
   if (Number.isNaN(num)) {
     return {
@@ -338,18 +361,20 @@ export function validatePositiveNumber(
  * Validates that a date range is chronological (startDate <= endDate).
  */
 export function validateDateRange(
-  startDate: string,
-  endDate: string,
+  startDate?: string | null,
+  endDate?: string | null,
   options: { language?: ValidationLanguage } = {}
 ): ValidationResult {
   const { language = 'en' } = options;
-  if (!startDate) {
+  const start = typeof startDate === 'string' ? startDate.trim() : '';
+  const end = typeof endDate === 'string' ? endDate.trim() : '';
+  if (!start) {
     return { isValid: false, error: language === 'hi' ? 'प्रारंभ तिथि आवश्यक है।' : 'Start date is required.' };
   }
-  if (!endDate) {
+  if (!end) {
     return { isValid: false, error: language === 'hi' ? 'समाप्ति तिथि आवश्यक है।' : 'End date is required.' };
   }
-  if (startDate > endDate) {
+  if (start > end) {
     return {
       isValid: false,
       error: language === 'hi' ? 'समाप्ति तिथि प्रारंभ तिथि के बाद या बराबर होनी चाहिए।' : 'End date must be on or after the start date.'
@@ -362,18 +387,20 @@ export function validateDateRange(
  * Validates that a time range is chronological (startTime < endTime).
  */
 export function validateTimeRange(
-  startTime: string,
-  endTime: string,
+  startTime?: string | null,
+  endTime?: string | null,
   options: { language?: ValidationLanguage } = {}
 ): ValidationResult {
   const { language = 'en' } = options;
-  if (!startTime) {
+  const start = typeof startTime === 'string' ? startTime.trim() : '';
+  const end = typeof endTime === 'string' ? endTime.trim() : '';
+  if (!start) {
     return { isValid: false, error: language === 'hi' ? 'प्रारंभ समय आवश्यक है।' : 'Start time is required.' };
   }
-  if (!endTime) {
+  if (!end) {
     return { isValid: false, error: language === 'hi' ? 'समाप्ति समय आवश्यक है।' : 'End time is required.' };
   }
-  if (startTime >= endTime) {
+  if (start >= end) {
     return {
       isValid: false,
       error: language === 'hi' ? 'समाप्ति समय प्रारंभ समय के बाद होना चाहिए।' : 'End time must be chronologically after the start time.'

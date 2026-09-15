@@ -100,12 +100,12 @@ The library exposes dedicated entry points for UI components, server-safe utilit
 | `@umesh0492/react-libs/analytics/react` | ESM (`import`), CJS (`require`) | **Client Components** (`'use client'`) | React integration layer for analytics: `AnalyticsProvider`, `useAnalytics`, `TrackArea`, and `PageViewTracker`. |
 | `@umesh0492/react-libs/pdf` | ESM (`import`), CJS (`require`) | **Client-Only** (`'use client'`) | Dedicated client subpath for `PdfViewer`. Isolated from root to prevent Node SSR from executing browser-only PDF workers (`pdfjs-dist`). |
 | `@umesh0492/react-libs/hooks/use-toast` | ESM (`import`), CJS (`require`) | **Client Hook** (`'use client'`) | Standalone imperative toast notification hook (`useToast`, `toast`). |
-| `@umesh0492/react-libs/button` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Button primitive with zero Radix dependency overhead for micro-bundle budgets. |
+| `@umesh0492/react-libs/button` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Button with Radix Slot polymorphism (asChild), custom loading spinners, and micro-interaction states. |
 | `@umesh0492/react-libs/dialog` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Dialog primitive with isolated Radix Dialog dependency. |
 | `@umesh0492/react-libs/card` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Card primitive with zero Radix dependency overhead. |
 | `@umesh0492/react-libs/badge` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Badge primitive with zero Radix dependency overhead. |
 | `@umesh0492/react-libs/input` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Input primitive with zero Radix dependency overhead. |
-| `@umesh0492/react-libs/data-table` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone DataTable component isolating `@tanstack/react-table` for data-heavy pages. |
+| `@umesh0492/react-libs/data-table` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone DataTable component with high-performance client-side sorting, multi-column search, pagination, and skeleton loading. |
 | `@umesh0492/react-libs/style.css` | CSS | N/A | Standalone pre-compiled stylesheet with all Tailwind utility classes and design tokens. |
 | `@umesh0492/react-libs/styles/theme.css` | CSS | N/A | Design system theme variables and color tokens for Tailwind CSS v4 projects (`@import`). |
 

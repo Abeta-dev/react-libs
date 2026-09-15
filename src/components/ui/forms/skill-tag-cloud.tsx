@@ -91,7 +91,7 @@ export function SkillTagCloud({
               <button
                 type="button"
                 onClick={() => onRemoveTag(tag)}
-                className="hover:opacity-75 focus:outline-none"
+                className="hover:opacity-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
                 aria-label={`Remove ${tag.name}`}
               >
                 <X className="h-3 w-3" />

@@ -41,22 +41,22 @@ export interface IndiaValidationOptions {
   language?: ValidationLanguage;
 }
 
-export function validateGSTIN(value: string, options: IndiaValidationOptions = {}): string | undefined {
-  const v = value.trim().toUpperCase();
+export function validateGSTIN(value?: string | null, options: IndiaValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim().toUpperCase() : '';
   const lang = options.language ?? 'en';
   if (!v) return lang === 'hi' ? "GST नंबर आवश्यक है" : "GST Number is required";
   if (!REGEX_GSTIN.test(v)) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.gstin : VALIDATION_MESSAGES_IN.gstin;
 }
 
-export function validatePAN(value: string, options: IndiaValidationOptions = {}): string | undefined {
-  const v = value.trim().toUpperCase();
+export function validatePAN(value?: string | null, options: IndiaValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim().toUpperCase() : '';
   const lang = options.language ?? 'en';
   if (!v) return lang === 'hi' ? "PAN नंबर आवश्यक है" : "PAN Number is required";
   if (!REGEX_PAN.test(v)) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.pan : VALIDATION_MESSAGES_IN.pan;
 }
 
-export function validatePhoneIN(value: string, options: IndiaValidationOptions = {}): string | undefined {
-  const raw = value.trim();
+export function validatePhoneIN(value?: string | null, options: IndiaValidationOptions = {}): string | undefined {
+  const raw = typeof value === 'string' ? value.trim() : '';
   const lang = options.language ?? 'en';
   if (!raw) return lang === 'hi' ? "फ़ोन नंबर आवश्यक है" : "Phone number is required";
   
@@ -66,28 +66,29 @@ export function validatePhoneIN(value: string, options: IndiaValidationOptions =
   }
 }
 
-export function validateIFSC(value: string, options: IndiaValidationOptions = {}): string | undefined {
-  const v = value.trim().toUpperCase();
+export function validateIFSC(value?: string | null, options: IndiaValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim().toUpperCase() : '';
   const lang = options.language ?? 'en';
   if (!v) return lang === 'hi' ? "IFSC कोड आवश्यक है" : "IFSC code is required";
   if (!REGEX_IFSC.test(v)) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.ifsc : VALIDATION_MESSAGES_IN.ifsc;
 }
 
-export function validateBankAccountIN(value: string, options: IndiaValidationOptions = {}): string | undefined {
-  const v = value.trim().replace(/\s/g, "");
+export function validateBankAccountIN(value?: string | null, options: IndiaValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim().replace(/\s/g, "") : '';
   const lang = options.language ?? 'en';
   if (!v) return lang === 'hi' ? "बैंक खाता संख्या आवश्यक है" : "Account number is required";
   if (!REGEX_BANK_ACCOUNT_IN.test(v)) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.bankAccount : VALIDATION_MESSAGES_IN.bankAccount;
 }
 
-export function validateFSSAI(value: string, options: IndiaValidationOptions = {}): string | undefined {
-  if (!value || !value.trim()) return undefined;
+export function validateFSSAI(value?: string | null, options: IndiaValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim() : '';
+  if (!v) return undefined;
   const lang = options.language ?? 'en';
-  if (!REGEX_FSSAI.test(value.trim())) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.fssai : VALIDATION_MESSAGES_IN.fssai;
+  if (!REGEX_FSSAI.test(v)) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.fssai : VALIDATION_MESSAGES_IN.fssai;
 }
 
-export function validatePincode(value: string, options: IndiaValidationOptions = {}): string | undefined {
-  const v = value.trim();
+export function validatePincode(value?: string | null, options: IndiaValidationOptions = {}): string | undefined {
+  const v = typeof value === 'string' ? value.trim() : '';
   const lang = options.language ?? 'en';
   if (!v) return lang === 'hi' ? "पिनकोड आवश्यक है" : "Pincode is required";
   if (!REGEX_PINCODE.test(v)) return lang === 'hi' ? VALIDATION_MESSAGES_IN_HI.pincode : VALIDATION_MESSAGES_IN.pincode;

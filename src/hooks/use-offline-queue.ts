@@ -23,6 +23,7 @@ export interface OfflineQueueState<T extends BaseQueuedMutation> {
   remove: (id: string) => Promise<void>;
   clear: () => Promise<void>;
   flushQueue: () => Promise<{ successCount: number; failedCount: number }>;
+  syncQueue?: () => Promise<{ successCount: number; failedCount: number }>;
 }
 
 function isIndexedDBAvailable(): boolean {
@@ -83,6 +84,28 @@ async function fetchItemsFromDB<T>(dbName: string, storeName: string): Promise<T
     req.onsuccess = () => resolve((req.result as T[]) || []);
     req.onerror = () => reject(req.error || new Error('Failed to read store'));
   });
+}
+
+function isOffline(): boolean {
+  return typeof navigator !== 'undefined' && !navigator.onLine;
+}
+
+async function handleSyncFailure<T extends BaseQueuedMutation>(
+  item: T,
+  maxRetries: number,
+  remove: (id: string) => Promise<void>,
+  enqueue: (item: T) => Promise<void>
+): Promise<void> {
+  item.retryCount = (item.retryCount || 0) + 1;
+  try {
+    if (item.retryCount >= maxRetries) {
+      await remove(item.id);
+    } else {
+      await enqueue(item);
+    }
+  } catch {
+    // ignore error updating or removing item
+  }
 }
 
 export function useOfflineQueue<T extends BaseQueuedMutation>(
@@ -197,7 +220,7 @@ export function useOfflineQueue<T extends BaseQueuedMutation>(
   }, [dbName, storeName, fallbackKey, refreshQueue]);
 
   const flushQueue = useCallback(async () => {
-    if (!syncHandler || isSyncingRef.current || (typeof navigator !== 'undefined' && !navigator.onLine)) {
+    if (!syncHandler || isSyncingRef.current || isOffline()) {
       return { successCount: 0, failedCount: 0 };
     }
 
@@ -221,15 +244,11 @@ export function useOfflineQueue<T extends BaseQueuedMutation>(
           await remove(item.id);
           successCount++;
         } else {
-          item.retryCount = (item.retryCount || 0) + 1;
-          if (item.retryCount >= maxRetries) {
-            await remove(item.id); // discard permanently failed
-          } else {
-            await enqueue(item);
-          }
+          await handleSyncFailure(item, maxRetries, remove, enqueue);
           failedCount++;
         }
       } catch {
+        await handleSyncFailure(item, maxRetries, remove, enqueue);
         failedCount++;
       }
     }
@@ -274,5 +293,6 @@ export function useOfflineQueue<T extends BaseQueuedMutation>(
     remove,
     clear,
     flushQueue,
+    syncQueue: flushQueue,
   };
 }

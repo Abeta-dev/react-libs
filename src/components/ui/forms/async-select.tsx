@@ -6,8 +6,9 @@ import { Check, Loader2 } from "lucide-react";
 import { cn } from "../../../lib/utils";
 
 export interface AsyncSelectProps<T> {
-  value: string;
-  onChange: (value: string, item: T | null) => void;
+  value?: string;
+  defaultValue?: string;
+  onChange?: (value: string, item: T | null) => void;
   fetchFn: (query: string) => Promise<T[]>;
   getOptionLabel: (option: T) => React.ReactNode;
   getOptionStringValue?: (option: T) => string;
@@ -20,7 +21,8 @@ export interface AsyncSelectProps<T> {
 }
 
 export function AsyncSelect<T>({
-  value,
+  value: controlledValue,
+  defaultValue = "",
   onChange,
   fetchFn,
   getOptionLabel,
@@ -32,6 +34,9 @@ export function AsyncSelect<T>({
   className,
   debounceMs = 300,
 }: AsyncSelectProps<T>) {
+  const isControlled = controlledValue !== undefined;
+  const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue);
+  const value = isControlled ? controlledValue : uncontrolledValue;
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -174,7 +179,10 @@ export function AsyncSelect<T>({
                       key={optVal}
                       value={optVal}
                       onSelect={() => {
-                        onChange(optVal, option);
+                        if (!isControlled) {
+                          setUncontrolledValue(optVal);
+                        }
+                        onChange?.(optVal, option);
                         setOpen(false);
                         setQuery(getOptionSafeString(option));
                       }}

@@ -15,6 +15,9 @@ import {
   validateBankAccount,
   validateRoutingCode,
   validateUrl,
+  validatePassword,
+  validatePositiveNumber,
+  validateRequired,
 } from "../validators";
 
 describe("Universal Validators & Regex", () => {
@@ -244,6 +247,61 @@ describe("Universal Validators & Regex", () => {
       expect(isValidPhone("12345", "IN")).toBe(false);
       expect(isValidPhone("+14155552671", "INTL")).toBe(true);
     });
+
+    it("defensively handles null, undefined, and non-string values without throwing", () => {
+      expect(validateEmail(null)).toBe("Email address is required");
+      expect(validateEmail(undefined)).toBe("Email address is required");
+      expect(validateEmail(undefined, { language: "hi" })).toBe("ईमेल पता आवश्यक है");
+
+      expect(validatePhone(null)).toBe("Phone number is required");
+      expect(validatePhone(undefined)).toBe("Phone number is required");
+      expect(validatePhone(undefined, { language: "hi" })).toBe("फ़ोन नंबर आवश्यक है");
+
+      expect(validatePostalCode(null)).toBe("Postal code is required");
+      expect(validatePostalCode(undefined)).toBe("Postal code is required");
+      expect(validatePostalCode(undefined, { language: "hi" })).toBe("पोस्टल कोड आवश्यक है");
+
+      expect(validateTaxId(null)).toBe("Tax ID is required");
+      expect(validateTaxId(undefined)).toBe("Tax ID is required");
+      expect(validateTaxId(undefined, { language: "hi" })).toBe("टैक्स आईडी आवश्यक है");
+
+      expect(validateBankAccount(null)).toBe("Bank account number is required");
+      expect(validateBankAccount(undefined)).toBe("Bank account number is required");
+      expect(validateBankAccount(undefined, { language: "hi" })).toBe("बैंक खाता संख्या आवश्यक है");
+
+      expect(validateRoutingCode(null)).toBe("Routing code is required");
+      expect(validateRoutingCode(undefined)).toBe("Routing code is required");
+      expect(validateRoutingCode(undefined, { language: "hi" })).toBe("रूटिंग कोड आवश्यक है");
+
+      expect(validateUrl(null)).toBe("URL is required");
+      expect(validateUrl(undefined)).toBe("URL is required");
+      expect(validateUrl(undefined, { language: "hi" })).toBe("URL आवश्यक है");
+
+      const passResult = validatePassword(null);
+      expect(passResult.isValid).toBe(false);
+      expect(passResult.error).toBe("Password is required.");
+
+      const passResultUndef = validatePassword(undefined);
+      expect(passResultUndef.isValid).toBe(false);
+      expect(passResultUndef.error).toBe("Password is required.");
+
+      const numNull = validatePositiveNumber(null, "Amount");
+      expect(numNull.isValid).toBe(false);
+      expect(numNull.error).toBe("Amount is required.");
+
+      const numUndef = validatePositiveNumber(undefined, "Amount");
+      expect(numUndef.isValid).toBe(false);
+      expect(numUndef.error).toBe("Amount is required.");
+
+      const reqNull = validateRequired(null, "Name");
+      expect(reqNull.isValid).toBe(false);
+      expect(reqNull.error).toBe("Name is required.");
+
+      const reqUndef = validateRequired(undefined, "Name");
+      expect(reqUndef.isValid).toBe(false);
+      expect(reqUndef.error).toBe("Name is required.");
+    });
   });
 });
+
 

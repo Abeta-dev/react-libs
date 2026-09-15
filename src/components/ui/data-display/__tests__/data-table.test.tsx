@@ -249,4 +249,19 @@ describe('DataTable Component', () => {
     render(<DataTable columns={columns} data={sparseData} />);
     expect(screen.getByText('—')).toBeInTheDocument();
   });
+
+  it('safely clamps pageSize when 0 or negative and avoids infinite loops', () => {
+    const { container } = render(
+      <DataTable
+        columns={columns}
+        data={data}
+        pagination={{ page: 1, pageSize: 0, total: 20, onPageChange: vi.fn() }}
+      />
+    );
+    expect(container).toBeInTheDocument();
+    // Default safePageSize is 10, so 20 items / 10 = 2 pages
+    expect(container).toHaveTextContent(/1–10 of 20/);
+    expect(screen.getByRole('button', { name: /page 2/i })).toBeInTheDocument();
+  });
 });
+

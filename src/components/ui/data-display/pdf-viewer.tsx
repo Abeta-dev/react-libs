@@ -97,7 +97,11 @@ export function PdfViewer({
     let blobUrl: string | null = null
     
     if (typeof file === "string") {
-      iframe.src = file
+      if (/^(blob:|https?:|\/)/i.test(file)) {
+        iframe.src = file
+      } else {
+        return
+      }
     } else {
       blobUrl = URL.createObjectURL(file)
       iframe.src = blobUrl

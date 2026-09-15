@@ -138,4 +138,27 @@ describe("AsyncSelect", () => {
       expect(screen.getByText("Fast Option")).toBeInTheDocument();
     });
   });
+
+  it("works in uncontrolled mode without value and with optional onChange", async () => {
+    render(
+      <AsyncSelect<{ id: string; name: string; type: string }>
+        fetchFn={mockFetchFn}
+        getOptionValue={(opt) => opt.id}
+        getOptionLabel={(opt) => opt.name}
+        getOptionStringValue={(opt) => opt.name}
+        debounceMs={0}
+      />
+    );
+
+    const input = screen.getByPlaceholderText("Type to search...");
+    expect(input).toBeInTheDocument();
+
+    fireEvent.focus(input);
+    await waitFor(() => {
+      expect(screen.getByText("Banana")).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText("Banana"));
+    expect(input).toHaveValue("Banana");
+  });
 });

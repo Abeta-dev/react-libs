@@ -16,6 +16,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Automated visual and layout smoke regression test suite asserting visual tokens, dark mode container scoping, and responsive mobile navigation.
 - Package script `test:visual` and integrated CI Visual & Layout Smoke Regression Gate in GitHub Actions.
 
+### Fixed
+- Hardened `useOfflineQueue` with automated sync failure recovery and retry count checks, preventing unhandled mutation rejections from deadlocking the offline sync queue.
+- Added defensive parameter sanitization across all 18+ generic and Indian statutory form validators (`validateEmail`, `validatePhone`, `validateGSTIN`, `validatePAN`, etc.) to safeguard against `null`, `undefined`, and non-string inputs.
+- Hardened `DataTable` pagination calculations with defensive page size clamping (`Math.max(1, pageSize)`), eliminating potential infinite page calculation loops.
+- Validated URL schemes in `PdfViewer` print handler to reject unsafe URI schemes (such as `javascript:` execution).
+- Resolved WCAG 2.1 AA contrast ratio failure for `--destructive` semantic color tokens in light mode by deepening crimson hue to `#dc2626` (contrast >= 4.5:1).
+- Restored keyboard focus visibility rings on interactive elements in `SkillTagCloud` and `NavigationMenu`.
+- Added uncontrolled input state support to `SearchField` and `AsyncSelect` components.
+- Rebuilt `calendar.test.tsx` and expanded `pdf-viewer.test.tsx` interaction test suites, lifting `pdf-viewer.tsx` test coverage from 30% to 95.31%.
+
 ## [0.9.0] - 2026-09-15
 
 ### Added

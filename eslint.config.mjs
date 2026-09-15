@@ -282,4 +282,23 @@ export default tseslint.config(
       'security/detect-unsafe-regex': 'off',
     },
   },
+
+  // ─── Non-JS/TS Files (Allow CLI targeting without warnings) ───────────────
+  {
+    files: ['**/*.json', '**/*.css'],
+    languageOptions: {
+      parser: {
+        parseForESLint: () => ({
+          ast: {
+            type: 'Program',
+            body: [],
+            comments: [],
+            tokens: [],
+            loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 0 } },
+            range: [0, 0],
+          },
+        }),
+      },
+    },
+  },
 );

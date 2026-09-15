@@ -30,4 +30,31 @@ describe("SearchField", () => {
 
     expect(handleClear).toHaveBeenCalledTimes(1);
   });
+
+  it("supports uncontrolled mode: reveals clear button on typing and clears value on click", () => {
+    const handleClear = vi.fn();
+    render(<SearchField onClear={handleClear} placeholder="Search items..." />);
+
+    const input = screen.getByPlaceholderText("Search items...");
+    expect(screen.queryByRole("button", { name: /clear search/i })).not.toBeInTheDocument();
+
+    fireEvent.change(input, { target: { value: "Turbine" } });
+    expect(input).toHaveValue("Turbine");
+
+    const clearButton = screen.getByRole("button", { name: /clear search/i });
+    expect(clearButton).toBeInTheDocument();
+
+    fireEvent.click(clearButton);
+    expect(handleClear).toHaveBeenCalledTimes(1);
+    expect(input).toHaveValue("");
+    expect(screen.queryByRole("button", { name: /clear search/i })).not.toBeInTheDocument();
+  });
+
+  it("supports uncontrolled mode with defaultValue", () => {
+    render(<SearchField defaultValue="Initial Query" placeholder="Search..." />);
+
+    const input = screen.getByPlaceholderText("Search...");
+    expect(input).toHaveValue("Initial Query");
+    expect(screen.getByRole("button", { name: /clear search/i })).toBeInTheDocument();
+  });
 });
