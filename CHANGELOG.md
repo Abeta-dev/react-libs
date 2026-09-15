@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2026-09-15
+
+### Added
+- Dedicated standalone subpaths for heavy peer dependencies: `@umesh0492/react-libs/charts`, `@umesh0492/react-libs/command`, `@umesh0492/react-libs/drawer`, `@umesh0492/react-libs/carousel`, `@umesh0492/react-libs/calendar`, `@umesh0492/react-libs/date-picker`, and `@umesh0492/react-libs/form`.
+- Colorblind-compliant Okabe-Ito data visualization palette for `--chart-1` through `--chart-5` in light and dark modes.
+- Global WCAG 2.3.3 reduced motion compliance media query in `src/styles/theme.css` resetting animation and transition durations.
+- Interactive keyboard navigation on `DataTable` clickable rows supporting keyboard row activation.
+- Expanded visual and keyboard accessibility smoke regression test suite in `src/__tests__/visual-smoke.test.tsx`.
+
+### Changed
+- Expanded automated test suite from 1,048 to 1,255 passing tests across 133 test suites (100% pass rate).
+- Elevated test coverage across analytics subsystem (`engine.ts`, `queue.ts`, `session.ts`, `dom-tracker.ts`, and adapters) to over 90%.
+
+### Fixed
+- Fixed `Slider` component prop spreading under strict `"exactOptionalPropertyTypes": true` by conditionally passing `onValueChange` and `aria-readonly`.
+- Fixed static type narrowing in `useAnalytics` test suite by leveraging standard `renderHook` from `@testing-library/react`.
+- Added formula injection sanitization (CWE-1236) in `export-utils.ts` and path traversal mitigation (CWE-22) in `blob-storage.ts`.
+
 ## [0.10.0] - 2026-09-15
 
 ### Changed

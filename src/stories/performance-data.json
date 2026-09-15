@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-09-12 20:05:39 UTC",
-  "totalWallMs": 43027,
+  "generatedAt": "2026-09-15 17:29:53 UTC",
+  "totalWallMs": 41999,
   "global": {
-    "count": 867,
-    "passing": 867,
+    "count": 1255,
+    "passing": 1255,
     "failing": 0,
     "skipped": 0,
-    "mean": 12.1,
+    "mean": 10.7,
     "p50": 1.8,
-    "p95": 70.8,
-    "p99": 115.1,
-    "max": 240.5,
+    "p95": 59.7,
+    "p99": 107.6,
+    "max": 227.9,
     "min": 0,
-    "totalWallMs": 43027
+    "totalWallMs": 41999
   },
   "components": [
     {
@@ -20,930 +20,970 @@
       "count": 4,
       "pass": 4,
       "fail": 0,
-      "mean": 65.3,
+      "mean": 62,
       "p50": 0.8,
-      "p95": 240.5,
-      "p99": 240.5
+      "p95": 227.9,
+      "p99": 227.9
     },
     {
       "component": "components/__tests__/comprehensive-matrix.test.tsx",
       "count": 4,
       "pass": 4,
       "fail": 0,
-      "mean": 102.4,
-      "p50": 59.9,
-      "p95": 235.9,
-      "p99": 235.9
+      "mean": 93.6,
+      "p50": 57.9,
+      "p95": 209.3,
+      "p99": 209.3
+    },
+    {
+      "component": "Forms / Combobox",
+      "count": 16,
+      "pass": 16,
+      "fail": 0,
+      "mean": 24.8,
+      "p50": 8.5,
+      "p95": 130.1,
+      "p99": 130.1
     },
     {
       "component": "Overlays / Dropdown menu",
       "count": 2,
       "pass": 2,
       "fail": 0,
-      "mean": 85.1,
-      "p50": 33.6,
-      "p95": 136.6,
-      "p99": 136.6
+      "mean": 78.9,
+      "p50": 31.4,
+      "p95": 126.4,
+      "p99": 126.4
     },
     {
-      "component": "Navigation / Menubar",
-      "count": 10,
-      "pass": 10,
+      "component": "Data-display / Pdf viewer",
+      "count": 14,
+      "pass": 14,
       "fail": 0,
-      "mean": 38.2,
-      "p50": 25.9,
-      "p95": 131.4,
-      "p99": 131.4
+      "mean": 37.1,
+      "p50": 13.5,
+      "p95": 119.2,
+      "p99": 119.2
+    },
+    {
+      "component": "Overlays / Alert dialog",
+      "count": 9,
+      "pass": 9,
+      "fail": 0,
+      "mean": 26.3,
+      "p50": 14.9,
+      "p95": 112.7,
+      "p99": 112.7
     },
     {
       "component": "Overlays / Tooltip",
       "count": 5,
       "pass": 5,
       "fail": 0,
-      "mean": 40.2,
-      "p50": 21.5,
-      "p95": 125,
-      "p99": 125
+      "mean": 33.4,
+      "p50": 16,
+      "p95": 111.7,
+      "p99": 111.7
+    },
+    {
+      "component": "Core / Calendar",
+      "count": 10,
+      "pass": 10,
+      "fail": 0,
+      "mean": 38.3,
+      "p50": 20,
+      "p95": 111,
+      "p99": 111
     },
     {
       "component": "Core / Popover",
-      "count": 1,
-      "pass": 1,
+      "count": 9,
+      "pass": 9,
       "fail": 0,
-      "mean": 116.7,
-      "p50": 116.7,
-      "p95": 116.7,
-      "p99": 116.7
+      "mean": 28.5,
+      "p50": 18.5,
+      "p95": 110.9,
+      "p99": 110.9
     },
     {
-      "component": "Data-display / Carousel",
-      "count": 8,
-      "pass": 8,
+      "component": "Overlays / Create entity panel",
+      "count": 9,
+      "pass": 9,
       "fail": 0,
-      "mean": 22.5,
-      "p50": 6.4,
-      "p95": 116.6,
-      "p99": 116.6
+      "mean": 25.6,
+      "p50": 15.9,
+      "p95": 107.7,
+      "p99": 107.7
+    },
+    {
+      "component": "Navigation / Persona dropdown",
+      "count": 9,
+      "pass": 9,
+      "fail": 0,
+      "mean": 28.2,
+      "p50": 26,
+      "p95": 107.6,
+      "p99": 107.6
     },
     {
       "component": "Overlays / Dialog",
       "count": 2,
       "pass": 2,
       "fail": 0,
-      "mean": 67.3,
-      "p50": 19.6,
-      "p95": 115.1,
-      "p99": 115.1
+      "mean": 63.1,
+      "p50": 18.6,
+      "p95": 107.6,
+      "p99": 107.6
+    },
+    {
+      "component": "Data-display / Carousel",
+      "count": 8,
+      "pass": 8,
+      "fail": 0,
+      "mean": 21,
+      "p50": 6.4,
+      "p95": 106.4,
+      "p99": 106.4
     },
     {
       "component": "Overlays / Sheet",
-      "count": 1,
-      "pass": 1,
+      "count": 9,
+      "pass": 9,
       "fail": 0,
-      "mean": 113.2,
-      "p50": 113.2,
-      "p95": 113.2,
-      "p99": 113.2
-    },
-    {
-      "component": "Overlays / Alert dialog",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 110.1,
-      "p50": 110.1,
-      "p95": 110.1,
-      "p99": 110.1
+      "mean": 27.7,
+      "p50": 19,
+      "p95": 105.9,
+      "p99": 105.9
     },
     {
       "component": "Forms / Skill tag cloud",
-      "count": 1,
-      "pass": 1,
+      "count": 9,
+      "pass": 9,
       "fail": 0,
-      "mean": 107.3,
-      "p50": 107.3,
-      "p95": 107.3,
-      "p99": 107.3
-    },
-    {
-      "component": "Forms / Slider",
-      "count": 2,
-      "pass": 2,
-      "fail": 0,
-      "mean": 68.7,
-      "p50": 31.3,
-      "p95": 106.1,
-      "p99": 106.1
-    },
-    {
-      "component": "Overlays / Create entity panel",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 102.4,
-      "p50": 102.4,
-      "p95": 102.4,
-      "p99": 102.4
-    },
-    {
-      "component": "Feedback / Toast",
-      "count": 10,
-      "pass": 10,
-      "fail": 0,
-      "mean": 20.5,
-      "p50": 12.1,
-      "p95": 99.8,
-      "p99": 99.8
+      "mean": 14.8,
+      "p50": 2.8,
+      "p95": 102.2,
+      "p99": 102.2
     },
     {
       "component": "Navigation / Tabs",
-      "count": 1,
-      "pass": 1,
+      "count": 9,
+      "pass": 9,
       "fail": 0,
-      "mean": 99.3,
-      "p50": 99.3,
-      "p95": 99.3,
-      "p99": 99.3
+      "mean": 20.6,
+      "p50": 11.9,
+      "p95": 93.7,
+      "p99": 93.7
     },
     {
       "component": "Overlays / Confirm dialog",
       "count": 9,
       "pass": 9,
       "fail": 0,
-      "mean": 23.5,
-      "p50": 13.6,
-      "p95": 97.6,
-      "p99": 97.6
+      "mean": 21.9,
+      "p50": 12.3,
+      "p95": 93,
+      "p99": 93
     },
     {
       "component": "Overlays / Context menu",
       "count": 11,
       "pass": 11,
       "fail": 0,
-      "mean": 29.3,
-      "p50": 23.3,
-      "p95": 93.8,
-      "p99": 93.8
+      "mean": 27.6,
+      "p50": 21.5,
+      "p95": 90.3,
+      "p99": 90.3
+    },
+    {
+      "component": "Feedback / Toast",
+      "count": 10,
+      "pass": 10,
+      "fail": 0,
+      "mean": 18.7,
+      "p50": 11.6,
+      "p95": 89.7,
+      "p99": 89.7
     },
     {
       "component": "Forms / Radio group",
       "count": 2,
       "pass": 2,
       "fail": 0,
-      "mean": 63.3,
-      "p50": 34.3,
-      "p95": 92.2,
-      "p99": 92.2
-    },
-    {
-      "component": "Forms / Input",
-      "count": 5,
-      "pass": 5,
-      "fail": 0,
-      "mean": 26.5,
-      "p50": 17,
-      "p95": 91.8,
-      "p99": 91.8
-    },
-    {
-      "component": "Feedback / Role empty state",
-      "count": 3,
-      "pass": 3,
-      "fail": 0,
-      "mean": 44.6,
-      "p50": 43.1,
-      "p95": 88.7,
-      "p99": 88.7
-    },
-    {
-      "component": "Feedback / Copy button",
-      "count": 2,
-      "pass": 2,
-      "fail": 0,
-      "mean": 45.7,
-      "p50": 3.2,
-      "p95": 88.2,
-      "p99": 88.2
-    },
-    {
-      "component": "Feedback / Toaster",
-      "count": 5,
-      "pass": 5,
-      "fail": 0,
-      "mean": 40.8,
-      "p50": 32.7,
-      "p95": 88.2,
-      "p99": 88.2
+      "mean": 61.5,
+      "p50": 34.6,
+      "p95": 88.3,
+      "p99": 88.3
     },
     {
       "component": "Forms / Form",
       "count": 10,
       "pass": 10,
       "fail": 0,
-      "mean": 13.9,
-      "p50": 2.7,
-      "p95": 88,
-      "p99": 88
+      "mean": 13.6,
+      "p50": 2.8,
+      "p95": 87.6,
+      "p99": 87.6
     },
     {
-      "component": "Overlays / Command",
+      "component": "Forms / Input",
+      "count": 5,
+      "pass": 5,
+      "fail": 0,
+      "mean": 25.7,
+      "p50": 16.1,
+      "p95": 86.9,
+      "p99": 86.9
+    },
+    {
+      "component": "Navigation / Onboarding panel",
+      "count": 10,
+      "pass": 10,
+      "fail": 0,
+      "mean": 14.9,
+      "p50": 6.4,
+      "p95": 85.6,
+      "p99": 85.6
+    },
+    {
+      "component": "__tests__/visual-smoke.test.tsx",
+      "count": 12,
+      "pass": 12,
+      "fail": 0,
+      "mean": 12.2,
+      "p50": 4.7,
+      "p95": 85.5,
+      "p99": 85.5
+    },
+    {
+      "component": "Feedback / Impersonation banner",
       "count": 8,
       "pass": 8,
       "fail": 0,
-      "mean": 22.6,
-      "p50": 4,
-      "p95": 87.9,
-      "p99": 87.9
+      "mean": 15.1,
+      "p50": 5.3,
+      "p95": 83.1,
+      "p99": 83.1
     },
     {
-      "component": "Feedback / Spinner",
+      "component": "Feedback / Copy button",
       "count": 2,
       "pass": 2,
       "fail": 0,
-      "mean": 47.1,
-      "p50": 6.9,
-      "p95": 87.3,
-      "p99": 87.3
+      "mean": 43,
+      "p50": 3.3,
+      "p95": 82.8,
+      "p99": 82.8
     },
     {
-      "component": "Core / Language toggle",
-      "count": 4,
-      "pass": 4,
+      "component": "Feedback / Role empty state",
+      "count": 3,
+      "pass": 3,
       "fail": 0,
-      "mean": 48.4,
-      "p50": 34,
-      "p95": 87,
-      "p99": 87
+      "mean": 42,
+      "p50": 41.2,
+      "p95": 82.7,
+      "p99": 82.7
+    },
+    {
+      "component": "Feedback / Toaster",
+      "count": 5,
+      "pass": 5,
+      "fail": 0,
+      "mean": 36.8,
+      "p50": 24.2,
+      "p95": 82.5,
+      "p99": 82.5
     },
     {
       "component": "Forms / Checkbox",
       "count": 3,
       "pass": 3,
       "fail": 0,
-      "mean": 41.8,
-      "p50": 25.5,
-      "p95": 86.3,
-      "p99": 86.3
+      "mean": 40.3,
+      "p50": 24.5,
+      "p95": 82.4,
+      "p99": 82.4
     },
     {
-      "component": "Forms / Filter select",
+      "component": "Feedback / Error state",
       "count": 8,
       "pass": 8,
       "fail": 0,
-      "mean": 30.8,
-      "p50": 9.2,
-      "p95": 85.9,
-      "p99": 85.9
-    },
-    {
-      "component": "Data-display / ActiveFilterBadge",
-      "count": 3,
-      "pass": 3,
-      "fail": 0,
-      "mean": 28.5,
-      "p50": 1.8,
-      "p95": 83,
-      "p99": 83
-    },
-    {
-      "component": "Feedback / Progress ring",
-      "count": 2,
-      "pass": 2,
-      "fail": 0,
-      "mean": 51.5,
-      "p50": 22.1,
-      "p95": 80.8,
-      "p99": 80.8
-    },
-    {
-      "component": "Forms / Switch",
-      "count": 3,
-      "pass": 3,
-      "fail": 0,
-      "mean": 41,
-      "p50": 29.3,
-      "p95": 79.1,
-      "p99": 79.1
+      "mean": 15.9,
+      "p50": 6.2,
+      "p95": 81.4,
+      "p99": 81.4
     },
     {
       "component": "Layout / Page header",
       "count": 12,
       "pass": 12,
       "fail": 0,
-      "mean": 8.7,
-      "p50": 1.4,
-      "p95": 77.2,
-      "p99": 77.2
+      "mean": 8.6,
+      "p50": 1.2,
+      "p95": 80.9,
+      "p99": 80.9
     },
     {
-      "component": "Data-display / Pdf viewer",
+      "component": "Forms / Slider",
+      "count": 8,
+      "pass": 8,
+      "fail": 0,
+      "mean": 26.4,
+      "p50": 17,
+      "p95": 80,
+      "p99": 80
+    },
+    {
+      "component": "Data-display / ActiveFilterBadge",
       "count": 3,
       "pass": 3,
       "fail": 0,
-      "mean": 38.2,
-      "p50": 29.7,
-      "p95": 77.1,
-      "p99": 77.1
+      "mean": 27.5,
+      "p50": 1.9,
+      "p95": 79.7,
+      "p99": 79.7
     },
     {
-      "component": "Forms / Button",
-      "count": 6,
-      "pass": 6,
+      "component": "Core / Language toggle",
+      "count": 4,
+      "pass": 4,
       "fail": 0,
-      "mean": 19.5,
-      "p50": 4.2,
-      "p95": 76.8,
-      "p99": 76.8
+      "mean": 44.1,
+      "p50": 32.9,
+      "p95": 78.3,
+      "p99": 78.3
     },
     {
-      "component": "Data-display / Accordion",
-      "count": 2,
-      "pass": 2,
+      "component": "Navigation / Menubar",
+      "count": 10,
+      "pass": 10,
       "fail": 0,
-      "mean": 43.9,
-      "p50": 12.9,
-      "p95": 74.9,
-      "p99": 74.9
+      "mean": 26.5,
+      "p50": 19.8,
+      "p95": 78,
+      "p99": 78
+    },
+    {
+      "component": "Forms / Filter select",
+      "count": 8,
+      "pass": 8,
+      "fail": 0,
+      "mean": 26.9,
+      "p50": 12,
+      "p95": 77.3,
+      "p99": 77.3
     },
     {
       "component": "Forms / Textarea",
       "count": 3,
       "pass": 3,
       "fail": 0,
-      "mean": 42.7,
-      "p50": 48.5,
-      "p95": 74.6,
-      "p99": 74.6
+      "mean": 43.5,
+      "p50": 49.5,
+      "p95": 76.2,
+      "p99": 76.2
     },
     {
-      "component": "Forms / File upload",
-      "count": 5,
-      "pass": 5,
+      "component": "Overlays / Command",
+      "count": 8,
+      "pass": 8,
       "fail": 0,
-      "mean": 21.8,
-      "p50": 6.1,
-      "p95": 73.4,
-      "p99": 73.4
+      "mean": 20.9,
+      "p50": 3.3,
+      "p95": 74.2,
+      "p99": 74.2
+    },
+    {
+      "component": "Forms / Button",
+      "count": 6,
+      "pass": 6,
+      "fail": 0,
+      "mean": 18.2,
+      "p50": 3.6,
+      "p95": 72.6,
+      "p99": 72.6
+    },
+    {
+      "component": "Forms / Switch",
+      "count": 3,
+      "pass": 3,
+      "fail": 0,
+      "mean": 38.7,
+      "p50": 27.8,
+      "p95": 72.4,
+      "p99": 72.4
+    },
+    {
+      "component": "Feedback / Spinner",
+      "count": 2,
+      "pass": 2,
+      "fail": 0,
+      "mean": 38.8,
+      "p50": 5.3,
+      "p95": 72.3,
+      "p99": 72.3
+    },
+    {
+      "component": "Feedback / Onboarding notice",
+      "count": 9,
+      "pass": 9,
+      "fail": 0,
+      "mean": 14.5,
+      "p50": 5.7,
+      "p95": 71.4,
+      "p99": 71.4
+    },
+    {
+      "component": "Data-display / Accordion",
+      "count": 2,
+      "pass": 2,
+      "fail": 0,
+      "mean": 42.5,
+      "p50": 14,
+      "p95": 71,
+      "p99": 71
     },
     {
       "component": "Forms / Button group",
       "count": 12,
       "pass": 12,
       "fail": 0,
-      "mean": 7.1,
-      "p50": 1.1,
-      "p95": 72.3,
-      "p99": 72.3
+      "mean": 7.3,
+      "p50": 1,
+      "p95": 70.9,
+      "p99": 70.9
+    },
+    {
+      "component": "__tests__ / Mobile pwa components",
+      "count": 10,
+      "pass": 10,
+      "fail": 0,
+      "mean": 15.6,
+      "p50": 9.2,
+      "p95": 69.5,
+      "p99": 69.5
+    },
+    {
+      "component": "Data-display / Line items card",
+      "count": 10,
+      "pass": 10,
+      "fail": 0,
+      "mean": 13,
+      "p50": 2.4,
+      "p95": 69.4,
+      "p99": 69.4
+    },
+    {
+      "component": "Forms / File upload",
+      "count": 15,
+      "pass": 15,
+      "fail": 0,
+      "mean": 12.5,
+      "p50": 6.9,
+      "p95": 69,
+      "p99": 69
+    },
+    {
+      "component": "india/__tests__/india.test.ts",
+      "count": 17,
+      "pass": 17,
+      "fail": 0,
+      "mean": 4.8,
+      "p50": 0.2,
+      "p95": 66.9,
+      "p99": 66.9
     },
     {
       "component": "Feedback / Error boundary",
       "count": 9,
       "pass": 9,
       "fail": 0,
-      "mean": 12.9,
+      "mean": 12.1,
+      "p50": 4,
+      "p95": 66,
+      "p99": 66
+    },
+    {
+      "component": "Data-display / Radar sweep",
+      "count": 8,
+      "pass": 8,
+      "fail": 0,
+      "mean": 13.9,
       "p50": 3.8,
-      "p95": 70.8,
-      "p99": 70.8
+      "p95": 63.5,
+      "p99": 63.5
     },
     {
-      "component": "india/__tests__/india.test.ts",
-      "count": 15,
-      "pass": 15,
+      "component": "Forms / Multi select",
+      "count": 17,
+      "pass": 17,
       "fail": 0,
-      "mean": 5.7,
-      "p50": 0.2,
-      "p95": 70.2,
-      "p99": 70.2
-    },
-    {
-      "component": "Overlays / Drawer",
-      "count": 5,
-      "pass": 5,
-      "fail": 0,
-      "mean": 38.9,
-      "p50": 26.2,
-      "p95": 68.3,
-      "p99": 68.3
+      "mean": 10.1,
+      "p50": 4.8,
+      "p95": 62.8,
+      "p99": 62.8
     },
     {
       "component": "Navigation / Stepper",
       "count": 3,
       "pass": 3,
       "fail": 0,
-      "mean": 31.3,
-      "p50": 25,
-      "p95": 66.3,
-      "p99": 66.3
-    },
-    {
-      "component": "Forms / Multi select",
-      "count": 6,
-      "pass": 6,
-      "fail": 0,
-      "mean": 17.7,
-      "p50": 5.4,
-      "p95": 66.2,
-      "p99": 66.2
-    },
-    {
-      "component": "Forms / Search field",
-      "count": 2,
-      "pass": 2,
-      "fail": 0,
-      "mean": 41.8,
-      "p50": 19.5,
-      "p95": 64.1,
-      "p99": 64.1
+      "mean": 28.7,
+      "p50": 23.6,
+      "p95": 60.5,
+      "p99": 60.5
     },
     {
       "component": "Feedback / Empty state",
       "count": 3,
       "pass": 3,
       "fail": 0,
-      "mean": 28.8,
-      "p50": 21.5,
-      "p95": 63.2,
-      "p99": 63.2
+      "mean": 27.5,
+      "p50": 21.1,
+      "p95": 59.8,
+      "p99": 59.8
     },
     {
-      "component": "Feedback / Banner",
-      "count": 3,
-      "pass": 3,
+      "component": "Feedback / Workspace banner",
+      "count": 8,
+      "pass": 8,
       "fail": 0,
-      "mean": 30.8,
-      "p50": 23.6,
-      "p95": 62.2,
-      "p99": 62.2
+      "mean": 11.5,
+      "p50": 2.4,
+      "p95": 59.7,
+      "p99": 59.7
+    },
+    {
+      "component": "Forms / Search field",
+      "count": 4,
+      "pass": 4,
+      "fail": 0,
+      "mean": 23.1,
+      "p50": 9.2,
+      "p95": 58.9,
+      "p99": 58.9
     },
     {
       "component": "Core / Item",
       "count": 18,
       "pass": 18,
       "fail": 0,
-      "mean": 5.8,
-      "p50": 1.2,
-      "p95": 61.4,
-      "p99": 61.4
+      "mean": 5.5,
+      "p50": 0.9,
+      "p95": 58.6,
+      "p99": 58.6
+    },
+    {
+      "component": "Feedback / Banner",
+      "count": 3,
+      "pass": 3,
+      "fail": 0,
+      "mean": 28.6,
+      "p50": 21.5,
+      "p95": 58,
+      "p99": 58
     },
     {
       "component": "Forms / Input otp",
       "count": 7,
       "pass": 7,
       "fail": 0,
-      "mean": 15,
-      "p50": 4.8,
-      "p95": 59.8,
-      "p99": 59.8
+      "mean": 14.2,
+      "p50": 4.7,
+      "p95": 57.4,
+      "p99": 57.4
     },
     {
-      "component": "Forms / Async select",
-      "count": 3,
-      "pass": 3,
+      "component": "Overlays / Drawer",
+      "count": 5,
+      "pass": 5,
       "fail": 0,
-      "mean": 30.8,
-      "p50": 17.3,
-      "p95": 58.3,
-      "p99": 58.3
+      "mean": 34.5,
+      "p50": 25.9,
+      "p95": 55.6,
+      "p99": 55.6
     },
     {
       "component": "Navigation / Breadcrumb",
       "count": 8,
       "pass": 8,
       "fail": 0,
-      "mean": 12.3,
+      "mean": 11.9,
       "p50": 1.5,
-      "p95": 57.8,
-      "p99": 57.8
+      "p95": 55.2,
+      "p99": 55.2
+    },
+    {
+      "component": "Feedback / Progress ring",
+      "count": 2,
+      "pass": 2,
+      "fail": 0,
+      "mean": 37.2,
+      "p50": 20.2,
+      "p95": 54.2,
+      "p99": 54.2
     },
     {
       "component": "Data-display / Image viewer",
       "count": 12,
       "pass": 12,
       "fail": 0,
-      "mean": 12.7,
+      "mean": 11.8,
       "p50": 4,
-      "p95": 57.6,
-      "p99": 57.6
+      "p95": 53.2,
+      "p99": 53.2
     },
     {
       "component": "Navigation / Navigation menu",
       "count": 8,
       "pass": 8,
       "fail": 0,
-      "mean": 18.5,
-      "p50": 5.2,
-      "p95": 56.4,
-      "p99": 56.4
+      "mean": 17.5,
+      "p50": 5.1,
+      "p95": 53.1,
+      "p99": 53.1
+    },
+    {
+      "component": "Feedback / Loading state",
+      "count": 8,
+      "pass": 8,
+      "fail": 0,
+      "mean": 12.6,
+      "p50": 5.8,
+      "p95": 53,
+      "p99": 53
+    },
+    {
+      "component": "lib/analytics/__tests__/engine.test.ts",
+      "count": 23,
+      "pass": 23,
+      "fail": 0,
+      "mean": 9.6,
+      "p50": 0.2,
+      "p95": 52.8,
+      "p99": 53.9
+    },
+    {
+      "component": "Data-display / Match score gauge",
+      "count": 8,
+      "pass": 8,
+      "fail": 0,
+      "mean": 12.6,
+      "p50": 4.5,
+      "p95": 51.8,
+      "p99": 51.8
+    },
+    {
+      "component": "Forms / Async select",
+      "count": 4,
+      "pass": 4,
+      "fail": 0,
+      "mean": 22.9,
+      "p50": 14.6,
+      "p95": 51.1,
+      "p99": 51.1
     },
     {
       "component": "Layout / Resizable",
       "count": 2,
       "pass": 2,
       "fail": 0,
-      "mean": 28.9,
-      "p50": 6.8,
-      "p95": 51,
-      "p99": 51
+      "mean": 28.5,
+      "p50": 6.7,
+      "p95": 50.3,
+      "p99": 50.3
     },
     {
       "component": "Feedback / Toasters",
       "count": 5,
       "pass": 5,
       "fail": 0,
-      "mean": 11.5,
-      "p50": 3.3,
-      "p95": 41.5,
-      "p99": 41.5
-    },
-    {
-      "component": "Data-display / Line items card",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 39.8,
-      "p50": 39.8,
-      "p95": 39.8,
-      "p99": 39.8
-    },
-    {
-      "component": "Data-display / Bilingual tooltip",
-      "count": 5,
-      "pass": 5,
-      "fail": 0,
-      "mean": 9.1,
-      "p50": 2,
-      "p95": 38.6,
-      "p99": 38.6
+      "mean": 10.8,
+      "p50": 2.8,
+      "p95": 39.3,
+      "p99": 39.3
     },
     {
       "component": "Data-display / Amount summary card",
       "count": 2,
       "pass": 2,
       "fail": 0,
-      "mean": 20.6,
-      "p50": 3,
-      "p95": 38.3,
-      "p99": 38.3
+      "mean": 20.2,
+      "p50": 2.7,
+      "p95": 37.8,
+      "p99": 37.8
     },
     {
-      "component": "Layout / Detail grid",
-      "count": 1,
-      "pass": 1,
+      "component": "Data-display / Bilingual tooltip",
+      "count": 5,
+      "pass": 5,
       "fail": 0,
-      "mean": 35,
-      "p50": 35,
-      "p95": 35,
-      "p99": 35
+      "mean": 8.7,
+      "p50": 2.1,
+      "p95": 37,
+      "p99": 37
     },
     {
       "component": "__tests__ / Accessibility",
       "count": 38,
       "pass": 38,
       "fail": 0,
-      "mean": 16.7,
-      "p50": 12.7,
-      "p95": 34.9,
-      "p99": 148.9
-    },
-    {
-      "component": "Navigation / Onboarding panel",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 32.4,
-      "p50": 32.4,
-      "p95": 32.4,
-      "p99": 32.4
-    },
-    {
-      "component": "Data-display / Radar sweep",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 31.4,
-      "p50": 31.4,
-      "p95": 31.4,
-      "p99": 31.4
-    },
-    {
-      "component": "Data-display / Match score gauge",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 29.9,
-      "p50": 29.9,
-      "p95": 29.9,
-      "p99": 29.9
-    },
-    {
-      "component": "Navigation / Persona dropdown",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 29.2,
-      "p50": 29.2,
-      "p95": 29.2,
-      "p99": 29.2
-    },
-    {
-      "component": "Feedback / Onboarding notice",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 28.4,
-      "p50": 28.4,
-      "p95": 28.4,
-      "p99": 28.4
-    },
-    {
-      "component": "Feedback / Loading state",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 28,
-      "p50": 28,
-      "p95": 28,
-      "p99": 28
-    },
-    {
-      "component": "Feedback / Error state",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 27.8,
-      "p50": 27.8,
-      "p95": 27.8,
-      "p99": 27.8
+      "mean": 15.3,
+      "p50": 11.6,
+      "p95": 31.9,
+      "p99": 135
     },
     {
       "component": "Data-display / Quota card",
       "count": 3,
       "pass": 3,
       "fail": 0,
-      "mean": 10.8,
-      "p50": 3.1,
-      "p95": 27.1,
-      "p99": 27.1
-    },
-    {
-      "component": "Navigation / Sidebar",
-      "count": 37,
-      "pass": 37,
-      "fail": 0,
-      "mean": 5,
-      "p50": 1.5,
-      "p95": 27.1,
-      "p99": 80.7
+      "mean": 10.5,
+      "p50": 3.2,
+      "p95": 26,
+      "p99": 26
     },
     {
       "component": "Data-display / Data table",
-      "count": 21,
-      "pass": 21,
+      "count": 22,
+      "pass": 22,
       "fail": 0,
-      "mean": 10.8,
-      "p50": 3.5,
-      "p95": 26.8,
-      "p99": 76.9
+      "mean": 10.2,
+      "p50": 3.2,
+      "p95": 25.8,
+      "p99": 74.4
     },
     {
       "component": "Data-display / Pipeline kanban",
       "count": 3,
       "pass": 3,
       "fail": 0,
-      "mean": 10,
+      "mean": 9.7,
       "p50": 2.3,
-      "p95": 26.6,
-      "p99": 26.6
-    },
-    {
-      "component": "Forms / Combobox",
-      "count": 5,
-      "pass": 5,
-      "fail": 0,
-      "mean": 7.3,
-      "p50": 2.3,
-      "p95": 26.6,
-      "p99": 26.6
-    },
-    {
-      "component": "Feedback / Impersonation banner",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 26.4,
-      "p50": 26.4,
-      "p95": 26.4,
-      "p99": 26.4
-    },
-    {
-      "component": "Data-display / Payment ledger",
-      "count": 2,
-      "pass": 2,
-      "fail": 0,
-      "mean": 22,
-      "p50": 18.2,
-      "p95": 25.8,
-      "p99": 25.8
-    },
-    {
-      "component": "Data-display / Timeline",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 25.7,
-      "p50": 25.7,
-      "p95": 25.7,
-      "p99": 25.7
+      "p95": 25.6,
+      "p99": 25.6
     },
     {
       "component": "Data-display / Proof of work card",
       "count": 3,
       "pass": 3,
       "fail": 0,
-      "mean": 9.8,
+      "mean": 10,
       "p50": 2.9,
-      "p95": 24.9,
-      "p99": 24.9
+      "p95": 25.5,
+      "p99": 25.5
     },
     {
-      "component": "Data-display / Info list",
-      "count": 1,
-      "pass": 1,
+      "component": "Data-display / Timeline",
+      "count": 8,
+      "pass": 8,
       "fail": 0,
-      "mean": 24.5,
-      "p50": 24.5,
-      "p95": 24.5,
-      "p99": 24.5
+      "mean": 5.3,
+      "p50": 2.1,
+      "p95": 25.4,
+      "p99": 25.4
     },
     {
-      "component": "india/__tests__/amount-summary-card-india.test.tsx",
-      "count": 7,
-      "pass": 7,
+      "component": "Data-display / Payment ledger",
+      "count": 2,
+      "pass": 2,
+      "fail": 0,
+      "mean": 21.3,
+      "p50": 18.5,
+      "p95": 24,
+      "p99": 24
+    },
+    {
+      "component": "Navigation / Sidebar",
+      "count": 37,
+      "pass": 37,
       "fail": 0,
       "mean": 4,
+      "p50": 1.3,
+      "p95": 23.8,
+      "p99": 57
+    },
+    {
+      "component": "lib/analytics/__tests__/react-analytics.test.tsx",
+      "count": 17,
+      "pass": 17,
+      "fail": 0,
+      "mean": 2.5,
       "p50": 0.9,
-      "p95": 24.2,
-      "p99": 24.2
+      "p95": 22.7,
+      "p99": 22.7
     },
     {
       "component": "Data-display / Kpi card",
       "count": 4,
       "pass": 4,
       "fail": 0,
-      "mean": 8.4,
-      "p50": 3.6,
-      "p95": 23.6,
-      "p99": 23.6
-    },
-    {
-      "component": "Feedback / Empty",
-      "count": 11,
-      "pass": 11,
-      "fail": 0,
-      "mean": 4.3,
-      "p50": 1.5,
-      "p95": 22.4,
-      "p99": 22.4
-    },
-    {
-      "component": "Feedback / Workspace banner",
-      "count": 1,
-      "pass": 1,
-      "fail": 0,
-      "mean": 22.3,
-      "p50": 22.3,
-      "p95": 22.3,
-      "p99": 22.3
-    },
-    {
-      "component": "Data-display / Status badge",
-      "count": 5,
-      "pass": 5,
-      "fail": 0,
-      "mean": 5.6,
-      "p50": 1.6,
-      "p95": 22.1,
-      "p99": 22.1
-    },
-    {
-      "component": "lib/analytics/__tests__/react-analytics.test.tsx",
-      "count": 4,
-      "pass": 4,
-      "fail": 0,
-      "mean": 7.3,
+      "mean": 7.4,
       "p50": 3,
-      "p95": 21.5,
-      "p99": 21.5
-    },
-    {
-      "component": "Data-display / Salary range display",
-      "count": 4,
-      "pass": 4,
-      "fail": 0,
-      "mean": 7.6,
-      "p50": 2.9,
-      "p95": 21.3,
-      "p99": 21.3
-    },
-    {
-      "component": "Navigation / Pagination",
-      "count": 20,
-      "pass": 20,
-      "fail": 0,
-      "mean": 8.6,
-      "p50": 2.6,
-      "p95": 21.1,
-      "p99": 70.1
-    },
-    {
-      "component": "Feedback / Alert",
-      "count": 7,
-      "pass": 7,
-      "fail": 0,
-      "mean": 4.1,
-      "p50": 1.1,
-      "p95": 20.9,
-      "p99": 20.9
-    },
-    {
-      "component": "Core / Typography",
-      "count": 13,
-      "pass": 13,
-      "fail": 0,
-      "mean": 2.6,
-      "p50": 1.1,
-      "p95": 20.3,
-      "p99": 20.3
-    },
-    {
-      "component": "Core / Kbd",
-      "count": 11,
-      "pass": 11,
-      "fail": 0,
-      "mean": 3.1,
-      "p50": 1.5,
-      "p95": 19.8,
-      "p99": 19.8
-    },
-    {
-      "component": "Feedback / Skeleton list",
-      "count": 2,
-      "pass": 2,
-      "fail": 0,
-      "mean": 11,
-      "p50": 2.4,
-      "p95": 19.7,
-      "p99": 19.7
-    },
-    {
-      "component": "Data-display / Chart",
-      "count": 23,
-      "pass": 23,
-      "fail": 0,
-      "mean": 4.9,
-      "p50": 2.7,
-      "p95": 19.3,
-      "p99": 32.1
+      "p95": 21,
+      "p99": 21
     },
     {
       "component": "Forms / Input group",
       "count": 20,
       "pass": 20,
       "fail": 0,
-      "mean": 7.1,
+      "mean": 6.7,
+      "p50": 1,
+      "p95": 21,
+      "p99": 70.6
+    },
+    {
+      "component": "Data-display / Info list",
+      "count": 8,
+      "pass": 8,
+      "fail": 0,
+      "mean": 4.1,
+      "p50": 1.7,
+      "p95": 20.7,
+      "p99": 20.7
+    },
+    {
+      "component": "Feedback / Alert",
+      "count": 7,
+      "pass": 7,
+      "fail": 0,
+      "mean": 3.9,
+      "p50": 1,
+      "p95": 20.6,
+      "p99": 20.6
+    },
+    {
+      "component": "india/__tests__/amount-summary-card-india.test.tsx",
+      "count": 7,
+      "pass": 7,
+      "fail": 0,
+      "mean": 3.4,
+      "p50": 0.6,
+      "p95": 20.4,
+      "p99": 20.4
+    },
+    {
+      "component": "Feedback / Empty",
+      "count": 11,
+      "pass": 11,
+      "fail": 0,
+      "mean": 3.2,
       "p50": 1.3,
+      "p95": 20.3,
+      "p99": 20.3
+    },
+    {
+      "component": "Data-display / Status badge",
+      "count": 5,
+      "pass": 5,
+      "fail": 0,
+      "mean": 5.1,
+      "p50": 1.5,
+      "p95": 19.7,
+      "p99": 19.7
+    },
+    {
+      "component": "Navigation / Pagination",
+      "count": 20,
+      "pass": 20,
+      "fail": 0,
+      "mean": 7.9,
+      "p50": 2.3,
+      "p95": 19.6,
+      "p99": 65.3
+    },
+    {
+      "component": "Core / Kbd",
+      "count": 11,
+      "pass": 11,
+      "fail": 0,
+      "mean": 2.9,
+      "p50": 1.4,
+      "p95": 19.3,
+      "p99": 19.3
+    },
+    {
+      "component": "Data-display / Salary range display",
+      "count": 4,
+      "pass": 4,
+      "fail": 0,
+      "mean": 6.7,
+      "p50": 2.7,
+      "p95": 19.3,
+      "p99": 19.3
+    },
+    {
+      "component": "Layout / Detail grid",
+      "count": 7,
+      "pass": 7,
+      "fail": 0,
+      "mean": 4.1,
+      "p50": 1.5,
+      "p95": 19.3,
+      "p99": 19.3
+    },
+    {
+      "component": "Core / Typography",
+      "count": 13,
+      "pass": 13,
+      "fail": 0,
+      "mean": 2.4,
+      "p50": 1,
       "p95": 19.2,
-      "p99": 75.5
+      "p99": 19.2
     },
     {
       "component": "lib/__tests__/telemetry.test.tsx",
       "count": 3,
       "pass": 3,
       "fail": 0,
-      "mean": 7.3,
-      "p50": 2,
-      "p95": 18.5,
-      "p99": 18.5
+      "mean": 7.2,
+      "p50": 1.6,
+      "p95": 18.7,
+      "p99": 18.7
+    },
+    {
+      "component": "Feedback / Skeleton list",
+      "count": 2,
+      "pass": 2,
+      "fail": 0,
+      "mean": 10,
+      "p50": 1.9,
+      "p95": 18.1,
+      "p99": 18.1
+    },
+    {
+      "component": "Data-display / Chart",
+      "count": 23,
+      "pass": 23,
+      "fail": 0,
+      "mean": 4.4,
+      "p50": 2.2,
+      "p95": 17.6,
+      "p99": 30.7
     },
     {
       "component": "Forms / Field",
       "count": 24,
       "pass": 24,
       "fail": 0,
-      "mean": 4.6,
-      "p50": 1.1,
-      "p95": 17,
-      "p99": 58.4
+      "mean": 4.2,
+      "p50": 0.9,
+      "p95": 16.7,
+      "p99": 54.7
     },
     {
       "component": "lib/__tests__/utils-subpath.test.ts",
       "count": 3,
       "pass": 3,
       "fail": 0,
-      "mean": 5.6,
+      "mean": 5.1,
       "p50": 0.8,
-      "p95": 15.7,
-      "p99": 15.7
+      "p95": 14.3,
+      "p99": 14.3
     },
     {
       "component": "lib/__tests__/masking.test.ts",
@@ -956,24 +996,44 @@
       "p99": 11.7
     },
     {
-      "component": "hooks/__tests__/use-toast.test.ts",
-      "count": 3,
-      "pass": 3,
+      "component": "hooks/__tests__/use-offline-queue.test.ts",
+      "count": 12,
+      "pass": 12,
       "fail": 0,
-      "mean": 3.8,
+      "mean": 2.3,
+      "p50": 1.4,
+      "p95": 9.6,
+      "p99": 9.6
+    },
+    {
+      "component": "hooks/__tests__/use-toast.test.ts",
+      "count": 11,
+      "pass": 11,
+      "fail": 0,
+      "mean": 1.5,
+      "p50": 0.8,
+      "p95": 8.9,
+      "p99": 8.9
+    },
+    {
+      "component": "hooks/__tests__/use-platform-pwa-offline.test.tsx",
+      "count": 14,
+      "pass": 14,
+      "fail": 0,
+      "mean": 1.5,
       "p50": 1.1,
-      "p95": 9.4,
-      "p99": 9.4
+      "p95": 8.7,
+      "p99": 8.7
     },
     {
       "component": "hooks/__tests__/use-debounce.test.ts",
       "count": 3,
       "pass": 3,
       "fail": 0,
-      "mean": 3.9,
-      "p50": 2.1,
-      "p95": 8.3,
-      "p99": 8.3
+      "mean": 4.1,
+      "p50": 2.2,
+      "p95": 8.6,
+      "p99": 8.6
     },
     {
       "component": "lib/__tests__/locations.test.ts",
@@ -982,148 +1042,118 @@
       "fail": 0,
       "mean": 1.4,
       "p50": 0.2,
-      "p95": 7.8,
-      "p99": 7.8
+      "p95": 8,
+      "p99": 8
     },
     {
       "component": "hooks/__tests__/use-local-storage.test.ts",
       "count": 7,
       "pass": 7,
       "fail": 0,
-      "mean": 2.1,
-      "p50": 1.2,
-      "p95": 7.7,
-      "p99": 7.7
+      "mean": 2,
+      "p50": 1.1,
+      "p95": 7.5,
+      "p99": 7.5
     },
     {
       "component": "lib/__tests__/blob-storage.test.ts",
-      "count": 4,
-      "pass": 4,
-      "fail": 0,
-      "mean": 2.6,
-      "p50": 0.8,
-      "p95": 7.4,
-      "p99": 7.4
-    },
-    {
-      "component": "lib/analytics/__tests__/dom-tracker.test.ts",
-      "count": 4,
-      "pass": 4,
-      "fail": 0,
-      "mean": 2.6,
-      "p50": 1.3,
-      "p95": 7,
-      "p99": 7
-    },
-    {
-      "component": "lib/__tests__/export-utils.test.ts",
-      "count": 33,
-      "pass": 33,
-      "fail": 0,
-      "mean": 1.1,
-      "p50": 0.6,
-      "p95": 4.5,
-      "p99": 7.8
-    },
-    {
-      "component": "lib/analytics/__tests__/engine.test.ts",
       "count": 6,
       "pass": 6,
       "fail": 0,
-      "mean": 1,
-      "p50": 0.2,
-      "p95": 4.4,
-      "p99": 4.4
-    },
-    {
-      "component": "lib/__tests__/utils.test.ts",
-      "count": 12,
-      "pass": 12,
-      "fail": 0,
-      "mean": 0.5,
-      "p50": 0.1,
-      "p95": 3.9,
-      "p99": 3.9
-    },
-    {
-      "component": "lib/analytics/__tests__/queue.test.ts",
-      "count": 3,
-      "pass": 3,
-      "fail": 0,
-      "mean": 1.7,
-      "p50": 1,
-      "p95": 3.5,
-      "p99": 3.5
+      "mean": 1.8,
+      "p50": 0.7,
+      "p95": 7,
+      "p99": 7
     },
     {
       "component": "__tests__/ssr-smoke.test.tsx",
       "count": 57,
       "pass": 57,
       "fail": 0,
-      "mean": 1,
+      "mean": 1.1,
       "p50": 0.5,
-      "p95": 2.5,
-      "p99": 13.5
+      "p95": 4.2,
+      "p99": 13.1
     },
     {
-      "component": "lib/analytics/__tests__/adapters.test.ts",
-      "count": 4,
-      "pass": 4,
+      "component": "lib/__tests__/utils.test.ts",
+      "count": 12,
+      "pass": 12,
       "fail": 0,
-      "mean": 1.1,
+      "mean": 0.4,
+      "p50": 0.1,
+      "p95": 3.6,
+      "p99": 3.6
+    },
+    {
+      "component": "lib/analytics/__tests__/queue.test.ts",
+      "count": 15,
+      "pass": 15,
+      "fail": 0,
+      "mean": 0.6,
       "p50": 0.4,
-      "p95": 2,
-      "p99": 2
+      "p95": 2.8,
+      "p99": 2.8
+    },
+    {
+      "component": "lib/__tests__/export-utils.test.ts",
+      "count": 34,
+      "pass": 34,
+      "fail": 0,
+      "mean": 0.7,
+      "p50": 0.5,
+      "p95": 2.7,
+      "p99": 3.2
     },
     {
       "component": "Feedback / Success micro interaction",
       "count": 8,
       "pass": 8,
       "fail": 0,
-      "mean": 0.7,
-      "p50": 0.3,
-      "p95": 2,
-      "p99": 2
+      "mean": 0.6,
+      "p50": 0.2,
+      "p95": 1.9,
+      "p99": 1.9
     },
     {
       "component": "lib/analytics/__tests__/session.test.ts",
+      "count": 18,
+      "pass": 18,
+      "fail": 0,
+      "mean": 0.4,
+      "p50": 0.2,
+      "p95": 1.5,
+      "p99": 1.5
+    },
+    {
+      "component": "lib/analytics/__tests__/adapters.test.ts",
+      "count": 20,
+      "pass": 20,
+      "fail": 0,
+      "mean": 0.4,
+      "p50": 0.2,
+      "p95": 1.4,
+      "p99": 1.8
+    },
+    {
+      "component": "lib/analytics/__tests__/dom-tracker.test.ts",
+      "count": 23,
+      "pass": 23,
+      "fail": 0,
+      "mean": 0.8,
+      "p50": 0.5,
+      "p95": 1.4,
+      "p99": 7
+    },
+    {
+      "component": "__tests__/css-layer.test.ts",
       "count": 6,
       "pass": 6,
       "fail": 0,
-      "mean": 0.6,
+      "mean": 0.3,
       "p50": 0.2,
-      "p95": 1.7,
-      "p99": 1.7
-    },
-    {
-      "component": "Feedback / Progress",
-      "count": 2,
-      "pass": 2,
-      "fail": 0,
-      "mean": 0.6,
-      "p50": 0.2,
-      "p95": 1,
-      "p99": 1
-    },
-    {
-      "component": "Layout / Scroll area",
-      "count": 2,
-      "pass": 2,
-      "fail": 0,
-      "mean": 0.5,
-      "p50": 0.2,
-      "p95": 0.8,
-      "p99": 0.8
-    },
-    {
-      "component": "Feedback / Skeleton",
-      "count": 2,
-      "pass": 2,
-      "fail": 0,
-      "mean": 0.5,
-      "p50": 0.2,
-      "p95": 0.8,
-      "p99": 0.8
+      "p95": 0.9,
+      "p99": 0.9
     },
     {
       "component": "Forms / Label",
@@ -1136,14 +1166,14 @@
       "p99": 0.8
     },
     {
-      "component": "Core / Calendar",
+      "component": "Forms / Toggle group",
       "count": 2,
       "pass": 2,
       "fail": 0,
-      "mean": 0.4,
-      "p50": 0.1,
-      "p95": 0.7,
-      "p99": 0.7
+      "mean": 0.5,
+      "p50": 0.2,
+      "p95": 0.8,
+      "p99": 0.8
     },
     {
       "component": "Data-display / Avatar",
@@ -1196,17 +1226,27 @@
       "p99": 0.7
     },
     {
-      "component": "Layout / Card",
+      "component": "Layout / Scroll area",
       "count": 2,
       "pass": 2,
       "fail": 0,
       "mean": 0.4,
-      "p50": 0.2,
+      "p50": 0.1,
       "p95": 0.7,
       "p99": 0.7
     },
     {
       "component": "Layout / Separator",
+      "count": 2,
+      "pass": 2,
+      "fail": 0,
+      "mean": 0.4,
+      "p50": 0.1,
+      "p95": 0.7,
+      "p99": 0.7
+    },
+    {
+      "component": "Feedback / Progress",
       "count": 2,
       "pass": 2,
       "fail": 0,
@@ -1236,16 +1276,6 @@
       "p99": 0.7
     },
     {
-      "component": "Forms / Toggle group",
-      "count": 2,
-      "pass": 2,
-      "fail": 0,
-      "mean": 0.4,
-      "p50": 0.1,
-      "p95": 0.7,
-      "p99": 0.7
-    },
-    {
       "component": "Forms / Toggle",
       "count": 2,
       "pass": 2,
@@ -1261,29 +1291,59 @@
       "pass": 2,
       "fail": 0,
       "mean": 0.4,
-      "p50": 0.2,
+      "p50": 0.1,
       "p95": 0.7,
       "p99": 0.7
+    },
+    {
+      "component": "Layout / Card",
+      "count": 2,
+      "pass": 2,
+      "fail": 0,
+      "mean": 0.4,
+      "p50": 0.1,
+      "p95": 0.6,
+      "p99": 0.6
+    },
+    {
+      "component": "Feedback / Skeleton",
+      "count": 2,
+      "pass": 2,
+      "fail": 0,
+      "mean": 0.4,
+      "p50": 0.1,
+      "p95": 0.6,
+      "p99": 0.6
     },
     {
       "component": "lib/__tests__/formatters.test.ts",
       "count": 63,
       "pass": 63,
       "fail": 0,
-      "mean": 0.4,
+      "mean": 0.3,
       "p50": 0.1,
-      "p95": 0.5,
-      "p99": 13.3
+      "p95": 0.3,
+      "p99": 12.1
     },
     {
       "component": "lib/__tests__/validators.test.ts",
-      "count": 31,
-      "pass": 31,
+      "count": 37,
+      "pass": 37,
       "fail": 0,
       "mean": 0.1,
       "p50": 0.1,
       "p95": 0.3,
-      "p99": 0.9
+      "p99": 0.7
+    },
+    {
+      "component": "india/__tests__/validators.test.ts",
+      "count": 21,
+      "pass": 21,
+      "fail": 0,
+      "mean": 0.1,
+      "p50": 0.1,
+      "p95": 0.2,
+      "p99": 0.7
     }
   ],
   "slowest": [
@@ -1291,105 +1351,105 @@
       "file": "src/components/ui/core/__tests__/date-range-picker.test.tsx",
       "component": "Core / Date range picker",
       "name": "date-range-picker component hierarchy does not wipe selection when defaultDate object identity changes on re-renders",
-      "durationMs": 240.5,
+      "durationMs": 227.9,
       "status": "passed"
     },
     {
       "file": "src/components/__tests__/comprehensive-matrix.test.tsx",
       "component": "components/__tests__/comprehensive-matrix.test.tsx",
       "name": "Comprehensive Matrix Interaction Coverage Forms High Density Integration with State & Axe Audits",
-      "durationMs": 235.9,
+      "durationMs": 209.3,
       "status": "passed"
     },
     {
       "file": "src/components/ui/__tests__/accessibility.test.tsx",
       "component": "__tests__ / Accessibility",
       "name": "Accessibility (a11y) Automated Tests - Axe Violations MultiSelect has 0 accessibility violations in closed and open states",
-      "durationMs": 148.9,
+      "durationMs": 135,
+      "status": "passed"
+    },
+    {
+      "file": "src/components/ui/forms/__tests__/combobox.test.tsx",
+      "component": "Forms / Combobox",
+      "name": "Combobox keyboard navigation navigates options via ArrowDown, ArrowUp and selects via Enter",
+      "durationMs": 130.1,
       "status": "passed"
     },
     {
       "file": "src/components/ui/overlays/__tests__/dropdown-menu.test.tsx",
       "component": "Overlays / Dropdown menu",
       "name": "DropdownMenu Keyboard Navigations & Triggers should assert dynamic portal drop-downs rendering accessible menu items securely natively",
-      "durationMs": 136.6,
+      "durationMs": 126.4,
       "status": "passed"
     },
     {
-      "file": "src/components/ui/navigation/__tests__/menubar.test.tsx",
-      "component": "Navigation / Menubar",
-      "name": "Menubar Component renders trigger buttons in menubar",
-      "durationMs": 131.4,
+      "file": "src/components/ui/data-display/__tests__/pdf-viewer.test.tsx",
+      "component": "Data-display / Pdf viewer",
+      "name": "PdfViewer Component handles print button click with File object",
+      "durationMs": 119.2,
+      "status": "passed"
+    },
+    {
+      "file": "src/components/ui/data-display/__tests__/pdf-viewer.test.tsx",
+      "component": "Data-display / Pdf viewer",
+      "name": "PdfViewer Component handles print button click by creating hidden iframe and triggering print",
+      "durationMs": 117.5,
+      "status": "passed"
+    },
+    {
+      "file": "src/components/ui/overlays/__tests__/alert-dialog.test.tsx",
+      "component": "Overlays / Alert dialog",
+      "name": "AlertDialog Component opens modal via trigger and closes when Cancel is clicked",
+      "durationMs": 112.7,
       "status": "passed"
     },
     {
       "file": "src/components/ui/overlays/__tests__/tooltip.test.tsx",
       "component": "Overlays / Tooltip",
       "name": "Tooltip Focus and Hover Bounds should inject tooltip overlays matching explicit hover delays automatically safely",
-      "durationMs": 125,
+      "durationMs": 111.7,
+      "status": "passed"
+    },
+    {
+      "file": "src/components/ui/core/__tests__/calendar.test.tsx",
+      "component": "Core / Calendar",
+      "name": "Calendar Component renders default calendar grid with role=\"grid\"",
+      "durationMs": 111,
       "status": "passed"
     },
     {
       "file": "src/components/ui/core/__tests__/popover.test.tsx",
       "component": "Core / Popover",
-      "name": "Popover Interaction and Portal Focus Map should evaluate trigger click mappings checking complex generic context portals natively",
-      "durationMs": 116.7,
+      "name": "Popover Component toggles open and closed when trigger is clicked and manages aria-expanded",
+      "durationMs": 110.9,
       "status": "passed"
     },
     {
-      "file": "src/components/ui/data-display/__tests__/carousel.test.tsx",
-      "component": "Data-display / Carousel",
-      "name": "Carousel Slide Navigations should map standard embla nested boundaries tracking generic previous-next click mutations elegantly reliably directly organically natively",
-      "durationMs": 116.6,
+      "file": "src/components/ui/overlays/__tests__/create-entity-panel.test.tsx",
+      "component": "Overlays / Create entity panel",
+      "name": "CreateEntityPanel renders slide-over sheet with title, description, custom icon, and body children when open is true",
+      "durationMs": 107.7,
       "status": "passed"
     },
     {
       "file": "src/components/ui/overlays/__tests__/dialog.test.tsx",
       "component": "Overlays / Dialog",
       "name": "Dialog Portal Injection Bounds should inject portals into generic document nodes asserting modal visibility correctly",
-      "durationMs": 115.1,
+      "durationMs": 107.6,
       "status": "passed"
     },
     {
-      "file": "src/components/ui/overlays/__tests__/sheet.test.tsx",
-      "component": "Overlays / Sheet",
-      "name": "Sheet Modal Navigation Matrices should assert off-canvas overlays interacting securely via structured structural navigation correctly natively",
-      "durationMs": 113.2,
+      "file": "src/components/ui/navigation/__tests__/persona-dropdown.test.tsx",
+      "component": "Navigation / Persona dropdown",
+      "name": "PersonaDropdown opens menu on trigger click and displays all persona options and subtitles",
+      "durationMs": 107.6,
       "status": "passed"
     },
     {
-      "file": "src/components/ui/overlays/__tests__/alert-dialog.test.tsx",
-      "component": "Overlays / Alert dialog",
-      "name": "AlertDialog Keyboard/Mouse Interaction Boundaries should assert accessible overlays validating action/cancel click simulations rigorously",
-      "durationMs": 110.1,
-      "status": "passed"
-    },
-    {
-      "file": "src/components/ui/forms/__tests__/skill-tag-cloud.test.tsx",
-      "component": "Forms / Skill tag cloud",
-      "name": "SkillTagCloud renders skill tags and handles remove/add",
-      "durationMs": 107.3,
-      "status": "passed"
-    },
-    {
-      "file": "src/components/ui/forms/__tests__/slider.test.tsx",
-      "component": "Forms / Slider",
-      "name": "Slider Accessibility Navigation Bounds should bootstrap complex nested radix primitives exactly synchronously safely",
-      "durationMs": 106.1,
-      "status": "passed"
-    },
-    {
-      "file": "src/components/ui/overlays/__tests__/create-entity-panel.test.tsx",
-      "component": "Overlays / Create entity panel",
-      "name": "CreateEntityPanel renders slide-over sheet when open is true",
-      "durationMs": 102.4,
-      "status": "passed"
-    },
-    {
-      "file": "src/components/ui/feedback/__tests__/toast.test.tsx",
-      "component": "Feedback / Toast",
-      "name": "Toast renders default toast with title",
-      "durationMs": 99.8,
+      "file": "src/components/ui/data-display/__tests__/carousel.test.tsx",
+      "component": "Data-display / Carousel",
+      "name": "Carousel Slide Navigations should map standard embla nested boundaries tracking generic previous-next click mutations elegantly reliably directly organically natively",
+      "durationMs": 106.4,
       "status": "passed"
     }
   ]

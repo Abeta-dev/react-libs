@@ -15,6 +15,20 @@
 | **Navigation** | Sidebar, NavigationMenu, Breadcrumb, Tabs, Menubar, Pagination |
 | **Feedback** | Toast/Toaster, Sonner, Skeleton, Progress, Spinner, Alert, EmptyState, RoleEmptyState |
 
+### Standalone Subpaths (Zero-Peer Tree-Shaking)
+
+| Subpath | Key Component | Isolated Peer |
+|---|---|---|
+| `@umesh0492/react-libs/charts` | `ChartContainer`, `ChartTooltip` | `recharts` |
+| `@umesh0492/react-libs/command` | `Command`, `CommandInput` | `cmdk` |
+| `@umesh0492/react-libs/drawer` | `Drawer`, `DrawerContent` | `vaul` |
+| `@umesh0492/react-libs/carousel` | `Carousel`, `CarouselContent` | `embla-carousel-react` |
+| `@umesh0492/react-libs/calendar` | `Calendar` | `react-day-picker` |
+| `@umesh0492/react-libs/date-picker` | `DatePicker`, `DateRangePicker` | `react-day-picker`, `date-fns` |
+| `@umesh0492/react-libs/form` | `Form`, `FormField` | `react-hook-form` |
+| `@umesh0492/react-libs/data-table` | `DataTable` | `@tanstack/react-table` |
+| `@umesh0492/react-libs/pdf` | `PdfViewer` | `@react-pdf/renderer` |
+
 > Full API docs → [README.md](./README.md)
 
 ---

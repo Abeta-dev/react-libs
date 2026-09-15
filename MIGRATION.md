@@ -193,3 +193,38 @@ If using custom cascade layers, import or declare the standard layer sequence pr
 @layer reset, base, react-libs, components, utilities, overrides;
 ```
 
+---
+
+## Upgrading to v0.11.0
+
+`v0.11.0` is 100% backward-compatible and introduces discrete subpaths for heavy dependencies to eliminate peer dependency bundle overhead:
+
+### 1. Isolated Subpaths for Heavy Peers
+
+Consumers can import heavy primitives from dedicated standalone entry points:
+- `@umesh0492/react-libs/charts` (isolates `recharts`)
+- `@umesh0492/react-libs/command` (isolates `cmdk`)
+- `@umesh0492/react-libs/drawer` (isolates `vaul`)
+- `@umesh0492/react-libs/carousel` (isolates `embla-carousel-react`)
+- `@umesh0492/react-libs/calendar` (isolates `react-day-picker`)
+- `@umesh0492/react-libs/date-picker` (isolates `react-day-picker` and `date-fns`)
+- `@umesh0492/react-libs/form` (isolates `react-hook-form`)
+
+```tsx
+// Backward compatible:
+import { Calendar, ChartContainer, Drawer } from "@umesh0492/react-libs";
+
+// Recommended for minimal bundle footprints:
+import { Calendar } from "@umesh0492/react-libs/calendar";
+import { ChartContainer } from "@umesh0492/react-libs/charts";
+import { Drawer } from "@umesh0492/react-libs/drawer";
+```
+
+### 2. Accessibility & Reduced Motion Compliance
+
+- Added WCAG 2.3.3 reduced motion `@layer base` media query (`@media (prefers-reduced-motion: reduce)`) in `theme.css`.
+- Okabe-Ito colorblind-compliant palette calibrated for `--chart-1` through `--chart-5` ($\Delta E > 35$).
+- Interactive `DataTable` rows (`onRowClick`) now feature `role="button"`, `tabIndex={0}`, focus visible rings, and `Enter`/`Space` keyboard navigation.
+- Carousel indicators and slider thumbs extended to 44×44px mobile touch hit targets.
+
+
