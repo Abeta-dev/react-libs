@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] - 2026-09-15
+
+### Changed
+- Elevated core repository positioning to Enterprise B2B Design System & Application Engine for React 19 (vendor portals, compliance workflows, audit telemetry, and offline PWAs).
+- Deepened 20 component test suites across overlays, forms, navigation, feedback, and mobile PWA, expanding test suite from 890 to 1,048 passing unit tests (85.08% line coverage, 75.59% branch coverage).
+- Untracked built distribution files from Git version control, restored `.gitignore` exclusion, and verified `prepare` and `prepack` lifecycle hooks for clean npm distribution.
+
+### Added
+- Automated visual and layout smoke regression test suite asserting visual tokens, dark mode container scoping, and responsive mobile navigation.
+- Package script `test:visual` and integrated CI Visual & Layout Smoke Regression Gate in GitHub Actions.
+
 ## [0.9.0] - 2026-09-15
 
 ### Added
