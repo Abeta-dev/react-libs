@@ -24,6 +24,10 @@ export interface AuthCardProps {
   signUpProps?: Partial<SignUpFormProps> | undefined;
   otpEmail?: string | undefined;
   className?: string | undefined;
+  /**
+   * Cooldown / debounce duration in seconds for buttons and forms. Default: 1. Pass 0 or false to disable.
+   */
+  debounceSec?: number | false | undefined;
 }
 
 export const AuthCard: React.FC<AuthCardProps> = ({
@@ -41,6 +45,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
   signUpProps,
   otpEmail,
   className,
+  debounceSec = 1,
 }) => {
   const [internalMode, setInternalMode] = React.useState<AuthCardMode>(initialMode);
   const currentMode = controlledMode ?? internalMode;
@@ -139,6 +144,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
             options={oauthOptions}
             layout="stack"
             variant="outline"
+            debounceSec={debounceSec}
           />
 
           <div className="relative flex items-center justify-center">
@@ -159,6 +165,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
           onError={onError}
           onForgotPasswordClick={() => setMode('forgotPassword')}
           onSignUpClick={() => setMode('signUp')}
+          debounceSec={debounceSec}
           {...loginProps}
         />
       )}
@@ -168,6 +175,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
           onSuccess={onSuccess}
           onError={onError}
           onSignInClick={() => setMode('signIn')}
+          debounceSec={debounceSec}
           {...signUpProps}
         />
       )}
@@ -175,6 +183,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
       {currentMode === 'forgotPassword' && (
         <ForgotPasswordForm
           onBackToSignIn={() => setMode('signIn')}
+          debounceSec={debounceSec}
         />
       )}
 
@@ -183,6 +192,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
           email={otpEmail}
           onSuccess={onSuccess}
           onError={onError}
+          debounceSec={debounceSec}
         />
       )}
     </div>

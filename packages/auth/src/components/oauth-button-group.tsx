@@ -13,6 +13,10 @@ export interface OAuthButtonGroupProps {
   options?: OAuthOptions | undefined;
   className?: string | undefined;
   disabled?: boolean | undefined;
+  /**
+   * Cooldown / debounce duration in seconds. Default: 1. Pass 0 or false to disable.
+   */
+  debounceSec?: number | false | undefined;
 }
 
 export const OAuthButtonGroup: React.FC<OAuthButtonGroupProps> = ({
@@ -24,6 +28,7 @@ export const OAuthButtonGroup: React.FC<OAuthButtonGroupProps> = ({
   options,
   className,
   disabled = false,
+  debounceSec = 1,
 }) => {
   const { signInWithOAuth, isConnecting, activeProvider } = useOAuth();
 
@@ -53,6 +58,7 @@ export const OAuthButtonGroup: React.FC<OAuthButtonGroupProps> = ({
           iconOnly={iconOnly}
           isLoading={isConnecting && activeProvider === provider}
           disabled={disabled || isConnecting}
+          debounceSec={debounceSec}
           onClick={() => void handleSignIn(provider)}
         />
       ))}

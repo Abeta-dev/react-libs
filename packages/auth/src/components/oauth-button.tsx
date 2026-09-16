@@ -4,6 +4,7 @@ import { GoogleIcon } from '../icons/google-icon';
 import { LinkedInIcon } from '../icons/linkedin-icon';
 import { SpinnerIcon } from '../icons/spinner-icon';
 import type { OAuthProvider } from '../types/adapter';
+import { useClickBackpressure } from '../core/use-click-backpressure';
 
 export interface OAuthButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   provider: OAuthProvider;
@@ -11,6 +12,17 @@ export interface OAuthButtonProps extends React.ButtonHTMLAttributes<HTMLButtonE
   variant?: 'outline' | 'brand' | 'secondary' | undefined;
   label?: string | undefined;
   iconOnly?: boolean | undefined;
+  /**
+   * Cooldown / debounce duration in seconds to prevent multiple rapid clicks.
+   * Pass any number in seconds (e.g. 1, 0.5, 2).
+   * Pass `false` or `0` to disable debouncing.
+   * @default 1
+   */
+  debounceSec?: number | false | undefined;
+  /**
+   * Optional callback when a click is blocked by debouncing or in-flight backpressure.
+   */
+  onBlocked?: ((reason: 'in_flight' | 'cooldown') => void) | undefined;
 }
 
 function getProviderConfig(provider: OAuthProvider) {
@@ -44,6 +56,9 @@ export const OAuthButton = React.forwardRef<HTMLButtonElement, OAuthButtonProps>
       variant = 'outline',
       label,
       iconOnly = false,
+      debounceSec = 1,
+      onBlocked,
+      onClick,
       className,
       disabled,
       ...props
@@ -52,9 +67,16 @@ export const OAuthButton = React.forwardRef<HTMLButtonElement, OAuthButtonProps>
   ) => {
     const config = getProviderConfig(provider);
 
+    const { execute: handleClick, isPending } = useClickBackpressure(onClick, {
+      debounceSec,
+      onBlocked,
+    });
+
     const IconComponent = config.icon;
     const buttonText = label ?? (iconOnly ? '' : `Continue with ${config.name}`);
     const ariaLabel = label ?? (iconOnly ? `Sign in with ${config.name}` : undefined);
+
+    const isEffectiveLoading = isLoading || isPending;
 
     const baseClasses =
       'inline-flex items-center justify-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 select-none';
@@ -72,9 +94,10 @@ export const OAuthButton = React.forwardRef<HTMLButtonElement, OAuthButtonProps>
       <button
         ref={ref}
         type="button"
-        disabled={disabled || isLoading}
+        disabled={disabled || isEffectiveLoading}
         aria-label={ariaLabel}
-        aria-busy={isLoading}
+        aria-busy={isEffectiveLoading}
+        onClick={handleClick}
         className={clsx(
           baseClasses,
           variantClasses,
@@ -83,7 +106,7 @@ export const OAuthButton = React.forwardRef<HTMLButtonElement, OAuthButtonProps>
         )}
         {...props}
       >
-        {isLoading ? (
+        {isEffectiveLoading ? (
           <SpinnerIcon size={18} className="animate-spin text-current" />
         ) : (
           <IconComponent size={18} className="shrink-0" />

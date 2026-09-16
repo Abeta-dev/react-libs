@@ -4,6 +4,7 @@ import { clsx } from 'clsx';
 import { useAuth } from '../context/hooks';
 import { SpinnerIcon } from '../icons/spinner-icon';
 import type { AuthSession } from '../types/adapter';
+import { useClickBackpressure } from '../core/use-click-backpressure';
 
 export interface OtpFormProps {
   email?: string | undefined;
@@ -12,6 +13,11 @@ export interface OtpFormProps {
   onError?: ((error: Error) => void) | undefined;
   onResendCode?: (() => Promise<void> | void) | undefined;
   className?: string | undefined;
+  /**
+   * Cooldown / debounce duration in seconds. Default: 1. Pass 0 or false to disable.
+   */
+  debounceSec?: number | false | undefined;
+  onBlocked?: ((reason: 'in_flight' | 'cooldown') => void) | undefined;
 }
 
 export const OtpForm: React.FC<OtpFormProps> = ({
@@ -21,6 +27,8 @@ export const OtpForm: React.FC<OtpFormProps> = ({
   onError,
   onResendCode,
   className,
+  debounceSec = 1,
+  onBlocked,
 }) => {
   const { verifyOtp, error: contextError, clearError } = useAuth();
   const [digits, setDigits] = React.useState<string[]>(Array(length).fill(''));
@@ -68,6 +76,13 @@ export const OtpForm: React.FC<OtpFormProps> = ({
     [verifyOtp, email, onSuccess, onError, clearError]
   );
 
+  const { execute: debouncedSubmitCode, isPending: isSubmittingPending } = useClickBackpressure(
+    async (codeToSubmit: string) => {
+      await submitCode(codeToSubmit);
+    },
+    { debounceSec, onBlocked }
+  );
+
   const handleChange = (index: number, val: string) => {
     // Keep only the last character entered
     const char = val.replace(/\D/g, '').slice(-1);
@@ -84,7 +99,7 @@ export const OtpForm: React.FC<OtpFormProps> = ({
     // Auto-submit if all digits are filled
     const fullCode = newDigits.join('');
     if (fullCode.length === length && newDigits.every((d) => d !== '')) {
-      void submitCode(fullCode);
+      void debouncedSubmitCode(fullCode);
     }
   };
 
@@ -110,29 +125,35 @@ export const OtpForm: React.FC<OtpFormProps> = ({
     if (!pasted) return;
 
     const newDigits = [...digits];
-    for (let i = 0; i < pasted.length; i++) {
+    for (let i = 0; i < pasted.length; i += 1) {
       newDigits[i] = pasted[i] ?? '';
     }
     setDigits(newDigits);
+    setLocalError(null);
 
     const nextIndex = Math.min(pasted.length, length - 1);
     inputsRef.current[nextIndex]?.focus();
 
     if (pasted.length === length) {
-      void submitCode(pasted);
+      void debouncedSubmitCode(pasted);
     }
   };
 
-  const handleResend = async () => {
-    if (resendCooldown > 0 || isSubmitting) return;
-    setResendCooldown(60);
-    setLocalError(null);
-    try {
-      await onResendCode?.();
-    } catch (err) {
-      setLocalError(err instanceof Error ? err.message : 'Failed to resend code');
-    }
-  };
+  const { execute: debouncedResend, isPending: isResendingPending } = useClickBackpressure(
+    async () => {
+      if (resendCooldown > 0 || isSubmitting) return;
+      setResendCooldown(60);
+      setLocalError(null);
+      try {
+        await onResendCode?.();
+      } catch (err) {
+        setLocalError(err instanceof Error ? err.message : 'Failed to resend code');
+      }
+    },
+    { debounceSec, onBlocked }
+  );
+
+  const isEffectiveSubmitting = isSubmitting || isSubmittingPending;
 
   return (
     <div className={clsx('space-y-5 text-center', className)}>
@@ -188,11 +209,11 @@ export const OtpForm: React.FC<OtpFormProps> = ({
 
       <button
         type="button"
-        disabled={isSubmitting || digits.some((d) => d === '')}
-        onClick={() => void submitCode(digits.join(''))}
+        disabled={isEffectiveSubmitting || digits.some((d) => d === '')}
+        onClick={() => void debouncedSubmitCode(digits.join(''))}
         className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
       >
-        {isSubmitting ? (
+        {isEffectiveSubmitting ? (
           <>
             <SpinnerIcon size={16} className="animate-spin text-white" />
             <span>Verifying code...</span>
@@ -206,8 +227,8 @@ export const OtpForm: React.FC<OtpFormProps> = ({
         Didn't receive code?{' '}
         <button
           type="button"
-          disabled={resendCooldown > 0 || isSubmitting}
-          onClick={() => void handleResend()}
+          disabled={resendCooldown > 0 || isEffectiveSubmitting || isResendingPending}
+          onClick={() => void debouncedResend()}
           className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline disabled:text-neutral-400 disabled:no-underline focus:outline-none"
         >
           {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend code'}

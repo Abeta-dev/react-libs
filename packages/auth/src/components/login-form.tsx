@@ -4,6 +4,7 @@ import { useAuth } from '../context/hooks';
 import { EyeIcon, EyeOffIcon } from '../icons/eye-icons';
 import { SpinnerIcon } from '../icons/spinner-icon';
 import type { AuthSession, PasswordCredentials } from '../types/adapter';
+import { useClickBackpressure } from '../core/use-click-backpressure';
 
 export interface LoginFormProps {
   onSuccess?: ((session: AuthSession) => void) | undefined;
@@ -15,6 +16,11 @@ export interface LoginFormProps {
   submitLabel?: string | undefined;
   defaultValues?: Partial<PasswordCredentials> | undefined;
   className?: string | undefined;
+  /**
+   * Cooldown / debounce duration in seconds. Default: 1. Pass 0 or false to disable.
+   */
+  debounceSec?: number | false | undefined;
+  onBlocked?: ((reason: 'in_flight' | 'cooldown') => void) | undefined;
 }
 
 function isValidEmail(val: string): boolean {
@@ -33,6 +39,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   submitLabel = 'Sign in',
   defaultValues,
   className,
+  debounceSec = 1,
+  onBlocked,
 }) => {
   const { signIn, error: contextError, clearError } = useAuth();
   const [email, setEmail] = React.useState(defaultValues?.email ?? '');
@@ -44,44 +52,50 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   const displayError = localError ?? contextError;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLocalError(null);
-    clearError();
+  const { execute: debouncedSubmit, cancelCooldown } = useClickBackpressure(
+    async (e?: React.FormEvent<HTMLFormElement>) => {
+      e?.preventDefault();
+      setLocalError(null);
+      clearError();
 
-    if (!email.trim()) {
-      setLocalError('Please enter your email address');
-      return;
-    }
+      if (!email.trim()) {
+        setLocalError('Please enter your email address');
+        cancelCooldown();
+        return;
+      }
 
-    if (!isValidEmail(email.trim())) {
-      setLocalError('Please enter a valid email address');
-      return;
-    }
+      if (!isValidEmail(email.trim())) {
+        setLocalError('Please enter a valid email address');
+        cancelCooldown();
+        return;
+      }
 
-    if (!password) {
-      setLocalError('Please enter your password');
-      return;
-    }
+      if (!password) {
+        setLocalError('Please enter your password');
+        cancelCooldown();
+        return;
+      }
 
-    setIsSubmitting(true);
-    try {
-      const session = await signIn({
-        email: email.trim(),
-        password,
-        rememberMe,
-      });
-      onSuccess?.(session);
-    } catch (err) {
-      const errorInstance = err instanceof Error ? err : new Error('Sign in failed');
-      onError?.(errorInstance);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+      setIsSubmitting(true);
+      try {
+        const session = await signIn({
+          email: email.trim(),
+          password,
+          rememberMe,
+        });
+        onSuccess?.(session);
+      } catch (err) {
+        const errorInstance = err instanceof Error ? err : new Error('Sign in failed');
+        onError?.(errorInstance);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    { debounceSec, onBlocked }
+  );
 
   return (
-    <form onSubmit={handleSubmit} noValidate className={clsx('space-y-4', className)}>
+    <form onSubmit={(e) => void debouncedSubmit(e)} noValidate className={clsx('space-y-4', className)}>
       {displayError && (
         <div
           role="alert"

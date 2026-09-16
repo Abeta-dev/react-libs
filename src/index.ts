@@ -19,6 +19,7 @@ export * from "./hooks/use-toast";
 export * from "./hooks/use-platform";
 export * from "./hooks/use-pwa-install";
 export * from "./hooks/use-offline-queue";
+export * from "./hooks/use-click-backpressure";
 
 // ─── Forms & Inputs ──────────────────────────────────────────────────────────
 export * from "./components/ui/forms/async-select";

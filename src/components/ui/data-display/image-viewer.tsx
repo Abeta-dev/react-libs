@@ -105,17 +105,17 @@ export function ImageViewer({
       {/* Top Controls Bar */}
       {!error && !isLoading && (
         <div className="absolute top-2 right-2 z-10 flex items-center gap-1 bg-background/80 backdrop-blur-md p-1 rounded-md border shadow-sm">
-          <Button variant="ghost" size="icon" onClick={() => setCurrentScale(s => Math.max(s - 0.2, 0.2))} className="h-7 w-7" aria-label="Zoom Out" title="Zoom Out">
+          <Button variant="ghost" size="icon" debounceSec={false} onClick={() => setCurrentScale(s => Math.max(s - 0.2, 0.2))} className="h-7 w-7" aria-label="Zoom Out" title="Zoom Out">
             <ZoomOut className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setCurrentScale(1.0)} className="h-7 w-7" aria-label="Reset Zoom" title="Fit Page">
+          <Button variant="ghost" size="icon" debounceSec={false} onClick={() => setCurrentScale(1.0)} className="h-7 w-7" aria-label="Reset Zoom" title="Fit Page">
             <Maximize className="h-3.5 w-3.5" />
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setCurrentScale(s => Math.min(s + 0.5, 5.0))} className="h-7 w-7" aria-label="Zoom In" title="Zoom In">
+          <Button variant="ghost" size="icon" debounceSec={false} onClick={() => setCurrentScale(s => Math.min(s + 0.5, 5.0))} className="h-7 w-7" aria-label="Zoom In" title="Zoom In">
             <ZoomIn className="h-4 w-4" />
           </Button>
           <div className="w-px h-4 bg-border mx-1" />
-          <Button variant="ghost" size="icon" onClick={() => setRotation(r => (r + 90) % 360)} className="h-7 w-7" aria-label="Rotate" title="Rotate">
+          <Button variant="ghost" size="icon" debounceSec={false} onClick={() => setRotation(r => (r + 90) % 360)} className="h-7 w-7" aria-label="Rotate" title="Rotate">
             <RotateCw className="h-4 w-4" />
           </Button>
           

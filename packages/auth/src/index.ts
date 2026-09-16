@@ -58,3 +58,8 @@ export { SignUpForm, type SignUpFormProps } from './components/signup-form';
 export { ForgotPasswordForm, type ForgotPasswordFormProps } from './components/forgot-password-form';
 export { OtpForm, type OtpFormProps } from './components/otp-form';
 export { AuthCard, type AuthCardProps, type AuthCardMode } from './components/auth-card';
+export {
+  useClickBackpressure,
+  type ClickBackpressureOptions,
+  type UseClickBackpressureResult,
+} from './core/use-click-backpressure';

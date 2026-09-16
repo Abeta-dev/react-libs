@@ -111,6 +111,7 @@ export function InstallPwaBanner({
           <div className="mt-3 flex items-center gap-2">
             <Button
               size="sm"
+              debounceSec={false}
               onClick={handleInstall}
               className="gap-1.5 text-xs font-semibold h-8 rounded-lg shadow-sm"
             >
@@ -120,6 +121,7 @@ export function InstallPwaBanner({
             <Button
               variant="ghost"
               size="sm"
+              debounceSec={false}
               onClick={handleDismiss}
               className="text-xs text-muted-foreground hover:text-foreground h-8"
             >

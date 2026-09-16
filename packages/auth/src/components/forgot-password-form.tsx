@@ -2,11 +2,17 @@ import * as React from 'react';
 import { clsx } from 'clsx';
 import { useAuth } from '../context/hooks';
 import { SpinnerIcon } from '../icons/spinner-icon';
+import { useClickBackpressure } from '../core/use-click-backpressure';
 
 export interface ForgotPasswordFormProps {
   onSuccess?: () => void;
   onBackToSignIn?: () => void;
   className?: string;
+  /**
+   * Cooldown / debounce duration in seconds. Default: 1. Pass 0 or false to disable.
+   */
+  debounceSec?: number | false | undefined;
+  onBlocked?: ((reason: 'in_flight' | 'cooldown') => void) | undefined;
 }
 
 function isValidEmail(val: string): boolean {
@@ -19,6 +25,8 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   onSuccess,
   onBackToSignIn,
   className,
+  debounceSec = 1,
+  onBlocked,
 }) => {
   const { requestPasswordReset, error: contextError, clearError } = useAuth();
   const [email, setEmail] = React.useState('');
@@ -37,30 +45,35 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
     return () => clearInterval(timer);
   }, [cooldownSeconds]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (cooldownSeconds > 0) return;
+  const { execute: debouncedSubmit, isPending } = useClickBackpressure(
+    async (e?: React.FormEvent<HTMLFormElement>) => {
+      e?.preventDefault();
+      if (cooldownSeconds > 0) return;
 
-    setLocalError(null);
-    clearError();
+      setLocalError(null);
+      clearError();
 
-    if (!isValidEmail(email.trim())) {
-      setLocalError('Please enter a valid email address');
-      return;
-    }
+      if (!isValidEmail(email.trim())) {
+        setLocalError('Please enter a valid email address');
+        return;
+      }
 
-    setIsSubmitting(true);
-    try {
-      await requestPasswordReset(email.trim());
-      setIsSuccess(true);
-      setCooldownSeconds(60);
-      onSuccess?.();
-    } catch (err) {
-      setLocalError(err instanceof Error ? err.message : 'Failed to send reset link');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+      setIsSubmitting(true);
+      try {
+        await requestPasswordReset(email.trim());
+        setIsSuccess(true);
+        setCooldownSeconds(60);
+        onSuccess?.();
+      } catch (err) {
+        setLocalError(err instanceof Error ? err.message : 'Failed to send reset link');
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    { debounceSec, onBlocked }
+  );
+
+  const isEffectiveSubmitting = isSubmitting || isPending;
 
   if (isSuccess) {
     return (
@@ -83,8 +96,8 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
         <div className="pt-2 space-y-2">
           <button
             type="button"
-            disabled={cooldownSeconds > 0 || isSubmitting}
-            onClick={(e) => void handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>)}
+            disabled={cooldownSeconds > 0 || isEffectiveSubmitting}
+            onClick={(e) => void debouncedSubmit(e as unknown as React.FormEvent<HTMLFormElement>)}
             className="w-full text-xs font-medium text-indigo-600 hover:text-indigo-500 disabled:text-neutral-400 focus:outline-none"
           >
             {cooldownSeconds > 0
@@ -107,7 +120,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className={clsx('space-y-4', className)}>
+    <form onSubmit={(e) => void debouncedSubmit(e)} noValidate className={clsx('space-y-4', className)}>
       <div className="space-y-1">
         <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">
           Reset your password
@@ -154,11 +167,11 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
 
       <button
         type="submit"
-        disabled={isSubmitting}
-        aria-busy={isSubmitting}
+        disabled={isEffectiveSubmitting}
+        aria-busy={isEffectiveSubmitting}
         className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
       >
-        {isSubmitting ? (
+        {isEffectiveSubmitting ? (
           <>
             <SpinnerIcon size={16} className="animate-spin text-white" />
             <span>Sending link...</span>

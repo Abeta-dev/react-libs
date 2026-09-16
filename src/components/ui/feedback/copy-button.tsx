@@ -26,6 +26,7 @@ export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
       variant = "ghost",
       size = "icon",
       className,
+      debounceSec = false,
       ...props
     },
     ref
@@ -69,6 +70,7 @@ export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
         type="button"
         variant={variant}
         size={showText ? "sm" : size}
+        debounceSec={debounceSec}
         onClick={handleCopy}
         aria-label={hasCopied ? copiedText : defaultText}
         className={cn(

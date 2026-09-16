@@ -52,4 +52,40 @@ describe('OAuthButton & OAuthButtonGroup', () => {
       expect(signInSpy).toHaveBeenCalledWith('google', undefined);
     });
   });
+
+  it('debounces rapid multiple clicks with default 1s cooldown', () => {
+    vi.useFakeTimers();
+    try {
+      const onClick = vi.fn();
+      const onBlocked = vi.fn();
+      render(<OAuthButton provider="google" onClick={onClick} onBlocked={onBlocked} />);
+
+      const button = screen.getByRole('button', { name: /continue with google/i });
+      fireEvent.click(button);
+      expect(onClick).toHaveBeenCalledTimes(1);
+
+      // Immediate second click dropped
+      fireEvent.click(button);
+      expect(onClick).toHaveBeenCalledTimes(1);
+      expect(onBlocked).toHaveBeenCalledWith('cooldown');
+
+      // After 1 second cooldown
+      vi.advanceTimersByTime(1000);
+      fireEvent.click(button);
+      expect(onClick).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('allows disabling debounce when debounceSec is false or 0', () => {
+    const onClick = vi.fn();
+    render(<OAuthButton provider="google" debounceSec={false} onClick={onClick} />);
+
+    const button = screen.getByRole('button', { name: /continue with google/i });
+    fireEvent.click(button);
+    fireEvent.click(button);
+    fireEvent.click(button);
+    expect(onClick).toHaveBeenCalledTimes(3);
+  });
 });

@@ -4,6 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { Loader2 } from "lucide-react"
 
 import { cn } from "../../../lib/utils"
+import { useClickBackpressure } from "../../../hooks/use-click-backpressure"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0" +
@@ -51,19 +52,74 @@ export interface ButtonProps
   isLoading?: boolean
   /** Label shown next to the spinner when isLoading is true. Defaults to children. */
   loadingText?: string
+  /**
+   * Cooldown duration in seconds to prevent rapid multiple clicks.
+   * Pass any number in seconds (e.g. 1, 0.5, 2) or `true` for the default 1 second.
+   * Pass `false` or `0` to disable debouncing.
+   */
+  debounceSec?: number | boolean | undefined
+  /**
+   * Callback invoked when a click is blocked by cooldown or in-flight backpressure.
+   */
+  onBlocked?: ((reason: 'in_flight' | 'cooldown') => void) | undefined
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant, size, asChild = false, isLoading = false, loadingText, children, disabled, ...props },
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      isLoading = false,
+      loadingText,
+      debounceSec,
+      onBlocked,
+      onClick,
+      children,
+      disabled,
+      ...props
+    },
     ref
   ) => {
+    let effectiveDebounceSec: number | false
+    if (debounceSec === false) {
+      effectiveDebounceSec = false
+    } else if (typeof debounceSec === "number") {
+      effectiveDebounceSec = debounceSec
+    } else {
+      effectiveDebounceSec = 1
+    }
+
+    const isDebounceDisabled =
+      effectiveDebounceSec === false || effectiveDebounceSec <= 0
+
+    const { execute: debouncedOnClick, isPending } = useClickBackpressure(onClick, {
+      debounceSec: isDebounceDisabled ? false : effectiveDebounceSec,
+      disabled: isDebounceDisabled,
+      onBlocked,
+    })
+
+    const isEffectiveLoading = isLoading || (!isDebounceDisabled && isPending)
     const Comp = asChild ? Slot : "button"
+
+    let handleClick: React.MouseEventHandler<HTMLButtonElement> | undefined
+    if (onClick) {
+      if (isDebounceDisabled) {
+        handleClick = onClick
+      } else {
+        handleClick = (e) => {
+          void debouncedOnClick(e)
+        }
+      }
+    }
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
-        disabled={disabled || isLoading}
+        disabled={disabled || isEffectiveLoading}
+        onClick={handleClick}
         {...props}
       >
         {isLoading ? (

@@ -4,6 +4,7 @@ import { useAuth } from '../context/hooks';
 import { EyeIcon, EyeOffIcon } from '../icons/eye-icons';
 import { SpinnerIcon } from '../icons/spinner-icon';
 import type { AuthSession, SignUpCredentials } from '../types/adapter';
+import { useClickBackpressure } from '../core/use-click-backpressure';
 
 export interface SignUpFormProps {
   onSuccess?: ((session: AuthSession) => void) | undefined;
@@ -13,6 +14,11 @@ export interface SignUpFormProps {
   termsUrl?: string | undefined;
   privacyUrl?: string | undefined;
   className?: string | undefined;
+  /**
+   * Cooldown / debounce duration in seconds. Default: 1. Pass 0 or false to disable.
+   */
+  debounceSec?: number | false | undefined;
+  onBlocked?: ((reason: 'in_flight' | 'cooldown') => void) | undefined;
 }
 
 function calculatePasswordStrength(password: string): {
@@ -54,6 +60,8 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
   termsUrl = '#',
   privacyUrl = '#',
   className,
+  debounceSec = 1,
+  onBlocked,
 }) => {
   const { signUp, error: contextError, clearError } = useAuth();
   const [name, setName] = React.useState('');
@@ -68,56 +76,64 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
   const displayError = localError ?? contextError;
   const strength = calculatePasswordStrength(password);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLocalError(null);
-    clearError();
+  const { execute: debouncedSubmit, cancelCooldown } = useClickBackpressure(
+    async (e?: React.FormEvent<HTMLFormElement>) => {
+      e?.preventDefault();
+      setLocalError(null);
+      clearError();
 
-    if (!name.trim()) {
-      setLocalError('Please enter your full name');
-      return;
-    }
+      if (!name.trim()) {
+        setLocalError('Please enter your full name');
+        cancelCooldown();
+        return;
+      }
 
-    if (!isValidEmail(email.trim())) {
-      setLocalError('Please enter a valid email address');
-      return;
-    }
+      if (!isValidEmail(email.trim())) {
+        setLocalError('Please enter a valid email address');
+        cancelCooldown();
+        return;
+      }
 
-    if (password.length < 8) {
-      setLocalError('Password must be at least 8 characters long');
-      return;
-    }
+      if (password.length < 8) {
+        setLocalError('Password must be at least 8 characters long');
+        cancelCooldown();
+        return;
+      }
 
-    if (!Object.is(password, confirmPassword)) {
-      setLocalError('Passwords do not match');
-      return;
-    }
+      if (!Object.is(password, confirmPassword)) {
+        setLocalError('Passwords do not match');
+        cancelCooldown();
+        return;
+      }
 
-    if (!acceptTerms) {
-      setLocalError('You must accept the terms of service to proceed');
-      return;
-    }
+      if (!acceptTerms) {
+        setLocalError('You must accept the terms of service to proceed');
+        cancelCooldown();
+        return;
+      }
 
-    setIsSubmitting(true);
-    try {
-      const credentials: SignUpCredentials = {
-        name: name.trim(),
-        email: email.trim(),
-        password,
-        confirmPassword,
-      };
-      const session = await signUp(credentials);
-      onSuccess?.(session);
-    } catch (err) {
-      const errorInstance = err instanceof Error ? err : new Error('Registration failed');
-      onError?.(errorInstance);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+      setIsSubmitting(true);
+      try {
+        const credentials: SignUpCredentials = {
+          name: name.trim(),
+          email: email.trim(),
+          password,
+          confirmPassword,
+        };
+        const session = await signUp(credentials);
+        onSuccess?.(session);
+      } catch (err) {
+        const errorInstance = err instanceof Error ? err : new Error('Registration failed');
+        onError?.(errorInstance);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    { debounceSec, onBlocked }
+  );
 
   return (
-    <form onSubmit={handleSubmit} noValidate className={clsx('space-y-4', className)}>
+    <form onSubmit={(e) => void debouncedSubmit(e)} noValidate className={clsx('space-y-4', className)}>
       {displayError && (
         <div
           role="alert"

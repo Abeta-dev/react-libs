@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from '../button';
 
@@ -61,5 +61,90 @@ describe('Button Comprehensive Interaction Suite', () => {
         expect(anchor.tagName.toLowerCase()).toBe('a');
         expect(anchor).toHaveAttribute('href', 'https://example.com');
         expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    });
+
+    it('should debounce rapid clicks within the default 1s cooldown window', async () => {
+        vi.useFakeTimers();
+        try {
+            const handleClick = vi.fn();
+            const onBlocked = vi.fn();
+            render(<Button onClick={handleClick} onBlocked={onBlocked}>Debounced Action</Button>);
+            const btn = screen.getByRole('button', { name: /debounced action/i });
+
+            btn.click();
+            expect(handleClick).toHaveBeenCalledTimes(1);
+
+            // Immediate second click should be dropped
+            btn.click();
+            expect(handleClick).toHaveBeenCalledTimes(1);
+            expect(onBlocked).toHaveBeenCalledWith('cooldown');
+
+            // After 1 second, subsequent click should be accepted
+            vi.advanceTimersByTime(1000);
+            btn.click();
+            expect(handleClick).toHaveBeenCalledTimes(2);
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it('should support custom debounceSec duration', async () => {
+        vi.useFakeTimers();
+        try {
+            const handleClick = vi.fn();
+            render(<Button debounceSec={2.5} onClick={handleClick}>Custom Debounce</Button>);
+            const btn = screen.getByRole('button', { name: /custom debounce/i });
+
+            btn.click();
+            expect(handleClick).toHaveBeenCalledTimes(1);
+
+            vi.advanceTimersByTime(2000);
+            btn.click();
+            expect(handleClick).toHaveBeenCalledTimes(1);
+
+            vi.advanceTimersByTime(600);
+            btn.click();
+            expect(handleClick).toHaveBeenCalledTimes(2);
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it('should allow disabling debounce via debounceSec={false} or debounceSec={0}', () => {
+        const handleClick = vi.fn();
+        render(<Button debounceSec={false} onClick={handleClick}>No Debounce</Button>);
+        const btn = screen.getByRole('button', { name: /no debounce/i });
+
+        btn.click();
+        btn.click();
+        btn.click();
+        expect(handleClick).toHaveBeenCalledTimes(3);
+    });
+
+    it('should handle async in-flight backpressure and reflect loading state', async () => {
+        let resolvePromise!: () => void;
+        const asyncAction = vi.fn().mockImplementation(() => {
+            return new Promise<void>((resolve) => {
+                resolvePromise = resolve;
+            });
+        });
+
+        render(
+            <Button onClick={asyncAction}>
+                Async Trigger
+            </Button>
+        );
+        const btn = screen.getByRole('button', { name: /async trigger/i });
+
+        await act(async () => {
+            btn.click();
+        });
+        expect(asyncAction).toHaveBeenCalledTimes(1);
+        expect(btn).toBeDisabled();
+
+        await act(async () => {
+            resolvePromise();
+        });
+        expect(btn).not.toBeDisabled();
     });
 });
