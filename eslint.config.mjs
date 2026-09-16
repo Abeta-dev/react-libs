@@ -145,10 +145,12 @@ export default tseslint.config(
     ignores: [
       'node_modules/**',
       'dist/**',
+      '**/dist/**',
       'storybook-static/**',
       'coverage/**',
       '.storybook/**',
       '**/*.d.ts',
+      '**/*.d.cts',
     ],
   },
 

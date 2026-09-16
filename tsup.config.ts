@@ -25,6 +25,7 @@ const CLIENT_EXTERNAL = [
   'clsx',
   'tailwind-merge',
   /^@radix-ui\/.+/,
+  '@abeta.dev/auth',
 ];
 
 export default defineConfig([
@@ -48,6 +49,7 @@ export default defineConfig([
       calendar: 'src/components/ui/core/calendar.tsx',
       'date-picker': 'src/components/ui/core/date-range-picker.tsx',
       form: 'src/components/ui/forms/form.tsx',
+      auth: 'src/auth/index.ts',
     },
     format: ['esm', 'cjs'],
     dts: true,

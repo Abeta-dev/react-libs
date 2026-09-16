@@ -27,6 +27,10 @@
     "access": "public",
     "provenance": true
   },
+  "packageManager": "npm@11.17.0",
+  "workspaces": [
+    "packages/*"
+  ],
   "engines": {
     "node": ">=24.0.0"
   },
@@ -95,6 +99,9 @@
       ],
       "form": [
         "./dist/form.d.ts"
+      ],
+      "auth": [
+        "./dist/auth.d.ts"
       ]
     }
   },
@@ -342,6 +349,16 @@
         "default": "./dist/form.cjs"
       }
     },
+    "./auth": {
+      "import": {
+        "types": "./dist/auth.d.ts",
+        "default": "./dist/auth.js"
+      },
+      "require": {
+        "types": "./dist/auth.d.cts",
+        "default": "./dist/auth.cjs"
+      }
+    },
     "./style.css": "./dist/style.css"
   },
   "license": "MIT",
@@ -400,6 +417,7 @@
     }
   },
   "dependencies": {
+    "@abeta.dev/auth": "*",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.8",
@@ -477,6 +495,7 @@
     "storybook": "^10.3.3",
     "tailwindcss": "^4.2.2",
     "tsup": "^8.5.1",
+    "turbo": "2.10.13",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.58.0",
     "vaul": "^1.1.2",

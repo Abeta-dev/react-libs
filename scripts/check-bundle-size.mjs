@@ -147,6 +147,12 @@ const BUDGETS = [
     maxGzipKb: 5,
   },
   {
+    file: 'dist/auth.js',
+    label: 'Auth UI Subpath (ESM)',
+    maxRawKb: 75,
+    maxGzipKb: 20,
+  },
+  {
     file: 'dist/style.css',
     label: 'Compiled Tailwind CSS',
     maxRawKb: 180,

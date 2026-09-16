@@ -60,6 +60,8 @@ const CLIENT_FILES = [
   'dist/date-picker.cjs',
   'dist/form.js',
   'dist/form.cjs',
+  'dist/auth.js',
+  'dist/auth.cjs',
 ];
 
 const UNIVERSAL_FILES = [
