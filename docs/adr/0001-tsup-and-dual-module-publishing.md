@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-`@umesh0492/react-libs` is consumed by diverse frontend ecosystems including:
+`@abeta.dev/react-libs` is consumed by diverse frontend ecosystems including:
 - Modern Next.js 14/15 App Router applications using React Server Components (RSC) and standard ECMAScript Modules (ESM).
 - Vite, Bun, and Remix build systems.
 - Legacy Jest test harnesses, Node.js scripts, and SSR pipelines operating in CommonJS (CJS).

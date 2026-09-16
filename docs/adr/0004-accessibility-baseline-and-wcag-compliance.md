@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-Accessibility (a11y) cannot be an afterthought or a superficial marketing claim. Enterprise design systems must guarantee compliance with WCAG 2.1 Level AA to ensure usability by assistive technology (screen readers, braille displays, keyboard-only navigation). Previous versions of `@umesh0492/react-libs` had:
+Accessibility (a11y) cannot be an afterthought or a superficial marketing claim. Enterprise design systems must guarantee compliance with WCAG 2.1 Level AA to ensure usability by assistive technology (screen readers, braille displays, keyboard-only navigation). Previous versions of `@abeta.dev/react-libs` had:
 1. Hardcoded static DOM IDs (e.g. `multiselect-listbox`), causing duplicate ID violations when multiple instances appeared on the same page.
 2. Missing semantic roles and ARIA values on custom SVG data visualizations (`ProgressRing`, `MatchScoreGauge`, `RadarSweep`).
 3. Sortable table headers that were non-interactive `div`s without keyboard triggers or `aria-sort` indicators.

@@ -1,7 +1,7 @@
 # Continuous Automated Visual Regression Testing Recipe
-## Visual Testing Architecture for `@umesh0492/react-libs` Storybook Stories
+## Visual Testing Architecture for `@abeta.dev/react-libs` Storybook Stories
 
-This recipe provides a battle-tested architecture for setting up and running continuous automated visual regression testing across all 100+ UI component stories in `@umesh0492/react-libs`.
+This recipe provides a battle-tested architecture for setting up and running continuous automated visual regression testing across all 100+ UI component stories in `@abeta.dev/react-libs`.
 
 ---
 

@@ -1,5 +1,5 @@
 name: Bug Report
-description: File a bug report to help us improve @umesh0492/react-libs
+description: File a bug report to help us improve @abeta.dev/react-libs
 title: "[Bug]: "
 labels: ["bug", "triage"]
 body:
@@ -8,7 +8,7 @@ body:
       value: |
         Thank you for taking the time to report a bug! Please ensure you have searched existing issues to see if your problem has already been reported.
 
-        *Note: If you have discovered a security vulnerability, please do NOT file a public issue. Follow our [Security Policy](https://github.com/umesh0492/react-libs/blob/main/SECURITY.md) to report it responsibly.*
+        *Note: If you have discovered a security vulnerability, please do NOT file a public issue. Follow our [Security Policy](https://github.com/abeta-dev/react-libs/blob/main/SECURITY.md) to report it responsibly.*
 
   - type: textarea
     id: description
@@ -56,7 +56,7 @@ body:
       label: Environment & System Info
       description: Please share your environment details to help us diagnose the issue.
       value: |
-        - @umesh0492/react-libs version: 
+        - @abeta.dev/react-libs version: 
         - React version: 
         - Framework / Bundler (Vite, Next.js, etc.): 
         - Tailwind CSS version: 

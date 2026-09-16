@@ -15,7 +15,7 @@ type Story = StoryObj<typeof CopyButton>;
 
 export const DefaultIcon: Story = {
   args: {
-    value: "npm install @umesh0492/react-libs",
+    value: "npm install @abeta.dev/react-libs",
   },
   render: (args) => (
     <div className="flex items-center gap-2 p-3 bg-muted rounded-md border border-border">
@@ -27,7 +27,7 @@ export const DefaultIcon: Story = {
 
 export const WithTextLabel: Story = {
   args: {
-    value: "https://umesh0492.github.io/react-libs/",
+    value: "https://abeta.dev/react-libs/",
     showText: true,
     variant: "outline",
   },

@@ -1,14 +1,14 @@
-# @umesh0492/react-libs
+# @abeta.dev/react-libs
 
 > **Enterprise B2B Design System & Application Engine for React 19.**  
 > Built for multi-tenant vendor portals, procurement dashboards, statutory compliance, and financial workflows.
 > Combines accessible Tailwind CSS v4 & Radix UI primitives, India statutory validation (GSTIN, PAN, IFSC), pluggable behavioral telemetry, and offline-resilient PWA mutations into isolated, tree-shakeable subpaths.
 
-[![Version](https://img.shields.io/badge/version-0.11.0-blue)](https://www.npmjs.com/package/@umesh0492/react-libs)
+[![Version](https://img.shields.io/badge/version-0.12.0-blue)](https://www.npmjs.com/package/@abeta.dev/react-libs)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#testing)
 [![React](https://img.shields.io/badge/react-19-blue)](https://react.dev)
 [![Tailwind](https://img.shields.io/badge/tailwind-v4-38bdf8)](https://tailwindcss.com)
-[![Storybook](https://img.shields.io/badge/storybook-10.x-ff4785)](https://umesh0492.github.io/react-libs)
+[![Storybook](https://img.shields.io/badge/storybook-10.x-ff4785)](https://react-libs.abeta.dev)
 
 ---
 
@@ -38,13 +38,13 @@
 
 ## Enterprise Architecture & Subpath Matrix
 
-`@umesh0492/react-libs` addresses the complete domain stack required to power multi-tenant vendor portals, procurement suites, and compliance engines. Rather than imposing a heavy monolithic dependency, every domain capability is isolated into **strictly decoupled subpaths** so consumers only bundle what they import:
+`@abeta.dev/react-libs` addresses the complete domain stack required to power multi-tenant vendor portals, procurement suites, and compliance engines. Rather than imposing a heavy monolithic dependency, every domain capability is isolated into **strictly decoupled subpaths** so consumers only bundle what they import:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│                   @umesh0492/react-libs Module Matrix                  │
+│                   @abeta.dev/react-libs Module Matrix                  │
 ├────────────────────────────────────────────────────────────────────────┤
-│ 1. Core UI Layer (@umesh0492/react-libs)                               │
+│ 1. Core UI Layer (@abeta.dev/react-libs)                               │
 │    Accessible, themeable Tailwind v4 components, layouts & data tables │
 ├────────────────────────────────────────────────────────────────────────┤
 │ 2. Standalone Primitives (/button, /card, /dialog, /data-table, etc.)  │
@@ -65,10 +65,10 @@
 
 ## Installation
 
-Install `@umesh0492/react-libs` directly from [npm](https://www.npmjs.com/package/@umesh0492/react-libs):
+Install `@abeta.dev/react-libs` directly from [npm](https://www.npmjs.com/package/@abeta.dev/react-libs):
 
 ```bash
-npm install @umesh0492/react-libs
+npm install @abeta.dev/react-libs
 ```
 
 ### Peer Dependencies
@@ -92,56 +92,56 @@ The library exposes dedicated entry points for UI components, server-safe utilit
 
 | Subpath / Export | Module Formats | SSR / RSC Compatibility | Purpose & Contents |
 |---|---|---|---|
-| `@umesh0492/react-libs` | ESM (`import`), CJS (`require`) | **Client Components** (`'use client'`) | Primary UI component library (accessible Tailwind UI components, primitives, forms, dialogs, charts, error boundaries, and hooks). SSR-compatible with browser APIs guarded inside lifecycle hooks. |
-| `@umesh0492/react-libs/utils` | ESM (`import`), CJS (`require`) | **RSC & Server-Safe** | Pure utility helpers, formatters, universal validators, masking, and `cn`. Zero DOM and zero React dependencies; safe in Next.js Server Components, Server Actions, Route Handlers, and Edge runtimes. |
-| `@umesh0492/react-libs/india` | ESM (`import`), CJS (`require`) | **RSC & Server-Safe** | Dedicated domain subpath containing India compliance logic: GSTIN, PAN, IFSC, FSSAI, and Pincode validators, GST tax calculation splits, regional constants (`INDIA_STATES`, `INDIA_CITIES`). |
-| `@umesh0492/react-libs/india/react` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Interactive regional components (e.g. `AmountSummaryCardIndia`). |
-| `@umesh0492/react-libs/analytics` | ESM (`import`), CJS (`require`) | **RSC & Server-Safe** | Pure behavioral analytics tracking engine, DOM auto-tracking, batching pipeline, and destination adapters. Zero React hooks. |
-| `@umesh0492/react-libs/analytics/react` | ESM (`import`), CJS (`require`) | **Client Components** (`'use client'`) | React integration layer for analytics: `AnalyticsProvider`, `useAnalytics`, `TrackArea`, and `PageViewTracker`. |
-| `@umesh0492/react-libs/pdf` | ESM (`import`), CJS (`require`) | **Client-Only** (`'use client'`) | Dedicated client subpath for `PdfViewer`. Isolated from root to prevent Node SSR from executing browser-only PDF workers (`pdfjs-dist`). |
-| `@umesh0492/react-libs/hooks/use-toast` | ESM (`import`), CJS (`require`) | **Client Hook** (`'use client'`) | Standalone imperative toast notification hook (`useToast`, `toast`). |
-| `@umesh0492/react-libs/button` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Button with Radix Slot polymorphism (asChild), custom loading spinners, and micro-interaction states. |
-| `@umesh0492/react-libs/dialog` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Dialog primitive with isolated Radix Dialog dependency. |
-| `@umesh0492/react-libs/card` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Card primitive with zero Radix dependency overhead. |
-| `@umesh0492/react-libs/badge` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Badge primitive with zero Radix dependency overhead. |
-| `@umesh0492/react-libs/input` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Input primitive with zero Radix dependency overhead. |
-| `@umesh0492/react-libs/data-table` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone DataTable component with high-performance client-side sorting, multi-column search, pagination, and skeleton loading. |
-| `@umesh0492/react-libs/charts` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Chart container and tooltip primitives (`ChartContainer`, `ChartTooltip`, `ChartLegend`), isolating Recharts peer dependency. |
-| `@umesh0492/react-libs/command` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Command palette primitives (`Command`, `CommandInput`, `CommandList`), isolating cmdk peer dependency. |
-| `@umesh0492/react-libs/drawer` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Drawer overlay primitives (`Drawer`, `DrawerContent`, `DrawerHeader`), isolating Vaul peer dependency. |
-| `@umesh0492/react-libs/carousel` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Carousel primitives (`Carousel`, `CarouselContent`, `CarouselItem`), isolating Embla Carousel peer dependency. |
-| `@umesh0492/react-libs/calendar` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Calendar date picker primitive (`Calendar`), isolating react-day-picker peer dependency. |
-| `@umesh0492/react-libs/date-picker` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone DateRangePicker primitive (`DateRangePicker`), isolating react-day-picker and date-fns peer dependencies. |
-| `@umesh0492/react-libs/form` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Form field and form context primitives (`Form`, `FormField`, `FormItem`, `FormLabel`), isolating react-hook-form peer dependency. |
-| `@umesh0492/react-libs/style.css` | CSS | N/A | Standalone pre-compiled stylesheet with all Tailwind utility classes and design tokens. |
-| `@umesh0492/react-libs/styles/theme.css` | CSS | N/A | Design system theme variables and color tokens for Tailwind CSS v4 projects (`@import`). |
+| `@abeta.dev/react-libs` | ESM (`import`), CJS (`require`) | **Client Components** (`'use client'`) | Primary UI component library (accessible Tailwind UI components, primitives, forms, dialogs, charts, error boundaries, and hooks). SSR-compatible with browser APIs guarded inside lifecycle hooks. |
+| `@abeta.dev/react-libs/utils` | ESM (`import`), CJS (`require`) | **RSC & Server-Safe** | Pure utility helpers, formatters, universal validators, masking, and `cn`. Zero DOM and zero React dependencies; safe in Next.js Server Components, Server Actions, Route Handlers, and Edge runtimes. |
+| `@abeta.dev/react-libs/india` | ESM (`import`), CJS (`require`) | **RSC & Server-Safe** | Dedicated domain subpath containing India compliance logic: GSTIN, PAN, IFSC, FSSAI, and Pincode validators, GST tax calculation splits, regional constants (`INDIA_STATES`, `INDIA_CITIES`). |
+| `@abeta.dev/react-libs/india/react` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Interactive regional components (e.g. `AmountSummaryCardIndia`). |
+| `@abeta.dev/react-libs/analytics` | ESM (`import`), CJS (`require`) | **RSC & Server-Safe** | Pure behavioral analytics tracking engine, DOM auto-tracking, batching pipeline, and destination adapters. Zero React hooks. |
+| `@abeta.dev/react-libs/analytics/react` | ESM (`import`), CJS (`require`) | **Client Components** (`'use client'`) | React integration layer for analytics: `AnalyticsProvider`, `useAnalytics`, `TrackArea`, and `PageViewTracker`. |
+| `@abeta.dev/react-libs/pdf` | ESM (`import`), CJS (`require`) | **Client-Only** (`'use client'`) | Dedicated client subpath for `PdfViewer`. Isolated from root to prevent Node SSR from executing browser-only PDF workers (`pdfjs-dist`). |
+| `@abeta.dev/react-libs/hooks/use-toast` | ESM (`import`), CJS (`require`) | **Client Hook** (`'use client'`) | Standalone imperative toast notification hook (`useToast`, `toast`). |
+| `@abeta.dev/react-libs/button` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Button with Radix Slot polymorphism (asChild), custom loading spinners, and micro-interaction states. |
+| `@abeta.dev/react-libs/dialog` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Dialog primitive with isolated Radix Dialog dependency. |
+| `@abeta.dev/react-libs/card` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Card primitive with zero Radix dependency overhead. |
+| `@abeta.dev/react-libs/badge` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Badge primitive with zero Radix dependency overhead. |
+| `@abeta.dev/react-libs/input` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Input primitive with zero Radix dependency overhead. |
+| `@abeta.dev/react-libs/data-table` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone DataTable component with high-performance client-side sorting, multi-column search, pagination, and skeleton loading. |
+| `@abeta.dev/react-libs/charts` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Chart container and tooltip primitives (`ChartContainer`, `ChartTooltip`, `ChartLegend`), isolating Recharts peer dependency. |
+| `@abeta.dev/react-libs/command` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Command palette primitives (`Command`, `CommandInput`, `CommandList`), isolating cmdk peer dependency. |
+| `@abeta.dev/react-libs/drawer` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Drawer overlay primitives (`Drawer`, `DrawerContent`, `DrawerHeader`), isolating Vaul peer dependency. |
+| `@abeta.dev/react-libs/carousel` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Carousel primitives (`Carousel`, `CarouselContent`, `CarouselItem`), isolating Embla Carousel peer dependency. |
+| `@abeta.dev/react-libs/calendar` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Calendar date picker primitive (`Calendar`), isolating react-day-picker peer dependency. |
+| `@abeta.dev/react-libs/date-picker` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone DateRangePicker primitive (`DateRangePicker`), isolating react-day-picker and date-fns peer dependencies. |
+| `@abeta.dev/react-libs/form` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Standalone Form field and form context primitives (`Form`, `FormField`, `FormItem`, `FormLabel`), isolating react-hook-form peer dependency. |
+| `@abeta.dev/react-libs/style.css` | CSS | N/A | Standalone pre-compiled stylesheet with all Tailwind utility classes and design tokens. |
+| `@abeta.dev/react-libs/styles/theme.css` | CSS | N/A | Design system theme variables and color tokens for Tailwind CSS v4 projects (`@import`). |
 
 ### Tree-Shaking Scope & Standalone Primitives
 
-Modern bundlers (Vite, Next.js, Rollup, Webpack 5) automatically perform dead-code elimination and tree-shake unreferenced components from the primary entry point (`@umesh0492/react-libs`).
+Modern bundlers (Vite, Next.js, Rollup, Webpack 5) automatically perform dead-code elimination and tree-shake unreferenced components from the primary entry point (`@abeta.dev/react-libs`).
 
 For consumer environments with strict per-route bundle budgets, zero optional peer dependencies, or legacy bundlers without deep tree-shaking, high-frequency primitives and heavy components provide **dedicated standalone entry points** with zero barrel overhead:
-- `@umesh0492/react-libs/button` (Micro-bundle: ~2.5 KB)
-- `@umesh0492/react-libs/dialog` (Micro-bundle: ~3.3 KB)
-- `@umesh0492/react-libs/card` (Micro-bundle: ~3.7 KB)
-- `@umesh0492/react-libs/badge` (Micro-bundle: ~1.6 KB)
-- `@umesh0492/react-libs/input` (Micro-bundle: ~1.1 KB)
-- `@umesh0492/react-libs/data-table` (Isolated data table: ~12.6 KB)
-- `@umesh0492/react-libs/charts` (Isolates `recharts` peer dependency)
-- `@umesh0492/react-libs/command` (Isolates `cmdk` peer dependency)
-- `@umesh0492/react-libs/drawer` (Isolates `vaul` peer dependency)
-- `@umesh0492/react-libs/carousel` (Isolates `embla-carousel-react` peer dependency)
-- `@umesh0492/react-libs/calendar` (Isolates `react-day-picker` peer dependency)
-- `@umesh0492/react-libs/date-picker` (Isolates `react-day-picker` + `date-fns` peer dependencies)
-- `@umesh0492/react-libs/form` (Isolates `react-hook-form` peer dependency)
+- `@abeta.dev/react-libs/button` (Micro-bundle: ~2.5 KB)
+- `@abeta.dev/react-libs/dialog` (Micro-bundle: ~3.3 KB)
+- `@abeta.dev/react-libs/card` (Micro-bundle: ~3.7 KB)
+- `@abeta.dev/react-libs/badge` (Micro-bundle: ~1.6 KB)
+- `@abeta.dev/react-libs/input` (Micro-bundle: ~1.1 KB)
+- `@abeta.dev/react-libs/data-table` (Isolated data table: ~12.6 KB)
+- `@abeta.dev/react-libs/charts` (Isolates `recharts` peer dependency)
+- `@abeta.dev/react-libs/command` (Isolates `cmdk` peer dependency)
+- `@abeta.dev/react-libs/drawer` (Isolates `vaul` peer dependency)
+- `@abeta.dev/react-libs/carousel` (Isolates `embla-carousel-react` peer dependency)
+- `@abeta.dev/react-libs/calendar` (Isolates `react-day-picker` peer dependency)
+- `@abeta.dev/react-libs/date-picker` (Isolates `react-day-picker` + `date-fns` peer dependencies)
+- `@abeta.dev/react-libs/form` (Isolates `react-hook-form` peer dependency)
 
-All other UI components are imported directly from `@umesh0492/react-libs`, relying on modern ESM bundler tree-shaking.
+All other UI components are imported directly from `@abeta.dev/react-libs`, relying on modern ESM bundler tree-shaking.
 
 ### SSR Compatibility & Hydration Architecture
 
-The primary package entry point (`@umesh0492/react-libs`) is engineered for broad SSR and RSC compatibility:
+The primary package entry point (`@abeta.dev/react-libs`) is engineered for broad SSR and RSC compatibility:
 - **Zero Module-Level DOM Access**: No browser globals (`window`, `document`, `navigator`, `localStorage`) are evaluated during module evaluation or import, preventing Node.js SSR crashes.
-- **SSR & RSC Architecture**: Interactive components carry explicit `'use client'` boundaries for React Server Component frameworks (such as Next.js App Router). Zero-DOM pure utilities reside in `@umesh0492/react-libs/utils` and run safely in Server Components, Server Actions, and Edge runtimes.
+- **SSR & RSC Architecture**: Interactive components carry explicit `'use client'` boundaries for React Server Component frameworks (such as Next.js App Router). Zero-DOM pure utilities reside in `@abeta.dev/react-libs/utils` and run safely in Server Components, Server Actions, and Edge runtimes.
 - **Client Effects Isolation**: All interactive browser logic (event listeners, DOM measurements, post-mount fallbacks) is scoped inside `useEffect` or client event handlers to prevent hydration mismatches. For zero-flash SSR with components like `Sidebar`, pass server cookie values directly to `defaultOpen`.
 
 ### Dedicated Client Subpath for PdfViewer
@@ -151,7 +151,7 @@ Components with browser-only dependencies—specifically `PdfViewer`, which reli
 ```tsx
 "use client"; // Next.js App Router client component directive
 
-import { PdfViewer } from "@umesh0492/react-libs/pdf";
+import { PdfViewer } from "@abeta.dev/react-libs/pdf";
 
 export function ContractViewer() {
   return (
@@ -165,7 +165,7 @@ export function ContractViewer() {
 
 > [!IMPORTANT]
 > **Why is `PdfViewer` isolated?**  
-> PDF rendering engines require browser APIs (`DOMMatrix`, Canvas rendering context, `window.URL.createObjectURL`) and web workers (`pdf.worker.mjs`). Isolating `PdfViewer` under `@umesh0492/react-libs/pdf` prevents Node.js SSR environments from executing browser-only PDF workers or encountering `DOMMatrix is not defined` errors during server compilation.
+> PDF rendering engines require browser APIs (`DOMMatrix`, Canvas rendering context, `window.URL.createObjectURL`) and web workers (`pdf.worker.mjs`). Isolating `PdfViewer` under `@abeta.dev/react-libs/pdf` prevents Node.js SSR environments from executing browser-only PDF workers or encountering `DOMMatrix is not defined` errors during server compilation.
 
 ### Dual ESM & CommonJS Support
 
@@ -173,26 +173,26 @@ The package ships with first-class dual build support for modern ECMAScript Modu
 
 ```tsx
 // Modern ESM (Vite, Next.js, Remix, Webpack 5, tsx)
-import { Button, Card } from "@umesh0492/react-libs";
-import { cn, formatCurrency } from "@umesh0492/react-libs/utils";
-import { PdfViewer } from "@umesh0492/react-libs/pdf";
-import { initAnalytics } from "@umesh0492/react-libs/analytics";
+import { Button, Card } from "@abeta.dev/react-libs";
+import { cn, formatCurrency } from "@abeta.dev/react-libs/utils";
+import { PdfViewer } from "@abeta.dev/react-libs/pdf";
+import { initAnalytics } from "@abeta.dev/react-libs/analytics";
 ```
 
 ```javascript
 // CommonJS (Node.js runtime, legacy tooling, Jest)
-const { Button, Card } = require("@umesh0492/react-libs");
-const { cn, formatCurrency } = require("@umesh0492/react-libs/utils");
-const { PdfViewer } = require("@umesh0492/react-libs/pdf");
-const { initAnalytics } = require("@umesh0492/react-libs/analytics");
+const { Button, Card } = require("@abeta.dev/react-libs");
+const { cn, formatCurrency } = require("@abeta.dev/react-libs/utils");
+const { PdfViewer } = require("@abeta.dev/react-libs/pdf");
+const { initAnalytics } = require("@abeta.dev/react-libs/analytics");
 ```
 
 ### Server-Safe Pure Utilities Subpath (`/utils`)
 
-`@umesh0492/react-libs/utils` provides pure helper functions with **zero DOM and zero React dependencies**. It is guaranteed to execute safely inside React Server Components, Server Actions, Route Handlers, Node.js scripts, and Edge workers:
+`@abeta.dev/react-libs/utils` provides pure helper functions with **zero DOM and zero React dependencies**. It is guaranteed to execute safely inside React Server Components, Server Actions, Route Handlers, Node.js scripts, and Edge workers:
 
 ```tsx
-import { cn, formatCurrency, formatDate, isValidEmail, maskEmail } from "@umesh0492/react-libs/utils";
+import { cn, formatCurrency, formatDate, isValidEmail, maskEmail } from "@abeta.dev/react-libs/utils";
 
 // Pure functions safe in React Server Components, Server Actions, and Node.js
 export async function ServerSummaryCard({ user, balance }: { user: { email: string }, balance: number }) {
@@ -208,7 +208,7 @@ export async function ServerSummaryCard({ user, balance }: { user: { email: stri
 ### Standard UI Component Imports
 
 ```tsx
-import { Button, Dialog, Card } from "@umesh0492/react-libs";
+import { Button, Dialog, Card } from "@abeta.dev/react-libs";
 
 export function App() {
   return (
@@ -225,7 +225,7 @@ export function App() {
 ### Analytics Subpath Import
 
 ```tsx
-import { initAnalytics } from "@umesh0492/react-libs/analytics";
+import { initAnalytics } from "@abeta.dev/react-libs/analytics";
 
 initAnalytics({
   autoTrackDom: true,
@@ -243,7 +243,7 @@ Import the design system theme directly into your global CSS stylesheet (e.g. `s
 
 ```css
 @import "tailwindcss";
-@import "@umesh0492/react-libs/styles/theme.css";
+@import "@abeta.dev/react-libs/styles/theme.css";
 ```
 
 This registers all semantic design tokens (`--primary`, `--muted`, `--border`, etc.) directly with Tailwind v4's `@theme` directive, giving you instant access to semantic utility classes like `bg-primary`, `text-muted`, and `border-border`.
@@ -252,20 +252,20 @@ This registers all semantic design tokens (`--primary`, `--muted`, `--border`, e
 If your project uses Tailwind CSS v3, Vite, Webpack, Create React App, or standard plain CSS without Tailwind v4, import the pre-compiled distribution stylesheet at your application's root entry point (e.g. `main.tsx`, `App.tsx`, or `_app.tsx`):
 
 ```tsx
-import "@umesh0492/react-libs/dist/style.css";
+import "@abeta.dev/react-libs/dist/style.css";
 ```
 
 > [!TIP]
 > **CSS Cascade Layer Isolation (`@layer react-libs`)**:
 > `dist/style.css` is encapsulated in `@layer react-libs { ... }` per the W3C CSS Cascading and Inheritance Level 5 specification. Because unlayered styles have higher precedence than layered styles in the CSS cascade, your application's custom CSS classes and local Tailwind utilities will naturally override library styles without specificity wars or `!important`.
 >
-> If your application uses multiple cascade layers, `@umesh0492/react-libs/styles/theme.css` pre-declares the standard layer ordering preset:
+> If your application uses multiple cascade layers, `@abeta.dev/react-libs/styles/theme.css` pre-declares the standard layer ordering preset:
 > ```css
 > @layer reset, base, react-libs, components, utilities, overrides;
 > ```
 
 > [!NOTE]
-> `@umesh0492/react-libs/dist/style.css` contains all pre-compiled Tailwind utility classes and design tokens. It requires zero PostCSS or Tailwind build plugins on the consumer end, making it plug-and-play in any React project.
+> `@abeta.dev/react-libs/dist/style.css` contains all pre-compiled Tailwind utility classes and design tokens. It requires zero PostCSS or Tailwind build plugins on the consumer end, making it plug-and-play in any React project.
 
 ### Brand Tokens & CSS Variables
 
@@ -293,12 +293,12 @@ Add `.theme-orange` (or customized brand classes) to switch accent branding seam
 
 ## Component Reference
 
-> Interactive documentation & stories: [Storybook Playground](https://umesh0492.github.io/react-libs) · Comprehensive guide: [WIKI.md](./WIKI.md) · Architecture Recipe: [Enterprise App Integration](docs/recipes/full-app-integration.md)
+> Interactive documentation & stories: [Storybook Playground](https://react-libs.abeta.dev) · Comprehensive guide: [WIKI.md](./WIKI.md) · Architecture Recipe: [Enterprise App Integration](docs/recipes/full-app-integration.md)
 
 > [!NOTE]
-> **SSR Compatibility**: Root `@umesh0492/react-libs` UI components are tagged with `'use client'` directives and guard browser APIs to avoid server hydration mismatches in Next.js App Router and Remix. Pure utilities under `@umesh0492/react-libs/utils` run safely in server contexts with zero DOM/React dependencies. Browser-only components such as `PdfViewer` are exported through dedicated client subpaths (`@umesh0492/react-libs/pdf`) to prevent server runtime issues.
+> **SSR Compatibility**: Root `@abeta.dev/react-libs` UI components are tagged with `'use client'` directives and guard browser APIs to avoid server hydration mismatches in Next.js App Router and Remix. Pure utilities under `@abeta.dev/react-libs/utils` run safely in server contexts with zero DOM/React dependencies. Browser-only components such as `PdfViewer` are exported through dedicated client subpaths (`@abeta.dev/react-libs/pdf`) to prevent server runtime issues.
 
-All standard UI components are directly importable from `@umesh0492/react-libs` (with client-only subpaths noted):
+All standard UI components are directly importable from `@abeta.dev/react-libs` (with client-only subpaths noted):
 
 | Domain | Component | Notes |
 |---|---|---|
@@ -329,7 +329,7 @@ All standard UI components are directly importable from `@umesh0492/react-libs` 
 | | `Card` | Structured surface container (`CardHeader`, `CardContent`, `CardFooter`) |
 | | `DataTable` | Feature-rich table with client/server sorting, skeleton loading, pagination, and empty states |
 | | `Table` | Primitive semantic table building blocks (`TableHeader`, `TableRow`, `TableCell`) |
-| | `PdfViewer` | Multi-page interactive PDF document viewer with zoom, pagination, rotation, and printing. *Imported via `@umesh0492/react-libs/pdf` (client-only subpath).* |
+| | `PdfViewer` | Multi-page interactive PDF document viewer with zoom, pagination, rotation, and printing. *Imported via `@abeta.dev/react-libs/pdf` (client-only subpath).* |
 | | `Chart` | Themed Recharts wrapper for responsive analytics visualizations |
 | | `Accordion` | Accessible collapsible accordion panels |
 | | `Collapsible` | Expandable content section |
@@ -380,7 +380,7 @@ All standard UI components are directly importable from `@umesh0492/react-libs` 
 ### Button — Loading State
 
 ```tsx
-import { Button } from "@umesh0492/react-libs";
+import { Button } from "@abeta.dev/react-libs";
 
 <Button isLoading={isSubmitting} loadingText="Saving...">
   Save Changes
@@ -399,7 +399,7 @@ import { Button } from "@umesh0492/react-libs";
 
 ```tsx
 import { useState } from "react";
-import { ConfirmDialog } from "@umesh0492/react-libs";
+import { ConfirmDialog } from "@abeta.dev/react-libs";
 
 export function DeleteDialog() {
   const [open, setOpen] = useState(false);
@@ -432,7 +432,7 @@ export function DeleteDialog() {
 ### StatusBadge
 
 ```tsx
-import { StatusBadge } from "@umesh0492/react-libs";
+import { StatusBadge } from "@abeta.dev/react-libs";
 
 <StatusBadge status="pending" />
 <StatusBadge status="confirmed" />
@@ -447,7 +447,7 @@ import { StatusBadge } from "@umesh0492/react-libs";
 ### DataTable
 
 ```tsx
-import { DataTable, StatusBadge, formatCurrency } from "@umesh0492/react-libs";
+import { DataTable, StatusBadge, formatCurrency } from "@abeta.dev/react-libs";
 
 const columns = [
   { key: "id", header: "Order ID", sortable: true },
@@ -475,7 +475,7 @@ To prevent server-side rendering (SSR) crashes in Node.js environments caused by
 ```tsx
 "use client";
 
-import { PdfViewer } from "@umesh0492/react-libs/pdf";
+import { PdfViewer } from "@abeta.dev/react-libs/pdf";
 
 export function InvoiceViewer() {
   return (
@@ -490,7 +490,7 @@ export function InvoiceViewer() {
 }
 ```
 
-> **Isolation Note**: `PdfViewer` is exported from `@umesh0492/react-libs/pdf` to keep browser-only PDF workers (`pdfjs-dist`) isolated from root imports, ensuring server-side rendering in Node.js, Next.js, and Remix does not crash on missing canvas or web worker APIs.
+> **Isolation Note**: `PdfViewer` is exported from `@abeta.dev/react-libs/pdf` to keep browser-only PDF workers (`pdfjs-dist`) isolated from root imports, ensuring server-side rendering in Node.js, Next.js, and Remix does not crash on missing canvas or web worker APIs.
 
 ---
 
@@ -508,7 +508,7 @@ import {
   trackEvent,
   AnalyticsProvider,
   useAnalytics,
-} from "@umesh0492/react-libs/analytics";
+} from "@abeta.dev/react-libs/analytics";
 
 // Initialize analytics globally
 initAnalytics({
@@ -530,7 +530,7 @@ trackEvent("order_submitted", { orderId: "12345", total: 4999 });
 ## Hooks
 
 ```tsx
-import { useDebounce, useLocalStorage, useIsMobile } from "@umesh0492/react-libs";
+import { useDebounce, useLocalStorage, useIsMobile } from "@abeta.dev/react-libs";
 ```
 
 | Hook | Description |
@@ -559,7 +559,7 @@ import {
   formatLocalizedDate,
   formatLocalizedDateTime,
   formatLocalizedNumber,
-} from "@umesh0492/react-libs";
+} from "@abeta.dev/react-libs";
 ```
 
 | Formatter | Example Input | Output |
@@ -625,9 +625,9 @@ npm publish --access public
 ## Architecture & Accessibility
 
 - **Radix UI Primitives**: Built upon headless, fully accessible primitives managing focus traps, ARIA attributes, and keyboard navigation according to WCAG 2.1 AA specifications. Automated regression tests via `axe-core` verify 0 violations across all interactive widgets.
-- **SSR Compatibility**: Root UI components avoid top-level browser globals during module evaluation, guarding interactive code within client hooks and event handlers. Pure utilities in `@umesh0492/react-libs/utils` feature zero DOM and zero React dependencies for native Server Component execution. Browser-only components like `PdfViewer` reside in isolated client subpaths.
+- **SSR Compatibility**: Root UI components avoid top-level browser globals during module evaluation, guarding interactive code within client hooks and event handlers. Pure utilities in `@abeta.dev/react-libs/utils` feature zero DOM and zero React dependencies for native Server Component execution. Browser-only components like `PdfViewer` reside in isolated client subpaths.
 - **Dual ESM & CommonJS**: Full dual module support (`import` and `require`) with TypeScript declaration files (`.d.ts` and `.d.cts`) and subpath type mappings across modern module loaders, verified with `@arethetypeswrong/cli`.
-- **Domain Subpath Isolation**: Preserves all Indian compliance logic (`@umesh0492/react-libs/india`) while leaving the root package and `/utils` domain-neutral.
+- **Domain Subpath Isolation**: Preserves all Indian compliance logic (`@abeta.dev/react-libs/india`) while leaving the root package and `/utils` domain-neutral.
 - **Static Zero-Runtime CSS Delivery**: CSS tokens and component styles compile into static stylesheets (`theme.css` and `dist/style.css`), eliminating runtime `<style>` injection and satisfying strict Content Security Policies (`CSP`).
 - **Tree-Shaking**: Pure ES modules allow modern bundlers (Vite, Rollup, Webpack, Turbopack) to eliminate unused components and utilities from consumer bundles.
 
@@ -644,17 +644,17 @@ Explore our formal design decisions in [`docs/adr/`](./docs/adr/):
 - [ADR 0003: SSR & React Server Components (RSC) Purity Architecture](./docs/adr/0003-ssr-and-react-server-components-architecture.md)
 - [ADR 0004: Accessibility Baseline and Automated WCAG Compliance](./docs/adr/0004-accessibility-baseline-and-wcag-compliance.md)
 - [ADR 0005: Controlled vs Uncontrolled State and Ref Forwarding Convention](./docs/adr/0005-controlled-and-uncontrolled-component-convention.md)
-- [ADR 0006: Domain Subpath Isolation Architecture (@umesh0492/react-libs/india)](./docs/adr/0006-domain-subpath-isolation-architecture.md)
+- [ADR 0006: Domain Subpath Isolation Architecture (@abeta.dev/react-libs/india)](./docs/adr/0006-domain-subpath-isolation-architecture.md)
 
 ---
 
 ## Community & Contributing
 
-- **[Migration Guide](./MIGRATION.md)**: Upgrading to v0.11.0.
+- **[Migration Guide](./MIGRATION.md)**: Upgrading to v0.12.0.
 - **[Code of Conduct](./CODE_OF_CONDUCT.md)**: We are committed to providing a friendly, safe, and welcoming environment for all contributors.
 - **[Security Policy](./SECURITY.md)**: Guidelines for reporting security vulnerabilities responsibly.
 - **[Contributing Guide](./CONTRIBUTING.md)**: Step-by-step instructions for adding components, writing tests, and filing pull requests.
 
 ## License
 
-[MIT](./LICENSE) © Umesh Gupta
+[MIT](./LICENSE) © Umesh Gupta (abeta.dev)

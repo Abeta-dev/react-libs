@@ -7,6 +7,10 @@
  *   3. The backend returns storage credentials securely from environment configuration.
  *   4. Credentials are cached in memory for the active browser session.
  *   5. uploadFileToStorage / downloadFileFromStorage use the cached config to manage files.
+ *
+ * For SSR or multi-tenant environments:
+ *   Use `BlobStorageClient` or `createBlobStorageClient()` to instantiate per-tenant or
+ *   per-request client instances with isolated credentials, avoiding cross-tenant SSR pollution.
  */
 
 /** Shape returned by the backend GET /api/config endpoint for storage. */
@@ -15,65 +19,14 @@ export interface BlobStorageConfig {
   storageSecretKey: string;
 }
 
-// Module-level cache — lasts for the browser session (wiped on page reload / logout).
-let _config: BlobStorageConfig | null = null;
-
-// Module-level backend base URL. Set once at app startup via setBlobStorageApiBase().
-let _apiBase = "";
-
-/**
- * Set the backend base URL for storage config/upload/download calls.
- * Call this once at app startup before any upload/download occurs.
- */
-export function setBlobStorageApiBase(base: string): void {
-  _apiBase = base.replace(/\/$/, ""); // strip trailing slash
-}
-
-/**
- * Fetch storage config from the backend's authenticated /api/config endpoint.
- * Caches the result in memory so subsequent calls are instant.
- *
- * @param apiBase  - Override base URL (defaults to the value set via setBlobStorageApiBase)
- * @param token    - Optional JWT; falls back to localStorage "auth_jwt"
- */
-export async function fetchBlobStorageConfig(
-  apiBase?: string,
-  token?: string
-): Promise<BlobStorageConfig> {
-  if (_config) return _config;
-
-  const base = apiBase ?? _apiBase;
-  const jwt =
-    token ??
-    (typeof window !== "undefined"
-      ? localStorage.getItem("auth_jwt") ?? localStorage.getItem("jwt") ?? ""
-      : "");
-
-  const res = await fetch(`${base}/api/config`, {
-    headers: { Authorization: `Bearer ${jwt}` },
-  });
-
-  if (!res.ok) {
-    throw new Error(
-      `fetchBlobStorageConfig: /api/config returned ${res.status} (base: "${base}")`
-    );
-  }
-
-  const json = (await res.json()) as {
-    storage_base_url?: string;
-    storage_secret_key?: string;
-  };
-
-  _config = {
-    storageBaseUrl: json.storage_base_url || "",
-    storageSecretKey: json.storage_secret_key || "",
-  };
-  return _config;
-}
-
-/** Call this on logout to wipe the cached secret from memory. */
-export function clearBlobStorageConfig(): void {
-  _config = null;
+/** Configuration options for initializing a BlobStorageClient. */
+export interface BlobStorageClientOptions {
+  /** Backend API base URL for storage config endpoints */
+  apiBase?: string | undefined;
+  /** Optional pre-configured storage credentials */
+  config?: BlobStorageConfig | null | undefined;
+  /** Optional bearer token for authentication */
+  token?: string | undefined;
 }
 
 /** Result shape returned after a successful upload. */
@@ -104,10 +57,278 @@ export function sanitizeStoragePath(path: string): string {
 }
 
 /**
- * Upload a file to Blob Storage directly from the browser.
+ * BlobStorageClient encapsulates storage credentials and API base configuration,
+ * preventing cross-tenant SSR pollution in multi-tenant or server-side rendering environments.
+ */
+export class BlobStorageClient {
+  private _config: BlobStorageConfig | null = null;
+  private _apiBase: string = "";
+  private _token?: string | undefined;
+
+  constructor(options?: BlobStorageClientOptions) {
+    if (options?.apiBase) {
+      this.setApiBase(options.apiBase);
+    }
+    if (options?.config) {
+      this._config = { ...options.config };
+    }
+    if (options?.token) {
+      this._token = options.token;
+    }
+  }
+
+  /** Get the configured backend base URL */
+  public get apiBase(): string {
+    return this._apiBase;
+  }
+
+  /** Get the configured backend base URL */
+  public getApiBase(): string {
+    return this._apiBase;
+  }
+
+  /** Get the currently cached storage configuration, or null if uninitialized */
+  public get config(): BlobStorageConfig | null {
+    return this._config ? { ...this._config } : null;
+  }
+
+  /** Get the currently cached storage configuration, or null if uninitialized */
+  public getConfig(): BlobStorageConfig | null {
+    return this._config ? { ...this._config } : null;
+  }
+
+  /**
+   * Set the backend base URL for storage config/upload/download calls.
+   */
+  public setApiBase(base: string): void {
+    this._apiBase = base.replace(/\/$/, ""); // strip trailing slash
+  }
+
+  /** Alias for backward compatibility */
+  public setBlobStorageApiBase(base: string): void {
+    this.setApiBase(base);
+  }
+
+  /** Explicitly set or override authentication token */
+  public setToken(token?: string): void {
+    this._token = token;
+  }
+
+  /** Explicitly set or override storage configuration */
+  public setConfig(config: BlobStorageConfig | null): void {
+    this._config = config ? { ...config } : null;
+  }
+
+  /**
+   * Fetch storage config from the backend's authenticated /api/config endpoint.
+   * Caches the result in memory on this instance so subsequent calls are instant.
+   *
+   * @param apiBase  - Override base URL (defaults to this instance's apiBase)
+   * @param token    - Optional JWT (defaults to instance token, then localStorage "auth_jwt")
+   */
+  public async fetchConfig(
+    apiBase?: string,
+    token?: string
+  ): Promise<BlobStorageConfig> {
+    if (this._config) return this._config;
+
+    const base = apiBase ?? this._apiBase;
+    const jwt =
+      token ??
+      this._token ??
+      (typeof window !== "undefined"
+        ? localStorage.getItem("auth_jwt") ?? localStorage.getItem("jwt") ?? ""
+        : "");
+
+    const res = await fetch(`${base}/api/config`, {
+      headers: { Authorization: `Bearer ${jwt}` },
+    });
+
+    if (!res.ok) {
+      throw new Error(
+        `fetchBlobStorageConfig: /api/config returned ${res.status} (base: "${base}")`
+      );
+    }
+
+    const json = (await res.json()) as {
+      storage_base_url?: string;
+      storage_secret_key?: string;
+    };
+
+    this._config = {
+      storageBaseUrl: json.storage_base_url || "",
+      storageSecretKey: json.storage_secret_key || "",
+    };
+    return this._config;
+  }
+
+  /** Alias for backward compatibility */
+  public async fetchBlobStorageConfig(
+    apiBase?: string,
+    token?: string
+  ): Promise<BlobStorageConfig> {
+    return this.fetchConfig(apiBase, token);
+  }
+
+  /** Call this on logout or tenant switch to wipe cached secrets from this instance. */
+  public clearConfig(): void {
+    this._config = null;
+  }
+
+  /** Alias for backward compatibility */
+  public clearBlobStorageConfig(): void {
+    this.clearConfig();
+  }
+
+  /**
+   * Upload a file to Blob Storage directly using this client's credentials.
+   *
+   * @param file       - File to upload
+   * @param folderPath - Destination folder / bucket (e.g. "documents", "attachments")
+   * @param apiBase    - Optional backend base URL override
+   */
+  public async uploadFile(
+    file: File,
+    folderPath: string,
+    apiBase?: string
+  ): Promise<BlobUploadResult> {
+    const { storageBaseUrl, storageSecretKey } = await this.fetchConfig(apiBase);
+
+    const safeFolderPath = sanitizeStoragePath(folderPath);
+    const form = new FormData();
+    form.append("folderPath", safeFolderPath);
+    form.append("file", file);
+
+    const res = await fetch(`${storageBaseUrl}/api/admin/upload_file`, {
+      method: "POST",
+      headers: { secretkey: storageSecretKey },
+      body: form,
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Storage upload failed (${res.status}): ${text}`);
+    }
+
+    const json = await res.json();
+    if (!json?.data?.length) {
+      throw new Error("Storage upload succeeded but no file data in response");
+    }
+    const item = json.data[0];
+    return {
+      url: item.url || item.file_url,
+      fileName: item.fileName || item.file_name,
+      originalName: item.originalName || item.original_name,
+    };
+  }
+
+  /** Alias for backward compatibility */
+  public async uploadFileToStorage(
+    file: File,
+    folderPath: string,
+    apiBase?: string
+  ): Promise<BlobUploadResult> {
+    return this.uploadFile(file, folderPath, apiBase);
+  }
+
+  /**
+   * Download a file from Blob Storage directly.
+   *
+   * @param fileName    - UUID filename stored in DB
+   * @param folder      - Bucket folder
+   * @param displayName - Filename shown in the browser's Save As dialog
+   * @param apiBase     - Optional backend base URL override
+   */
+  public async downloadFile(
+    fileName: string,
+    folder: string,
+    displayName?: string,
+    apiBase?: string
+  ): Promise<void> {
+    const { storageBaseUrl, storageSecretKey } = await this.fetchConfig(apiBase);
+
+    const filePath = `${folder}/${fileName}`;
+    const qs = new URLSearchParams({ filePath, fileName });
+
+    const res = await fetch(`${storageBaseUrl}/api/admin/download_file?${qs}`, {
+      headers: { secretkey: storageSecretKey },
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Storage download failed (${res.status}): ${text}`);
+    }
+
+    const blob = await res.blob();
+    if (typeof window !== "undefined" && typeof document !== "undefined") {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = displayName || fileName;
+      document.body.appendChild(a);
+      a.click();
+      if (a.parentNode) {
+        a.parentNode.removeChild(a);
+      }
+      window.URL.revokeObjectURL(url);
+    }
+  }
+
+  /** Alias for backward compatibility */
+  public async downloadFileFromStorage(
+    fileName: string,
+    folder: string,
+    displayName?: string,
+    apiBase?: string
+  ): Promise<void> {
+    return this.downloadFile(fileName, folder, displayName, apiBase);
+  }
+}
+
+/** Factory function to create a new BlobStorageClient instance. */
+export function createBlobStorageClient(
+  options?: BlobStorageClientOptions
+): BlobStorageClient {
+  return new BlobStorageClient(options);
+}
+
+// Global default instance for backward-compatible top-level functional API
+const defaultClient = new BlobStorageClient();
+
+/** Access the default BlobStorageClient singleton instance. */
+export function getDefaultBlobStorageClient(): BlobStorageClient {
+  return defaultClient;
+}
+
+/**
+ * Set the backend base URL for storage config/upload/download calls on the default client.
+ * Call this once at app startup before any upload/download occurs.
+ */
+export function setBlobStorageApiBase(base: string): void {
+  defaultClient.setApiBase(base);
+}
+
+/**
+ * Fetch storage config using the default client.
+ * Caches the result in memory so subsequent calls are instant.
  *
- * The secret key is retrieved from the backend via /api/config (authenticated) and
- * cached in memory — it is never hardcoded in the frontend bundle.
+ * @param apiBase  - Override base URL (defaults to the value set via setBlobStorageApiBase)
+ * @param token    - Optional JWT; falls back to localStorage "auth_jwt"
+ */
+export async function fetchBlobStorageConfig(
+  apiBase?: string,
+  token?: string
+): Promise<BlobStorageConfig> {
+  return defaultClient.fetchConfig(apiBase, token);
+}
+
+/** Call this on logout to wipe the cached secret from the default client. */
+export function clearBlobStorageConfig(): void {
+  defaultClient.clearConfig();
+}
+
+/**
+ * Upload a file to Blob Storage using the default client.
  *
  * @param file       - File to upload
  * @param folderPath - Destination folder / bucket (e.g. "documents", "attachments")
@@ -118,38 +339,11 @@ export async function uploadFileToStorage(
   folderPath: string,
   apiBase?: string
 ): Promise<BlobUploadResult> {
-  const { storageBaseUrl, storageSecretKey } = await fetchBlobStorageConfig(apiBase);
-
-  const safeFolderPath = sanitizeStoragePath(folderPath);
-  const form = new FormData();
-  form.append("folderPath", safeFolderPath);
-  form.append("file", file);
-
-  const res = await fetch(`${storageBaseUrl}/api/admin/upload_file`, {
-    method: "POST",
-    headers: { secretkey: storageSecretKey },
-    body: form,
-  });
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    throw new Error(`Storage upload failed (${res.status}): ${text}`);
-  }
-
-  const json = await res.json();
-  if (!json?.data?.length) {
-    throw new Error("Storage upload succeeded but no file data in response");
-  }
-  const item = json.data[0];
-  return {
-    url: item.url || item.file_url,
-    fileName: item.fileName || item.file_name,
-    originalName: item.originalName || item.original_name,
-  };
+  return defaultClient.uploadFile(file, folderPath, apiBase);
 }
 
 /**
- * Download a file from Blob Storage directly in the browser.
+ * Download a file from Blob Storage using the default client.
  *
  * @param fileName    - UUID filename stored in DB
  * @param folder      - Bucket folder
@@ -162,31 +356,5 @@ export async function downloadFileFromStorage(
   displayName?: string,
   apiBase?: string
 ): Promise<void> {
-  const { storageBaseUrl, storageSecretKey } = await fetchBlobStorageConfig(apiBase);
-
-  const filePath = `${folder}/${fileName}`;
-  const qs = new URLSearchParams({ filePath, fileName });
-
-  const res = await fetch(`${storageBaseUrl}/api/admin/download_file?${qs}`, {
-    headers: { secretkey: storageSecretKey },
-  });
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    throw new Error(`Storage download failed (${res.status}): ${text}`);
-  }
-
-  const blob = await res.blob();
-  if (typeof window !== "undefined" && typeof document !== "undefined") {
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = displayName || fileName;
-    document.body.appendChild(a);
-    a.click();
-    if (a.parentNode) {
-      a.parentNode.removeChild(a);
-    }
-    window.URL.revokeObjectURL(url);
-  }
+  return defaultClient.downloadFile(fileName, folder, displayName, apiBase);
 }

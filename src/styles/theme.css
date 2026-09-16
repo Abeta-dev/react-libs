@@ -1,10 +1,10 @@
 /*
- * @umesh0492/react-libs — Shared Design Tokens
+ * @abeta.dev/react-libs — Shared Design Tokens
  *
  * Single source of truth for all color, radius, font, and spacing tokens.
  *
  * Usage in each app's index.css:
- *   @import "@umesh0492/react-libs/src/styles/theme.css";
+ *   @import "@abeta.dev/react-libs/src/styles/theme.css";
  */
 
 @layer reset, base, react-libs, components, utilities, overrides;

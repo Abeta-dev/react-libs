@@ -22,7 +22,7 @@ import {
   formatCrores,
 } from "../index";
 
-describe("@umesh0492/react-libs/india", () => {
+describe("@abeta.dev/react-libs/india", () => {
   describe("Validators & Regex", () => {
     it("validates GSTIN correctly", () => {
       expect(REGEX_GSTIN.test("27AADCA1234D1Z5")).toBe(true);
@@ -166,7 +166,7 @@ describe("@umesh0492/react-libs/india", () => {
   });
 
   describe("Subpath Architecture Separation", () => {
-    it("guarantees @umesh0492/react-libs/india is pure without React components", async () => {
+    it("guarantees @abeta.dev/react-libs/india is pure without React components", async () => {
       const pureModule = await import("../index");
       expect((pureModule as Record<string, unknown>).AmountSummaryCardIndia).toBeUndefined();
       expect(pureModule.validateGSTIN).toBeDefined();
@@ -174,7 +174,7 @@ describe("@umesh0492/react-libs/india", () => {
       expect(pureModule.INDIA_STATES).toBeDefined();
     });
 
-    it("exports AmountSummaryCardIndia from @umesh0492/react-libs/india/react", async () => {
+    it("exports AmountSummaryCardIndia from @abeta.dev/react-libs/india/react", async () => {
       const reactModule = await import("../react/index");
       expect(reactModule.AmountSummaryCardIndia).toBeDefined();
       expect(typeof reactModule.AmountSummaryCardIndia).toBe("object"); // React.forwardRef returns an object

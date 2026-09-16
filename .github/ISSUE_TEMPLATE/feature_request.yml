@@ -1,12 +1,12 @@
 name: Feature Request
-description: Suggest an idea or new feature for @umesh0492/react-libs
+description: Suggest an idea or new feature for @abeta.dev/react-libs
 title: "[Feature]: "
 labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for suggesting an enhancement or new feature for `@umesh0492/react-libs`! Please provide as much detail as possible to help the maintainers and community evaluate the proposal.
+        Thank you for suggesting an enhancement or new feature for `@abeta.dev/react-libs`! Please provide as much detail as possible to help the maintainers and community evaluate the proposal.
 
   - type: textarea
     id: problem-description

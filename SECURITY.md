@@ -1,6 +1,6 @@
 # Security Policy
 
-The `@umesh0492/react-libs` team takes security issues seriously and welcomes reports from developers, security researchers, and the open-source community.
+The `@abeta.dev/react-libs` team takes security issues seriously and welcomes reports from developers, security researchers, and the open-source community.
 
 ## Supported Versions
 
@@ -17,13 +17,13 @@ We strongly advise all users to stay updated with the latest releases to ensure 
 
 **Please do not report security vulnerabilities through public GitHub issues, discussions, or pull requests.**
 
-If you believe you have discovered a security vulnerability in `@umesh0492/react-libs`, please report it responsibly by following these steps:
+If you believe you have discovered a security vulnerability in `@abeta.dev/react-libs`, please report it responsibly by following these steps:
 
-1. Send an email directly to **[umesh0492@gmail.com](mailto:umesh0492@gmail.com)** with the subject line:  
-   `[Security Vulnerability]: @umesh0492/react-libs - <Brief Description>`
+1. Send an email directly to **[security@abeta.dev](mailto:security@abeta.dev)** (or **[umesh@abeta.dev](mailto:umesh@abeta.dev)**) with the subject line:  
+   `[Security Vulnerability]: @abeta.dev/react-libs - <Brief Description>`
 2. Include the following information in your report:
    - A clear description of the vulnerability and its potential impact.
-   - The version(s) of `@umesh0492/react-libs` affected.
+   - The version(s) of `@abeta.dev/react-libs` affected.
    - Step-by-step reproduction instructions or a minimal proof-of-concept (PoC) repository / script.
    - Any proposed remediation, patch, or mitigation strategy (if available).
    - Your preferred name / handle for attribution in release notes (optional).
@@ -39,6 +39,6 @@ When a security vulnerability is reported:
 
 ## Security Best Practices for Consumers
 
-- Keep `@umesh0492/react-libs` and peer dependencies (`react`, `react-dom`) updated to their latest compatible versions.
+- Keep `@abeta.dev/react-libs` and peer dependencies (`react`, `react-dom`) updated to their latest compatible versions.
 - Regularly run `npm audit` in your application repositories.
 - Follow WCAG accessibility and Content Security Policy (CSP) best practices when integrating component wrappers and rendering rich content.

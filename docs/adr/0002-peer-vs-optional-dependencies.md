@@ -33,7 +33,7 @@ We establish a 3-tier dependency architecture:
      - `react-pdf` (isolated under `./pdf` subpath)
      - `xlsx`, `jspdf`, `jspdf-autotable` (for export utilities)
 4. **Subpath & Dynamic Boundary Isolation**:
-   - Features requiring optional peers are either isolated in dedicated subpaths (e.g., `@umesh0492/react-libs/pdf`) or gracefully degrade / warn if the peer is missing at runtime.
+   - Features requiring optional peers are either isolated in dedicated subpaths (e.g., `@abeta.dev/react-libs/pdf`) or gracefully degrade / warn if the peer is missing at runtime.
 
 ## Consequences
 - **Positive**:

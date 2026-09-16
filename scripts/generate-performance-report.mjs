@@ -11,7 +11,7 @@
  */
 
 import { execSync } from 'child_process';
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -20,6 +20,12 @@ const ROOT = join(__dirname, '..');
 const OUT_DIR = join(ROOT, 'docs');
 const OUT_FILE = join(OUT_DIR, 'performance-report.md');
 const JSON_TMP = join(ROOT, '.vitest-report.json');
+
+let pkgName = '@abeta.dev/react-libs';
+if (existsSync(join(ROOT, 'package.json'))) {
+  const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'));
+  if (pkg.name) pkgName = pkg.name;
+}
 
 // ---------------------------------------------------------------------------
 // 1. Configuration & Exclusions
@@ -189,7 +195,7 @@ const maxP95 = Math.max(...componentRows.map(r => r.p95), 1);
 const md = `# ⚡ Component Library — Performance Report
 
 > **Generated:** ${now}  
-> **Test suite:** \`@umesh0492/react-libs\`  
+> **Test suite:** \`${pkgName}\`  
 > **Total wall time:** ${(totalWallMs / 1000).toFixed(2)}s  
 > **Note:** Documentation and Storybook stories are excluded from this report to focus on core component logic performance.
 

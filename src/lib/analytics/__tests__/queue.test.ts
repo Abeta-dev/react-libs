@@ -272,6 +272,106 @@ describe("AnalyticsQueue", () => {
 
       queue.destroy();
     });
+
+    it("removes all window and document event listeners on destroy()", () => {
+      const windowRemoveSpy = vi.spyOn(window, "removeEventListener");
+      const documentRemoveSpy = vi.spyOn(document, "removeEventListener");
+
+      const queue = new AnalyticsQueue({
+        adapters: [],
+      });
+
+      const handleOnline = (queue as any).handleOnline;
+      const handleUnload = (queue as any).handleUnload;
+      const handleVisibilityChange = (queue as any).handleVisibilityChange;
+
+      expect(typeof handleOnline).toBe("function");
+      expect(typeof handleUnload).toBe("function");
+      expect(typeof handleVisibilityChange).toBe("function");
+
+      queue.destroy();
+
+      expect(windowRemoveSpy).toHaveBeenCalledWith("online", handleOnline);
+      expect(windowRemoveSpy).toHaveBeenCalledWith("pagehide", handleUnload);
+      expect(windowRemoveSpy).toHaveBeenCalledWith("beforeunload", handleUnload);
+      expect(documentRemoveSpy).toHaveBeenCalledWith("visibilitychange", handleVisibilityChange);
+    });
+
+    it("registers the same bound listener instances on initialization that are removed on destroy()", () => {
+      const windowAddSpy = vi.spyOn(window, "addEventListener");
+      const documentAddSpy = vi.spyOn(document, "addEventListener");
+      const windowRemoveSpy = vi.spyOn(window, "removeEventListener");
+      const documentRemoveSpy = vi.spyOn(document, "removeEventListener");
+
+      const queue = new AnalyticsQueue({ adapters: [] });
+
+      const handleOnline = (queue as any).handleOnline;
+      const handleUnload = (queue as any).handleUnload;
+      const handleVisibilityChange = (queue as any).handleVisibilityChange;
+
+      expect(windowAddSpy).toHaveBeenCalledWith("online", handleOnline);
+      expect(windowAddSpy).toHaveBeenCalledWith("pagehide", handleUnload);
+      expect(windowAddSpy).toHaveBeenCalledWith("beforeunload", handleUnload);
+      expect(documentAddSpy).toHaveBeenCalledWith("visibilitychange", handleVisibilityChange);
+
+      queue.destroy();
+
+      expect(windowRemoveSpy).toHaveBeenCalledWith("online", handleOnline);
+      expect(windowRemoveSpy).toHaveBeenCalledWith("pagehide", handleUnload);
+      expect(windowRemoveSpy).toHaveBeenCalledWith("beforeunload", handleUnload);
+      expect(documentRemoveSpy).toHaveBeenCalledWith("visibilitychange", handleVisibilityChange);
+    });
+
+    it("stops responding to window and document lifecycle events after destroy()", async () => {
+      const trackBatch = vi.fn().mockResolvedValue(undefined);
+      const adapter: AnalyticsAdapter = {
+        name: "test",
+        track: vi.fn(),
+        trackBatch,
+      };
+
+      const queue = new AnalyticsQueue({
+        adapters: [adapter],
+        batchSize: 10,
+        storagePrefix: "post_destroy_lifecycle",
+      });
+
+      queue.enqueue(createMockEvent("pre-destroy-1"));
+      queue.destroy();
+
+      // Clear the storage saved by destroy
+      window.localStorage.removeItem("post_destroy_lifecycle_offline_queue");
+
+      // 1. Online event should not trigger flush
+      queue.enqueue(createMockEvent("post-destroy-2"));
+      window.dispatchEvent(new Event("online"));
+      await Promise.resolve();
+      expect(trackBatch).not.toHaveBeenCalled();
+
+      // 2. Visibilitychange to hidden should not trigger flush
+      const originalVis = document.visibilityState;
+      Object.defineProperty(document, "visibilityState", {
+        value: "hidden",
+        configurable: true,
+        writable: true,
+      });
+
+      document.dispatchEvent(new Event("visibilitychange"));
+      await Promise.resolve();
+      expect(trackBatch).not.toHaveBeenCalled();
+
+      Object.defineProperty(document, "visibilityState", {
+        value: originalVis,
+        configurable: true,
+        writable: true,
+      });
+
+      // 3. Pagehide and beforeunload should not persist to localStorage anymore
+      window.dispatchEvent(new Event("pagehide"));
+      window.dispatchEvent(new Event("beforeunload"));
+      const stored = window.localStorage.getItem("post_destroy_lifecycle_offline_queue");
+      expect(stored).toBeNull();
+    });
   });
 
   describe("Persistence error handling and edge cases", () => {

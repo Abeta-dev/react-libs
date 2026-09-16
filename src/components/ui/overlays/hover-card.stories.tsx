@@ -18,7 +18,7 @@ export const Default: Story = {
       <HoverCard openDelay={0} closeDelay={0}>
         <HoverCardTrigger asChild>
           <a
-            href="https://github.com/umesh0492/react-libs"
+            href="https://github.com/abeta-dev/react-libs"
             id="hover-card-trigger"
             className="text-sm font-medium underline underline-offset-4 cursor-pointer"
             target="_blank"

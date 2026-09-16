@@ -26,7 +26,7 @@ const noHardcodedColors = {
     docs: {
       description:
         'Disallow hardcoded color literals. Use design tokens (CSS custom properties or Tailwind semantic classes) instead.',
-      url: 'https://github.com/umesh0492/react-libs/blob/main/CONTRIBUTING.md#design-tokens',
+      url: 'https://github.com/abeta-dev/react-libs/blob/main/CONTRIBUTING.md#design-tokens',
     },
     schema: [],
     messages: {

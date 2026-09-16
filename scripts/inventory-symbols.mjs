@@ -2,7 +2,7 @@
 /**
  * scripts/inventory-symbols.mjs
  *
- * Emits the exported-symbol and component inventory for @umesh0492/react-libs,
+ * Emits the exported-symbol and component inventory for @abeta.dev/react-libs,
  * and validates that every bullet under `### Added` in CHANGELOG.md references
  * a real, verifiable symbol, component, subpath, or file in the repository tree.
  *
@@ -22,14 +22,24 @@ export function getExportedSymbols() {
   const symbols = new Set();
   const files = new Set();
 
+  // Root repository files
+  const rootFiles = ['LICENSE', 'README.md', 'CHANGELOG.md', 'SECURITY.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'MIGRATION.md', 'WIKI.md'];
+  for (const rf of rootFiles) {
+    if (existsSync(join(ROOT, rf))) {
+      files.add(rf);
+    }
+  }
+
   // 1. Scan package.json exports
   const pkgPath = join(ROOT, 'package.json');
+  let pkgName = '@abeta.dev/react-libs';
   if (existsSync(pkgPath)) {
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
+    if (pkg.name) pkgName = pkg.name;
     if (pkg.exports) {
       for (const exp of Object.keys(pkg.exports)) {
         symbols.add(exp);
-        symbols.add(`@umesh0492/react-libs${exp === '.' ? '' : '/' + exp.replace(/^\.\//, '')}`);
+        symbols.add(`${pkgName}${exp === '.' ? '' : '/' + exp.replace(/^\.\//, '')}`);
       }
     }
   }
@@ -199,7 +209,7 @@ export function verifyChangelogSymbols() {
 
       // If bullet asserts 'use client' directive on a subpath, verify verify-directives.mjs asserts it
       if (bullet.includes("'use client'") || bullet.includes('"use client"')) {
-        const subpathMatch = bullet.match(/@umesh0492\/react-libs\/([A-Za-z0-9_/-]+)/);
+        const subpathMatch = bullet.match(/@abeta\.dev\/react-libs\/([A-Za-z0-9_/-]+)/);
         if (subpathMatch) {
           const subpath = subpathMatch[1];
           const expectedFilePattern = `dist/${subpath}`;
@@ -212,7 +222,7 @@ export function verifyChangelogSymbols() {
         }
       }
 
-      // 2. Check backticked identifiers in the bullet (e.g. `Button`, `DataTable`, `@umesh0492/react-libs/utils`)
+      // 2. Check backticked identifiers in the bullet (e.g. `Button`, `DataTable`, `@abeta.dev/react-libs/utils`)
       const backtickedTokens = [...bullet.matchAll(/`([^`]+)`/g)].map((m) => m[1]);
 
       for (const token of backtickedTokens) {
@@ -223,7 +233,7 @@ export function verifyChangelogSymbols() {
         if (
           symbols.has(token) ||
           files.has(token) ||
-          token.startsWith('@umesh0492/react-libs') ||
+          token.startsWith('@abeta.dev/react-libs') ||
           token.startsWith('./')
         ) {
           // OK

@@ -144,7 +144,7 @@ describe("Accessibility (a11y) Automated Tests - Axe Violations", () => {
 
   it("CopyButton has 0 accessibility violations", async () => {
     const { container } = render(
-      <CopyButton value="npm install @umesh0492/react-libs" defaultText="Copy command" />
+      <CopyButton value="npm install @abeta.dev/react-libs" defaultText="Copy command" />
     );
 
     const results = await axe.run(container);

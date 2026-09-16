@@ -1,6 +1,6 @@
 # react-lib Component Wiki
 
-> **Visual cookbook for `@umesh0492/react-libs`** — copy-paste patterns for every component.
+> **Visual cookbook for `@abeta.dev/react-libs`** — copy-paste patterns for every component.
 > - Accessible UI components across 6 semantic domains
 > - **Storybook 10** at http://localhost:6006 — live visual playground
 
@@ -19,15 +19,15 @@
 
 | Subpath | Key Component | Isolated Peer |
 |---|---|---|
-| `@umesh0492/react-libs/charts` | `ChartContainer`, `ChartTooltip` | `recharts` |
-| `@umesh0492/react-libs/command` | `Command`, `CommandInput` | `cmdk` |
-| `@umesh0492/react-libs/drawer` | `Drawer`, `DrawerContent` | `vaul` |
-| `@umesh0492/react-libs/carousel` | `Carousel`, `CarouselContent` | `embla-carousel-react` |
-| `@umesh0492/react-libs/calendar` | `Calendar` | `react-day-picker` |
-| `@umesh0492/react-libs/date-picker` | `DatePicker`, `DateRangePicker` | `react-day-picker`, `date-fns` |
-| `@umesh0492/react-libs/form` | `Form`, `FormField` | `react-hook-form` |
-| `@umesh0492/react-libs/data-table` | `DataTable` | `@tanstack/react-table` |
-| `@umesh0492/react-libs/pdf` | `PdfViewer` | `@react-pdf/renderer` |
+| `@abeta.dev/react-libs/charts` | `ChartContainer`, `ChartTooltip` | `recharts` |
+| `@abeta.dev/react-libs/command` | `Command`, `CommandInput` | `cmdk` |
+| `@abeta.dev/react-libs/drawer` | `Drawer`, `DrawerContent` | `vaul` |
+| `@abeta.dev/react-libs/carousel` | `Carousel`, `CarouselContent` | `embla-carousel-react` |
+| `@abeta.dev/react-libs/calendar` | `Calendar` | `react-day-picker` |
+| `@abeta.dev/react-libs/date-picker` | `DatePicker`, `DateRangePicker` | `react-day-picker`, `date-fns` |
+| `@abeta.dev/react-libs/form` | `Form`, `FormField` | `react-hook-form` |
+| `@abeta.dev/react-libs/data-table` | `DataTable` | `@tanstack/react-table` |
+| `@abeta.dev/react-libs/pdf` | `PdfViewer` | `@react-pdf/renderer` |
 
 > Full API docs → [README.md](./README.md)
 
@@ -36,7 +36,7 @@
 ## Button
 
 ```tsx
-import { Button } from "@umesh0492/react-libs"
+import { Button } from "@abeta.dev/react-libs"
 ```
 
 ### Variants
@@ -73,7 +73,7 @@ import { Button } from "@umesh0492/react-libs"
 ## StatusBadge
 
 ```tsx
-import { StatusBadge } from "@umesh0492/react-libs"
+import { StatusBadge } from "@abeta.dev/react-libs"
 ```
 
 Covers every status across business workflows. Always consistent colour — do not build custom status indicators.
@@ -122,7 +122,7 @@ Covers every status across business workflows. Always consistent colour — do n
 ## PageHeader
 
 ```tsx
-import { PageHeader, PageHeaderSkeleton } from "@umesh0492/react-libs"
+import { PageHeader, PageHeaderSkeleton } from "@abeta.dev/react-libs"
 ```
 
 **Use on every page** for consistent spacing, breadcrumbs, and action placement.
@@ -164,7 +164,7 @@ import { PageHeader, PageHeaderSkeleton } from "@umesh0492/react-libs"
 ## DataTable
 
 ```tsx
-import { DataTable } from "@umesh0492/react-libs"
+import { DataTable } from "@abeta.dev/react-libs"
 ```
 
 Generic sortable table with skeleton loading, empty state, and pagination.
@@ -248,7 +248,7 @@ const columns = [
 ## ConfirmDialog
 
 ```tsx
-import { ConfirmDialog } from "@umesh0492/react-libs"
+import { ConfirmDialog } from "@abeta.dev/react-libs"
 ```
 
 Replace all manual `<AlertDialog>` confirm patterns with this. Handles own loading state.
@@ -289,10 +289,10 @@ async function handleDelete() {
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription, DialogFooter,
-} from "@umesh0492/react-libs"
+} from "@abeta.dev/react-libs"
 ```
 
-> **Rule:** Always use `Dialog` from `@umesh0492/react-libs` — never build custom modals. It manages its own overlay, animations, portal, and focus trap via Radix.
+> **Rule:** Always use `Dialog` from `@abeta.dev/react-libs` — never build custom modals. It manages its own overlay, animations, portal, and focus trap via Radix.
 
 ```tsx
 const [open, setOpen] = useState(false)
@@ -329,7 +329,7 @@ const [open, setOpen] = useState(false)
 import {
   Sheet, SheetContent, SheetHeader,
   SheetTitle, SheetDescription, SheetFooter,
-} from "@umesh0492/react-libs"
+} from "@abeta.dev/react-libs"
 ```
 
 ```tsx
@@ -364,7 +364,7 @@ import {
   FormControl, FormMessage, Input, Textarea,
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
   Checkbox, Switch
-} from "@umesh0492/react-libs"
+} from "@abeta.dev/react-libs"
 ```
 
 ```tsx
@@ -439,7 +439,7 @@ const form = useForm<z.infer<typeof schema>>({ resolver: zodResolver(schema) })
 ## Hooks
 
 ```tsx
-import { useDebounce, useLocalStorage, useIsMobile } from "@umesh0492/react-libs"
+import { useDebounce, useLocalStorage, useIsMobile } from "@abeta.dev/react-libs"
 ```
 
 ### useDebounce — Search
@@ -485,7 +485,7 @@ import {
   formatCurrency, formatDate, formatDateTime, formatRelativeTime,
   formatWeight, formatQuantity, formatFileSize, formatPercent,
   formatLocalizedDate, formatLocalizedDateTime, formatLocalizedNumber,
-} from "@umesh0492/react-libs"
+} from "@abeta.dev/react-libs"
 ```
 
 ### In Table Cells
@@ -525,7 +525,7 @@ formatRelativeTime(record.updated_at)
 ## Toast Notifications
 
 ```tsx
-import { useToast, Toaster } from "@umesh0492/react-libs"
+import { useToast, Toaster } from "@abeta.dev/react-libs"
 
 // Add <Toaster /> once in App.tsx / root layout
 ```
@@ -553,7 +553,7 @@ toast({ title: "Low storage warning", description: "Only 3% capacity remaining."
 ## Skeleton Loading
 
 ```tsx
-import { Skeleton } from "@umesh0492/react-libs"
+import { Skeleton } from "@abeta.dev/react-libs"
 ```
 
 ```tsx
@@ -575,7 +575,7 @@ import { Skeleton } from "@umesh0492/react-libs"
 ## EmptyState
 
 ```tsx
-import { EmptyState, RoleEmptyState } from "@umesh0492/react-libs"
+import { EmptyState, RoleEmptyState } from "@abeta.dev/react-libs"
 ```
 
 ```tsx
@@ -603,7 +603,7 @@ import { EmptyState, RoleEmptyState } from "@umesh0492/react-libs"
 import {
   ChartContainer, ChartTooltip, ChartTooltipContent,
   ChartLegend, ChartLegendContent,
-} from "@umesh0492/react-libs"
+} from "@abeta.dev/react-libs"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts"
 ```
 
@@ -641,7 +641,7 @@ import {
   SidebarGroup, SidebarGroupLabel, SidebarGroupContent,
   SidebarMenu, SidebarMenuItem, SidebarMenuButton,
   SidebarProvider, SidebarTrigger, SidebarInset,
-} from "@umesh0492/react-libs"
+} from "@abeta.dev/react-libs"
 ```
 
 ```tsx
@@ -705,7 +705,7 @@ import {
 import {
   Pagination, PaginationContent, PaginationItem,
   PaginationNext, PaginationPrevious, PaginationButton,
-} from "@umesh0492/react-libs"
+} from "@abeta.dev/react-libs"
 ```
 
 ```tsx
@@ -733,7 +733,7 @@ import {
 ## Accordion
 
 ```tsx
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@umesh0492/react-libs"
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@abeta.dev/react-libs"
 ```
 
 ```tsx
@@ -760,7 +760,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@u
 ## Tabs
 
 ```tsx
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@umesh0492/react-libs"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@abeta.dev/react-libs"
 ```
 
 ```tsx
@@ -781,7 +781,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@umesh0492/react-libs"
 ## Tooltip
 
 ```tsx
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@umesh0492/react-libs"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@abeta.dev/react-libs"
 ```
 
 ```tsx
@@ -807,7 +807,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@umesh
 import {
   Breadcrumb, BreadcrumbList, BreadcrumbItem,
   BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage,
-} from "@umesh0492/react-libs"
+} from "@abeta.dev/react-libs"
 ```
 
 ```tsx
@@ -902,7 +902,7 @@ export function OrdersPage() {
 ## FileUpload
 
 ```tsx
-import { FileUpload, FileItem } from "@umesh0492/react-libs"
+import { FileUpload, FileItem } from "@abeta.dev/react-libs"
 import { useState } from "react"
 
 export function DocumentUpload() {
@@ -926,7 +926,7 @@ export function DocumentUpload() {
 ## MultiSelect
 
 ```tsx
-import { MultiSelect, Option } from "@umesh0492/react-libs"
+import { MultiSelect, Option } from "@abeta.dev/react-libs"
 import { useState } from "react"
 
 const tagOptions: Option[] = [
@@ -956,7 +956,7 @@ export function TagFilter() {
 ## Stepper
 
 ```tsx
-import { Stepper, StepItem } from "@umesh0492/react-libs"
+import { Stepper, StepItem } from "@abeta.dev/react-libs"
 import { useState } from "react"
 
 const onboardingSteps: StepItem[] = [
@@ -985,7 +985,7 @@ export function OnboardingFlow() {
 ## KPICard
 
 ```tsx
-import { KPICard } from "@umesh0492/react-libs"
+import { KPICard } from "@abeta.dev/react-libs"
 import { DollarSign, Users, ShoppingCart } from "lucide-react"
 
 export function DashboardMetrics() {
@@ -1023,7 +1023,7 @@ export function DashboardMetrics() {
 ## Timeline
 
 ```tsx
-import { Timeline, TimelineItem } from "@umesh0492/react-libs"
+import { Timeline, TimelineItem } from "@abeta.dev/react-libs"
 
 const orderEvents: TimelineItem[] = [
   {
@@ -1056,7 +1056,7 @@ export function OrderHistory() {
 ## CopyButton & Banner
 
 ```tsx
-import { Banner, CopyButton } from "@umesh0492/react-libs"
+import { Banner, CopyButton } from "@abeta.dev/react-libs"
 
 export function Announcement() {
   return (
@@ -1071,8 +1071,8 @@ export function Announcement() {
       </Banner>
 
       <div className="flex items-center gap-2 p-2 bg-muted rounded">
-        <code>npm install @umesh0492/react-libs</code>
-        <CopyButton value="npm install @umesh0492/react-libs" />
+        <code>npm install @abeta.dev/react-libs</code>
+        <CopyButton value="npm install @abeta.dev/react-libs" />
       </div>
     </div>
   )

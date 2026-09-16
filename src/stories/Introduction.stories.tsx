@@ -12,7 +12,7 @@ const meta = {
     docs: {
       description: {
         component:
-          '**@umesh0492/react-libs** — UI component library for web applications. ' +
+          '**@abeta.dev/react-libs** — UI component library for web applications. ' +
           '50+ accessible Tailwind UI components · Storybook 10 · Tailwind v4 · React 19',
       },
     },
@@ -211,7 +211,7 @@ function QuickLink({
 
 // ─── Main Story ────────────────────────────────────────────────────────────────
 
-/** Component directory and architecture guide for @umesh0492/react-lib. */
+/** Component directory and architecture guide for @abeta.dev/react-libs. */
 export const ComponentDirectory: Story = {
   render: () => (
     <div
@@ -237,10 +237,10 @@ export const ComponentDirectory: Story = {
         >
           <div style={{ marginBottom: 16 }}>
             <h1 style={{ margin: '0 0 6px', fontSize: 30, fontWeight: 800, letterSpacing: '-0.5px' }}>
-              @umesh0492/react-libs
+              @abeta.dev/react-libs
             </h1>
             <p style={{ margin: 0, fontSize: 15, color: '#6b7280' }}>
-              <strong style={{ color: '#111827' }}>@umesh0492/react-libs</strong> —
+              <strong style={{ color: '#111827' }}>@abeta.dev/react-libs</strong> —
               UI component library for web applications.
             </p>
           </div>
@@ -289,23 +289,23 @@ export const ComponentDirectory: Story = {
           </p>
 
           <div style={{ marginBottom: 16 }}>
-            <CodeBlock>{`npm install @umesh0492/react-libs`}</CodeBlock>
+            <CodeBlock>{`npm install @abeta.dev/react-libs`}</CodeBlock>
           </div>
 
           <div style={{ marginBottom: 16 }}>
             <p style={{ fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 8 }}>
               CSS — import once in your app root (e.g. index.css)
             </p>
-            <CodeBlock>{`@import "@umesh0492/react-libs/styles/theme.css";`}</CodeBlock>
+            <CodeBlock>{`@import "@abeta.dev/react-libs/styles/theme.css";`}</CodeBlock>
           </div>
 
           <div>
             <p style={{ fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 8 }}>
               Direct Imports — No bundler aliases needed
             </p>
-            <CodeBlock>{`import { Button, Dialog, Card } from '@umesh0492/react-libs';
-import { cn, formatCurrency } from '@umesh0492/react-libs/utils';
-import { initAnalytics } from '@umesh0492/react-libs/analytics';`}</CodeBlock>
+            <CodeBlock>{`import { Button, Dialog, Card } from '@abeta.dev/react-libs';
+import { cn, formatCurrency } from '@abeta.dev/react-libs/utils';
+import { initAnalytics } from '@abeta.dev/react-libs/analytics';`}</CodeBlock>
           </div>
         </div>
 
@@ -440,16 +440,16 @@ import {
   Spinner, EmptyState, RoleEmptyState,
   Calendar, DateRangePicker, LanguageToggle,
   ActiveFilterBadge, StatusBadge, useToast
-} from '@umesh0492/react-libs';
+} from '@abeta.dev/react-libs';
 
 // Pure Utilities & Formatters (Server/RSC Safe)
-import { cn, formatCurrency, formatDate, isValidEmail } from '@umesh0492/react-libs/utils';
+import { cn, formatCurrency, formatDate, isValidEmail } from '@abeta.dev/react-libs/utils';
 
 // Analytics Engine
-import { initAnalytics, trackEvent } from '@umesh0492/react-libs/analytics';
+import { initAnalytics, trackEvent } from '@abeta.dev/react-libs/analytics';
 
 // Client-Only PDF Viewer
-import { PdfViewer } from '@umesh0492/react-libs/pdf';`}</CodeBlock>
+import { PdfViewer } from '@abeta.dev/react-libs/pdf';`}</CodeBlock>
         </div>
 
         {/* ── Quick Links ── */}
@@ -477,13 +477,13 @@ import { PdfViewer } from '@umesh0492/react-libs/pdf';`}</CodeBlock>
               subtitle="Live P50/P95/P99 latency per component"
             />
             <QuickLink
-              href="https://github.com/umesh0492/react-lib"
+              href="https://github.com/abeta-dev/react-libs"
               icon="📖"
               label="GitHub Repository"
               subtitle="Source code, issues & releases"
             />
             <QuickLink
-              href="https://github.com/umesh0492/react-libs/releases"
+              href="https://github.com/abeta-dev/react-libs/releases"
               icon="🚀"
               label="Changelog"
               subtitle="Release notes & version history"

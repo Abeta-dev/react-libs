@@ -1,10 +1,10 @@
-# ADR 0006: Domain Subpath Isolation Architecture (`@umesh0492/react-libs/india`)
+# ADR 0006: Domain Subpath Isolation Architecture (`@abeta.dev/react-libs/india`)
 
 ## Status
 Accepted
 
 ## Context
-Early iterations of `@umesh0492/react-libs` bundled regional Indian business logic directly into root exports and generic utility files:
+Early iterations of `@abeta.dev/react-libs` bundled regional Indian business logic directly into root exports and generic utility files:
 - `src/lib/validators.ts` exported `validateGSTIN`, `validatePAN`, `validateIFSC`, `validateFSSAI`, `validatePincode`.
 - `src/lib/formatters.ts` defaulted currency formatting to Indian Rupee (`₹`, `en-IN`) and lakh/crore scale.
 - Components like `SalaryRangeDisplay` hardcoded `minLakhs` and `esopsLakhs`.
@@ -15,12 +15,12 @@ While valuable for Indian enterprise applications, baking regional assumptions i
 
 ## Decision
 We adopted **Option 1: Subpath Module Isolation** with a two-tier subpath structure:
-1. **Pure Domain Subpath (`@umesh0492/react-libs/india`)**:
+1. **Pure Domain Subpath (`@abeta.dev/react-libs/india`)**:
    - 100% pure TypeScript/JavaScript containing India compliance, taxation calculations, statutory validators, and regional datasets.
    - Built with zero directive/banner into `dist/india/index.js` (and CJS/DTS).
    - Zero React, DOM, or browser dependencies — 100% safe for React Server Components (RSC), Node.js, and Edge runtimes.
    - Preserved assets: `validators.ts`, `tax.ts`, `constants.ts`, `locations.ts`.
-2. **Interactive UI Subpath (`@umesh0492/react-libs/india/react`)**:
+2. **Interactive UI Subpath (`@abeta.dev/react-libs/india/react`)**:
    - Dedicated entry point for interactive React UI components targeting Indian finance workflows (`AmountSummaryCardIndia`).
    - Built with `'use client';` directive banner into `dist/india/react/index.js` (and CJS/DTS).
    - Safe for Next.js App Router client components while preventing server runtime leakage.
@@ -37,9 +37,9 @@ We adopted **Option 1: Subpath Module Isolation** with a two-tier subpath struct
 ## Consequences
 - **Positive**:
   - Global users get a clean, domain-neutral component library with zero unexpected regional defaults.
-  - Indian enterprise consumers retain complete, first-class access to GST/PAN/IFSC validation and tax splitting via `@umesh0492/react-libs/india`.
-  - Full RSC purity: `@umesh0492/react-libs/india` can be safely imported into Server Components and backend Node/Edge services without dragging in React or client directives.
-  - Interactive UI (`AmountSummaryCardIndia`) lives in `@umesh0492/react-libs/india/react` with clear `'use client'` demarcation.
-  - Zero bundle bloat: consumers importing `@umesh0492/react-libs` or `@umesh0492/react-libs/utils` never bundle Indian regional logic.
+  - Indian enterprise consumers retain complete, first-class access to GST/PAN/IFSC validation and tax splitting via `@abeta.dev/react-libs/india`.
+  - Full RSC purity: `@abeta.dev/react-libs/india` can be safely imported into Server Components and backend Node/Edge services without dragging in React or client directives.
+  - Interactive UI (`AmountSummaryCardIndia`) lives in `@abeta.dev/react-libs/india/react` with clear `'use client'` demarcation.
+  - Zero bundle bloat: consumers importing `@abeta.dev/react-libs` or `@abeta.dev/react-libs/utils` never bundle Indian regional logic.
 - **Negative**:
-  - Consumers using `AmountSummaryCardIndia` import from `@umesh0492/react-libs/india/react` instead of `@umesh0492/react-libs/india`.
+  - Consumers using `AmountSummaryCardIndia` import from `@abeta.dev/react-libs/india/react` instead of `@abeta.dev/react-libs/india`.

@@ -1,22 +1,57 @@
-# Migration Guide: Upgrading to v0.1.0
+# Migration Guide: Upgrading to v0.12.0
 
-This guide details architectural evolutions and migration steps for upgrading to `@umesh0492/react-libs` v0.1.0.
+This guide details architectural evolutions, security hardening, and migration steps for upgrading to `@abeta.dev/react-libs` v0.12.0.
+
+---
+
+## Upgrading to v0.12.0
+
+### 1. Package Rebrand to `@abeta.dev/react-libs`
+All packages, documentation, and repository URLs have been standardized to `@abeta.dev/react-libs` and `abeta.dev`:
+```bash
+npm install @abeta.dev/react-libs
+```
+
+### 2. Multi-Tenant Isolated Blob Storage Client
+`src/lib/blob-storage.ts` now provides `BlobStorageClient` and `createBlobStorageClient` to prevent cross-tenant SSR pollution:
+```tsx
+import { createBlobStorageClient, BlobStorageClient } from '@abeta.dev/react-libs';
+
+// Create isolated client instances per-request or per-tenant:
+const client = createBlobStorageClient({
+  apiBase: 'https://api.vendorportal.com',
+  token: tenantJwtToken,
+});
+const { url } = await client.uploadFile(file, 'invoices');
+```
+*Note: Top-level helper functions (`uploadFileToStorage`, `downloadFileFromStorage`, `fetchBlobStorageConfig`, etc.) remain fully supported for backward compatibility.*
+
+### 3. Chart CSS Security Sanitization
+`ChartStyle` in `src/components/ui/data-display/chart.tsx` now sanitizes chart IDs, CSS custom property keys, and theme colors. If you pass dynamic colors from untrusted user inputs, use `sanitizeCssColor`:
+```tsx
+import { sanitizeCssColor } from '@abeta.dev/react-libs';
+
+const safeColor = sanitizeCssColor(untrustedUserColorInput);
+```
+
+### 4. AnalyticsQueue SPA Lifecycle Cleanup
+`AnalyticsQueue.destroy()` now cleans up all bound event listeners on `window` and `document` (`online`, `pagehide`, `beforeunload`, `visibilitychange`), preventing SPA memory leaks across unmounts.
 
 ---
 
 ## Overview of Architectural Changes
 
-In v0.1.0, `@umesh0492/react-libs` achieves full domain neutralization, minimal bundle footprint, and strict React Server Components (RSC) purity:
-1. **Dedicated Domain Subpath**: Indian regional and compliance logic has been moved from root and `/utils` into a dedicated subpath: `@umesh0492/react-libs/india`.
-2. **Pure RSC `/utils`**: The `@umesh0492/react-libs/utils` entry point exports pure utilities with zero DOM, browser, or React dependencies.
-3. **Pure Analytics Engine vs Client React Subpath**: `@umesh0492/react-libs/analytics` exports the pure headless engine, queue, and adapters (zero React hooks, zero directives, RSC-safe). React components and hooks (`AnalyticsProvider`, `useAnalytics`, `TrackArea`, `PageViewTracker`) are isolated in `@umesh0492/react-libs/analytics/react` with a `'use client'` boundary.
+In v0.1.0, `@abeta.dev/react-libs` achieves full domain neutralization, minimal bundle footprint, and strict React Server Components (RSC) purity:
+1. **Dedicated Domain Subpath**: Indian regional and compliance logic has been moved from root and `/utils` into a dedicated subpath: `@abeta.dev/react-libs/india`.
+2. **Pure RSC `/utils`**: The `@abeta.dev/react-libs/utils` entry point exports pure utilities with zero DOM, browser, or React dependencies.
+3. **Pure Analytics Engine vs Client React Subpath**: `@abeta.dev/react-libs/analytics` exports the pure headless engine, queue, and adapters (zero React hooks, zero directives, RSC-safe). React components and hooks (`AnalyticsProvider`, `useAnalytics`, `TrackArea`, `PageViewTracker`) are isolated in `@abeta.dev/react-libs/analytics/react` with a `'use client'` boundary.
 4. **Optional Peer Dependencies**: Heavy libraries (`recharts`, `react-pdf`, `xlsx`, `jspdf`, `canvas-confetti`, etc.) are declared as optional peer dependencies.
 
 ---
 
 ## 1. Indian Domain & Compliance Logic Migration
 
-All Indian-specific validators, tax calculations, and regional constants are isolated in `@umesh0492/react-libs/india`.
+All Indian-specific validators, tax calculations, and regional constants are isolated in `@abeta.dev/react-libs/india`.
 
 ### Before (pre-0.1.0):
 ```tsx
@@ -29,9 +64,9 @@ import {
   validatePincode, 
   INDIA_STATES, 
   INDIA_CITIES 
-} from '@umesh0492/react-libs';
+} from '@abeta.dev/react-libs';
 // or
-import { validateGSTIN } from '@umesh0492/react-libs/utils';
+import { validateGSTIN } from '@abeta.dev/react-libs/utils';
 ```
 
 ### After (v0.1.0):
@@ -50,26 +85,26 @@ import {
   INDIAN_LANGUAGES,
   formatLakhs,
   formatCrores
-} from '@umesh0492/react-libs/india';
+} from '@abeta.dev/react-libs/india';
 
 // 2. Interactive React UI components ('use client' bounded):
-import { AmountSummaryCardIndia } from '@umesh0492/react-libs/india/react';
+import { AmountSummaryCardIndia } from '@abeta.dev/react-libs/india/react';
 ```
 
 ---
 
-## 2. Purity of `@umesh0492/react-libs/utils`
+## 2. Purity of `@abeta.dev/react-libs/utils`
 
-`@umesh0492/react-libs/utils` is now strictly server-safe and contains zero browser DOM references (`window`, `document`, `Blob`).
+`@abeta.dev/react-libs/utils` is now strictly server-safe and contains zero browser DOM references (`window`, `document`, `Blob`).
 
-- If your application imported `downloadFileSecurely` or `exportData` from `@umesh0492/react-libs/utils`, update the import to root `@umesh0492/react-libs`:
+- If your application imported `downloadFileSecurely` or `exportData` from `@abeta.dev/react-libs/utils`, update the import to root `@abeta.dev/react-libs`:
 
 ```tsx
 // Before (pre-0.1.0)
-import { downloadFileSecurely, exportData } from '@umesh0492/react-libs/utils';
+import { downloadFileSecurely, exportData } from '@abeta.dev/react-libs/utils';
 
 // After (v0.1.0)
-import { downloadFileSecurely, exportData } from '@umesh0492/react-libs';
+import { downloadFileSecurely, exportData } from '@abeta.dev/react-libs';
 ```
 
 ---
@@ -78,16 +113,16 @@ import { downloadFileSecurely, exportData } from '@umesh0492/react-libs';
 
 Analytics functionality is cleanly partitioned between pure headless telemetry and React bindings:
 
-- **Server-Safe Telemetry Engine (`@umesh0492/react-libs/analytics`)**:
+- **Server-Safe Telemetry Engine (`@abeta.dev/react-libs/analytics`)**:
   Contains zero React code and zero `"use client"` directives. Completely safe to import in RSC, background tasks, or server runtimes.
   ```tsx
-  import { createAnalyticsEngine, ConsoleAdapter, HttpAdapter } from '@umesh0492/react-libs/analytics';
+  import { createAnalyticsEngine, ConsoleAdapter, HttpAdapter } from '@abeta.dev/react-libs/analytics';
   ```
 
-- **React Client Context & Hooks (`@umesh0492/react-libs/analytics/react`)**:
+- **React Client Context & Hooks (`@abeta.dev/react-libs/analytics/react`)**:
   Contains `"use client"` bounded provider, hooks, and tracker components.
   ```tsx
-  import { AnalyticsProvider, useAnalytics, TrackArea, PageViewTracker } from '@umesh0492/react-libs/analytics/react';
+  import { AnalyticsProvider, useAnalytics, TrackArea, PageViewTracker } from '@abeta.dev/react-libs/analytics/react';
   ```
 
 ---
@@ -101,7 +136,7 @@ If you use any of the following features, ensure the corresponding peer package 
 | Feature / Component | Required Peer Dependency | Installation Command |
 |---|---|---|
 | `ChartContainer`, `ChartTooltip`, `ChartLegend` | `recharts` | `npm i recharts` |
-| `PdfViewer` (`@umesh0492/react-libs/pdf`) | `react-pdf` | `npm i react-pdf` |
+| `PdfViewer` (`@abeta.dev/react-libs/pdf`) | `react-pdf` | `npm i react-pdf` |
 | Export to Excel (`exportData({ format: 'xlsx' })`) | `xlsx` | `npm i xlsx` |
 | Export to PDF (`exportData({ format: 'pdf' })`) | `jspdf`, `jspdf-autotable` | `npm i jspdf jspdf-autotable` |
 | Confetti interactions (`SuccessMicroInteraction`) | `canvas-confetti` | `npm i canvas-confetti @types/canvas-confetti` |
@@ -137,9 +172,9 @@ The card now accepts dynamic, configurable tax breakdowns rather than hardcoded 
 />
 ```
 
-> **Tip for India GST apps**: Use `AmountSummaryCardIndia` from `@umesh0492/react-libs/india/react` which automatically formats GST splits:
+> **Tip for India GST apps**: Use `AmountSummaryCardIndia` from `@abeta.dev/react-libs/india/react` which automatically formats GST splits:
 > ```tsx
-> import { AmountSummaryCardIndia } from '@umesh0492/react-libs/india/react';
+> import { AmountSummaryCardIndia } from '@abeta.dev/react-libs/india/react';
 > ```
 
 ### `SalaryRangeDisplay`
@@ -173,16 +208,16 @@ Deprecated `minLakhs`, `fixedLakhs`, and `esopsLakhs` props have been replaced w
 
 `v0.9.0` is 100% backward-compatible with `v0.8.0` and introduces dedicated entry points and layer ordering presets:
 
-### 1. Isolated `DataTable` Subpath (`@umesh0492/react-libs/data-table`)
+### 1. Isolated `DataTable` Subpath (`@abeta.dev/react-libs/data-table`)
 
 Consumers with strict bundle budgets can now import `DataTable` from its standalone subpath to isolate `@tanstack/react-table` from lighter pages:
 
 ```tsx
 // Backward compatible (still supported):
-import { DataTable } from "@umesh0492/react-libs";
+import { DataTable } from "@abeta.dev/react-libs";
 
 // Recommended for micro-bundle budgets / data dashboards:
-import { DataTable } from "@umesh0492/react-libs/data-table";
+import { DataTable } from "@abeta.dev/react-libs/data-table";
 ```
 
 ### 2. Standard Cascade Layer Ordering Preset
@@ -202,22 +237,22 @@ If using custom cascade layers, import or declare the standard layer sequence pr
 ### 1. Isolated Subpaths for Heavy Peers
 
 Consumers can import heavy primitives from dedicated standalone entry points:
-- `@umesh0492/react-libs/charts` (isolates `recharts`)
-- `@umesh0492/react-libs/command` (isolates `cmdk`)
-- `@umesh0492/react-libs/drawer` (isolates `vaul`)
-- `@umesh0492/react-libs/carousel` (isolates `embla-carousel-react`)
-- `@umesh0492/react-libs/calendar` (isolates `react-day-picker`)
-- `@umesh0492/react-libs/date-picker` (isolates `react-day-picker` and `date-fns`)
-- `@umesh0492/react-libs/form` (isolates `react-hook-form`)
+- `@abeta.dev/react-libs/charts` (isolates `recharts`)
+- `@abeta.dev/react-libs/command` (isolates `cmdk`)
+- `@abeta.dev/react-libs/drawer` (isolates `vaul`)
+- `@abeta.dev/react-libs/carousel` (isolates `embla-carousel-react`)
+- `@abeta.dev/react-libs/calendar` (isolates `react-day-picker`)
+- `@abeta.dev/react-libs/date-picker` (isolates `react-day-picker` and `date-fns`)
+- `@abeta.dev/react-libs/form` (isolates `react-hook-form`)
 
 ```tsx
 // Backward compatible:
-import { Calendar, ChartContainer, Drawer } from "@umesh0492/react-libs";
+import { Calendar, ChartContainer, Drawer } from "@abeta.dev/react-libs";
 
 // Recommended for minimal bundle footprints:
-import { Calendar } from "@umesh0492/react-libs/calendar";
-import { ChartContainer } from "@umesh0492/react-libs/charts";
-import { Drawer } from "@umesh0492/react-libs/drawer";
+import { Calendar } from "@abeta.dev/react-libs/calendar";
+import { ChartContainer } from "@abeta.dev/react-libs/charts";
+import { Drawer } from "@abeta.dev/react-libs/drawer";
 ```
 
 ### 2. Accessibility & Reduced Motion Compliance

@@ -11,8 +11,8 @@ With the proliferation of Next.js App Router, Remix, and React Server Components
 
 ## Decision
 1. **Strict RSC Subpath Separation**:
-   - The subpath `@umesh0492/react-libs/utils` is verified to be 100% server-safe. It contains zero React dependencies, zero hooks, and zero DOM API access.
-   - Browser-dependent file export functions (`downloadFileSecurely`, `exportData`) are exported exclusively from the root entry (`@umesh0492/react-libs`), leaving `/utils` pure for Edge/Node usage.
+   - The subpath `@abeta.dev/react-libs/utils` is verified to be 100% server-safe. It contains zero React dependencies, zero hooks, and zero DOM API access.
+   - Browser-dependent file export functions (`downloadFileSecurely`, `exportData`) are exported exclusively from the root entry (`@abeta.dev/react-libs`), leaving `/utils` pure for Edge/Node usage.
 2. **`"use client";` Banner & Per-File Enforcement**:
    - Every interactive UI component and hook (`use-toast`, `use-mobile`, `use-debounce`, `use-local-storage`) includes `"use client";` at line 1.
    - `tsup.config.ts` preserves directives across emitted ESM and CJS bundles.

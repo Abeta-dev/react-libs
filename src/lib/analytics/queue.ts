@@ -40,24 +40,29 @@ export class AnalyticsQueue {
     }, this.flushIntervalMs);
   }
 
+  private handleOnline = (): void => {
+    this.flush().catch((err) => this.onError?.(err));
+  };
+
+  private handleUnload = (): void => {
+    this.persistMemoryQueueToStorage();
+  };
+
+  private handleVisibilityChange = (): void => {
+    if (typeof document !== "undefined" && document.visibilityState === "hidden") {
+      this.flush().catch((err) => this.onError?.(err));
+    }
+  };
+
   private registerLifecycleListeners(): void {
     if (typeof window === "undefined") return;
 
-    window.addEventListener("online", () => {
-      this.flush().catch((err) => this.onError?.(err));
-    });
-
-    const handleUnload = () => {
-      this.persistMemoryQueueToStorage();
-    };
-
-    window.addEventListener("pagehide", handleUnload);
-    window.addEventListener("beforeunload", handleUnload);
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "hidden") {
-        this.flush().catch((err) => this.onError?.(err));
-      }
-    });
+    window.addEventListener("online", this.handleOnline);
+    window.addEventListener("pagehide", this.handleUnload);
+    window.addEventListener("beforeunload", this.handleUnload);
+    if (typeof document !== "undefined") {
+      document.addEventListener("visibilitychange", this.handleVisibilityChange);
+    }
   }
 
   public enqueue(event: AnalyticsEvent): void {
@@ -172,6 +177,14 @@ export class AnalyticsQueue {
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
       this.flushTimer = null;
+    }
+    if (typeof window !== "undefined") {
+      window.removeEventListener("online", this.handleOnline);
+      window.removeEventListener("pagehide", this.handleUnload);
+      window.removeEventListener("beforeunload", this.handleUnload);
+    }
+    if (typeof document !== "undefined") {
+      document.removeEventListener("visibilitychange", this.handleVisibilityChange);
     }
     this.persistMemoryQueueToStorage();
   }

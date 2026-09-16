@@ -7,6 +7,8 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
+  ChartStyle,
+  sanitizeCssColor,
 } from '../chart';
 import {
   Bar, BarChart, Line, LineChart,
@@ -334,3 +336,162 @@ describe('ChartContainer — id and CSS variable injection', () => {
     spy.mockRestore();
   });
 });
+
+describe('sanitizeCssColor', () => {
+  it('strips </style> and HTML tags to prevent XSS breakout', () => {
+    const malicious = '</style><script>alert(1)</script>';
+    const sanitized = sanitizeCssColor(malicious);
+    expect(sanitized).not.toContain('</style');
+    expect(sanitized).not.toContain('<');
+    expect(sanitized).not.toContain('>');
+    expect(sanitized).toBe('scriptalert(1)/script');
+  });
+
+  it('strips case-insensitive </STYLE> tags', () => {
+    const malicious = '</STYLE><script>alert(1)</script>';
+    const sanitized = sanitizeCssColor(malicious);
+    expect(sanitized).not.toContain('</STYLE');
+    expect(sanitized).not.toContain('</style');
+    expect(sanitized).toBe('scriptalert(1)/script');
+  });
+
+  it('strips CSS breakout characters like brackets and semicolons', () => {
+    const malicious = 'red; } body { display:none; }';
+    const sanitized = sanitizeCssColor(malicious);
+    expect(sanitized).not.toContain(';');
+    expect(sanitized).not.toContain('}');
+    expect(sanitized).not.toContain('{');
+    expect(sanitized).toBe('red  body  display:none');
+  });
+
+  it('strips ASCII and Unicode control characters and newlines', () => {
+    const withControl = 'blue\u0000\u001f\u007f\n\r\t';
+    expect(sanitizeCssColor(withControl)).toBe('blue');
+
+    const controlEvasion = '<\u0000/style>';
+    expect(sanitizeCssColor(controlEvasion)).toBe('');
+  });
+
+  it('preserves valid hex color codes', () => {
+    expect(sanitizeCssColor('#fff')).toBe('#fff');
+    expect(sanitizeCssColor('#ffffff')).toBe('#ffffff');
+    expect(sanitizeCssColor('#4f46e5')).toBe('#4f46e5');
+    expect(sanitizeCssColor('#12345678')).toBe('#12345678');
+  });
+
+  it('preserves valid rgb and rgba colors', () => {
+    expect(sanitizeCssColor('rgb(255, 0, 0)')).toBe('rgb(255, 0, 0)');
+    expect(sanitizeCssColor('rgba(255, 0, 0, 0.5)')).toBe('rgba(255, 0, 0, 0.5)');
+  });
+
+  it('preserves valid hsl and hsla colors', () => {
+    expect(sanitizeCssColor('hsl(120, 50%, 50%)')).toBe('hsl(120, 50%, 50%)');
+    expect(sanitizeCssColor('hsla(120, 50%, 50%, 0.8)')).toBe('hsla(120, 50%, 50%, 0.8)');
+  });
+
+  it('preserves valid CSS variables', () => {
+    expect(sanitizeCssColor('var(--chart-1)')).toBe('var(--chart-1)');
+    expect(sanitizeCssColor('var(--chart-2, #f00)')).toBe('var(--chart-2, #f00)');
+  });
+
+  it('preserves modern CSS colors and keywords', () => {
+    expect(sanitizeCssColor('oklch(0.6 0.25 140)')).toBe('oklch(0.6 0.25 140)');
+    expect(sanitizeCssColor('transparent')).toBe('transparent');
+    expect(sanitizeCssColor('currentColor')).toBe('currentColor');
+  });
+
+  it('handles non-string or empty input safely', () => {
+    expect(sanitizeCssColor(null)).toBe('');
+    expect(sanitizeCssColor(undefined)).toBe('');
+    expect(sanitizeCssColor(123)).toBe('');
+    expect(sanitizeCssColor({})).toBe('');
+    expect(sanitizeCssColor('')).toBe('');
+  });
+});
+
+describe('ChartContainer and ChartStyle — security sanitization', () => {
+  it('sanitizes malicious color values in rendered <style> tag', () => {
+    const maliciousConfig = {
+      malicious: { label: 'Malicious', color: '</style><script>alert(1)</script>' },
+      breakout: { label: 'Breakout', color: 'red; } body { display:none; }' },
+      valid: { label: 'Valid', color: '#4f46e5' },
+      cssVar: { label: 'Var', color: 'var(--chart-1)' },
+    };
+
+    const { container } = render(
+      <ChartContainer config={maliciousConfig} id="safe-chart">
+        <BarChart data={barData}><Bar dataKey="valid" /></BarChart>
+      </ChartContainer>
+    );
+
+    const styleTag = container.querySelector('style');
+    const css = styleTag?.textContent || '';
+
+    expect(css).not.toContain('</style');
+    expect(css).not.toContain('<script');
+    expect(css).not.toContain('body {');
+    expect(css).not.toContain('red;');
+    expect(css).toContain('--color-malicious: scriptalert(1)/script;');
+    expect(css).toContain('--color-breakout: red  body  display:none;');
+    expect(css).toContain('--color-valid: #4f46e5;');
+    expect(css).toContain('--color-cssVar: var(--chart-1);');
+  });
+
+  it('sanitizes config keys in CSS custom property names to only allow [a-zA-Z0-9_-]', () => {
+    const keyInjectionConfig = {
+      'evil; } body { color: red; }': { color: '#ff0000' },
+      'safe-key_1': { color: '#00ff00' },
+      'bad$key@name': { color: '#0000ff' },
+      '!@#$%': { color: '#ffff00' },
+    };
+
+    const { container } = render(<ChartStyle id="test-chart" config={keyInjectionConfig} />);
+    const css = container.querySelector('style')?.textContent || '';
+
+    expect(css).toContain('--color-evilbodycolorred: #ff0000;');
+    expect(css).toContain('--color-safe-key_1: #00ff00;');
+    expect(css).toContain('--color-badkeyname: #0000ff;');
+    expect(css).not.toContain('--color-:');
+    expect(css).not.toContain('body { color: red; }');
+  });
+
+  it('sanitizes chart id in ChartContainer and ChartStyle to only allow [a-zA-Z0-9_-]', () => {
+    const { container } = render(
+      <ChartContainer config={mockConfig} id='my"}] { color: red; }'>
+        <BarChart data={barData}><Bar dataKey="sales" /></BarChart>
+      </ChartContainer>
+    );
+
+    expect(container.querySelector('[data-chart="chart-mycolorred"]')).toBeInTheDocument();
+    const css = container.querySelector('style')?.textContent || '';
+    expect(css).toContain('[data-chart=chart-mycolorred]');
+    expect(css).not.toContain('color: red; }');
+  });
+
+  it('sanitizes standalone ChartStyle id and themed color values', () => {
+    const themeConfig = {
+      themed: {
+        theme: {
+          light: 'red; } body { color: red; }',
+          dark: '</style><script>alert(1)</script>',
+        },
+      },
+    };
+
+    const { container } = render(<ChartStyle id="direct-id</style>" config={themeConfig} />);
+    const style = container.querySelector('style');
+    const css = style?.textContent || '';
+
+    expect(css).toContain('[data-chart=direct-idstyle]');
+    expect(css).not.toContain('</style');
+    expect(css).not.toContain('<script');
+    expect(css).toContain('--color-themed: red  body  color: red;');
+    expect(css).toContain('--color-themed: scriptalert(1)/script;');
+  });
+
+  it('returns null when ChartStyle id has no valid characters', () => {
+    const { container } = render(<ChartStyle id="!@#$%" config={mockConfig} />);
+    expect(container.querySelector('style')).toBeNull();
+  });
+});
+

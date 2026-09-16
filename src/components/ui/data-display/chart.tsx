@@ -41,12 +41,35 @@ export type ChartContainerProps = Omit<React.ComponentProps<"div">, "onError"> &
   onError?: ((error: Error, errorInfo: React.ErrorInfo) => void) | undefined
 }
 
+/**
+ * Sanitizes a CSS color value by stripping dangerous sequences:
+ * </style, <, >, {, }, ;, and control characters.
+ */
+function sanitizeCssColor(value: unknown): string {
+  if (typeof value !== "string") {
+    return ""
+  }
+
+  return (
+    value
+      // Strip ASCII and Latin-1 control characters first to prevent evasion
+      // eslint-disable-next-line no-control-regex
+      .replace(/[\x00-\x1F\x7F-\x9F]/g, "")
+      // Strip </style (case-insensitive)
+      .replace(/<\/style/gi, "")
+      // Strip HTML tags and CSS block delimiters / statement terminators
+      .replace(/[<>{};]/g, "")
+      .trim()
+  )
+}
+
 const ChartContainer = React.forwardRef<
   HTMLDivElement,
   ChartContainerProps
 >(({ id, className, children, config, fallback, onError, ...props }, ref) => {
   const uniqueId = React.useId()
-  const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`
+  const rawChartId = `chart-${id || uniqueId.replace(/:/g, "")}`
+  const chartId = rawChartId.replace(/[^a-zA-Z0-9_-]/g, "")
   const contextValue = React.useMemo(() => ({ config }), [config])
 
   return (
@@ -78,6 +101,11 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     return null
   }
 
+  const safeId = typeof id === "string" ? id.replace(/[^a-zA-Z0-9_-]/g, "") : ""
+  if (!safeId) {
+    return null
+  }
+
   const colorConfig = Object.entries(config).filter(
     ([, itemConfig]) =>
       Boolean(itemConfig && (("theme" in itemConfig && itemConfig.theme) || ("color" in itemConfig && itemConfig.color)))
@@ -93,15 +121,20 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
         __html: Object.entries(THEMES)
           .map(
             ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
+${prefix} [data-chart=${safeId}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
+    const safeKey = typeof key === "string" ? key.replace(/[^a-zA-Z0-9_-]/g, "") : ""
+    if (!safeKey) {
+      return null
+    }
     const color =
       ("theme" in itemConfig && itemConfig.theme
         ? // eslint-disable-next-line security/detect-object-injection
           (itemConfig.theme as Record<string, string>)[theme]
         : undefined) || ("color" in itemConfig ? itemConfig.color : undefined)
-    return color ? `  --color-${key}: ${color};` : null
+    const safeColor = color ? sanitizeCssColor(color) : ""
+    return safeColor ? `  --color-${safeKey}: ${safeColor};` : null
   })
   .filter(Boolean)
   .join("\n")}
@@ -415,4 +448,5 @@ export {
   ChartLegend,
   ChartLegendContent,
   ChartStyle,
+  sanitizeCssColor,
 }

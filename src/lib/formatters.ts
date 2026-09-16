@@ -1,5 +1,5 @@
 /**
- * @umesh0492/react-libs — Shared Formatters
+ * @abeta.dev/react-libs — Shared Formatters
  *
  * Consistent formatting utilities for currency, dates, weights, sizes, and times.
  * Use these instead of inline `toLocaleString` or manual format strings.

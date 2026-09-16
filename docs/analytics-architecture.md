@@ -1,6 +1,6 @@
 # Behavioral Analytics Layer Architecture Specification
 
-**Package**: `@umesh0492/react-libs/analytics`  
+**Package**: `@abeta.dev/react-libs/analytics`  
 **Status**: Approved (Brainstorming Complete)  
 **Target React Version**: React 19+  
 
@@ -8,9 +8,9 @@
 
 ## 1. Understanding Summary
 
-* **What is being built**: A zero-effort, pluggable Behavioral Analytics Engine for `@umesh0492/react-libs` with automatic DOM event delegation, page & component UUID generation, resilient batching queue, offline `localStorage` fallback, and an Adapter pattern for destinations.
+* **What is being built**: A zero-effort, pluggable Behavioral Analytics Engine for `@abeta.dev/react-libs` with automatic DOM event delegation, page & component UUID generation, resilient batching queue, offline `localStorage` fallback, and an Adapter pattern for destinations.
 * **Why it exists**: To enable organizations and developers to track user interactions, component click frequency, page visits, and funnel drop-offs automatically without having to write manual tracking boilerplate in every component.
-* **Who it is for**: Developers, product managers, and growth engineers building enterprise applications with `@umesh0492/react-libs`.
+* **Who it is for**: Developers, product managers, and growth engineers building enterprise applications with `@abeta.dev/react-libs`.
 * **Key constraints**:
   * Strict React 19 Concurrent Mode safety (pure rendering, no render-time side effects).
   * Zero heavy external dependencies (adapters bridge to existing browser globals or standard HTTP).
@@ -100,7 +100,7 @@ export interface AnalyticsEvent {
 ## 6. Developer Usage Example
 
 ```tsx
-import { initAnalytics, HttpAdapter, MixpanelAdapter, ConsoleAdapter } from "@umesh0492/react-libs/analytics";
+import { initAnalytics, HttpAdapter, MixpanelAdapter, ConsoleAdapter } from "@abeta.dev/react-libs/analytics";
 
 // Initialize once at app root (e.g., main.tsx or App.tsx)
 initAnalytics({

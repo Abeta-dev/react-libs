@@ -1,5 +1,5 @@
 /**
- * @umesh0492/react-libs — Export Utilities
+ * @abeta.dev/react-libs — Export Utilities
  *
  * Client-side CSV, XLSX, and PDF export from in-memory data arrays.
  * Framework-agnostic — no React dependencies.

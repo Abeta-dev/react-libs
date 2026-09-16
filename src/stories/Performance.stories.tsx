@@ -195,7 +195,7 @@ function PerformanceDashboard() {
               ⚡ Test Performance Dashboard
             </h1>
             <p style={{ margin: "6px 0 0", fontSize: 13, color: "#6b7280" }}>
-              @umesh0492/react-libs · Generated {data.generatedAt}
+              @abeta.dev/react-libs · Generated {data.generatedAt}
             </p>
           </div>
           <div
@@ -661,7 +661,7 @@ const meta = {
     docs: {
       description: {
         component: `
-**Live performance dashboard** for \`@umesh0492/react-lib\`.
+**Live performance dashboard** for \`@abeta.dev/react-libs\`.
 
 Shows per-component P50/P95/P99 latency, pass/fail counts, and slowest tests from the last \`npm run perf\` run.
 

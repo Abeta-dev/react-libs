@@ -1,7 +1,7 @@
 # Enterprise Application Integration Recipe
 ## Complete Architecture: Root Bootstrap, Cascading Theming, Behavioral Analytics & Composite Workflows
 
-This production recipe demonstrates how to integrate `@umesh0492/react-libs` into an enterprise-grade web application (such as Next.js 15 App Router or React 19 Single Page Applications). It covers everything from global CSS layer configuration to behavioral analytics, multi-brand theming, and an end-to-end composite feature page.
+This production recipe demonstrates how to integrate `@abeta.dev/react-libs` into an enterprise-grade web application (such as Next.js 15 App Router or React 19 Single Page Applications). It covers everything from global CSS layer configuration to behavioral analytics, multi-brand theming, and an end-to-end composite feature page.
 
 ---
 
@@ -28,7 +28,7 @@ This production recipe demonstrates how to integrate `@umesh0492/react-libs` int
 
 ## 1. Architectural Overview
 
-`@umesh0492/react-libs` is structured into clean architectural boundaries to prevent bundling overhead, eliminate CSS specificity conflicts, and ensure high-throughput execution across both client and server runtimes:
+`@abeta.dev/react-libs` is structured into clean architectural boundaries to prevent bundling overhead, eliminate CSS specificity conflicts, and ensure high-throughput execution across both client and server runtimes:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -64,12 +64,12 @@ This production recipe demonstrates how to integrate `@umesh0492/react-libs` int
 
 | Import Path | Runtime | Purpose & Responsibility |
 |---|---|---|
-| `@umesh0492/react-libs` | Universal / Client | Core design primitives, forms, layout, overlays, feedback, and data-display components. |
-| `@umesh0492/react-libs/style.css` | CSS | Complete pre-built design token definitions and component styles wrapped in `@layer react-libs`. |
-| `@umesh0492/react-libs/analytics` | Pure TypeScript | Engine core, queue buffer, DOM event delegation, and destination adapters (`HttpAdapter`, `ConsoleAdapter`). |
-| `@umesh0492/react-libs/analytics/react` | React 19 Client | React bindings: `AnalyticsProvider`, `useAnalytics()`, `TrackArea`, and `PageViewTracker`. |
-| `@umesh0492/react-libs/india` | Pure TypeScript | Pure statutory compliance functions: GST calculators, TDS splitters, PAN/GSTIN/IFSC validators. Zero DOM/React deps. |
-| `@umesh0492/react-libs/india/react` | React 19 Client | Specialized Indian enterprise UI components (`AmountSummaryCardIndia`). |
+| `@abeta.dev/react-libs` | Universal / Client | Core design primitives, forms, layout, overlays, feedback, and data-display components. |
+| `@abeta.dev/react-libs/style.css` | CSS | Complete pre-built design token definitions and component styles wrapped in `@layer react-libs`. |
+| `@abeta.dev/react-libs/analytics` | Pure TypeScript | Engine core, queue buffer, DOM event delegation, and destination adapters (`HttpAdapter`, `ConsoleAdapter`). |
+| `@abeta.dev/react-libs/analytics/react` | React 19 Client | React bindings: `AnalyticsProvider`, `useAnalytics()`, `TrackArea`, and `PageViewTracker`. |
+| `@abeta.dev/react-libs/india` | Pure TypeScript | Pure statutory compliance functions: GST calculators, TDS splitters, PAN/GSTIN/IFSC validators. Zero DOM/React deps. |
+| `@abeta.dev/react-libs/india/react` | React 19 Client | Specialized Indian enterprise UI components (`AmountSummaryCardIndia`). |
 
 ---
 
@@ -79,7 +79,7 @@ The root layout mounts global styling, provides the analytics engine with queue 
 
 ### CSS Layering & Tailwind v4 Integration
 
-`@umesh0492/react-libs/style.css` is encapsulated inside `@layer react-libs`. This ensures:
+`@abeta.dev/react-libs/style.css` is encapsulated inside `@layer react-libs`. This ensures:
 1. All component styles and CSS variables load deterministically.
 2. Your application-level Tailwind v4 utilities can override any component class without requiring `!important`.
 3. Multi-brand CSS variables are fully inherited by nested DOM trees.
@@ -88,7 +88,7 @@ In your application root CSS file (e.g., `src/index.css` or `app/globals.css`):
 
 ```css
 @import "tailwindcss";
-@import "@umesh0492/react-libs/style.css";
+@import "@abeta.dev/react-libs/style.css";
 
 /* Optional custom application overrides live in standard cascade layers */
 @layer utilities {
@@ -107,13 +107,13 @@ The behavioral analytics layer provides automatic DOM interaction capture, unhan
 "use client";
 
 import * as React from "react";
-import { AnalyticsProvider } from "@umesh0492/react-libs/analytics/react";
+import { AnalyticsProvider } from "@abeta.dev/react-libs/analytics/react";
 import {
   HttpAdapter,
   ConsoleAdapter,
   type AnalyticsConfig,
-} from "@umesh0492/react-libs/analytics";
-import { Toaster, SonnerToaster } from "@umesh0492/react-libs";
+} from "@abeta.dev/react-libs/analytics";
+import { Toaster, SonnerToaster } from "@abeta.dev/react-libs";
 
 interface AppProvidersProps {
   children: React.ReactNode;
@@ -176,7 +176,7 @@ In your root layout (`app/layout.tsx` or `src/App.tsx`):
 
 ```tsx
 // app/layout.tsx
-import "@umesh0492/react-libs/style.css";
+import "@abeta.dev/react-libs/style.css";
 import "./globals.css";
 import { AppProviders } from "./providers";
 
@@ -215,7 +215,7 @@ Dark mode is activated simply by adding the `.dark` class to the `<html>` or roo
 
 ```tsx
 // Example theme toggle button
-import { Button } from "@umesh0492/react-libs";
+import { Button } from "@abeta.dev/react-libs";
 
 export function ThemeToggle() {
   const toggleDark = () => {
@@ -232,7 +232,7 @@ export function ThemeToggle() {
 
 ### Multi-Tenant / Multi-Brand Container Scoping (`.theme-orange`)
 
-Enterprise platforms frequently host sub-brands or co-branded partner workspaces. Rather than rebuilding styles or mounting multiple CSS stylesheets, `@umesh0492/react-libs` uses **CSS Variable Container Scoping**.
+Enterprise platforms frequently host sub-brands or co-branded partner workspaces. Rather than rebuilding styles or mounting multiple CSS stylesheets, `@abeta.dev/react-libs` uses **CSS Variable Container Scoping**.
 
 By applying `.theme-orange` (or creating a custom `.theme-[name]` class) to any container element, all descendant primitives (`Button`, `Badge`, `DataTable` highlights, `AmountSummaryCardIndia`) immediately inherit the accent palette:
 
@@ -273,7 +273,7 @@ Mount `<PageViewTracker />` inside feature views or router layouts to emit canon
 ```tsx
 "use client";
 
-import { PageViewTracker } from "@umesh0492/react-libs/analytics/react";
+import { PageViewTracker } from "@abeta.dev/react-libs/analytics/react";
 
 export function InvoiceRouteHeader() {
   return (
@@ -294,8 +294,8 @@ export function InvoiceRouteHeader() {
 To understand user drop-offs within complex workflows, wrap sections in `<TrackArea>`. The global `DomTracker` delegates click and change events, automatically attributing the parent `area` or `journey` and contextual metadata to every button or input interaction:
 
 ```tsx
-import { TrackArea } from "@umesh0492/react-libs/analytics/react";
-import { Button } from "@umesh0492/react-libs";
+import { TrackArea } from "@abeta.dev/react-libs/analytics/react";
+import { Button } from "@abeta.dev/react-libs";
 
 export function InvoiceActionBar() {
   return (
@@ -328,7 +328,7 @@ export function InvoiceActionBar() {
 For explicit business logic transitions (e.g. status changes, downloads, statutory clearances), use the `useAnalytics` hook:
 
 ```tsx
-import { useAnalytics } from "@umesh0492/react-libs/analytics/react";
+import { useAnalytics } from "@abeta.dev/react-libs/analytics/react";
 
 export function useInvoiceTelemetry() {
   const { track, identify } = useAnalytics();
@@ -380,9 +380,9 @@ import {
   useToast,
   formatCurrency,
   formatDate,
-} from "@umesh0492/react-libs";
-import { AmountSummaryCardIndia } from "@umesh0492/react-libs/india/react";
-import { TrackArea, PageViewTracker, useAnalytics } from "@umesh0492/react-libs/analytics/react";
+} from "@abeta.dev/react-libs";
+import { AmountSummaryCardIndia } from "@abeta.dev/react-libs/india/react";
+import { TrackArea, PageViewTracker, useAnalytics } from "@abeta.dev/react-libs/analytics/react";
 import { FileSpreadsheet, Plus, CheckCircle2, AlertCircle } from "lucide-react";
 
 // ─── 1. Domain Entities & Type Contracts ──────────────────────────────────────
@@ -812,7 +812,7 @@ export function InvoiceListPage() {
 Before shipping your application integration to production, verify the following checks:
 
 ### 1. Style & CSS Layering Check
-- [ ] `@import "@umesh0492/react-libs/style.css";` is present at the very top of your global CSS file.
+- [ ] `@import "@abeta.dev/react-libs/style.css";` is present at the very top of your global CSS file.
 - [ ] Confirm `@layer react-libs` is present in your build output to ensure that application utility classes override library styles cleanly without `!important`.
 
 ### 2. Behavioral Analytics Telemetry Check
@@ -821,9 +821,9 @@ Before shipping your application integration to production, verify the following
 - [ ] Verify that PII patterns (passwords, PANs, Aadhaar numbers) are never transmitted in the event payload.
 
 ### 3. Subpath Import Safety
-- [ ] Ensure non-DOM server code imports pure utilities from `@umesh0492/react-libs/india` and `@umesh0492/react-libs/analytics`.
-- [ ] Ensure client components mounting UI elements use `@umesh0492/react-libs/india/react` and `@umesh0492/react-libs/analytics/react`.
-- [ ] Verify that PDF viewer logic is isolated to `@umesh0492/react-libs/pdf` to preserve Node.js SSR stability.
+- [ ] Ensure non-DOM server code imports pure utilities from `@abeta.dev/react-libs/india` and `@abeta.dev/react-libs/analytics`.
+- [ ] Ensure client components mounting UI elements use `@abeta.dev/react-libs/india/react` and `@abeta.dev/react-libs/analytics/react`.
+- [ ] Verify that PDF viewer logic is isolated to `@abeta.dev/react-libs/pdf` to preserve Node.js SSR stability.
 
 ### 4. Accessibility & Responsive Verification
 - [ ] Keyboard navigation: Verify that `DataTable` headers can be sorted via `Enter` or `Space` keys.

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import * as utils from '../../utils';
 
-describe('@umesh0492/react-libs/utils subpath', () => {
+describe('@abeta.dev/react-libs/utils subpath', () => {
   it('exports pure utility functions and constants', () => {
     expect(typeof utils.cn).toBe('function');
     expect(typeof utils.formatCurrency).toBe('function');

@@ -73,7 +73,7 @@ export * from "./components/ui/data-display/match-score-gauge";
 export * from "./components/ui/data-display/metric-ticker";
 export * from "./components/ui/data-display/quota-card";
 export * from "./components/ui/data-display/payment-ledger";
-// Note: PdfViewer is exported exclusively via '@umesh0492/react-libs/pdf' to safeguard Node.js SSR environments from DOMMatrix evaluation.
+// Note: PdfViewer is exported exclusively via '@abeta.dev/react-libs/pdf' to safeguard Node.js SSR environments from DOMMatrix evaluation.
 export * from "./components/ui/data-display/pipeline-kanban";
 export * from "./components/ui/data-display/proof-of-work-card";
 export * from "./components/ui/data-display/radar-sweep";

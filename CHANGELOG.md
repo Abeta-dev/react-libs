@@ -5,10 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0] - 2026-09-16
+
+### Added
+- Exported `sanitizeCssColor` utility in `@abeta.dev/react-libs` (`src/components/ui/data-display/chart.tsx`) mitigating CSS injection and style breakout attacks (CWE-79).
+- Exported instantiable `BlobStorageClient` and `createBlobStorageClient` factory in `@abeta.dev/react-libs` (`src/lib/blob-storage.ts`) providing isolated storage configuration and eliminating cross-tenant pollution in SSR environments.
+
+### Changed
+- Expanded automated test suite from 1,255 to 1,282 passing tests across 133 test suites (100% pass rate).
+
+### Fixed
+- Hardened `ChartStyle` in `src/components/ui/data-display/chart.tsx` by sanitizing chart IDs, CSS custom property keys, and theme color values against tag closing and CSS breakout sequences.
+- Fixed single-page application (SPA) memory leak in `AnalyticsQueue` (`src/lib/analytics/queue.ts`) by binding lifecycle listeners (`online`, `pagehide`, `beforeunload`, `visibilitychange`) to class instance properties and detaching them in `destroy()`.
+- Purged all legacy repository URLs, copyright notices, and author handles across `package.json`, `LICENSE`, `eslint.config.mjs`, issue templates, and storybook files, standardizing exclusively on `abeta.dev`.
+
 ## [0.11.0] - 2026-09-15
 
 ### Added
-- Dedicated standalone subpaths for heavy peer dependencies: `@umesh0492/react-libs/charts`, `@umesh0492/react-libs/command`, `@umesh0492/react-libs/drawer`, `@umesh0492/react-libs/carousel`, `@umesh0492/react-libs/calendar`, `@umesh0492/react-libs/date-picker`, and `@umesh0492/react-libs/form`.
+- Dedicated standalone subpaths for heavy peer dependencies: `@abeta.dev/react-libs/charts`, `@abeta.dev/react-libs/command`, `@abeta.dev/react-libs/drawer`, `@abeta.dev/react-libs/carousel`, `@abeta.dev/react-libs/calendar`, `@abeta.dev/react-libs/date-picker`, and `@abeta.dev/react-libs/form`.
 - Colorblind-compliant Okabe-Ito data visualization palette for `--chart-1` through `--chart-5` in light and dark modes.
 - Global WCAG 2.3.3 reduced motion compliance media query in `src/styles/theme.css` resetting animation and transition durations.
 - Interactive keyboard navigation on `DataTable` clickable rows supporting keyboard row activation.
@@ -47,7 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2026-09-15
 
 ### Added
-- Dedicated standalone subpath `@umesh0492/react-libs/data-table` (`DataTable`) isolating `@tanstack/react-table` for data-heavy pages.
+- Dedicated standalone subpath `@abeta.dev/react-libs/data-table` (`DataTable`) isolating `@tanstack/react-table` for data-heavy pages.
 - Pre-configured CSS cascade layer ordering preset in `src/styles/theme.css` (`@layer reset, base, react-libs, components, utilities, overrides;`).
 - Complete Storybook coverage across 100% of UI components (29 new story files for feedback, mobile PWA, and complex data-display primitives).
 - Enterprise full-application integration recipe (`docs/recipes/full-app-integration.md`) covering React 19 / Next.js 15, multi-brand theming, and composite workflows.
@@ -68,7 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Adopted `"exactOptionalPropertyTypes": true` across the entire codebase (`tsconfig.json`) per ADR 0007, resolving all 28 type discrepancies across headless wrappers, DOM fetch calls, and internal interface definitions.
 - Expanded ESLint scope to cover 100% of repository assets (including tests, stories, and build scripts) with zero warnings (`eslint . --max-warnings 0`).
-- Documented 5 standalone primitive subpaths (`@umesh0492/react-libs/button`, `@umesh0492/react-libs/dialog`, `@umesh0492/react-libs/card`, `@umesh0492/react-libs/badge`, `@umesh0492/react-libs/input`) in the README subpath matrix and clarified modern ESM tree-shaking boundaries.
+- Documented 5 standalone primitive subpaths (`@abeta.dev/react-libs/button`, `@abeta.dev/react-libs/dialog`, `@abeta.dev/react-libs/card`, `@abeta.dev/react-libs/badge`, `@abeta.dev/react-libs/input`) in the README subpath matrix and clarified modern ESM tree-shaking boundaries.
 - Streamlined Vitest runner concurrency in `vitest.config.ts`.
 - Cleaned up redundant regex escape characters in `scripts/docs-match-tree.mjs` and `scripts/inventory-symbols.mjs`.
 
@@ -83,7 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Eliminated duplicate `'use client'` directives in source files (`Button`, `Dialog`, `Input`) ensuring single-directive banners across ESM and CJS bundles.
 - Resolved initial render state tearing in `AnalyticsProvider` by synchronously initializing `initAnalytics` in `useState` lazy initializer with zero render-time ref mutations for full React 19 compiler compliance.
 - Replaced unsafe `any` casting in test DOMMatrix polyfill (`src/test/setup.ts`) to satisfy strict ESLint rules (`--max-warnings 0`).
-- Exported `Sonner` component alias from `@umesh0492/react-libs` root barrel to guarantee 100% symbol parity with `README.md`.
+- Exported `Sonner` component alias from `@abeta.dev/react-libs` root barrel to guarantee 100% symbol parity with `README.md`.
 
 ### Security
 - Hardened `scripts/verify-release-version.mjs` to match strictly against topmost `CHANGELOG.md` release to prevent historical version rollback bypasses.
@@ -94,15 +108,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Synchronized `.github/workflows/publish.yml` with the complete 13-step CI quality and truth gate suite prior to package distribution.
 
 ### Changed
-- Tightened per-component bundle size budgets in `scripts/check-bundle-size.mjs` (`button`: 8 KB, `dialog`: 15 KB, `card`: 8 KB, `badge`: 6 KB, `input`: 6 KB) and introduced a dedicated budget for `@umesh0492/react-libs/analytics/react` (35 KB raw, 10 KB gzip).
+- Tightened per-component bundle size budgets in `scripts/check-bundle-size.mjs` (`button`: 8 KB, `dialog`: 15 KB, `card`: 8 KB, `badge`: 6 KB, `input`: 6 KB) and introduced a dedicated budget for `@abeta.dev/react-libs/analytics/react` (35 KB raw, 10 KB gzip).
 
 ## [0.6.0] - 2026-09-11
 
 ### Added
-- Dedicated client subpaths `@umesh0492/react-libs/button`, `@umesh0492/react-libs/dialog`, `@umesh0492/react-libs/card`, `@umesh0492/react-libs/badge`, `@umesh0492/react-libs/input` (`Button`, `Dialog`, `Card`, `Badge`, `Input`) for fine-grained per-component tree-shaking with dual ESM/CJS exports and TypeScript definitions.
+- Dedicated client subpaths `@abeta.dev/react-libs/button`, `@abeta.dev/react-libs/dialog`, `@abeta.dev/react-libs/card`, `@abeta.dev/react-libs/badge`, `@abeta.dev/react-libs/input` (`Button`, `Dialog`, `Card`, `Badge`, `Input`) for fine-grained per-component tree-shaking with dual ESM/CJS exports and TypeScript definitions.
 - Automated per-entry bundle size verification budgets in `scripts/check-bundle-size.mjs` ensuring component subpaths remain under strict budgets (`dist/button.js` <= 15 KB raw, measured 2.55 KB raw).
-- Dedicated client subpath `@umesh0492/react-libs/analytics/react` (`AnalyticsProvider`, `useAnalytics`, `TrackArea`, `PageViewTracker`) with explicit `'use client'` directive boundary.
-- Pure headless domain isolation for `@umesh0492/react-libs/analytics` with zero React hooks, zero client directives, and full server runtime safety.
+- Dedicated client subpath `@abeta.dev/react-libs/analytics/react` (`AnalyticsProvider`, `useAnalytics`, `TrackArea`, `PageViewTracker`) with explicit `'use client'` directive boundary.
+- Pure headless domain isolation for `@abeta.dev/react-libs/analytics` with zero React hooks, zero client directives, and full server runtime safety.
 
 ### Changed
 - Isolated `window.history.pushState` and `window.history.replaceState` monkey-patching in `AnalyticsEngine` behind explicit opt-in (`patchHistory: true`, defaults to `false`) with full method restoration and event listener cleanup upon `destroy()`.
@@ -124,12 +138,12 @@ Initial public release.
 - 50+ accessible Tailwind UI components (buttons, dialogs, dropdowns, forms, layout, data display)
 - Modern DataTable built on TanStack Table with filtering, pagination, and column controls
 - Dual packaging: ESM and CJS builds with TypeScript .d.ts declarations
-- Dedicated pure subpath `@umesh0492/react-libs/utils` for domain-neutral utilities
-- Dedicated subpaths for `@umesh0492/react-libs/india` (pure domain tax/compliance/locations) and `@umesh0492/react-libs/india/react` (interactive AmountSummaryCardIndia component)
-- Pluggable client analytics library (`@umesh0492/react-libs/analytics`) with console, Google Analytics, HTTP, and Mixpanel adapters
+- Dedicated pure subpath `@abeta.dev/react-libs/utils` for domain-neutral utilities
+- Dedicated subpaths for `@abeta.dev/react-libs/india` (pure domain tax/compliance/locations) and `@abeta.dev/react-libs/india/react` (interactive AmountSummaryCardIndia component)
+- Pluggable client analytics library (`@abeta.dev/react-libs/analytics`) with console, Google Analytics, HTTP, and Mixpanel adapters
 - Standalone Tailwind CSS stylesheet exported via `./style.css`
-- PDF viewer component (`@umesh0492/react-libs/pdf`) with optional peer dependencies
-- Toast notification system (`@umesh0492/react-libs/hooks/use-toast`)
+- PDF viewer component (`@abeta.dev/react-libs/pdf`) with optional peer dependencies
+- Toast notification system (`@abeta.dev/react-libs/hooks/use-toast`)
 
 ### Known limitations
 - Root index bundle is ~425 KB raw due to complete UI primitive inclusion; subpath imports should be preferred for lean bundles

@@ -1,5 +1,5 @@
 /**
- * @umesh0492/react-libs/utils
+ * @abeta.dev/react-libs/utils
  *
  * Pure utilities, formatters, validators, and masking functions.
  * Fully compatible with React Server Components (RSC), Next.js App Router,

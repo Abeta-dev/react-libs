@@ -8,7 +8,7 @@
  *
  * Consuming apps have their own equivalent entry:
  *   @import "tailwindcss";
- *   @import "@umesh0492/react-libs/styles/theme.css";
+ *   @import "@abeta.dev/react-libs/styles/theme.css";
  */
 
 @import "tailwindcss";

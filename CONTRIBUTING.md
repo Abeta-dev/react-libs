@@ -1,4 +1,4 @@
-# Contributing to @umesh0492/react-libs 🧱
+# Contributing to @abeta.dev/react-libs 🧱
 
 > Production-grade React 19 component library with Tailwind CSS v4 & Radix UI primitives. It is the **single source of truth** for visual components, design tokens, hooks, and formatters.
 
@@ -17,7 +17,7 @@
 ### Installation
 
 ```bash
-git clone https://github.com/umesh0492/react-libs.git && cd react-libs
+git clone https://github.com/abeta-dev/react-libs.git && cd react-libs
 npm ci
 ```
 
@@ -228,12 +228,12 @@ import { expect, within, userEvent, waitFor } from 'storybook/test';
 
 ### Package Imports & Local Development
 
-Consumers install `@umesh0492/react-libs` and import components and utilities directly:
+Consumers install `@abeta.dev/react-libs` and import components and utilities directly:
 
 ```tsx
-import { Button, Card, Dialog } from "@umesh0492/react-libs";
-import { cn, formatCurrency } from "@umesh0492/react-libs/utils";
-import { validateGSTIN, INDIA_STATES } from "@umesh0492/react-libs/india";
+import { Button, Card, Dialog } from "@abeta.dev/react-libs";
+import { cn, formatCurrency } from "@abeta.dev/react-libs/utils";
+import { validateGSTIN, INDIA_STATES } from "@abeta.dev/react-libs/india";
 ```
 
 Within the library source code, use relative paths:
@@ -245,7 +245,7 @@ import { Button } from "../../forms/button";
 
 ### Dialog Rule
 
-**Never build custom modals.** Always use `Dialog` from `@umesh0492/react-libs` — it manages portal, overlay, animation, and focus trap via Radix.
+**Never build custom modals.** Always use `Dialog` from `@abeta.dev/react-libs` — it manages portal, overlay, animation, and focus trap via Radix.
 
 ### Portal Testing Rule
 
@@ -283,7 +283,7 @@ npm version patch    # e.g. 0.1.0 → 0.1.1
 
 # 3. Commit & tag
 git add package.json package-lock.json
-git commit -m "chore: bump @umesh0492/react-libs to 0.1.1"
+git commit -m "chore: bump @abeta.dev/react-libs to 0.1.1"
 git tag v0.1.1
 
 # 4. Push — CI runs + auto-publishes
@@ -305,5 +305,5 @@ Update the version in consuming apps:
 
 ```bash
 # In consuming web portals
-npm install @umesh0492/react-libs@latest
+npm install @abeta.dev/react-libs@latest
 ```

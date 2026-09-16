@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-Form components in `@umesh0492/react-libs` are utilized across different paradigms:
+Form components in `@abeta.dev/react-libs` are utilized across different paradigms:
 1. Uncontrolled forms leveraging native FormData or `react-hook-form` / `uncontrolled` integrations.
 2. Controlled forms where state is strictly managed in host React state or external state management engines (Zustand, Redux).
 
