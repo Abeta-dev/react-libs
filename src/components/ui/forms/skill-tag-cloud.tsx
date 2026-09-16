@@ -35,19 +35,38 @@ export function SkillTagCloud({
   ...props
 }: SkillTagCloudProps) {
   const [inputValue, setInputValue] = React.useState("");
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim()) {
       e.preventDefault();
       onAddTag?.(inputValue.trim());
       setInputValue("");
+    } else if (
+      e.key === "Backspace" &&
+      !inputValue &&
+      tags.length > 0 &&
+      !readOnly &&
+      onRemoveTag
+    ) {
+      e.preventDefault();
+      const lastTag = tags[tags.length - 1];
+      if (lastTag) {
+        onRemoveTag(lastTag);
+      }
     }
+  };
+
+  const handleRemove = (tag: SkillTag) => {
+    onRemoveTag?.(tag);
+    inputRef.current?.focus();
   };
 
   const handleAdd = () => {
     if (inputValue.trim()) {
       onAddTag?.(inputValue.trim());
       setInputValue("");
+      inputRef.current?.focus();
     }
   };
 
@@ -90,7 +109,7 @@ export function SkillTagCloud({
             {!readOnly && onRemoveTag ? (
               <button
                 type="button"
-                onClick={() => onRemoveTag(tag)}
+                onClick={() => handleRemove(tag)}
                 className="hover:opacity-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
                 aria-label={`Remove ${tag.name}`}
               >
@@ -108,6 +127,7 @@ export function SkillTagCloud({
       {!readOnly && (!maxTags || tags.length < maxTags) && (
         <div className="flex items-center gap-2 max-w-sm pt-1">
           <Input
+            ref={inputRef}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}

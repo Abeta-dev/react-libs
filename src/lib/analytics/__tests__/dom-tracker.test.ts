@@ -361,6 +361,38 @@ describe("DomTracker Event Delegation", () => {
       const [, meta] = onInteraction.mock.calls[0]!;
       expect(meta).toEqual({});
     });
+
+    it("mitigates Prototype Pollution (CWE-1321) in data-track-metadata attributes", () => {
+      const btn = document.createElement("button");
+      btn.setAttribute(
+        "data-track-metadata",
+        '{"__proto__":{"polluted":"yes"},"constructor":{"prototype":{"evil":true}},"validKey":"safeValue"}'
+      );
+      btn.textContent = "Secure Action";
+      document.body.appendChild(btn);
+
+      btn.click();
+
+      expect(onInteraction).toHaveBeenCalledTimes(1);
+      const [, meta] = onInteraction.mock.calls[0]!;
+      expect(meta).toEqual({ validKey: "safeValue" });
+      expect((meta as any).polluted).toBeUndefined();
+      expect(({} as any).polluted).toBeUndefined();
+      expect(({} as any).evil).toBeUndefined();
+    });
+
+    it("ignores non-object JSON values like arrays, primitives, and null", () => {
+      const btn = document.createElement("button");
+      btn.setAttribute("data-track-metadata", '["array", 1, 2]');
+      btn.textContent = "Array Meta";
+      document.body.appendChild(btn);
+
+      btn.click();
+
+      expect(onInteraction).toHaveBeenCalledTimes(1);
+      const [, meta] = onInteraction.mock.calls[0]!;
+      expect(meta).toEqual({});
+    });
   });
 
   describe("Lifecycle and edge cases", () => {

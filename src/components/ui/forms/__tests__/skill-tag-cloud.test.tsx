@@ -148,4 +148,40 @@ describe("SkillTagCloud", () => {
     expect(root).toHaveClass("custom-tag-cloud");
     expect(root).toHaveClass("space-y-2.5");
   });
+
+  it("removes the last tag when pressing Backspace in an empty input", () => {
+    const handleRemove = vi.fn();
+    render(<SkillTagCloud tags={sampleTags} onRemoveTag={handleRemove} />);
+
+    const input = screen.getByPlaceholderText(/Add skill/i);
+    // Input is empty, press Backspace
+    fireEvent.keyDown(input, { key: "Backspace", code: "Backspace" });
+
+    // Should have called handleRemove with the last tag ("Kubernetes")
+    expect(handleRemove).toHaveBeenCalledWith(expect.objectContaining({ name: "Kubernetes" }));
+  });
+
+  it("does not remove tag on Backspace if input has content", () => {
+    const handleRemove = vi.fn();
+    render(<SkillTagCloud tags={sampleTags} onRemoveTag={handleRemove} />);
+
+    const input = screen.getByPlaceholderText(/Add skill/i);
+    fireEvent.change(input, { target: { value: "a" } });
+    fireEvent.keyDown(input, { key: "Backspace", code: "Backspace" });
+
+    expect(handleRemove).not.toHaveBeenCalled();
+  });
+
+  it("returns focus to input when a tag is removed via delete button", () => {
+    const handleRemove = vi.fn();
+    render(<SkillTagCloud tags={sampleTags} onRemoveTag={handleRemove} />);
+
+    const removeBtn = screen.getByRole("button", { name: "Remove Golang" });
+    const input = screen.getByPlaceholderText(/Add skill/i);
+
+    fireEvent.click(removeBtn);
+    expect(handleRemove).toHaveBeenCalled();
+    expect(document.activeElement).toBe(input);
+  });
 });
+

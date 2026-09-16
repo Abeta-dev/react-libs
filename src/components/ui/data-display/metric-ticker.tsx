@@ -10,6 +10,8 @@ export interface TickerItem {
   highlight?: boolean;
 }
 
+export type MetricTickerItem = TickerItem;
+
 export interface MetricTickerProps extends React.HTMLAttributes<HTMLDivElement> {
   items: TickerItem[];
   speedSeconds?: number;
@@ -42,8 +44,6 @@ export function MetricTicker({
     }
   }, []);
 
-  // Duplicate list to create seamless infinite scroll loop
-  const duplicatedItems = [...items, ...items];
 
   return (
     <div
@@ -55,7 +55,7 @@ export function MetricTicker({
       onFocus={() => setIsPaused(true)}
       onBlur={() => setIsPaused(false)}
       className={cn(
-        "group overflow-hidden border-y border-indigo-500/20 bg-indigo-950/20 py-2 backdrop-blur-xs select-none",
+        "group overflow-hidden border-y border-indigo-500/30 dark:border-indigo-400/30 bg-indigo-950/20 py-2 backdrop-blur-xs select-none",
         "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
         className
       )}
@@ -74,23 +74,49 @@ export function MetricTicker({
           animationName: prefersReducedMotion ? "none" : undefined,
         }}
       >
-        {duplicatedItems.map((item, idx) => (
-          <div
-            key={item.id || `${item.label}-${idx}`}
-            className="flex items-center gap-2 text-xs font-semibold text-slate-400"
-          >
-            <span>{item.label}:</span>
-            <span
-              className={cn(
-                "font-bold text-slate-200",
-                item.highlight && "text-indigo-400 font-extrabold"
-              )}
+        <div className="flex gap-8">
+          {items.map((item, idx) => (
+            <div
+              key={item.id || `${item.label}-${idx}`}
+              className="flex items-center gap-2 text-xs font-semibold text-slate-400"
             >
-              {item.value}
-            </span>
-            <span className="text-slate-600 ml-3">•</span>
-          </div>
-        ))}
+              <span>{item.label}:</span>
+              <span
+                className={cn(
+                  "font-bold text-slate-200",
+                  item.highlight && "text-indigo-400 font-extrabold"
+                )}
+              >
+                {item.value}
+              </span>
+              <span className="text-slate-600 ml-3">•</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Duplicate list hidden from screen readers for seamless visual marquee loop */}
+        <div aria-hidden="true" className="flex gap-8">
+          {items.map((item, idx) => {
+            const itemKey = item.id ? `dup-${item.id}` : `dup-${item.label}-${idx}`;
+            return (
+              <div
+                key={itemKey}
+                className="flex items-center gap-2 text-xs font-semibold text-slate-400"
+              >
+                <span>{item.label}:</span>
+                <span
+                  className={cn(
+                    "font-bold text-slate-200",
+                    item.highlight && "text-indigo-400 font-extrabold"
+                  )}
+                >
+                  {item.value}
+                </span>
+                <span className="text-slate-600 ml-3">•</span>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

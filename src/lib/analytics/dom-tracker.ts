@@ -9,6 +9,35 @@ export interface DomTrackerOptions {
   maskPatterns?: RegExp[] | undefined;
 }
 
+/**
+ * Safely parses JSON metadata from untrusted DOM attributes,
+ * mitigating Prototype Pollution (CWE-1321) and ignoring non-object structures.
+ */
+export function safeParseMetadata(raw: string | null): Record<string, unknown> {
+  if (!raw || typeof raw !== "string") return {};
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return {};
+    }
+    const clean: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(parsed)) {
+      if (key === "__proto__" || key === "constructor" || key === "prototype") {
+        continue;
+      }
+      Object.defineProperty(clean, key, {
+        value,
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
+    }
+    return clean;
+  } catch {
+    return {};
+  }
+}
+
 export class DomTracker {
   private onInteraction: DomTrackerOptions["onInteraction"];
   private maskPatterns: RegExp[];
@@ -113,22 +142,14 @@ export class DomTracker {
       if (journey) metadata.journey = journey;
       if (step) metadata.step = step;
       if (rawMeta) {
-        try {
-          Object.assign(metadata, JSON.parse(rawMeta));
-        } catch {
-          // Ignore invalid json
-        }
+        Object.assign(metadata, safeParseMetadata(rawMeta));
       }
     }
 
     // Collect element's own data-track-metadata
     const elMeta = el.getAttribute("data-track-metadata");
     if (elMeta) {
-      try {
-        Object.assign(metadata, JSON.parse(elMeta));
-      } catch {
-        // Ignore invalid json
-      }
+      Object.assign(metadata, safeParseMetadata(elMeta));
     }
 
     return metadata;

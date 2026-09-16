@@ -406,5 +406,47 @@ describe("BlobStorageClient Instance & Factory", () => {
     expect(tenantA.apiBase).toBe("https://tenant-a.api.com");
     expect(tenantB.apiBase).toBe("https://tenant-b-updated.api.com");
   });
+
+  it("evaluates async tokenProvider and forwards fetch credentials mode", async () => {
+    const mockTokenProvider = vi.fn().mockResolvedValue("dynamic-jwt-from-provider");
+    const client = new BlobStorageClient({
+      apiBase: "https://auth.example.com",
+      tokenProvider: mockTokenProvider,
+      credentials: "include",
+    });
+
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        storage_base_url: "https://storage.secure.com",
+        storage_secret_key: "secure-key-123",
+      }),
+    } as Response);
+
+    const config = await client.fetchConfig();
+    expect(mockTokenProvider).toHaveBeenCalledTimes(1);
+    expect(fetchSpy).toHaveBeenCalledWith(
+      "https://auth.example.com/api/config",
+      expect.objectContaining({
+        headers: { Authorization: "Bearer dynamic-jwt-from-provider" },
+        credentials: "include",
+      })
+    );
+    expect(config.storageBaseUrl).toBe("https://storage.secure.com");
+  });
+
+  it("handles tokenProvider failure gracefully with descriptive error", async () => {
+    const client = new BlobStorageClient({
+      apiBase: "https://auth.example.com",
+      tokenProvider: async () => {
+        throw new Error("Token refresh expired");
+      },
+    });
+
+    await expect(client.fetchConfig()).rejects.toThrow(
+      "fetchBlobStorageConfig: tokenProvider failed: Token refresh expired"
+    );
+  });
 });
+
 

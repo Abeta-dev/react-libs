@@ -19,6 +19,9 @@ export interface BlobStorageConfig {
   storageSecretKey: string;
 }
 
+/** Provider function to retrieve authentication token dynamically */
+export type TokenProvider = () => string | Promise<string>;
+
 /** Configuration options for initializing a BlobStorageClient. */
 export interface BlobStorageClientOptions {
   /** Backend API base URL for storage config endpoints */
@@ -27,6 +30,10 @@ export interface BlobStorageClientOptions {
   config?: BlobStorageConfig | null | undefined;
   /** Optional bearer token for authentication */
   token?: string | undefined;
+  /** Optional dynamic token provider function (e.g. for rotating tokens or async auth) */
+  tokenProvider?: TokenProvider | undefined;
+  /** Optional fetch credentials mode (e.g. 'include' or 'same-origin' for HttpOnly cookie sessions) */
+  credentials?: RequestCredentials | undefined;
 }
 
 /** Result shape returned after a successful upload. */
@@ -64,6 +71,8 @@ export class BlobStorageClient {
   private _config: BlobStorageConfig | null = null;
   private _apiBase: string = "";
   private _token?: string | undefined;
+  private _tokenProvider?: TokenProvider | undefined;
+  private _credentials?: RequestCredentials | undefined;
 
   constructor(options?: BlobStorageClientOptions) {
     if (options?.apiBase) {
@@ -74,6 +83,12 @@ export class BlobStorageClient {
     }
     if (options?.token) {
       this._token = options.token;
+    }
+    if (options?.tokenProvider) {
+      this._tokenProvider = options.tokenProvider;
+    }
+    if (options?.credentials) {
+      this._credentials = options.credentials;
     }
   }
 
@@ -114,6 +129,16 @@ export class BlobStorageClient {
     this._token = token;
   }
 
+  /** Explicitly set or update dynamic token provider */
+  public setTokenProvider(provider?: TokenProvider): void {
+    this._tokenProvider = provider;
+  }
+
+  /** Explicitly set or update request credentials mode */
+  public setCredentials(credentials?: RequestCredentials): void {
+    this._credentials = credentials;
+  }
+
   /** Explicitly set or override storage configuration */
   public setConfig(config: BlobStorageConfig | null): void {
     this._config = config ? { ...config } : null;
@@ -124,7 +149,7 @@ export class BlobStorageClient {
    * Caches the result in memory on this instance so subsequent calls are instant.
    *
    * @param apiBase  - Override base URL (defaults to this instance's apiBase)
-   * @param token    - Optional JWT (defaults to instance token, then localStorage "auth_jwt")
+   * @param token    - Optional JWT (defaults to instance token, tokenProvider, or localStorage "auth_jwt")
    */
   public async fetchConfig(
     apiBase?: string,
@@ -133,16 +158,35 @@ export class BlobStorageClient {
     if (this._config) return this._config;
 
     const base = apiBase ?? this._apiBase;
-    const jwt =
-      token ??
-      this._token ??
-      (typeof window !== "undefined"
-        ? localStorage.getItem("auth_jwt") ?? localStorage.getItem("jwt") ?? ""
-        : "");
+    let jwt = token ?? this._token;
 
-    const res = await fetch(`${base}/api/config`, {
-      headers: { Authorization: `Bearer ${jwt}` },
-    });
+    if (!jwt && this._tokenProvider) {
+      try {
+        jwt = await this._tokenProvider();
+      } catch (err) {
+        throw new Error(
+          `fetchBlobStorageConfig: tokenProvider failed: ${err instanceof Error ? err.message : String(err)}`
+        );
+      }
+    }
+
+    if (!jwt && typeof window !== "undefined") {
+      jwt = localStorage.getItem("auth_jwt") ?? localStorage.getItem("jwt") ?? "";
+    }
+
+    const headers: Record<string, string> = {};
+    if (jwt) {
+      headers.Authorization = `Bearer ${jwt}`;
+    }
+
+    const fetchOptions: RequestInit = {
+      headers,
+    };
+    if (this._credentials) {
+      fetchOptions.credentials = this._credentials;
+    }
+
+    const res = await fetch(`${base}/api/config`, fetchOptions);
 
     if (!res.ok) {
       throw new Error(

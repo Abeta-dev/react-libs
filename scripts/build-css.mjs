@@ -19,12 +19,20 @@ const INPUT_CSS = join(ROOT, 'src', 'styles', 'tailwind-bundle.css');
 const DIST_DIR = join(ROOT, 'dist');
 const OUTPUT_CSS = join(DIST_DIR, 'style.css');
 const INDEX_CSS = join(DIST_DIR, 'index.css');
+const THEME_CSS = join(ROOT, 'src', 'styles', 'theme.css');
+const OUTPUT_THEME_CSS = join(DIST_DIR, 'theme.css');
 
 async function buildCss() {
   console.log('🎨 Starting standalone CSS bundle build...');
 
   if (!existsSync(DIST_DIR)) {
     mkdirSync(DIST_DIR, { recursive: true });
+  }
+
+  // Copy modular theme tokens for Tailwind v4 @source consumers
+  if (existsSync(THEME_CSS)) {
+    console.log(`🎨 Emitting modular theme tokens ${THEME_CSS} -> ${OUTPUT_THEME_CSS}...`);
+    writeFileSync(OUTPUT_THEME_CSS, readFileSync(THEME_CSS, 'utf8'), 'utf8');
   }
 
   if (!existsSync(INPUT_CSS)) {
