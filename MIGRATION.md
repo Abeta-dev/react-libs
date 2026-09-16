@@ -1,6 +1,47 @@
-# Migration Guide: Upgrading to v0.12.0
+# Migration Guide: Upgrading to v0.13.0
 
-This guide details architectural evolutions, security hardening, and migration steps for upgrading to `@abeta.dev/react-libs` v0.12.0.
+This guide details architectural evolutions, security hardening, and migration steps for upgrading to `@abeta.dev/react-libs` v0.13.0.
+
+---
+
+## Upgrading to v0.13.0
+
+### 1. Turborepo Monorepo Architecture & Backend-Agnostic Auth UI
+Authentication components are now provided via Turborepo monorepo workspace `@abeta.dev/auth` or via zero-overhead subpath export `@abeta.dev/react-libs/auth`:
+```tsx
+// Using standalone package:
+import { LoginForm, OAuthButtonGroup, TokenManager } from '@abeta.dev/auth';
+
+// Or using core subpath:
+import { LoginForm, OAuthButtonGroup, TokenManager } from '@abeta.dev/react-libs/auth';
+```
+Any backend (Supabase, Firebase, custom REST/GraphQL, Next.js Auth) can be plugged in by implementing the `AuthAdapter` contract.
+
+### 2. Async Backpressure & Click Debouncing on `Button`
+The core `<Button />` primitive now automatically enforces click debouncing (default: `1` second cooldown) and async in-flight promise backpressure to prevent double clicks and duplicate API requests:
+```tsx
+import { Button } from '@abeta.dev/react-libs';
+
+// Default: 1 second debounce cooldown + async in-flight backpressure
+<Button onClick={asyncSubmit}>Submit</Button>
+
+// Custom debounce duration (in seconds):
+<Button debounceSec={2.5} onClick={handleAction}>Save</Button>
+
+// Disable debouncing for continuous rapid actions (zoom, rotate, pagination, toggles):
+<Button debounceSec={false} onClick={handleNextPage}>Next Page</Button>
+```
+
+### 3. Standalone `useClickBackpressure` Hook
+You can also apply leading-edge click debouncing and promise backpressure to arbitrary event handlers:
+```tsx
+import { useClickBackpressure } from '@abeta.dev/react-libs';
+
+const { execute, isPending } = useClickBackpressure(handleSave, {
+  debounceSec: 1.5,
+  onBlocked: (reason) => console.warn(`Action blocked due to ${reason}`),
+});
+```
 
 ---
 

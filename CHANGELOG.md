@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0] - 2026-09-16
+
+### Added
+- Exported `@abeta.dev/react-libs/auth` subpath export in root package.json connecting to the `@abeta.dev/auth` monorepo package with zero-overhead re-export.
+- Exported `useClickBackpressure` hook in `@abeta.dev/react-libs` (`src/hooks/use-click-backpressure.ts`) providing leading-edge click debouncing, configurable cooldown windows, and async promise in-flight backpressure.
+- Added `debounceSec` and `onBlocked` props to `Button` primitive (`src/components/ui/forms/button.tsx`) defaulting to 1s debouncing cooldown and async backpressure while supporting custom intervals or disabling via `debounceSec={false}`.
+
+### Changed
+- Migrated codebase architecture to Turborepo with npm workspaces and `turbo.json` task orchestration.
+- Expanded automated test suite from 1,282 to 1,346 passing tests across 144 test suites (100% pass rate).
+
+### Fixed
+- Fixed double-triggering on rapid user clicks and duplicate async in-flight mutations across all action buttons and auth forms.
+- Prevented unneeded React state updates and test `act(...)` warnings on synchronous button clicks by isolating pending state tracking to async Promise execution.
+- Added explicit `debounceSec={false}` to high-frequency image viewer, PDF viewer, copy button, and PWA guide controls to preserve rapid multi-click operations.
+
 ## [0.12.0] - 2026-09-16
 
 ### Added

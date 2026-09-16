@@ -1,6 +1,6 @@
 {
   "name": "@abeta.dev/react-libs",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "React 19 component library with Tailwind CSS v4 & Radix UI primitives.",
   "keywords": [
     "react",
