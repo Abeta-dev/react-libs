@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -11,6 +12,7 @@ jobs:
     permissions:
       contents: write
       id-token: write
+      packages: write
 
     steps:
       - name: Checkout
@@ -138,4 +140,50 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          AUTH_VERSION=$(node -p "require('./packages/auth/package.json').version")
+          ROOT_VERSION=$(node -p "require('./package.json').version")
+
+          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+          echo "@abeta-dev:registry=https://npm.pkg.github.com" >> ~/.npmrc
+
+          # Configure auth package for GitHub Packages
+          node -e '
+            const fs = require("fs");
+            const p = JSON.parse(fs.readFileSync("./packages/auth/package.json", "utf8"));
+            p.name = "@abeta-dev/auth";
+            p.publishConfig = { registry: "https://npm.pkg.github.com" };
+            fs.writeFileSync("./packages/auth/package.json", JSON.stringify(p, null, 2));
+          '
+
+          if npm view "@abeta-dev/auth@${AUTH_VERSION}" version --registry=https://npm.pkg.github.com/ >/dev/null 2>&1; then
+            echo "@abeta-dev/auth@${AUTH_VERSION} already exists on GitHub Packages; leaving untouched."
+          else
+            npm publish -w packages/auth --registry=https://npm.pkg.github.com/
+            echo "Successfully published @abeta-dev/auth@${AUTH_VERSION} to GitHub Packages."
+          fi
+
+          # Configure root package for GitHub Packages
+          node -e '
+            const fs = require("fs");
+            const p = JSON.parse(fs.readFileSync("./package.json", "utf8"));
+            p.name = "@abeta-dev/react-libs";
+            p.publishConfig = { registry: "https://npm.pkg.github.com" };
+            if (p.dependencies && p.dependencies["@abeta.dev/auth"]) {
+              p.dependencies["@abeta-dev/auth"] = p.dependencies["@abeta.dev/auth"];
+              delete p.dependencies["@abeta.dev/auth"];
+            }
+            fs.writeFileSync("./package.json", JSON.stringify(p, null, 2));
+          '
+
+          if npm view "@abeta-dev/react-libs@${ROOT_VERSION}" version --registry=https://npm.pkg.github.com/ >/dev/null 2>&1; then
+            echo "@abeta-dev/react-libs@${ROOT_VERSION} already exists on GitHub Packages; leaving untouched."
+          else
+            npm publish --registry=https://npm.pkg.github.com/
+            echo "Successfully published @abeta-dev/react-libs@${ROOT_VERSION} to GitHub Packages."
+          fi
 
