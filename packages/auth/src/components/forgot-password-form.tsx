@@ -129,7 +129,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
             type="button"
             disabled={cooldownSeconds > 0 || isEffectiveSubmitting}
             onClick={(e) => void debouncedSubmit(e)}
-            className="w-full text-xs font-medium text-indigo-600 hover:text-indigo-500 disabled:text-neutral-400 focus:outline-none"
+            className="w-full min-h-[32px] py-1.5 text-xs font-medium text-indigo-600 hover:text-indigo-500 disabled:text-neutral-400 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
           >
             {cooldownSeconds > 0
               ? `Resend available in ${cooldownSeconds}s`
@@ -223,7 +223,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
         <button
           type="button"
           onClick={onBackToSignIn}
-          className="w-full text-center text-xs font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline focus:outline-none pt-1"
+          className="w-full min-h-[32px] py-1.5 text-center text-xs font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
         >
           Back to sign in
         </button>
@@ -231,5 +231,4 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
     </form>
   );
 };
-const FORGOT_COMPONENT_NAME = ['Forgot', 'Password', 'Form'].join('');
-ForgotPasswordForm.displayName = FORGOT_COMPONENT_NAME;
+ForgotPasswordForm.displayName = 'ForgotPasswordForm';

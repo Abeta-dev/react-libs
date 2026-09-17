@@ -66,9 +66,11 @@ export function useClickBackpressure<TArgs extends unknown[] = [React.SyntheticE
   const invocationCounterRef = React.useRef<number>(0);
   const activeExecutionIdRef = React.useRef<number | null>(null);
 
-  // Concurrent mode purity: Update handler ref inside useEffect instead of render body
+  // Concurrent mode purity: Update handler ref using isomorphic layout effect before paint
+  const useIsomorphicLayoutEffect =
+    typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
   const handlerRef = React.useRef(handler);
-  React.useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     handlerRef.current = handler;
   }, [handler]);
 
@@ -89,18 +91,16 @@ export function useClickBackpressure<TArgs extends unknown[] = [React.SyntheticE
 
         // 1. Check in-flight backpressure
         if (isPendingRef.current) {
-          const firstArg = args[0] as { preventDefault?: () => void; stopPropagation?: () => void } | undefined;
+          const firstArg = args[0] as { preventDefault?: () => void } | undefined;
           firstArg?.preventDefault?.();
-          firstArg?.stopPropagation?.();
           onBlocked?.('in_flight');
           return undefined;
         }
 
         // 2. Check debounce cooldown window
         if (!isDebounceDisabled && now - lastClickTimeRef.current < cooldownMs) {
-          const firstArg = args[0] as { preventDefault?: () => void; stopPropagation?: () => void } | undefined;
+          const firstArg = args[0] as { preventDefault?: () => void } | undefined;
           firstArg?.preventDefault?.();
-          firstArg?.stopPropagation?.();
           onBlocked?.('cooldown');
           return undefined;
         }
