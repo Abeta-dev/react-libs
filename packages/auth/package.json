@@ -1,6 +1,6 @@
 {
   "name": "@abeta.dev/auth",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Backend-agnostic React 19 authentication UI library with Google & LinkedIn 3PL, email/password, and concurrent-safe token refresh.",
   "keywords": [
     "react",
@@ -22,7 +22,8 @@
     "directory": "packages/auth"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "type": "module",
   "main": "./dist/index.cjs",
@@ -65,7 +66,9 @@
     "build": "tsup",
     "test": "vitest run",
     "lint": "eslint . --max-warnings 0",
-    "check:types": "tsc --noEmit"
+    "check:types": "tsc --noEmit",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "react": "^18.2.0 || ^19.0.0",

@@ -60,6 +60,9 @@ jobs:
       - name: Build Library Package
         run: npm run build
 
+      - name: Verify Packed External Consumers
+        run: npm run verify:packed-consumers
+
       - name: Bundle Size Limit Gate
         run: npm run check:size
 
