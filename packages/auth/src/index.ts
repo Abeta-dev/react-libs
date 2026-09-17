@@ -26,7 +26,28 @@ export type {
   TokenManagerOptions,
 } from './types/tokens';
 
+export type {
+  AccessSessionPersistence,
+  ActivationInspection,
+  AuthCapabilities,
+  AuthClientAdapter,
+  AuthClientOptions,
+  AuthClientSession,
+  AuthClientSnapshot,
+  AuthClientStatus,
+  AuthCoordinationMessage,
+  CapabilityDescriptor,
+  CsrfProvider,
+  InvitationAccepted,
+  InvitationInspection,
+  PendingActivation,
+  RefreshCoordinator,
+} from './types/client';
+export { AuthClientError } from './types/client';
+
 // Core Engine & Adapters
+export { AuthClient } from './core/auth-client';
+export { createAuthenticatedFetch, type AuthenticatedFetchClient, type AuthenticatedFetchOptions } from './core/authenticated-fetch';
 export { TokenManager } from './core/token-manager';
 export { MockAuthAdapter, DEFAULT_MOCK_PASSWORD, type MockAdapterOptions } from './core/mock-adapter';
 export {
@@ -51,6 +72,12 @@ export {
   useUser,
   useOAuth,
 } from './context/hooks';
+export {
+  AuthClientProvider,
+  type AuthClientProviderProps,
+  useAuthClient,
+  useAuthClientSnapshot,
+} from './context/auth-client-context';
 
 // Icons
 export { GoogleIcon, type IconProps } from './icons/google-icon';
