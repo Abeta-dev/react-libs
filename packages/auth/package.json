@@ -18,7 +18,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abeta-dev/react-libs.git",
+    "url": "git+https://github.com/Abeta-dev/react-libs.git",
     "directory": "packages/auth"
   },
   "publishConfig": {

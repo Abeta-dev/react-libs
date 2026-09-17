@@ -17,10 +17,10 @@
   "author": "Umesh Gupta <umesh@abeta.dev>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abeta-dev/react-libs.git"
+    "url": "git+https://github.com/Abeta-dev/react-libs.git"
   },
   "bugs": {
-    "url": "https://github.com/abeta-dev/react-libs/issues"
+    "url": "https://github.com/Abeta-dev/react-libs/issues"
   },
   "homepage": "https://abeta.dev",
   "publishConfig": {
