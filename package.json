@@ -1,6 +1,6 @@
 {
   "name": "@abeta.dev/react-libs",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "Production-grade, highly performant React 19 component library with strict TypeScript types, atomic exports, and zero dependency leakage.",
   "keywords": [
     "react",
@@ -423,7 +423,7 @@
     }
   },
   "dependencies": {
-    "@abeta.dev/auth": "0.3.0",
+    "@abeta.dev/auth": "0.3.1",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.8",

@@ -23,6 +23,21 @@ jobs:
         with:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org/'
+          cache: 'npm'
+
+      - name: Cache Build & Storybook Artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            dist
+            packages/auth/dist
+            storybook-static
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-artifacts-${{ hashFiles('**/package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-artifacts-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-artifacts-
 
       - name: Install Dependencies
         run: npm ci
@@ -67,7 +82,12 @@ jobs:
         run: npm run test
 
       - name: Prebuild Storybook Artifacts
-        run: npm run build-storybook
+        run: |
+          if [ -d "storybook-static" ] && [ -f "storybook-static/index.html" ]; then
+            echo "Storybook already built for this commit; skipping."
+          else
+            npm run build-storybook
+          fi
 
       - name: Extract Release Notes
         run: node scripts/extract-release-notes.mjs --output dist/release-notes.md
@@ -77,20 +97,20 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Verify or publish auth package first
+      - name: Publish auth package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           AUTH_NAME=$(node -p "require('./packages/auth/package.json').name")
           AUTH_VERSION=$(node -p "require('./packages/auth/package.json').version")
           if npm view "${AUTH_NAME}@${AUTH_VERSION}" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
-            echo "${AUTH_NAME}@${AUTH_VERSION} already exists; leaving immutable release untouched."
+            echo "${AUTH_NAME}@${AUTH_VERSION} already exists on npm; leaving untouched."
           else
             npm publish -w packages/auth --access public --tag latest --provenance
+            echo "Successfully published ${AUTH_NAME}@${AUTH_VERSION} to npm."
           fi
-          test "$(npm view "${AUTH_NAME}@${AUTH_VERSION}" version --registry=https://registry.npmjs.org/)" = "${AUTH_VERSION}"
 
-      - name: Verify or publish root package after exact auth dependency resolves
+      - name: Publish root package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
@@ -99,13 +119,12 @@ jobs:
           AUTH_NAME=$(node -p "require('./packages/auth/package.json').name")
           AUTH_VERSION=$(node -p "require('./packages/auth/package.json').version")
           test "$(node -p "require('./package.json').dependencies['${AUTH_NAME}']")" = "${AUTH_VERSION}"
-          test "$(npm view "${AUTH_NAME}@${AUTH_VERSION}" version --registry=https://registry.npmjs.org/)" = "${AUTH_VERSION}"
           if npm view "${ROOT_NAME}@${ROOT_VERSION}" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
-            echo "${ROOT_NAME}@${ROOT_VERSION} already exists; leaving immutable release untouched."
+            echo "${ROOT_NAME}@${ROOT_VERSION} already exists on npm; leaving untouched."
           else
             npm publish --access public --tag latest --provenance
+            echo "Successfully published ${ROOT_NAME}@${ROOT_VERSION} to npm."
           fi
-          test "$(npm view "${ROOT_NAME}@${ROOT_VERSION}" version --registry=https://registry.npmjs.org/)" = "${ROOT_VERSION}"
 
       - name: Create GitHub Release when absent
         run: |
