@@ -86,7 +86,7 @@
     }
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup --config tsup.config.ts && tsup --config tsup.core.config.ts",
     "test": "vitest run",
     "lint": "eslint . --max-warnings 0",
     "check:types": "tsc --noEmit",
@@ -96,6 +96,10 @@
   "peerDependencies": {
     "react": "^18.2.0 || ^19.0.0",
     "react-dom": "^18.2.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "react-dom": { "optional": true }
   },
   "dependencies": {
     "clsx": "^2.1.1"

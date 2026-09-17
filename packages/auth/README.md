@@ -16,4 +16,6 @@ The application adapter maps its backend's `{ data }` / `{ error }` envelope to 
 
 OAuth and OTP are capability descriptors only. Unsupported capabilities are absent or reported as `{ supported: false }`; the package supplies no success-returning provider or OTP stub.
 
+Use `@abeta.dev/auth/core` for non-React/browser-neutral applications. It has no React runtime dependency and its output deliberately has no `'use client'` directive. `@abeta.dev/auth` and `@abeta.dev/auth/react` are React entrypoints: install compatible `react` and `react-dom` before importing either. The React peer metadata is optional so a core-only consumer is not forced to install React, not because the React entrypoints may run without it.
+
 Use `@abeta.dev/auth/react` for `AuthClientProvider` and `useAuthClientSnapshot`. The provider subscribes to a caller-owned client and does not create or destroy it, which keeps React StrictMode remounts from duplicating lifecycle work.

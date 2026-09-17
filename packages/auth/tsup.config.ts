@@ -1,9 +1,9 @@
 import { defineConfig } from 'tsup';
 
+/** React-facing bundles are built first and own cleaning the output directory. */
 export default defineConfig({
   entry: {
     index: 'src/index.ts',
-    core: 'src/core/index.ts',
     react: 'src/react.ts',
     'core/use-click-backpressure': 'src/core/use-click-backpressure.ts',
   },
@@ -12,8 +12,6 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   splitting: false,
-  banner: {
-    js: "'use client';",
-  },
+  banner: { js: "'use client';" },
   external: ['react', 'react-dom', 'clsx'],
 });

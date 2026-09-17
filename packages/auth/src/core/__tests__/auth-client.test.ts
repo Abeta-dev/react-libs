@@ -51,7 +51,7 @@ describe('AuthClient', () => {
     expect(client.getSnapshot().status).toBe('reauth_required');
   });
 
-  it('invalidates this tab on a cross-tab message', async () => {
+  it('invalidates on every cross-tab message despite incomparable epoch counters without rebroadcasting', async () => {
     let listener: ((message: { type: 'invalidate'; epoch: number }) => void) | undefined;
     const coordinator: RefreshCoordinator = {
       supportsCookieRefresh: true, run: async (work) => work(), publish: vi.fn(),
@@ -59,8 +59,46 @@ describe('AuthClient', () => {
     };
     const client = new AuthClient({ adapter: adapter(), csrf, refreshCoordinator: coordinator });
     await client.login({ email: 'user@example.test', password: 'secret' });
+    const localEpoch = client.getSnapshot().epoch;
+    listener?.({ type: 'invalidate', epoch: 0 });
+    const firstRemoteEpoch = client.getSnapshot().epoch;
     listener?.({ type: 'invalidate', epoch: 50 });
-    expect(client.getSnapshot()).toMatchObject({ status: 'reauth_required', session: null, epoch: 50 });
+    expect(client.getSnapshot()).toMatchObject({ status: 'reauth_required', session: null });
+    expect(firstRemoteEpoch).toBeGreaterThan(localEpoch);
+    expect(client.getSnapshot().epoch).toBeGreaterThan(50);
+    expect(coordinator.publish).not.toHaveBeenCalled();
+  });
+
+  it('makes reauthentication terminal for automatic access token retrieval', async () => {
+    const refresh = vi.fn().mockRejectedValue(new TypeError('lost refresh response'));
+    const client = new AuthClient({ adapter: adapter({ refresh }), csrf });
+    await client.refresh();
+    expect(await client.getAccessToken()).toBeNull();
+    expect(await client.refresh()).toBeNull();
+    expect(refresh).toHaveBeenCalledTimes(1);
+  });
+
+  it('propagates ambiguous rotation invalidation and does not let stale work mutate it', async () => {
+    let resolve!: (value: AuthClientSession) => void;
+    const coordinator: RefreshCoordinator = {
+      supportsCookieRefresh: true, run: async (work) => work(), publish: vi.fn(), subscribe: () => () => {},
+    };
+    const client = new AuthClient({ adapter: adapter({ refresh: vi.fn().mockReturnValue(new Promise<AuthClientSession>((done) => { resolve = done; })) }), csrf, refreshCoordinator: coordinator });
+    const pending = client.refresh();
+    await client.logout();
+    resolve(session('late'));
+    await pending;
+    expect(client.getSnapshot().status).toBe('unauthenticated');
+    expect(coordinator.publish).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not restore expired persisted access sessions', async () => {
+    const persistence = { load: vi.fn().mockResolvedValue({ ...session(), expiresAt: Date.now() - 1 }), save: vi.fn(), clear: vi.fn().mockResolvedValue(undefined) };
+    const refresh = vi.fn().mockResolvedValue(null);
+    const client = new AuthClient({ adapter: adapter({ refresh }), csrf, persistence });
+    await client.bootstrap();
+    expect(persistence.clear).toHaveBeenCalled();
+    expect(client.getSnapshot()).toMatchObject({ status: 'unauthenticated', session: null });
   });
 
   it('rejects malformed session envelopes', async () => {

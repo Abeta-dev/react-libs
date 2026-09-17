@@ -6,12 +6,13 @@ import {
   type AuthClientOptions,
   type AuthClientSession,
   type AuthClientSnapshot,
+  type AuthClientStatus,
   type InvitationAccepted,
   type InvitationInspection,
   type PendingActivation,
 } from '../types/client';
 
-const initialSnapshot = <TUser>(): AuthClientSnapshot<TUser> => ({
+const initialSnapshot = <TUser>(): AuthClientSnapshot<TUser> => Object.freeze({
   status: 'restoring',
   session: null,
   epoch: 0,
@@ -21,7 +22,7 @@ const initialSnapshot = <TUser>(): AuthClientSnapshot<TUser> => ({
 /**
  * Headless, backend-neutral owner of an in-memory access session.
  * Refresh is cookie-backed, deduplicated, and guarded by epochs so old work can
- * never restore a session after logout or account replacement.
+ * never restore a session after logout, account replacement, or cross-tab invalidation.
  */
 export class AuthClient<TUser = AuthUser> {
   private snapshot: AuthClientSnapshot<TUser> = initialSnapshot<TUser>();
@@ -39,9 +40,7 @@ export class AuthClient<TUser = AuthUser> {
     this.refreshThresholdMs = options.refreshThresholdMs ?? 60_000;
     if (options.refreshCoordinator) {
       this.unsubscribeCoordination = options.refreshCoordinator.subscribe((message) => {
-        if (message.type === 'invalidate' && message.epoch >= this.snapshot.epoch) {
-          this.invalidateFromAnotherTab(message.epoch);
-        }
+        if (message.type === 'invalidate') this.invalidateFromAnotherTab(message.epoch);
       });
     }
   }
@@ -54,12 +53,15 @@ export class AuthClient<TUser = AuthUser> {
   };
 
   async bootstrap(): Promise<AuthClientSnapshot<TUser>> {
-    const epoch = this.advanceEpoch();
-    this.replace({ status: 'restoring', session: null, epoch, error: null });
-
+    const epoch = this.begin('restoring');
     const restored = await this.options.persistence?.load().catch(() => null);
-    if (restored && this.isCurrent(epoch)) this.install(restored, epoch);
-    const token = await this.refresh({ epoch, allowCoordinatorFailure: false });
+    if (restored && this.isCurrent(epoch) && restored.expiresAt > this.now()) {
+      this.install(restored, epoch);
+    } else if (restored) {
+      this.ignorePersistence(this.options.persistence?.clear());
+    }
+
+    const token = await this.refresh({ epoch });
     if (!this.isCurrent(epoch)) return this.snapshot;
     if (!token && this.snapshot.status === 'restoring') {
       this.replace({ status: 'unauthenticated', session: null, epoch, error: null });
@@ -68,8 +70,7 @@ export class AuthClient<TUser = AuthUser> {
   }
 
   async login(credentials: PasswordCredentials): Promise<AuthClientSession<TUser>> {
-    const epoch = this.advanceEpoch();
-    this.replace({ status: 'restoring', session: null, epoch, error: null });
+    const epoch = this.begin('restoring');
     try {
       const session = await this.withCsrf((context) => this.options.adapter.login(credentials, context));
       if (!this.isCurrent(epoch)) throw new AuthClientError('A newer authentication operation superseded this login.', 'STALE_OPERATION');
@@ -81,7 +82,7 @@ export class AuthClient<TUser = AuthUser> {
     }
   }
 
-  async signup(credentials: SignUpCredentials): Promise<PendingActivation> {
+  signup(credentials: SignUpCredentials): Promise<PendingActivation> {
     return this.withCsrf((context) => this.options.adapter.signup(credentials, context));
   }
 
@@ -131,13 +132,14 @@ export class AuthClient<TUser = AuthUser> {
   }
 
   async getAccessToken(): Promise<string | null> {
+    if (this.snapshot.status === 'reauth_required') return null;
     const session = this.snapshot.session;
     if (session && session.expiresAt - this.now() > this.refreshThresholdMs) return session.accessToken;
     return this.refresh();
   }
 
-  async refresh(options: { epoch?: number; allowCoordinatorFailure?: boolean } = {}): Promise<string | null> {
-    if (this.refreshFlight) return this.refreshFlight;
+  async refresh(options: { epoch?: number } = {}): Promise<string | null> {
+    if (this.snapshot.status === 'reauth_required' || this.refreshFlight) return this.snapshot.status === 'reauth_required' ? null : this.refreshFlight;
     const epoch = options.epoch ?? this.snapshot.epoch;
     if (this.destroyed || !this.isCurrent(epoch)) return null;
     const coordinator = this.options.refreshCoordinator;
@@ -145,6 +147,7 @@ export class AuthClient<TUser = AuthUser> {
       this.invalidate('reauth_required', epoch);
       return null;
     }
+
     this.refreshFlight = (async () => {
       try {
         const work = () => this.withCsrf((context) => this.options.adapter.refresh(context));
@@ -155,11 +158,11 @@ export class AuthClient<TUser = AuthUser> {
           return null;
         }
         this.install(session, epoch);
-        return session.accessToken;
+        return this.isCurrent(epoch) && this.snapshot.session?.accessToken === session.accessToken ? session.accessToken : null;
       } catch (error) {
-        if (this.isCurrent(epoch) && !this.destroyed) {
+        if (!this.destroyed) {
           // A network loss after a rotation may have consumed a single-use generation.
-          // Never retry automatically: require an explicit login.
+          // Never retry automatically: require an explicit login in every tab.
           this.invalidate('reauth_required', epoch, error);
         }
         return null;
@@ -172,15 +175,12 @@ export class AuthClient<TUser = AuthUser> {
   }
 
   async logout(): Promise<void> {
-    const epoch = this.advanceEpoch();
-    this.replace({ status: 'unauthenticated', session: null, epoch, error: null });
-    this.clearTimer();
-    this.ignorePersistence(this.options.persistence?.clear());
+    const epoch = this.begin('unauthenticated');
+    this.clearLocalSession();
     this.options.refreshCoordinator?.publish({ type: 'invalidate', epoch });
     try {
       await this.withCsrf((context) => this.options.adapter.logout(context));
     } catch (error) {
-      // Local authority is already gone. The next bootstrap cannot silently restore it.
       if (this.isCurrent(epoch)) this.replace({ status: 'reauth_required', session: null, epoch, error: this.normalizeError(error) });
     }
   }
@@ -193,7 +193,6 @@ export class AuthClient<TUser = AuthUser> {
 
   destroy(): void {
     this.destroyed = true;
-    this.advanceEpoch();
     this.clearTimer();
     this.destroyController.abort();
     this.listeners.clear();
@@ -211,26 +210,43 @@ export class AuthClient<TUser = AuthUser> {
 
   private install(session: AuthClientSession<TUser>, epoch: number): void {
     if (!this.isCurrent(epoch) || this.destroyed) return;
-    if (!session.accessToken || !Number.isFinite(session.expiresAt)) {
-      this.invalidate('reauth_required', epoch, new AuthClientError('The backend returned an invalid session envelope.', 'MALFORMED_SESSION'));
+    if (!session.accessToken || !Number.isFinite(session.expiresAt) || session.expiresAt <= this.now()) {
+      this.invalidate('reauth_required', epoch, new AuthClientError('The backend returned an invalid or expired session envelope.', 'MALFORMED_SESSION'));
       return;
     }
-    this.replace({ status: 'authenticated', session, epoch, error: null });
-    this.ignorePersistence(this.options.persistence?.save(session));
-    this.scheduleRefresh(session, epoch);
+    const immutableSession = Object.freeze({ ...session, user: Object.freeze({ ...session.user }) });
+    this.replace({ status: 'authenticated', session: immutableSession, epoch, error: null });
+    this.ignorePersistence(this.options.persistence?.save(immutableSession));
+    this.scheduleRefresh(immutableSession, epoch);
   }
 
-  private invalidate(status: 'unauthenticated' | 'reauth_required', epoch = this.advanceEpoch(), cause?: unknown): void {
-    if (!this.isCurrent(epoch)) return;
-    this.clearTimer();
-    this.ignorePersistence(this.options.persistence?.clear());
+  /** Invalidates only if the expected async operation still owns the current epoch. */
+  private invalidate(status: 'unauthenticated' | 'reauth_required', expectedEpoch?: number, cause?: unknown): boolean {
+    if (expectedEpoch !== undefined && !this.isCurrent(expectedEpoch)) return false;
+    const epoch = this.snapshot.epoch + 1;
+    this.clearLocalSession();
     this.replace({ status, session: null, epoch, error: cause ? this.normalizeError(cause) : null });
+    this.options.refreshCoordinator?.publish({ type: 'invalidate', epoch });
+    return true;
   }
 
-  private invalidateFromAnotherTab(epoch: number): void {
+  /** Remote epochs are not comparable counters: every message must invalidate locally. */
+  private invalidateFromAnotherTab(remoteEpoch: number): void {
+    const epoch = Math.max(this.snapshot.epoch + 1, remoteEpoch + 1);
+    this.clearLocalSession();
+    // Do not re-publish a received message: BroadcastChannel/storage relays can otherwise loop forever.
+    this.replace({ status: 'reauth_required', session: null, epoch, error: null });
+  }
+
+  private begin(status: Extract<AuthClientStatus, 'restoring' | 'unauthenticated'>): number {
+    const epoch = this.snapshot.epoch + 1;
+    this.replace({ status, session: null, epoch, error: null });
+    return epoch;
+  }
+
+  private clearLocalSession(): void {
     this.clearTimer();
     this.ignorePersistence(this.options.persistence?.clear());
-    this.replace({ status: 'reauth_required', session: null, epoch, error: null });
   }
 
   private scheduleRefresh(session: AuthClientSession<TUser>, epoch: number): void {
@@ -257,13 +273,6 @@ export class AuthClient<TUser = AuthUser> {
   private replace(snapshot: AuthClientSnapshot<TUser>): void {
     this.snapshot = Object.freeze(snapshot);
     this.listeners.forEach((listener) => listener());
-  }
-
-  private advanceEpoch(): number {
-    const epoch = this.snapshot.epoch + 1;
-    // Advance immediately so late async operations observe that they are stale.
-    this.snapshot = Object.freeze({ ...this.snapshot, epoch });
-    return epoch;
   }
 
   private isCurrent(epoch: number): boolean {

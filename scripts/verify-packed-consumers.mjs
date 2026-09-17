@@ -58,10 +58,23 @@ try {
   run('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund'], fixture);
   run('node', ['--input-type=module', '--eval', `
     await import(${JSON.stringify(authPackage.name)});
+    await import(${JSON.stringify(`${authPackage.name}/core`)});
+    await import(${JSON.stringify(`${authPackage.name}/react`)});
     await import(${JSON.stringify(`${authPackage.name}/core/use-click-backpressure`)});
     await import(${JSON.stringify(rootPackage.name)});
     await import(${JSON.stringify(`${rootPackage.name}/auth`)});
     console.log('Packed external consumer imports passed.');
+  `], fixture);
+  run('node', ['--input-type=module', '--eval', `
+    import { readFileSync } from 'node:fs';
+    import { createRequire } from 'node:module';
+    const require = createRequire(import.meta.url);
+    const core = readFileSync(require.resolve(${JSON.stringify(`${authPackage.name}/core`)}), 'utf8');
+    const react = readFileSync(require.resolve(${JSON.stringify(`${authPackage.name}/react`)}), 'utf8');
+    const hasClientDirective = (source) => [String.fromCharCode(34), String.fromCharCode(39)].some((quote) => source.trimStart().startsWith(quote + 'use client' + quote));
+    if (hasClientDirective(core)) throw new Error('Headless core output unexpectedly has a client directive.');
+    if (!hasClientDirective(react)) throw new Error('React output is missing its client directive.');
+    console.log('Packed entrypoint directives passed.');
   `], fixture);
   console.log(`✅ Packed external consumer verified ${basename(authTarball)} and ${basename(rootTarball)}.`);
 } finally {
