@@ -16,7 +16,7 @@
 /** Shape returned by the backend GET /api/config endpoint for storage. */
 export interface BlobStorageConfig {
   storageBaseUrl: string;
-  storageSecretKey: string;
+  storageSecretKey?: string | undefined;
 }
 
 /** Provider function to retrieve authentication token dynamically */
@@ -201,9 +201,26 @@ export class BlobStorageClient {
 
     this._config = {
       storageBaseUrl: json.storage_base_url || "",
-      storageSecretKey: json.storage_secret_key || "",
+      storageSecretKey: json.storage_secret_key || undefined,
     };
     return this._config;
+  }
+
+  /** Resolve auth token from instance, provider, or storage */
+  private async resolveToken(token?: string): Promise<string> {
+    if (token) return token;
+    if (this._token) return this._token;
+    if (this._tokenProvider) {
+      try {
+        return (await this._tokenProvider()) || "";
+      } catch {
+        return "";
+      }
+    }
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("auth_jwt") ?? localStorage.getItem("jwt") ?? "";
+    }
+    return "";
   }
 
   /** Alias for backward compatibility */
@@ -243,9 +260,18 @@ export class BlobStorageClient {
     form.append("folderPath", safeFolderPath);
     form.append("file", file);
 
+    const headers: Record<string, string> = {};
+    if (storageSecretKey) {
+      headers.secretkey = storageSecretKey;
+    }
+    const authToken = await this.resolveToken();
+    if (authToken) {
+      headers.Authorization = `Bearer ${authToken}`;
+    }
+
     const res = await fetch(`${storageBaseUrl}/api/admin/upload_file`, {
       method: "POST",
-      headers: { secretkey: storageSecretKey },
+      headers,
       body: form,
     });
 
@@ -291,11 +317,26 @@ export class BlobStorageClient {
   ): Promise<void> {
     const { storageBaseUrl, storageSecretKey } = await this.fetchConfig(apiBase);
 
-    const filePath = `${folder}/${fileName}`;
-    const qs = new URLSearchParams({ filePath, fileName });
+    const safeFolder = sanitizeStoragePath(folder);
+    const safeFileName = fileName.replace(/\0/g, "").replace(/[^a-zA-Z0-9._-]/g, "");
+    if (!safeFileName) {
+      throw new Error("Invalid storage fileName parameter");
+    }
+
+    const filePath = safeFolder ? `${safeFolder}/${safeFileName}` : safeFileName;
+    const qs = new URLSearchParams({ filePath, fileName: safeFileName });
+
+    const headers: Record<string, string> = {};
+    if (storageSecretKey) {
+      headers.secretkey = storageSecretKey;
+    }
+    const authToken = await this.resolveToken();
+    if (authToken) {
+      headers.Authorization = `Bearer ${authToken}`;
+    }
 
     const res = await fetch(`${storageBaseUrl}/api/admin/download_file?${qs}`, {
-      headers: { secretkey: storageSecretKey },
+      headers,
     });
 
     if (!res.ok) {

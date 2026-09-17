@@ -25,7 +25,7 @@ export interface UseClickBackpressureResult<TArgs extends unknown[] = [React.Syn
   /**
    * Wrapped execution function with backpressure and debouncing applied.
    */
-  execute: (...args: TArgs) => Promise<TReturn | undefined>;
+  execute: (...args: TArgs) => Promise<Awaited<TReturn> | undefined>;
 
   /**
    * Whether an async execution is currently in flight.
@@ -42,7 +42,7 @@ export interface UseClickBackpressureResult<TArgs extends unknown[] = [React.Syn
    */
   wrapHandler: <A extends unknown[], R>(
     fn: (...args: A) => R
-  ) => (...args: A) => Promise<R | undefined>;
+  ) => (...args: A) => Promise<Awaited<R> | undefined>;
 }
 
 /**
@@ -66,9 +66,11 @@ export function useClickBackpressure<TArgs extends unknown[] = [React.SyntheticE
   const invocationCounterRef = React.useRef<number>(0);
   const activeExecutionIdRef = React.useRef<number | null>(null);
 
-  // Concurrent mode purity: Update handler ref inside useEffect instead of render body
+  // Concurrent mode purity: Update handler ref using isomorphic layout effect before paint
+  const useIsomorphicLayoutEffect =
+    typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
   const handlerRef = React.useRef(handler);
-  React.useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     handlerRef.current = handler;
   }, [handler]);
 
@@ -84,23 +86,21 @@ export function useClickBackpressure<TArgs extends unknown[] = [React.SyntheticE
 
   const wrapHandler = React.useCallback(
     <A extends unknown[], R>(fn: (...args: A) => R) => {
-      return async (...args: A): Promise<R | undefined> => {
+      return async (...args: A): Promise<Awaited<R> | undefined> => {
         const now = Date.now();
 
         // 1. Check in-flight backpressure
         if (isPendingRef.current) {
-          const firstArg = args[0] as { preventDefault?: () => void; stopPropagation?: () => void } | undefined;
+          const firstArg = args[0] as { preventDefault?: () => void } | undefined;
           firstArg?.preventDefault?.();
-          firstArg?.stopPropagation?.();
           onBlocked?.('in_flight');
           return undefined;
         }
 
         // 2. Check debounce cooldown window
         if (!isDebounceDisabled && now - lastClickTimeRef.current < cooldownMs) {
-          const firstArg = args[0] as { preventDefault?: () => void; stopPropagation?: () => void } | undefined;
+          const firstArg = args[0] as { preventDefault?: () => void } | undefined;
           firstArg?.preventDefault?.();
-          firstArg?.stopPropagation?.();
           onBlocked?.('cooldown');
           return undefined;
         }
@@ -119,12 +119,12 @@ export function useClickBackpressure<TArgs extends unknown[] = [React.SyntheticE
               isAsync = true;
               setIsPending(true);
             }
-            return (await result) as R;
+            return (await result) as Awaited<R>;
           }
           // Synchronous execution: release pending lock immediately
           isPendingRef.current = false;
           activeExecutionIdRef.current = null;
-          return result;
+          return result as Awaited<R>;
         } catch (err) {
           lastClickTimeRef.current = 0;
           isPendingRef.current = false;
@@ -152,7 +152,7 @@ export function useClickBackpressure<TArgs extends unknown[] = [React.SyntheticE
         return handlerRef.current(...args);
       }
       return undefined;
-    });
+    }) as (...args: TArgs) => Promise<Awaited<TReturn> | undefined>;
   }, [wrapHandler]);
 
   return {

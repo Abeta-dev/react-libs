@@ -37,17 +37,7 @@ function isSameDateRange(a?: DateRange, b?: DateRange): boolean {
   if (a === b) return true;
   if (!a && !b) return true;
   if (!a || !b) return false;
-  const fromEqual =
-    (!a.from && !b.from) ||
-    (Boolean(a.from) &&
-      Boolean(b.from) &&
-      a.from!.getTime() === b.from!.getTime());
-  const toEqual =
-    (!a.to && !b.to) ||
-    (Boolean(a.to) &&
-      Boolean(b.to) &&
-      a.to!.getTime() === b.to!.getTime());
-  return fromEqual && toEqual;
+  return a.from?.getTime() === b.from?.getTime() && a.to?.getTime() === b.to?.getTime();
 }
 
 export const DatePickerWithRange = React.forwardRef<

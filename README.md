@@ -4,7 +4,7 @@
 > Built for multi-tenant vendor portals, procurement dashboards, statutory compliance, and financial workflows.
 > Combines accessible Tailwind CSS v4 & Radix UI primitives, India statutory validation (GSTIN, PAN, IFSC), pluggable behavioral telemetry, and offline-resilient PWA mutations into isolated, tree-shakeable subpaths.
 
-[![Version](https://img.shields.io/badge/version-0.14.0-blue)](https://www.npmjs.com/package/@abeta.dev/react-libs)
+[![Version](https://img.shields.io/badge/version-0.14.1-blue)](https://www.npmjs.com/package/@abeta.dev/react-libs)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#testing)
 [![React](https://img.shields.io/badge/react-19-blue)](https://react.dev)
 [![Tailwind](https://img.shields.io/badge/tailwind-v4-38bdf8)](https://tailwindcss.com)
@@ -243,7 +243,7 @@ Import the design system theme directly into your global CSS stylesheet (e.g. `s
 
 ```css
 @import "tailwindcss";
-@import "@abeta.dev/react-libs/styles/theme.css";
+@import "@abeta.dev/react-libs/theme.css";
 ```
 
 This registers all semantic design tokens (`--primary`, `--muted`, `--border`, etc.) directly with Tailwind v4's `@theme` directive, giving you instant access to semantic utility classes like `bg-primary`, `text-muted`, and `border-border`.
@@ -252,7 +252,7 @@ This registers all semantic design tokens (`--primary`, `--muted`, `--border`, e
 If your project uses Tailwind CSS v3, Vite, Webpack, Create React App, or standard plain CSS without Tailwind v4, import the pre-compiled distribution stylesheet at your application's root entry point (e.g. `main.tsx`, `App.tsx`, or `_app.tsx`):
 
 ```tsx
-import "@abeta.dev/react-libs/dist/style.css";
+import "@abeta.dev/react-libs/style.css";
 ```
 
 > [!TIP]
@@ -650,7 +650,7 @@ Explore our formal design decisions in [`docs/adr/`](./docs/adr/):
 
 ## Community & Contributing
 
-- **[Migration Guide](./MIGRATION.md)**: Upgrading to v0.14.0.
+- **[Migration Guide](./MIGRATION.md)**: Upgrading to v0.14.1.
 - **[Quality Standards & Scorecard](./QUALITY_STANDARDS_AND_AUDIT_SCORECARD.md)**: Perpetual quality parameters, security invariants, and audit scorecard.
 - **[Code of Conduct](./CODE_OF_CONDUCT.md)**: We are committed to providing a friendly, safe, and welcoming environment for all contributors.
 - **[Security Policy](./SECURITY.md)**: Guidelines for reporting security vulnerabilities responsibly.

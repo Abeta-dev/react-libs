@@ -29,8 +29,8 @@ export const DEFAULT_LANGUAGES: LanguageOption[] = [
 export interface LanguageToggleProps<T extends string = string> {
   language: T;
   setLanguage: (lang: T) => void;
-  languages?: LanguageOption<T>[];
-  className?: string;
+  languages?: LanguageOption<T>[] | undefined;
+  className?: string | undefined;
 }
 
 /**
@@ -46,15 +46,16 @@ export interface LanguageToggleProps<T extends string = string> {
 export function LanguageToggle<T extends string = string>({
   language,
   setLanguage,
-  languages = DEFAULT_LANGUAGES as unknown as LanguageOption<T>[],
+  languages,
   className,
 }: LanguageToggleProps<T>) {
-  const fallbackLanguage: LanguageOption<T> = languages[0] ?? {
+  const activeLanguages = languages ?? (DEFAULT_LANGUAGES as LanguageOption<T>[]);
+  const fallbackLanguage: LanguageOption<T> = activeLanguages[0] ?? {
     code: language,
     name: String(language).toUpperCase(),
     nativeName: String(language).toUpperCase(),
   };
-  const current = languages.find((l) => l.code === language) ?? fallbackLanguage;
+  const current = activeLanguages.find((l) => l.code === language) ?? fallbackLanguage;
 
   return (
     <DropdownMenu>
@@ -79,7 +80,7 @@ export function LanguageToggle<T extends string = string>({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-[200px]">
-        {languages.map((lang) => (
+        {activeLanguages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
             onClick={() => setLanguage(lang.code)}

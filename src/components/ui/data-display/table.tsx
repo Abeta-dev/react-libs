@@ -6,7 +6,12 @@ const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-auto">
+  // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- Required for WCAG 2.1.1 scrollable region keyboard access
+  <div tabIndex={0}
+    role="region"
+    aria-label="Scrollable data table"
+    className="relative w-full overflow-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
+  >
     <table
       ref={ref}
       className={cn("w-full caption-bottom text-sm", className)}

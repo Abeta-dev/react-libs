@@ -1,6 +1,16 @@
-# Migration Guide: Upgrading to v0.14.0
+# Migration Guide: Upgrading to v0.14.1
 
-This guide details architectural evolutions, security hardening, and migration steps for upgrading to `@abeta.dev/react-libs` v0.14.0 and `@abeta.dev/auth` v0.2.0.
+This guide details architectural evolutions, security hardening, and migration steps for upgrading to `@abeta.dev/react-libs` v0.14.1 and `@abeta.dev/auth` v0.2.1.
+
+---
+
+## Upgrading to v0.14.1
+
+### 1. Direct Backpressure Hook Re-Export
+`useClickBackpressure` is now exported directly from the canonical `@abeta.dev/react-libs` root and `src/hooks/use-click-backpressure.ts`. If your UI components imported this hook from domain subpaths, you may now consume it directly from `@abeta.dev/react-libs`.
+
+### 2. Zero Error Manipulation & Raw Error Access
+In accordance with zero error manipulation standards, underlying error causes are now preserved via `AuthError.originalError` and ES2022 `options.cause`. In `AuthContextValue`, `rawError?: unknown` is exposed alongside formatted error messages for uncompromised debugging fidelity.
 
 ---
 

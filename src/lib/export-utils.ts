@@ -48,7 +48,10 @@ export function sanitizeSpreadsheetValue(val: unknown): unknown {
   if (val == null) return "";
   if (typeof val === "number" || typeof val === "boolean") return val;
   const str = String(val);
-  const isFormula = /^[=+\-@\t\r]/.test(str);
+  const trimmed = str.trimStart();
+  const hasRawTrigger = /^[=+\-@\t\r%|]/.test(str);
+  const hasTrimmedFormula = /^[=+\-@%|]/.test(trimmed);
+  const isFormula = hasRawTrigger || hasTrimmedFormula;
   const isNumber = !isNaN(Number(str)) && str.trim() !== "";
   return isFormula && !isNumber ? `'${str}` : val;
 }
@@ -208,6 +211,9 @@ export async function downloadFileSecurely(
   const base = apiBase ?? "";
   const fullEndpoint = endpoint.startsWith("http") ? endpoint : `${base}${endpoint}`;
 
+  // Security check: Validate origin before attaching Bearer token to prevent arbitrary token exfiltration
+  validateDownloadOrigin(endpoint, base);
+
   // SECURE DOWNLOAD: Use fetch with Authorization header to avoid token leakage in logs/history
   const response = await fetch(`${fullEndpoint}?${new URLSearchParams(queryParams).toString()}`, {
     method: 'GET',
@@ -218,16 +224,7 @@ export async function downloadFileSecurely(
   if (!response.ok) throw new Error(`Download failed: ${response.statusText}`);
 
   const blob = await response.blob();
-  if (typeof window !== "undefined" && typeof document !== "undefined") {
-    const downloadUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(downloadUrl);
-  }
+  triggerBlobDownload(blob, filename);
 }
 
 /** Backward-compatible alias for downloadFileSecurely */
@@ -254,4 +251,46 @@ function triggerDownload(blob: Blob, filename: string) {
     }
     URL.revokeObjectURL(url);
   }, 200);
+}
+
+function validateDownloadOrigin(endpoint: string, base?: string): void {
+  if (endpoint.startsWith("//") || /^(?:javascript|data|vbscript|file):/i.test(endpoint)) {
+    throw new Error(`Untrusted download URL: dangerous scheme or protocol-relative URL in ${endpoint}`);
+  }
+  if (!endpoint.startsWith("http://") && !endpoint.startsWith("https://")) {
+    return;
+  }
+  try {
+    const targetUrl = new URL(endpoint);
+    if (targetUrl.protocol !== "http:" && targetUrl.protocol !== "https:") {
+      throw new Error(`Untrusted download URL scheme: ${targetUrl.protocol}`);
+    }
+    // Prevent cleartext token leakage over unencrypted HTTP when origin is HTTPS
+    if (typeof window !== "undefined" && window.location?.protocol === "https:" && targetUrl.protocol === "http:" && targetUrl.hostname !== "localhost" && targetUrl.hostname !== "127.0.0.1") {
+      throw new Error(
+        `Untrusted download URL origin: refusing to attach Bearer token to unencrypted HTTP host ${targetUrl.host}`
+      );
+    }
+    if (base) {
+      // Validate base URL if provided
+      new URL(base, typeof window !== "undefined" && window.location?.origin ? window.location.origin : "http://localhost");
+    }
+  } catch (err) {
+    if (err instanceof Error && err.message.startsWith("Untrusted download URL")) {
+      throw err;
+    }
+    throw new Error(`Invalid download endpoint URL: ${endpoint}`);
+  }
+}
+
+function triggerBlobDownload(blob: Blob, filename: string): void {
+  if (typeof window === "undefined" || typeof document === "undefined") return;
+  const downloadUrl = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = downloadUrl;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(downloadUrl);
 }

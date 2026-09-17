@@ -70,7 +70,8 @@ export function getExportedSymbols() {
     for (const m of namedMatches) {
       const parts = m[1].split(',');
       for (const p of parts) {
-        const sym = p.trim().split(/\s+as\s+/).pop().trim();
+        const cleaned = p.trim().replace(/^type\s+/, '');
+        const sym = cleaned.split(/\s+as\s+/).pop().trim();
         if (sym && /^[A-Za-z0-9_]+$/.test(sym)) {
           symbols.add(sym);
         }
@@ -231,7 +232,7 @@ export function verifyChangelogSymbols() {
 
       for (const token of backtickedTokens) {
         // Skip format/syntax tokens
-        if (['.d.ts', './style.css', 'use client', 'onError', 'AbortController'].includes(token)) continue;
+        if (['.d.ts', './style.css', 'use client', 'onError', 'AbortController', 'AbortSignal'].includes(token)) continue;
 
         // Check if token matches symbol, file, or subpath
         if (

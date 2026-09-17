@@ -29,6 +29,11 @@ if (typeof document !== "undefined" && !document.getElementById(SHIMMER_STYLE_ID
       );
       animation: progress-shimmer 1.6s ease-in-out infinite;
     }
+    @media (prefers-reduced-motion: reduce) {
+      .progress-shimmer::after {
+        animation: none;
+      }
+    }
   `
   document.head.appendChild(style)
 }
@@ -63,13 +68,13 @@ const indicatorVariants = cva(
   }
 )
 
-interface ProgressProps
+export interface ProgressProps
   extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>,
     VariantProps<typeof progressVariants> {
   /** Show a shimmer animation over the progress bar */
-  shimmer?: boolean
+  shimmer?: boolean | undefined
   /** Show a percentage label to the right of the bar */
-  showLabel?: boolean
+  showLabel?: boolean | undefined
 }
 
 const Progress = React.forwardRef<

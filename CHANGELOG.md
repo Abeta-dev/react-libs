@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.1] - 2026-09-17
+
+### Added
+- Exported canonical `useClickBackpressure` hook in `@abeta.dev/react-libs` (`src/hooks/use-click-backpressure.ts`), decoupling foundational UI primitives from domain packages.
+- Exported `getStoredOAuthState`, `getStoredCodeVerifier`, and `clearStoredOAuthData` in `@abeta.dev/auth` for secure OAuth 2.0 PKCE and CSRF callback verification.
+- Added `rawError?: unknown` to `AuthContextValue` and `AuthContext` to expose unmanipulated raw errors to consuming developers for enhanced debugging.
+- Added `options?: { cause?: unknown }` and `originalError?: unknown` to `AuthError` (ES2022 cause pattern) to preserve underlying error causes.
+- Added dual-package Context singleton identity assertion test (`src/__tests__/auth-singleton.test.ts`) guaranteeing identical context reference between `@abeta.dev/auth` and `@abeta.dev/react-libs/auth`.
+- Added explicit package subpath exports in `package.json` for `./style.css`, `./dist/style.css`, `./theme.css`, and `./styles/theme.css` eliminating `ERR_PACKAGE_PATH_NOT_EXPORTED` bundling errors.
+
+### Changed
+- Decoupled foundational `<Button />` primitive from `@abeta.dev/auth`, resolving the inverted architectural dependency (DIP/KISS).
+- Added `@source "../india"` and `@source "../../packages/auth/src"` to `src/styles/tailwind-bundle.css` so regional Indian components and auth styles are compiled into `dist/style.css`.
+- Pinned `@abeta.dev/auth` workspace dependency in root `package.json` to `"^0.2.1"`, preventing React Context splitting via wildcard dependencies.
+- Updated `useClickBackpressure` return type to `Promise<Awaited<TReturn> | undefined>` for accurate TypeScript promise resolution.
+- Updated `@arethetypeswrong/cli` packaging truth gate to verify all 22 code subpaths with 100% 🟢 green status.
+
+### Fixed
+- **Security**: Eliminated master storage admin secret key (`storageSecretKey`) exposure in client memory in `src/lib/blob-storage.ts`.
+- **Security**: Fixed unauthenticated admin session takeover in `MockAuthAdapter.verifyOtp` by verifying OTP against the active session or matching email, eliminating fallback to administrative users.
+- **Security**: Hardened OAuth PKCE and CSRF by persisting `state` nonces and `code_verifier` in `sessionStorage` across browser navigation redirects.
+- **Security**: Neutralized protocol-relative URL phishing bypasses (`//evil.com` and `/\`) in `signup-form.tsx`.
+- **Security**: Protected Bearer tokens in `src/lib/export-utils.ts` by validating download origins, blocking dangerous schemes (`javascript:`, `data:`, `//`), and preventing unencrypted HTTP token transmission on HTTPS origins.
+- **Security**: Neutralized directory traversal attacks (`../`) in cloud storage operations in `src/lib/blob-storage.ts`.
+- **Security**: Prevented silent PKCE cryptographic downgrades in `packages/auth/src/core/pkce.ts` by adding Node.js crypto fallback and throwing explicit exceptions when Web Crypto is unavailable.
+- **Security**: Neutralized CSV and XLSX formula injection (CWE-1236) in `src/lib/export-utils.ts` against leading whitespace, tabs (`\t`), carriage returns (`\r`), and trigger characters (`=, +, -, @, %, |`).
+- **Accessibility**: Implemented full WAI-ARIA tablist pattern with keyboard arrow navigation (ArrowLeft, ArrowRight, Home, End) and roving `tabIndex` in `AuthCard` (WCAG 2.1 SC 2.1.1).
+- **Accessibility**: Added high-contrast visible focus rings (`focus-visible:ring-2 focus-visible:ring-indigo-500`) to inline buttons, password toggles, and form actions (WCAG 2.2 SC 2.4.7 / 2.4.11).
+- **Accessibility**: Replaced indiscriminate `aria-invalid="true"` attribution on form inputs with fine-grained field tracking, ensuring typing in a field immediately clears its invalid status (WCAG 2.2 SC 3.3.1).
+- **Accessibility**: Added `tabIndex={0}`, `role="region"`, and accessible label to `Table` for keyboard-accessible horizontal scrolling, and added `@media (prefers-reduced-motion: reduce)` to progress shimmer animations.
+- **Concurrency**: Prevented zombie session resurrection in `TokenManager` via `isLoggedOut` state guard and aborting in-flight refreshes via `AbortSignal` on `signOut()` and `destroy()`.
+- **Concurrency**: Clamped `setTimeout` delay intervals to 32-bit signed integer boundary (`2,147,483,647` ms) in `TokenManager` and `useToken`.
+- **Concurrency**: Ensured direct execution without blocking or artificial delays when `debounceSec={false}` is provided to `<Button />`.
+- **Type Safety**: Removed runtime-crashing type lie `undefined as unknown as AuthSession` from `AuthCard.onSuccess`.
+- **Type Safety**: Eliminated `any` type escapes from `AuthContext` and enforced strict generics throughout auth hooks.
+- **Type Safety**: Restored ADR 0007 compliance (`exactOptionalPropertyTypes: true`) across `card.tsx`, `progress.tsx`, and `language-toggle.tsx`.
+
 ## [0.14.0] - 2026-09-17
 
 ### Added

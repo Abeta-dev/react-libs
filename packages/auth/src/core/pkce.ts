@@ -55,7 +55,21 @@ export async function generateCodeChallenge(codeVerifier: string): Promise<strin
     const digest = await crypto.subtle.digest('SHA-256', data);
     return base64UrlEncode(new Uint8Array(digest));
   }
-  return codeVerifier;
+
+  // Node.js fallback for SSR/testing environments
+  try {
+    const nodeCrypto = await import('node:crypto');
+    if (nodeCrypto?.createHash) {
+      const hash = nodeCrypto.createHash('sha256').update(codeVerifier).digest();
+      return base64UrlEncode(new Uint8Array(hash));
+    }
+  } catch {
+    // node:crypto unavailable
+  }
+
+  throw new Error(
+    'generateCodeChallenge: Secure cryptography (crypto.subtle or node:crypto) is required for RFC 7636 S256 PKCE.'
+  );
 }
 
 /**

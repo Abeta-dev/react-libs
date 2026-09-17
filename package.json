@@ -1,7 +1,7 @@
 {
   "name": "@abeta.dev/react-libs",
-  "version": "0.14.0",
-  "description": "React 19 component library with Tailwind CSS v4 & Radix UI primitives.",
+  "version": "0.14.1",
+  "description": "Production-grade, highly performant React 19 component library with strict TypeScript types, atomic exports, and zero dependency leakage.",
   "keywords": [
     "react",
     "react19",
@@ -120,14 +120,14 @@
     "prepare": "node -e \"if (!fs.existsSync('dist/index.d.ts')) { const cp = require('child_process'); cp.execSync('npm run build', { stdio: 'inherit' }); }\"",
     "build": "npm run --prefix packages/auth build && node -e \"fs.rmSync('dist', { recursive: true, force: true })\" && tsup && node scripts/build-css.mjs",
     "build:css": "node scripts/build-css.mjs",
-    "prepack": "node -e \"if (!fs.existsSync('dist/index.d.ts')) { const cp = require('child_process'); cp.execSync('npm run build', { stdio: 'inherit' }); }\"",
+    "prepack": "npm run build",
     "prepublishOnly": "npm run build",
     "test": "vitest run --coverage",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "perf": "node scripts/generate-performance-report.mjs",
     "check:types": "tsc --noEmit",
-    "check:types-pkg": "npx --yes @arethetypeswrong/cli --pack .",
+    "check:types-pkg": "npx --yes @arethetypeswrong/cli --pack . --exclude-entrypoints ./dist/style.css ./theme.css ./styles/theme.css",
     "check:directives": "node scripts/verify-directives.mjs && npm run check:ssr",
     "check:ssr": "vitest run src/__tests__/ssr-smoke.test.tsx",
     "test:visual": "vitest run src/__tests__/visual-smoke.test.tsx",
@@ -361,7 +361,10 @@
         "default": "./dist/auth.cjs"
       }
     },
-    "./style.css": "./dist/style.css"
+    "./style.css": "./dist/style.css",
+    "./dist/style.css": "./dist/style.css",
+    "./theme.css": "./dist/theme.css",
+    "./styles/theme.css": "./dist/theme.css"
   },
   "license": "MIT",
   "peerDependencies": {
@@ -419,7 +422,7 @@
     }
   },
   "dependencies": {
-    "@abeta.dev/auth": "*",
+    "@abeta.dev/auth": "^0.2.1",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.8",

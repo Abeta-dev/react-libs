@@ -103,15 +103,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const isEffectiveLoading = isLoading || (!isDebounceDisabled && isPending)
     const Comp = asChild ? Slot : "button"
 
-    let handleClick: React.MouseEventHandler<HTMLButtonElement> | undefined
+    let handleClick: React.MouseEventHandler<HTMLButtonElement> | undefined = undefined
     if (onClick) {
-      if (isDebounceDisabled) {
-        handleClick = onClick
-      } else {
-        handleClick = (e) => {
-          void debouncedOnClick(e)
-        }
-      }
+      handleClick = isDebounceDisabled
+        ? onClick
+        : (e) => { void debouncedOnClick(e) }
     }
 
     return (

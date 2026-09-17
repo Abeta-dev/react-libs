@@ -261,7 +261,7 @@ export const OtpForm: React.FC<OtpFormProps> = ({
           type="button"
           disabled={resendCooldown > 0 || isEffectiveSubmitting || isResendingPending}
           onClick={() => void debouncedResend()}
-          className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline disabled:text-neutral-400 disabled:no-underline focus:outline-none"
+          className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline disabled:text-neutral-400 disabled:no-underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
         >
           {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend code'}
         </button>
