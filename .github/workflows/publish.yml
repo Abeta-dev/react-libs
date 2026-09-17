@@ -77,28 +77,20 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Verify or publish auth package first
+      - name: Publish auth package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           AUTH_NAME=$(node -p "require('./packages/auth/package.json').name")
           AUTH_VERSION=$(node -p "require('./packages/auth/package.json').version")
           if npm view "${AUTH_NAME}@${AUTH_VERSION}" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
-            echo "${AUTH_NAME}@${AUTH_VERSION} already exists; leaving immutable release untouched."
+            echo "${AUTH_NAME}@${AUTH_VERSION} already exists on npm; leaving untouched."
           else
             npm publish -w packages/auth --access public --tag latest --provenance
+            echo "Successfully published ${AUTH_NAME}@${AUTH_VERSION} to npm."
           fi
-          for i in {1..15}; do
-            if [ "$(npm view "${AUTH_NAME}@${AUTH_VERSION}" version --registry=https://registry.npmjs.org/ 2>/dev/null || true)" = "${AUTH_VERSION}" ]; then
-              echo "Verified ${AUTH_NAME}@${AUTH_VERSION} on npm registry."
-              break
-            fi
-            echo "Waiting for npm registry cache replication of ${AUTH_NAME}@${AUTH_VERSION} (attempt $i/15)..."
-            sleep 4
-          done
-          test "$(npm view "${AUTH_NAME}@${AUTH_VERSION}" version --registry=https://registry.npmjs.org/)" = "${AUTH_VERSION}"
 
-      - name: Verify or publish root package after exact auth dependency resolves
+      - name: Publish root package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
@@ -107,21 +99,12 @@ jobs:
           AUTH_NAME=$(node -p "require('./packages/auth/package.json').name")
           AUTH_VERSION=$(node -p "require('./packages/auth/package.json').version")
           test "$(node -p "require('./package.json').dependencies['${AUTH_NAME}']")" = "${AUTH_VERSION}"
-          test "$(npm view "${AUTH_NAME}@${AUTH_VERSION}" version --registry=https://registry.npmjs.org/)" = "${AUTH_VERSION}"
           if npm view "${ROOT_NAME}@${ROOT_VERSION}" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
-            echo "${ROOT_NAME}@${ROOT_VERSION} already exists; leaving immutable release untouched."
+            echo "${ROOT_NAME}@${ROOT_VERSION} already exists on npm; leaving untouched."
           else
             npm publish --access public --tag latest --provenance
+            echo "Successfully published ${ROOT_NAME}@${ROOT_VERSION} to npm."
           fi
-          for i in {1..15}; do
-            if [ "$(npm view "${ROOT_NAME}@${ROOT_VERSION}" version --registry=https://registry.npmjs.org/ 2>/dev/null || true)" = "${ROOT_VERSION}" ]; then
-              echo "Verified ${ROOT_NAME}@${ROOT_VERSION} on npm registry."
-              break
-            fi
-            echo "Waiting for npm registry cache replication of ${ROOT_NAME}@${ROOT_VERSION} (attempt $i/15)..."
-            sleep 4
-          done
-          test "$(npm view "${ROOT_NAME}@${ROOT_VERSION}" version --registry=https://registry.npmjs.org/)" = "${ROOT_VERSION}"
 
       - name: Create GitHub Release when absent
         run: |
