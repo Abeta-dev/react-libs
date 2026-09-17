@@ -23,6 +23,21 @@ jobs:
         with:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org/'
+          cache: 'npm'
+
+      - name: Cache Build & Storybook Artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            dist
+            packages/auth/dist
+            storybook-static
+            node_modules/.cache
+            .turbo
+          key: ${{ runner.os }}-artifacts-${{ hashFiles('**/package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-artifacts-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-artifacts-
 
       - name: Install Dependencies
         run: npm ci
@@ -67,7 +82,12 @@ jobs:
         run: npm run test
 
       - name: Prebuild Storybook Artifacts
-        run: npm run build-storybook
+        run: |
+          if [ -d "storybook-static" ] && [ -f "storybook-static/index.html" ]; then
+            echo "Storybook already built for this commit; skipping."
+          else
+            npm run build-storybook
+          fi
 
       - name: Extract Release Notes
         run: node scripts/extract-release-notes.mjs --output dist/release-notes.md
