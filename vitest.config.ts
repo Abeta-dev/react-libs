@@ -23,7 +23,7 @@ export default defineConfig({
       clean: false,
       reporter: ['text', 'json-summary', 'html'],
       reportsDirectory: './coverage',
-      include: ['src/components/ui/**', 'src/lib/**', 'src/hooks/**', 'src/india/**', 'src/utils.ts'],
+      include: ['src/components/ui/**', 'src/lib/**', 'src/hooks/**', 'src/india/**', 'src/utils.ts', 'packages/auth/src/**'],
       exclude: [
         'src/**/*.stories.{ts,tsx}',
         'src/stories/**',

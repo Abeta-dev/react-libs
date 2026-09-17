@@ -132,8 +132,14 @@ export class MockAuthAdapter implements AuthAdapter<AuthUser> {
     this.currentSession = null;
   }
 
-  public async refreshToken(currentToken?: string): Promise<AuthSession<AuthUser> | null> {
+  public async refreshToken(currentToken?: string, signal?: AbortSignal): Promise<AuthSession<AuthUser> | null> {
+    if (signal?.aborted) {
+      return null;
+    }
     await this.delay();
+    if (signal?.aborted) {
+      return null;
+    }
     const tokenToValidate = currentToken ?? this.currentSession?.refreshToken;
     if (!tokenToValidate) {
       throw new AuthError('Invalid refresh token');
@@ -201,12 +207,18 @@ export class MockAuthAdapter implements AuthAdapter<AuthUser> {
   public async verifyOtp(params: VerifyOtpParams): Promise<AuthSession<AuthUser>> {
     await this.delay();
     if (params.code !== '123456' && params.code !== '000000') {
-      throw new Error('Invalid verification code. Use 123456 for mock testing.');
+      throw new AuthError('Invalid verification code. Use 123456 for mock testing.', 'INVALID_OTP', 400);
     }
 
-    const user = this.currentSession?.user ?? Array.from(this.users.values())[0]?.user;
+    let user: AuthUser | undefined;
+    if (this.currentSession?.user) {
+      user = this.currentSession.user;
+    } else if (params.email) {
+      user = this.users.get(params.email.toLowerCase().trim())?.user;
+    }
+
     if (!user) {
-      throw new Error('No user associated with this verification request');
+      throw new AuthError('No active authentication session or matching user found for verification', 'USER_NOT_FOUND', 404);
     }
 
     this.currentSession = this.createSession({ ...user, emailVerified: true });

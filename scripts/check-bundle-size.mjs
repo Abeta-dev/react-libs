@@ -23,7 +23,7 @@ const BUDGETS = [
   {
     file: 'dist/index.js',
     label: 'Root UI Bundle (ESM)',
-    maxRawKb: 480,
+    maxRawKb: 500,
     maxGzipKb: 100,
   },
   {

@@ -55,7 +55,11 @@ function isValidEmail(val: string): boolean {
 function sanitizeUrl(url?: string): string {
   if (!url) return '#';
   const trimmed = url.trim();
-  if (trimmed.startsWith('#') || trimmed.startsWith('/')) {
+  if (trimmed.startsWith('#')) {
+    return trimmed;
+  }
+  // Allow relative paths but explicitly disallow protocol-relative URLs (//) and backslash bypass (/\)
+  if (trimmed.startsWith('/') && !trimmed.startsWith('//') && !trimmed.startsWith('/\\')) {
     return trimmed;
   }
   try {
@@ -89,6 +93,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
   const [showPassword, setShowPassword] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [localError, setLocalError] = React.useState<string | null>(null);
+  const [errorField, setErrorField] = React.useState<'name' | 'email' | 'password' | 'confirmPassword' | 'terms' | 'general' | null>(null);
 
   const nameId = React.useId();
   const emailId = React.useId();
@@ -108,33 +113,39 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
     async (e?: React.FormEvent<HTMLFormElement>) => {
       e?.preventDefault();
       setLocalError(null);
+      setErrorField(null);
       clearError();
 
       if (!name.trim()) {
+        setErrorField('name');
         setLocalError('Please enter your full name');
         cancelCooldown();
         return;
       }
 
       if (!isValidEmail(email.trim())) {
+        setErrorField('email');
         setLocalError('Please enter a valid email address');
         cancelCooldown();
         return;
       }
 
       if (password.length < 8) {
+        setErrorField('password');
         setLocalError('Password must be at least 8 characters long');
         cancelCooldown();
         return;
       }
 
       if (!Object.is(password, confirmPassword)) {
+        setErrorField('confirmPassword');
         setLocalError('Passwords do not match');
         cancelCooldown();
         return;
       }
 
       if (!acceptTerms) {
+        setErrorField('terms');
         setLocalError('You must accept the terms of service to proceed');
         cancelCooldown();
         return;
@@ -151,6 +162,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
         const session = await signUp(credentials);
         onSuccess?.(session);
       } catch (err) {
+        setErrorField('general');
         const errorInstance = err instanceof Error ? err : new Error('Registration failed');
         onError?.(errorInstance);
       } finally {
@@ -197,12 +209,13 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           autoComplete="name"
           required
           value={name}
-          aria-invalid={Boolean(displayError)}
+          aria-invalid={errorField === 'name' || errorField === 'general' || (Boolean(displayError) && !localError)}
           aria-describedby={displayError ? errorId : undefined}
           onChange={(e) => {
             setName(e.target.value);
-            if (displayError) {
+            if (errorField === 'name' || errorField === 'general' || displayError) {
               setLocalError(null);
+              setErrorField(null);
               clearError();
             }
           }}
@@ -225,12 +238,13 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           autoComplete="email"
           required
           value={email}
-          aria-invalid={Boolean(displayError)}
+          aria-invalid={errorField === 'email' || errorField === 'general' || (Boolean(displayError) && !localError)}
           aria-describedby={displayError ? errorId : undefined}
           onChange={(e) => {
             setEmail(e.target.value);
-            if (displayError) {
+            if (errorField === 'email' || errorField === 'general' || displayError) {
               setLocalError(null);
+              setErrorField(null);
               clearError();
             }
           }}
@@ -254,12 +268,13 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
             autoComplete="new-password"
             required
             value={password}
-            aria-invalid={Boolean(displayError)}
+            aria-invalid={errorField === 'password' || errorField === 'general' || (Boolean(displayError) && !localError)}
             aria-describedby={passwordDescribedBy}
             onChange={(e) => {
               setPassword(e.target.value);
-              if (displayError) {
+              if (errorField === 'password' || errorField === 'general' || displayError) {
                 setLocalError(null);
+                setErrorField(null);
                 clearError();
               }
             }}
@@ -321,12 +336,13 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           autoComplete="new-password"
           required
           value={confirmPassword}
-          aria-invalid={Boolean(displayError)}
+          aria-invalid={errorField === 'confirmPassword' || errorField === 'general' || (Boolean(displayError) && !localError)}
           aria-describedby={displayError ? errorId : undefined}
           onChange={(e) => {
             setConfirmPassword(e.target.value);
-            if (displayError) {
+            if (errorField === 'confirmPassword' || errorField === 'general' || displayError) {
               setLocalError(null);
+              setErrorField(null);
               clearError();
             }
           }}
@@ -341,7 +357,15 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           name="acceptTerms"
           type="checkbox"
           checked={acceptTerms}
-          onChange={(e) => setAcceptTerms(e.target.checked)}
+          aria-invalid={errorField === 'terms' || errorField === 'general' || (Boolean(displayError) && !localError)}
+          onChange={(e) => {
+            setAcceptTerms(e.target.checked);
+            if (errorField === 'terms' || errorField === 'general' || displayError) {
+              setLocalError(null);
+              setErrorField(null);
+              clearError();
+            }
+          }}
           className="mt-0.5 h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500 dark:border-neutral-700 dark:bg-neutral-900"
         />
         <label
@@ -349,11 +373,11 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           className="ml-2 block text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed"
         >
           I agree to the{' '}
-          <a href={safeTermsUrl} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">
+          <a href={safeTermsUrl} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1">
             Terms of Service
           </a>{' '}
           and{' '}
-          <a href={safePrivacyUrl} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">
+          <a href={safePrivacyUrl} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1">
             Privacy Policy
           </a>
         </label>
@@ -381,7 +405,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           <button
             type="button"
             onClick={onSignInClick}
-            className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline focus:outline-none"
+            className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
           >
             Sign in
           </button>

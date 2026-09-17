@@ -32,7 +32,7 @@ export function useToken(): {
       return undefined;
     }
 
-    const msUntilCheck = Math.max(0, session.expiresAt - Date.now() - 60_000);
+    const msUntilCheck = Math.min(Math.max(0, session.expiresAt - Date.now() - 60_000), 2147483647);
     const timer = setTimeout(() => {
       setValidityTick((tick) => tick + 1);
     }, msUntilCheck);

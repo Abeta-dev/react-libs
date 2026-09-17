@@ -92,14 +92,14 @@ CardFooter.displayName = "CardFooter"
 export interface StandardCardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   title: React.ReactNode
-  description?: React.ReactNode
-  badge?: React.ReactNode
-  headerActions?: React.ReactNode
+  description?: React.ReactNode | undefined
+  badge?: React.ReactNode | undefined
+  headerActions?: React.ReactNode | undefined
   children: React.ReactNode
-  footer?: React.ReactNode
-  actions?: React.ReactNode
-  contentClassName?: string
-  footerClassName?: string
+  footer?: React.ReactNode | undefined
+  actions?: React.ReactNode | undefined
+  contentClassName?: string | undefined
+  footerClassName?: string | undefined
 }
 
 const StandardCard = React.forwardRef<HTMLDivElement, StandardCardProps>(

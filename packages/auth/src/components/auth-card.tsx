@@ -20,6 +20,7 @@ export interface AuthCardProps {
   subtitle?: string | undefined;
   logo?: React.ReactNode | undefined;
   onSuccess?: ((session: AuthSession) => void) | undefined;
+  onPasswordResetSuccess?: (() => void) | undefined;
   onError?: ((error: Error) => void) | undefined;
   loginProps?: Partial<LoginFormProps> | undefined;
   signUpProps?: Partial<SignUpFormProps> | undefined;
@@ -41,6 +42,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
   subtitle,
   logo,
   onSuccess,
+  onPasswordResetSuccess,
   onError,
   loginProps,
   signUpProps,
@@ -52,6 +54,9 @@ export const AuthCard: React.FC<AuthCardProps> = ({
   const [internalMode, setInternalMode] = React.useState<AuthCardMode>(initialMode);
   const currentMode = controlledMode ?? internalMode;
 
+  const signInTabRef = React.useRef<HTMLButtonElement>(null);
+  const signUpTabRef = React.useRef<HTMLButtonElement>(null);
+
   const baseId = React.useId();
   const signInTabId = `${baseId}-tab-signin`;
   const signUpTabId = `${baseId}-tab-signup`;
@@ -62,6 +67,27 @@ export const AuthCard: React.FC<AuthCardProps> = ({
     auth?.clearError?.();
     setInternalMode(newMode);
     onModeChange?.(newMode);
+  };
+
+  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, tab: 'signIn' | 'signUp') => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const nextTab = tab === 'signIn' ? 'signUp' : 'signIn';
+      setMode(nextTab);
+      if (nextTab === 'signIn') {
+        signInTabRef.current?.focus();
+      } else {
+        signUpTabRef.current?.focus();
+      }
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      setMode('signIn');
+      signInTabRef.current?.focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      setMode('signUp');
+      signUpTabRef.current?.focus();
+    }
   };
 
   const defaultHeader = React.useMemo(() => {
@@ -123,12 +149,15 @@ export const AuthCard: React.FC<AuthCardProps> = ({
           className="grid grid-cols-2 rounded-lg bg-neutral-100 p-1 dark:bg-neutral-800 mb-6"
         >
           <button
+            ref={signInTabRef}
             id={signInTabId}
             type="button"
             role="tab"
+            tabIndex={currentMode === 'signIn' ? 0 : -1}
             aria-selected={currentMode === 'signIn'}
             aria-controls={signInPanelId}
             onClick={() => setMode('signIn')}
+            onKeyDown={(e) => handleTabKeyDown(e, 'signIn')}
             className={clsx(
               'rounded-md py-1.5 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
               currentMode === 'signIn'
@@ -139,12 +168,15 @@ export const AuthCard: React.FC<AuthCardProps> = ({
             Sign In
           </button>
           <button
+            ref={signUpTabRef}
             id={signUpTabId}
             type="button"
             role="tab"
+            tabIndex={currentMode === 'signUp' ? 0 : -1}
             aria-selected={currentMode === 'signUp'}
             aria-controls={signUpPanelId}
             onClick={() => setMode('signUp')}
+            onKeyDown={(e) => handleTabKeyDown(e, 'signUp')}
             className={clsx(
               'rounded-md py-1.5 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
               currentMode === 'signUp'
@@ -215,7 +247,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
 
       {currentMode === 'forgotPassword' && (
         <ForgotPasswordForm
-          onSuccess={onSuccess ? () => onSuccess(undefined as unknown as AuthSession) : undefined}
+          onSuccess={onPasswordResetSuccess}
           onError={onError}
           onBackToSignIn={() => setMode('signIn')}
           debounceSec={debounceSec}

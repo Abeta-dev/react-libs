@@ -64,12 +64,19 @@ export type OAuthSignInOptions = OAuthOptions;
 export class AuthError extends Error {
   public readonly code: string;
   public readonly status: number;
+  public readonly originalError?: unknown;
 
-  constructor(message: string, code: string = 'INVALID_TOKEN', status: number = 401) {
-    super(message);
+  constructor(
+    message: string,
+    code: string = 'INVALID_TOKEN',
+    status: number = 401,
+    options?: { cause?: unknown }
+  ) {
+    super(message, options);
     this.name = 'AuthError';
     this.code = code;
     this.status = status;
+    this.originalError = options?.cause;
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
@@ -90,7 +97,7 @@ export interface AuthAdapter<TUser = AuthUser> {
   signOut(): Promise<void>;
 
   /** Refresh the current access token */
-  refreshToken?(currentToken?: string): Promise<AuthSession<TUser> | null>;
+  refreshToken?(currentToken?: string, signal?: AbortSignal): Promise<AuthSession<TUser> | null>;
 
   /** Initiate or execute 3rd-party OAuth login */
   signInWithOAuth?(provider: OAuthProvider, options?: OAuthOptions): Promise<void | AuthSession<TUser>>;

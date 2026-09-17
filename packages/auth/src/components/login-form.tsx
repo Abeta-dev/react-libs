@@ -49,6 +49,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const [showPassword, setShowPassword] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [localError, setLocalError] = React.useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = React.useState<{ email?: boolean; password?: boolean }>({});
 
   const emailId = React.useId();
   const passwordId = React.useId();
@@ -61,22 +62,30 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     async (e?: React.FormEvent<HTMLFormElement>) => {
       e?.preventDefault();
       setLocalError(null);
+      setFieldErrors({});
       clearError();
 
-      if (!email.trim()) {
-        setLocalError('Please enter your email address');
-        cancelCooldown();
-        return;
-      }
+      const errors: { email?: boolean; password?: boolean } = {};
+      let firstErrorMessage: string | null = null;
 
-      if (!isValidEmail(email.trim())) {
-        setLocalError('Please enter a valid email address');
-        cancelCooldown();
-        return;
+      if (!email.trim()) {
+        errors.email = true;
+        firstErrorMessage = 'Please enter your email address';
+      } else if (!isValidEmail(email.trim())) {
+        errors.email = true;
+        firstErrorMessage = 'Please enter a valid email address';
       }
 
       if (!password) {
-        setLocalError('Please enter your password');
+        errors.password = true;
+        if (!firstErrorMessage) {
+          firstErrorMessage = 'Please enter your password';
+        }
+      }
+
+      if (firstErrorMessage) {
+        setFieldErrors(errors);
+        setLocalError(firstErrorMessage);
         cancelCooldown();
         return;
       }
@@ -90,6 +99,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         });
         onSuccess?.(session);
       } catch (err) {
+        setFieldErrors({ email: true, password: true });
         const errorInstance = err instanceof Error ? err : new Error('Sign in failed');
         onError?.(errorInstance);
       } finally {
@@ -129,12 +139,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           autoComplete="email"
           required
           value={email}
-          aria-invalid={Boolean(displayError)}
+          aria-invalid={Boolean(fieldErrors.email || (contextError && !localError))}
           aria-describedby={displayError ? errorId : undefined}
           onChange={(e) => {
             setEmail(e.target.value);
-            if (displayError) {
+            if (fieldErrors.email || displayError) {
               setLocalError(null);
+              setFieldErrors((prev) => ({ ...prev, email: false }));
               clearError();
             }
           }}
@@ -155,7 +166,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             <button
               type="button"
               onClick={onForgotPasswordClick}
-              className="text-xs font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline focus:outline-none focus:underline"
+              className="text-xs font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
             >
               Forgot password?
             </button>
@@ -169,12 +180,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             autoComplete="current-password"
             required
             value={password}
-            aria-invalid={Boolean(displayError)}
+            aria-invalid={Boolean(fieldErrors.password || (contextError && !localError))}
             aria-describedby={displayError ? errorId : undefined}
             onChange={(e) => {
               setPassword(e.target.value);
-              if (displayError) {
+              if (fieldErrors.password || displayError) {
                 setLocalError(null);
+                setFieldErrors((prev) => ({ ...prev, password: false }));
                 clearError();
               }
             }}
@@ -234,7 +246,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <button
             type="button"
             onClick={onSignUpClick}
-            className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline focus:outline-none"
+            className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
           >
             Sign up
           </button>

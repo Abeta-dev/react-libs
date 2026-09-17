@@ -16,6 +16,7 @@ export class TokenManager<TUser = AuthUser> {
   private refreshPromise: Promise<string | null> | null = null;
   private refreshTimer: ReturnType<typeof setTimeout> | null = null;
   private abortController: AbortController | null = null;
+  private isLoggedOut = false;
   private readonly refreshThresholdMs: number;
   private readonly storage: TokenStorage | null;
   private readonly tokenKey: string;
@@ -94,13 +95,14 @@ export class TokenManager<TUser = AuthUser> {
       return;
     }
 
+    this.isLoggedOut = false;
     this.currentSession = session;
     this.persistTokens(session);
     this.scheduleProactiveRefresh(session);
   }
 
   /**
-   * Retrieve active session synchronously (in-memory).
+   * Return current session snapshot.
    */
   public getSession(): AuthSession<TUser> | null {
     return this.currentSession;
@@ -131,6 +133,10 @@ export class TokenManager<TUser = AuthUser> {
   public async getValidToken(): Promise<string | null> {
     if (this.isTokenValid()) {
       return this.currentSession?.accessToken ?? null;
+    }
+
+    if (this.isLoggedOut || (!this.currentSession && !this.storage)) {
+      return null;
     }
 
     return this.executeRefresh();
@@ -171,9 +177,9 @@ export class TokenManager<TUser = AuthUser> {
 
     try {
       const currentRefreshToken = this.currentSession?.refreshToken;
-      const newSession = await this.adapter.refreshToken(currentRefreshToken);
+      const newSession = await this.adapter.refreshToken(currentRefreshToken, signal);
 
-      if (signal.aborted) {
+      if (signal.aborted || this.isLoggedOut) {
         return null;
       }
 
@@ -188,11 +194,13 @@ export class TokenManager<TUser = AuthUser> {
       this.options.onSessionExpired?.(new Error('Session refresh returned empty'));
       return null;
     } catch (err) {
-      if (signal.aborted) {
+      if (signal.aborted || this.isLoggedOut) {
         return null;
       }
       this.setSession(null);
-      this.options.onSessionExpired?.(err instanceof Error ? err : new Error(String(err)));
+      this.options.onSessionExpired?.(
+        err instanceof Error ? err : new Error(String(err), { cause: err })
+      );
       return null;
     } finally {
       if (this.abortController === abortController) {
@@ -241,6 +249,7 @@ export class TokenManager<TUser = AuthUser> {
    * Terminate active session and abort any pending refresh operations.
    */
   public signOut(): void {
+    this.isLoggedOut = true;
     this.abortInFlightRefresh();
     this.setSession(null);
   }
@@ -302,6 +311,7 @@ export class TokenManager<TUser = AuthUser> {
    * Teardown timer, abort in-flight refresh, and clear references.
    */
   public destroy(): void {
+    this.isLoggedOut = true;
     this.abortInFlightRefresh();
     this.clearTimer();
     this.currentSession = null;

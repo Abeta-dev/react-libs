@@ -29,9 +29,17 @@ describe('Toaster (Sonner) component', () => {
   });
 
   it('passes dark theme from useTheme to Toaster', () => {
-    vi.mocked(useTheme).mockReturnValue({ theme: 'dark' } as any);
+    vi.mocked(useTheme).mockReturnValue({
+      theme: 'dark',
+      setTheme: vi.fn(),
+      themes: ['light', 'dark', 'system'],
+      systemTheme: 'dark',
+    });
     const { container } = render(<Toaster />);
-    expect(container.querySelector('section')).toBeInTheDocument();
+    const section = container.querySelector('section');
+    expect(section).toBeInTheDocument();
+    expect(section).toHaveAttribute('aria-live', 'polite');
+    expect(useTheme).toHaveBeenCalled();
   });
 
   it('renders with custom props like expand and richColors', () => {

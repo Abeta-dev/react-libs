@@ -20,6 +20,7 @@ export interface AuthContextValue<TUser = AuthUser> {
   status: AuthStatus;
   isLoading: boolean;
   error: string | null;
+  rawError?: unknown;
   signIn: (credentials: PasswordCredentials) => Promise<AuthSession<TUser>>;
   signUp: (credentials: SignUpCredentials) => Promise<AuthSession<TUser>>;
   signOut: () => Promise<void>;
@@ -31,8 +32,7 @@ export interface AuthContextValue<TUser = AuthUser> {
   tokenManager: TokenManager<TUser>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const AuthContext = React.createContext<AuthContextValue<any> | null>(null);
+export const AuthContext = React.createContext<AuthContextValue<AuthUser> | null>(null);
 
 export interface AuthProviderProps<TUser = AuthUser> {
   adapter: AuthAdapter<TUser>;
@@ -52,6 +52,7 @@ export function AuthProvider<TUser = AuthUser>({
   const [session, setSessionState] = React.useState<AuthSession<TUser> | null>(initialSession);
   const [status, setStatus] = React.useState<AuthStatus>(initialSession ? 'authenticated' : 'loading');
   const [error, setError] = React.useState<string | null>(null);
+  const [rawError, setRawError] = React.useState<unknown>(undefined);
 
   // Initialize TokenManager instance once per adapter
   const tokenManager = React.useMemo(() => {
@@ -65,6 +66,8 @@ export function AuthProvider<TUser = AuthUser>({
       onSessionExpired: (err) => {
         setSessionState(null);
         setStatus('unauthenticated');
+        setError(err instanceof Error ? err.message : 'Session expired');
+        setRawError(err);
         tokenOptions?.onSessionExpired?.(err);
       },
     });
@@ -109,6 +112,7 @@ export function AuthProvider<TUser = AuthUser>({
         if (isMounted) {
           setStatus('unauthenticated');
           setError(err instanceof Error ? err.message : 'Failed to restore session');
+          setRawError(err);
         }
       }
     }
@@ -123,11 +127,13 @@ export function AuthProvider<TUser = AuthUser>({
 
   const clearError = React.useCallback(() => {
     setError(null);
+    setRawError(undefined);
   }, []);
 
   const signIn = React.useCallback(
     async (credentials: PasswordCredentials): Promise<AuthSession<TUser>> => {
       setError(null);
+      setRawError(undefined);
       try {
         const result = await adapter.signInWithPassword(credentials);
         applySession(result);
@@ -135,6 +141,7 @@ export function AuthProvider<TUser = AuthUser>({
       } catch (err) {
         const msg = err instanceof Error ? err.message : 'Sign in failed';
         setError(msg);
+        setRawError(err);
         throw err;
       }
     },
@@ -147,6 +154,7 @@ export function AuthProvider<TUser = AuthUser>({
         throw new Error('Sign up is not supported by the current auth adapter');
       }
       setError(null);
+      setRawError(undefined);
       try {
         const result = await adapter.signUpWithPassword(credentials);
         applySession(result);
@@ -154,6 +162,7 @@ export function AuthProvider<TUser = AuthUser>({
       } catch (err) {
         const msg = err instanceof Error ? err.message : 'Registration failed';
         setError(msg);
+        setRawError(err);
         throw err;
       }
     },
@@ -162,6 +171,7 @@ export function AuthProvider<TUser = AuthUser>({
 
   const signOut = React.useCallback(async (): Promise<void> => {
     setError(null);
+    setRawError(undefined);
     try {
       await adapter.signOut();
     } finally {
@@ -175,6 +185,7 @@ export function AuthProvider<TUser = AuthUser>({
         throw new Error(`OAuth login is not supported by the current auth adapter`);
       }
       setError(null);
+      setRawError(undefined);
       try {
         const result = await adapter.signInWithOAuth(provider, options);
         if (result) {
@@ -184,6 +195,7 @@ export function AuthProvider<TUser = AuthUser>({
       } catch (err) {
         const msg = err instanceof Error ? err.message : `Failed to sign in with ${provider}`;
         setError(msg);
+        setRawError(err);
         throw err;
       }
     },
@@ -196,11 +208,13 @@ export function AuthProvider<TUser = AuthUser>({
         throw new Error('Password reset is not supported by the current auth adapter');
       }
       setError(null);
+      setRawError(undefined);
       try {
         await adapter.requestPasswordReset(email);
       } catch (err) {
         const msg = err instanceof Error ? err.message : 'Failed to request password reset';
         setError(msg);
+        setRawError(err);
         throw err;
       }
     },
@@ -213,6 +227,7 @@ export function AuthProvider<TUser = AuthUser>({
         throw new Error('OTP verification is not supported by the current auth adapter');
       }
       setError(null);
+      setRawError(undefined);
       try {
         const result = await adapter.verifyOtp(params);
         applySession(result);
@@ -220,6 +235,7 @@ export function AuthProvider<TUser = AuthUser>({
       } catch (err) {
         const msg = err instanceof Error ? err.message : 'Invalid verification code';
         setError(msg);
+        setRawError(err);
         throw err;
       }
     },
@@ -237,6 +253,7 @@ export function AuthProvider<TUser = AuthUser>({
       status,
       isLoading: status === 'loading',
       error,
+      rawError,
       signIn,
       signUp,
       signOut,
@@ -251,6 +268,7 @@ export function AuthProvider<TUser = AuthUser>({
       session,
       status,
       error,
+      rawError,
       signIn,
       signUp,
       signOut,
@@ -263,5 +281,9 @@ export function AuthProvider<TUser = AuthUser>({
     ]
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value as unknown as AuthContextValue<AuthUser>}>
+      {children}
+    </AuthContext.Provider>
+  );
 }

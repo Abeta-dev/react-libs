@@ -10,6 +10,41 @@ import {
   isValidRedirectUrl,
 } from '../core/pkce';
 
+export const OAUTH_STORAGE_KEYS = {
+  STATE: 'abeta_oauth_state',
+  VERIFIER: 'abeta_oauth_code_verifier',
+  PROVIDER: 'abeta_oauth_provider',
+} as const;
+
+export function getStoredOAuthState(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return sessionStorage.getItem(OAUTH_STORAGE_KEYS.STATE);
+  } catch {
+    return null;
+  }
+}
+
+export function getStoredCodeVerifier(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return sessionStorage.getItem(OAUTH_STORAGE_KEYS.VERIFIER);
+  } catch {
+    return null;
+  }
+}
+
+export function clearStoredOAuthData(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    sessionStorage.removeItem(OAUTH_STORAGE_KEYS.STATE);
+    sessionStorage.removeItem(OAUTH_STORAGE_KEYS.VERIFIER);
+    sessionStorage.removeItem(OAUTH_STORAGE_KEYS.PROVIDER);
+  } catch {
+    // Graceful error
+  }
+}
+
 export interface OAuthButtonGroupProps {
   providers?: OAuthProvider[] | undefined;
   layout?: 'stack' | 'grid' | undefined;
@@ -46,7 +81,7 @@ export const OAuthButtonGroup: React.FC<OAuthButtonGroupProps> = ({
   const handleSignIn = async (provider: OAuthProvider): Promise<void> => {
     onProviderClick?.(provider);
 
-    // 1. Validate redirectUrl to prevent open redirect and protocol injection
+    // 1. Security Check: Validate redirectUrl origin if provided
     if (options?.redirectUrl) {
       const isValid = isValidRedirectUrl(options.redirectUrl, allowedOrigins);
       if (!isValid) {
@@ -71,6 +106,17 @@ export const OAuthButtonGroup: React.FC<OAuthButtonGroupProps> = ({
     const codeChallenge =
       options?.codeChallenge ?? (await generateCodeChallenge(codeVerifier));
 
+    // Persist PKCE verifier and CSRF state in sessionStorage across full-page redirects
+    if (typeof window !== 'undefined') {
+      try {
+        sessionStorage.setItem(OAUTH_STORAGE_KEYS.STATE, state);
+        sessionStorage.setItem(OAUTH_STORAGE_KEYS.VERIFIER, codeVerifier);
+        sessionStorage.setItem(OAUTH_STORAGE_KEYS.PROVIDER, provider);
+      } catch {
+        // Fallback for private browsing or strict storage policies
+      }
+    }
+
     const enhancedOptions: OAuthOptions = {
       ...options,
       state,
@@ -81,8 +127,11 @@ export const OAuthButtonGroup: React.FC<OAuthButtonGroupProps> = ({
 
     try {
       await signInWithOAuth(provider, enhancedOptions);
-    } catch {
-      // Handled by AuthContext error state
+    } catch (err) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('[OAuthButtonGroup] OAuth sign in error:', err);
+      }
+      throw err;
     }
   };
 
