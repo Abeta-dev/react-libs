@@ -1,6 +1,16 @@
-# Migration Guide: Upgrading to v0.14.2
+# Migration Guide: Upgrading to v0.15.0
 
-This guide details architectural evolutions, security hardening, and migration steps for upgrading to `@abeta.dev/react-libs` v0.14.2 and `@abeta.dev/auth` v0.2.2.
+This guide details architectural evolutions, security hardening, and migration steps for upgrading to `@abeta.dev/react-libs` v0.15.0 and `@abeta.dev/auth` v0.3.0.
+
+---
+
+## Upgrading to v0.15.0
+
+### 1. Headless Cookie-Backed Auth Client
+
+The new headless client is available from `@abeta.dev/auth/core`, with React bindings from `@abeta.dev/auth/react`. Existing form and `AuthAdapter` APIs remain available; applications only need to migrate when adopting the new one-backend, HttpOnly-cookie session model.
+
+Refresh credentials are intentionally absent from client state. Keep access tokens in memory, implement cookie-backed refresh in the application adapter, and provide CSRF headers for unsafe auth operations. See [`packages/auth/README.md`](./packages/auth/README.md) for the adapter contract and security invariants.
 
 ---
 
