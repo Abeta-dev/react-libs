@@ -142,6 +142,18 @@ if (existsSync(DIST_DIR)) {
   }
 }
 
+// 4. Verify Built CSS Artifacts in dist/
+const CSS_FILES = ['dist/style.css'];
+for (const relPath of CSS_FILES) {
+  const fullPath = join(ROOT, relPath);
+  if (!existsSync(fullPath)) {
+    console.error(`❌ [MISSING] File does not exist: ${relPath}`);
+    failed = true;
+  } else {
+    console.log(`✅ [CSS]     ${relPath} exists and is verified.`);
+  }
+}
+
 console.log('');
 
 if (failed) {

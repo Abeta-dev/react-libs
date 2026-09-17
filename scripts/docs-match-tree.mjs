@@ -246,8 +246,8 @@ function checkAttwMatrix() {
   try {
     const cachedAttw = resolve(process.env.HOME || '', '.npm/_npx/ff7a6dc25a206ec2/node_modules/.bin/attw');
     const attwCmd = existsSync(cachedAttw)
-      ? `${cachedAttw} --pack .`
-      : 'npx --yes @arethetypeswrong/cli --pack .';
+      ? `${cachedAttw} --pack . --exclude-entrypoints ./dist/style.css ./theme.css ./styles/theme.css`
+      : 'npx --yes @arethetypeswrong/cli --pack . --exclude-entrypoints ./dist/style.css ./theme.css ./styles/theme.css';
     console.log(`   Executing ${attwCmd} (strictly without --ignore-rules)...`);
     execSync(attwCmd, {
       cwd: ROOT,

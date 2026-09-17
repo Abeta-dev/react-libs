@@ -650,7 +650,7 @@ Explore our formal design decisions in [`docs/adr/`](./docs/adr/):
 
 ## Community & Contributing
 
-- **[Migration Guide](./MIGRATION.md)**: Upgrading to v0.14.0.
+- **[Migration Guide](./MIGRATION.md)**: Upgrading to v0.14.1.
 - **[Quality Standards & Scorecard](./QUALITY_STANDARDS_AND_AUDIT_SCORECARD.md)**: Perpetual quality parameters, security invariants, and audit scorecard.
 - **[Code of Conduct](./CODE_OF_CONDUCT.md)**: We are committed to providing a friendly, safe, and welcoming environment for all contributors.
 - **[Security Policy](./SECURITY.md)**: Guidelines for reporting security vulnerabilities responsibly.
