@@ -2,6 +2,9 @@ import * as React from 'react';
 import { clsx } from 'clsx';
 import { GoogleIcon } from '../icons/google-icon';
 import { LinkedInIcon } from '../icons/linkedin-icon';
+import { GitHubIcon } from '../icons/github-icon';
+import { AppleIcon } from '../icons/apple-icon';
+import { MicrosoftIcon } from '../icons/microsoft-icon';
 import { SpinnerIcon } from '../icons/spinner-icon';
 import type { OAuthProvider } from '../types/adapter';
 import { useClickBackpressure } from '../core/use-click-backpressure';
@@ -39,6 +42,30 @@ function getProviderConfig(provider: OAuthProvider) {
       name: 'LinkedIn',
       icon: LinkedInIcon,
       brandClasses: 'bg-[#0A66C2] hover:bg-[#095196] text-white border-transparent shadow-xs',
+    };
+  }
+  if (provider === 'github') {
+    return {
+      name: 'GitHub',
+      icon: GitHubIcon,
+      brandClasses:
+        'bg-[#24292F] hover:bg-[#1f2328] text-white border-transparent shadow-xs dark:bg-[#24292F] dark:hover:bg-[#1f2328]',
+    };
+  }
+  if (provider === 'apple') {
+    return {
+      name: 'Apple',
+      icon: AppleIcon,
+      brandClasses:
+        'bg-black hover:bg-neutral-900 text-white border-transparent shadow-xs dark:bg-white dark:hover:bg-neutral-100 dark:text-black',
+    };
+  }
+  if (provider === 'microsoft') {
+    return {
+      name: 'Microsoft',
+      icon: MicrosoftIcon,
+      brandClasses:
+        'bg-white hover:bg-neutral-50 text-neutral-800 border-neutral-300 shadow-xs dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-white dark:border-neutral-700',
     };
   }
   return {

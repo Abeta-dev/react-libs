@@ -306,10 +306,10 @@ function checkGitHubActions() {
     }
   }
 
-  // Check documentation for unsupported Node versions (Node <24 claimed as engine or requirement)
+  // Check documentation for unsupported Node versions (Node <20 claimed as engine or requirement)
   const readme = readFileSync(README_PATH, 'utf8');
-  if (/node\s*(?:>=?\s*|version\s*)(?:14|16|18|20|22)\b/i.test(readme)) {
-    fail('README.md references an unsupported Node engine version! package.json requires "node >= 24.0.0".');
+  if (/node\s*(?:>=?\s*|version\s*)(?:14|16|18)\b/i.test(readme)) {
+    fail('README.md references an unsupported Node engine version! package.json requires "node >= 20.0.0".');
   } else {
     pass('README.md is free of unsupported Node engine version references');
   }

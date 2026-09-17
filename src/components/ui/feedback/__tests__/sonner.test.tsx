@@ -1,20 +1,41 @@
-import { describe, it, expect } from 'vitest';
-import * as Module from '../sonner';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { Toaster } from '../sonner';
 
-describe('sonner component hierarchy', () => {
-    it('should export core ui modules reliably without syntax failure', () => {
-        expect(Module).toBeDefined();
-        expect(Object.keys(Module).length).toBeGreaterThanOrEqual(0);
-    });
+// Mock next-themes
+vi.mock('next-themes', () => ({
+  useTheme: vi.fn(() => ({ theme: 'system' })),
+}));
 
-    it('should natively scaffold generic rendering boundaries successfully', async () => {
-        try {
-            // Evaluates generic exports to verify parsing syntax boundaries safely
-            const exportedEntities = Object.values(Module).filter(val => typeof val === 'function' || typeof val === 'object');
-            expect(exportedEntities).toBeDefined();
-        } catch (error) {
-            // Swallowing rigid react prop crashers to ensure DOM parsing coverage maintains
-            console.warn('Smoke test isolated rigid prop boundaries', error);
-        }
-    });
+import { useTheme } from 'next-themes';
+
+describe('Toaster (Sonner) component', () => {
+  it('renders sonner toaster container into DOM', () => {
+    render(<Toaster />);
+    const section = screen.getByRole('region', { name: /notifications/i });
+    expect(section).toBeInTheDocument();
+    expect(section).toHaveAttribute('aria-live', 'polite');
+  });
+
+  it('renders section and handles toasts', async () => {
+    const { toast } = await import('sonner');
+    const { container } = render(<Toaster position="top-center" />);
+    const section = container.querySelector('section');
+    expect(section).toBeInTheDocument();
+
+    // Trigger a toast
+    toast('Notification message');
+    expect(await screen.findByText('Notification message')).toBeInTheDocument();
+  });
+
+  it('passes dark theme from useTheme to Toaster', () => {
+    vi.mocked(useTheme).mockReturnValue({ theme: 'dark' } as any);
+    const { container } = render(<Toaster />);
+    expect(container.querySelector('section')).toBeInTheDocument();
+  });
+
+  it('renders with custom props like expand and richColors', () => {
+    const { container } = render(<Toaster expand richColors />);
+    expect(container.querySelector('section')).toBeInTheDocument();
+  });
 });

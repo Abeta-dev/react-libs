@@ -149,6 +149,70 @@ describe('useClickBackpressure', () => {
     expect(result.current.isPending).toBe(false);
   });
 
+  it('acquires lock synchronously BEFORE invoking fn to close TOCTOU window', async () => {
+    let hookResult!: ReturnType<typeof useClickBackpressure>;
+    const onBlocked = vi.fn();
+
+    const reentrantHandler = vi.fn().mockImplementation(() => {
+      // Synchronously attempt a re-entrant click while fn is executing
+      hookResult.execute().catch(() => {});
+      return Promise.resolve('ok');
+    });
+
+    const { result } = renderHook(() => {
+      hookResult = useClickBackpressure(reentrantHandler, {
+        debounceSec: false,
+        onBlocked,
+      });
+      return hookResult;
+    });
+
+    await act(async () => {
+      await result.current.execute();
+    });
+
+    // Initial click called handler once; re-entrant click was blocked immediately
+    expect(reentrantHandler).toHaveBeenCalledTimes(1);
+    expect(onBlocked).toHaveBeenCalledWith('in_flight');
+    expect(result.current.isPending).toBe(false);
+  });
+
+  it('isolates cancellation and execution per invocation (decoupled mutex)', async () => {
+    let resolveFirst!: () => void;
+    const slowPromise = new Promise<void>((resolve) => {
+      resolveFirst = resolve;
+    });
+
+    const handler = vi.fn().mockReturnValue(slowPromise);
+    const onBlocked = vi.fn();
+    const { result } = renderHook(() =>
+      useClickBackpressure(handler, { debounceSec: false, onBlocked })
+    );
+
+    let firstExec!: Promise<unknown>;
+    act(() => {
+      firstExec = result.current.execute();
+    });
+
+    expect(result.current.isPending).toBe(true);
+
+    // Rapid successive click during flight
+    await act(async () => {
+      await result.current.execute();
+    });
+    expect(onBlocked).toHaveBeenCalledWith('in_flight');
+
+    // Ensure first execution is still pending and not corrupted by dropped second click
+    expect(result.current.isPending).toBe(true);
+
+    await act(async () => {
+      resolveFirst();
+      await firstExec;
+    });
+
+    expect(result.current.isPending).toBe(false);
+  });
+
   it('allows manual cooldown cancellation via cancelCooldown()', async () => {
     const handler = vi.fn();
     const { result } = renderHook(() => useClickBackpressure(handler));

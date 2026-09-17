@@ -23,11 +23,35 @@ export function useToken(): {
   getValidToken: () => Promise<string | null>;
   isTokenValid: boolean;
 } {
-  const { session, tokenManager, getValidToken } = useAuth();
+  const { session, tokenManager, getValidToken: baseGetValidToken } = useAuth();
+  const [validityTick, setValidityTick] = React.useState<number>(0);
+
+  // Reactively track token expiration or validity threshold transitions
+  React.useEffect(() => {
+    if (!session?.expiresAt || typeof session.expiresAt !== 'number') {
+      return undefined;
+    }
+
+    const msUntilCheck = Math.max(0, session.expiresAt - Date.now() - 60_000);
+    const timer = setTimeout(() => {
+      setValidityTick((tick) => tick + 1);
+    }, msUntilCheck);
+
+    return () => clearTimeout(timer);
+  }, [tokenManager, session]);
 
   const isTokenValid = React.useMemo(() => {
+    if (!session || validityTick < 0) {
+      return false;
+    }
     return tokenManager.isTokenValid();
-  }, [tokenManager]);
+  }, [tokenManager, session, validityTick]);
+
+  const getValidToken = React.useCallback(async () => {
+    const validToken = await baseGetValidToken();
+    setValidityTick((tick) => tick + 1);
+    return validToken;
+  }, [baseGetValidToken]);
 
   return {
     token: session?.accessToken ?? null,

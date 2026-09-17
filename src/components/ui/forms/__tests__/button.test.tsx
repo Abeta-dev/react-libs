@@ -141,10 +141,30 @@ describe('Button Comprehensive Interaction Suite', () => {
         });
         expect(asyncAction).toHaveBeenCalledTimes(1);
         expect(btn).toBeDisabled();
+        expect(btn).toHaveAttribute('aria-busy', 'true');
+        expect(btn.querySelector('.animate-spin')).toBeInTheDocument();
 
         await act(async () => {
             resolvePromise();
         });
         expect(btn).not.toBeDisabled();
+        expect(btn).toHaveAttribute('aria-busy', 'false');
+    });
+
+    it('should set aria-busy and render spinner when isLoading is true', () => {
+        render(<Button isLoading loadingText="Saving...">Save</Button>);
+        const btn = screen.getByRole('button');
+        expect(btn).toHaveAttribute('aria-busy', 'true');
+        expect(btn).toBeDisabled();
+        expect(screen.getByText('Saving...')).toBeInTheDocument();
+        expect(btn.querySelector('.animate-spin')).toBeInTheDocument();
+    });
+
+    it('should include high-contrast visible focus ring classes', () => {
+        render(<Button>Focus Me</Button>);
+        const btn = screen.getByRole('button', { name: /focus me/i });
+        expect(btn.className).toContain('focus-visible:ring-2');
+        expect(btn.className).toContain('focus-visible:ring-ring');
+        expect(btn.className).toContain('focus-visible:ring-offset-2');
     });
 });

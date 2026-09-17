@@ -79,6 +79,7 @@ const Progress = React.forwardRef<
   <div className={cn("flex items-center gap-2", showLabel && "gap-3")}>
     <ProgressPrimitive.Root
       ref={ref}
+      value={value}
       className={cn(progressVariants({ variant }), "flex-1", className)}
       {...props}
     >

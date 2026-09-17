@@ -1,6 +1,45 @@
-# Migration Guide: Upgrading to v0.13.0
+# Migration Guide: Upgrading to v0.14.0
 
-This guide details architectural evolutions, security hardening, and migration steps for upgrading to `@abeta.dev/react-libs` v0.13.0.
+This guide details architectural evolutions, security hardening, and migration steps for upgrading to `@abeta.dev/react-libs` v0.14.0 and `@abeta.dev/auth` v0.2.0.
+
+---
+
+## Upgrading to v0.14.0
+
+### 1. OAuth PKCE and State Nonce Support
+The OAuth integration now generates RFC 7636 PKCE `code_challenge` / `code_verifier` pairs and CSRF `state` nonces by default using Web Crypto API. If your custom backend adapter receives OAuth options, inspect the optional `state` and `codeChallenge` parameters:
+```tsx
+const adapter: AuthAdapter = {
+  // ...
+  signInWithOAuth: async (provider, options) => {
+    // options?.state - cryptographically generated state nonce
+    // options?.codeChallenge - SHA-256 code challenge
+    // options?.redirectUrl - validated redirect URL (non-http schemes rejected)
+  },
+};
+```
+
+### 2. Form Error Association & Accessible Tab Navigation
+All auth forms (`LoginForm`, `SignUpForm`, `ForgotPasswordForm`, `OtpForm`, `AuthCard`) now strictly adhere to WCAG 2.2 Level A/AA:
+- Inputs are dynamically coupled to error alerts via `React.useId()`, `aria-describedby`, and `aria-invalid`.
+- `AuthCard` implements semantic `role="tablist"` and `role="tab"` navigation; switching tabs automatically clears lingering validation errors.
+- Password strength meter uses `role="meter"` with ARIA range and textual state attributes.
+
+### 3. Strict `exactOptionalPropertyTypes: true` Compliance (ADR 0007)
+The `TokenManagerOptions` interface has been updated so all optional properties permit `undefined`:
+```tsx
+export interface TokenManagerOptions {
+  refreshThresholdMs?: number | undefined;
+  storage?: TokenStorage | undefined;
+  tokenStorageKey?: string | undefined;
+  refreshTokenStorageKey?: string | undefined;
+  onSessionRefreshed?: ((session: AuthSession) => void) | undefined;
+  onSessionExpired?: ((error: unknown) => void) | undefined;
+}
+```
+
+### 4. Tailwind v4 Styles for Monorepo Packages
+If you consume `@abeta.dev/auth` standalone in an application using Tailwind CSS v4, ensure you import `@abeta.dev/react-libs/style.css` (which contains compiled styles for all auth and UI components) or add `@source` pointing to the package in your CSS bundle.
 
 ---
 

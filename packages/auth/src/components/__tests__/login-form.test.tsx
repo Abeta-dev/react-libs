@@ -45,12 +45,15 @@ describe('LoginForm', () => {
     const passwordInput = screen.getByLabelText(/^password$/i);
     expect(passwordInput).toHaveAttribute('type', 'password');
 
-    const toggleBtn = screen.getByRole('button', { name: /show password/i });
+    const toggleBtn = screen.getByRole('button', { name: /toggle password visibility/i });
+    expect(toggleBtn).toHaveAttribute('aria-pressed', 'false');
     fireEvent.click(toggleBtn);
     expect(passwordInput).toHaveAttribute('type', 'text');
+    expect(toggleBtn).toHaveAttribute('aria-pressed', 'true');
 
-    fireEvent.click(screen.getByRole('button', { name: /hide password/i }));
+    fireEvent.click(toggleBtn);
     expect(passwordInput).toHaveAttribute('type', 'password');
+    expect(toggleBtn).toHaveAttribute('aria-pressed', 'false');
   });
 
   it('successfully signs in and triggers onSuccess callback', async () => {
@@ -105,5 +108,40 @@ describe('LoginForm', () => {
       expect(screen.getByRole('alert')).toHaveTextContent(/invalid email or password/i);
       expect(onError).toHaveBeenCalled();
     });
+  });
+
+  it('links error banner to inputs via aria-invalid and aria-describedby, and clears on typing', async () => {
+    const adapter = new MockAuthAdapter({ latencyMs: 0 });
+
+    render(
+      <AuthProvider adapter={adapter}>
+        <LoginForm />
+      </AuthProvider>
+    );
+
+    const emailInput = screen.getByLabelText(/email address/i);
+    const passwordInput = screen.getByLabelText(/^password$/i);
+
+    expect(emailInput).toHaveAttribute('aria-invalid', 'false');
+    expect(emailInput).not.toHaveAttribute('aria-describedby');
+
+    // Trigger validation error
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+
+    const alert = screen.getByRole('alert');
+    expect(alert).toHaveAttribute('aria-live', 'polite');
+    const alertId = alert.getAttribute('id');
+    expect(alertId).toBeTruthy();
+
+    expect(emailInput).toHaveAttribute('aria-invalid', 'true');
+    expect(emailInput).toHaveAttribute('aria-describedby', alertId);
+    expect(passwordInput).toHaveAttribute('aria-invalid', 'true');
+    expect(passwordInput).toHaveAttribute('aria-describedby', alertId);
+
+    // Typing in email clears errors
+    fireEvent.change(emailInput, { target: { value: 'user@test.com' } });
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(emailInput).toHaveAttribute('aria-invalid', 'false');
+    expect(emailInput).not.toHaveAttribute('aria-describedby');
   });
 });

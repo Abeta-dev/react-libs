@@ -5,9 +5,10 @@ import { SpinnerIcon } from '../icons/spinner-icon';
 import { useClickBackpressure } from '../core/use-click-backpressure';
 
 export interface ForgotPasswordFormProps {
-  onSuccess?: () => void;
-  onBackToSignIn?: () => void;
-  className?: string;
+  onSuccess?: (() => void) | undefined;
+  onError?: ((error: Error) => void) | undefined;
+  onBackToSignIn?: (() => void) | undefined;
+  className?: string | undefined;
   /**
    * Cooldown / debounce duration in seconds. Default: 1. Pass 0 or false to disable.
    */
@@ -23,6 +24,7 @@ function isValidEmail(val: string): boolean {
 
 export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   onSuccess,
+  onError,
   onBackToSignIn,
   className,
   debounceSec = 1,
@@ -34,19 +36,46 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [localError, setLocalError] = React.useState<string | null>(null);
   const [cooldownSeconds, setCooldownSeconds] = React.useState(0);
+  const timerRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const emailId = React.useId();
+  const errorId = React.useId();
 
   const displayError = localError ?? contextError;
 
-  React.useEffect(() => {
-    if (cooldownSeconds <= 0) return;
-    const timer = setInterval(() => {
-      setCooldownSeconds((prev) => prev - 1);
+  const startCooldown = React.useCallback((seconds: number) => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    setCooldownSeconds(seconds);
+    if (seconds <= 0) return;
+
+    timerRef.current = setInterval(() => {
+      setCooldownSeconds((prev) => {
+        if (prev <= 1) {
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
-    return () => clearInterval(timer);
-  }, [cooldownSeconds]);
+  }, []);
+
+  React.useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, []);
 
   const { execute: debouncedSubmit, isPending } = useClickBackpressure(
-    async (e?: React.FormEvent<HTMLFormElement>) => {
+    async (e?: React.SyntheticEvent) => {
       e?.preventDefault();
       if (cooldownSeconds > 0) return;
 
@@ -62,10 +91,12 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
       try {
         await requestPasswordReset(email.trim());
         setIsSuccess(true);
-        setCooldownSeconds(60);
+        startCooldown(60);
         onSuccess?.();
       } catch (err) {
-        setLocalError(err instanceof Error ? err.message : 'Failed to send reset link');
+        const errorInstance = err instanceof Error ? err : new Error('Failed to send reset link');
+        setLocalError(errorInstance.message);
+        onError?.(errorInstance);
       } finally {
         setIsSubmitting(false);
       }
@@ -97,7 +128,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
           <button
             type="button"
             disabled={cooldownSeconds > 0 || isEffectiveSubmitting}
-            onClick={(e) => void debouncedSubmit(e as unknown as React.FormEvent<HTMLFormElement>)}
+            onClick={(e) => void debouncedSubmit(e)}
             className="w-full text-xs font-medium text-indigo-600 hover:text-indigo-500 disabled:text-neutral-400 focus:outline-none"
           >
             {cooldownSeconds > 0
@@ -132,7 +163,9 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
 
       {displayError && (
         <div
+          id={errorId}
           role="alert"
+          aria-live="polite"
           className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300"
         >
           <div className="flex items-center gap-2">
@@ -144,21 +177,26 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
 
       <div className="space-y-1.5">
         <label
-          htmlFor="auth-forgot-email"
+          htmlFor={emailId}
           className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
         >
           Email address
         </label>
         <input
-          id="auth-forgot-email"
+          id={emailId}
           name="email"
           type="email"
           autoComplete="email"
           required
           value={email}
+          aria-invalid={Boolean(displayError)}
+          aria-describedby={displayError ? errorId : undefined}
           onChange={(e) => {
             setEmail(e.target.value);
-            if (displayError) setLocalError(null);
+            if (displayError) {
+              setLocalError(null);
+              clearError();
+            }
           }}
           placeholder="name@example.com"
           className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"

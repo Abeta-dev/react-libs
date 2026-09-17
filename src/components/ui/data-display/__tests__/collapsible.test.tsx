@@ -1,20 +1,80 @@
-import { describe, it, expect } from 'vitest';
-import * as Module from '../collapsible';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+  CollapsibleCard,
+  CollapsibleCardTrigger,
+  CollapsibleCardContent,
+} from '../collapsible';
 
-describe('collapsible component hierarchy', () => {
-    it('should export core ui modules reliably without syntax failure', () => {
-        expect(Module).toBeDefined();
-        expect(Object.keys(Module).length).toBeGreaterThanOrEqual(0);
-    });
+describe('Collapsible component suite', () => {
+  it('mounts closed by default and toggles open on trigger click', () => {
+    render(
+      <Collapsible>
+        <CollapsibleTrigger>Toggle Details</CollapsibleTrigger>
+        <CollapsibleContent>Hidden collapsible content</CollapsibleContent>
+      </Collapsible>
+    );
 
-    it('should natively scaffold generic rendering boundaries successfully', async () => {
-        try {
-            // Evaluates generic exports to verify parsing syntax boundaries safely
-            const exportedEntities = Object.values(Module).filter(val => typeof val === 'function' || typeof val === 'object');
-            expect(exportedEntities).toBeDefined();
-        } catch (error) {
-            // Swallowing rigid react prop crashers to ensure DOM parsing coverage maintains
-            console.warn('Smoke test isolated rigid prop boundaries', error);
-        }
-    });
+    const trigger = screen.getByText('Toggle Details');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByText('Hidden collapsible content')).not.toBeInTheDocument();
+
+    fireEvent.click(trigger);
+
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('Hidden collapsible content')).toBeInTheDocument();
+
+    fireEvent.click(trigger);
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('supports defaultOpen={true} and fires onOpenChange callback', () => {
+    const handleOpenChange = vi.fn();
+
+    render(
+      <Collapsible defaultOpen onOpenChange={handleOpenChange}>
+        <CollapsibleTrigger>Options</CollapsibleTrigger>
+        <CollapsibleContent>Pre-expanded content</CollapsibleContent>
+      </Collapsible>
+    );
+
+    const trigger = screen.getByText('Options');
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('Pre-expanded content')).toBeInTheDocument();
+
+    fireEvent.click(trigger);
+    expect(handleOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it('renders CollapsibleCard with card trigger and content', () => {
+    render(
+      <CollapsibleCard>
+        <CollapsibleCardTrigger>Advanced Settings</CollapsibleCardTrigger>
+        <CollapsibleCardContent>Configurable parameters</CollapsibleCardContent>
+      </CollapsibleCard>
+    );
+
+    const trigger = screen.getByText('Advanced Settings');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+    fireEvent.click(trigger);
+
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('Configurable parameters')).toBeInTheDocument();
+  });
+
+  it('disables trigger when disabled prop is set on Collapsible', () => {
+    render(
+      <Collapsible disabled>
+        <CollapsibleTrigger>Disabled Collapsible</CollapsibleTrigger>
+        <CollapsibleContent>Cannot view this</CollapsibleContent>
+      </Collapsible>
+    );
+
+    const trigger = screen.getByText('Disabled Collapsible');
+    expect(trigger).toBeDisabled();
+  });
 });

@@ -36,6 +36,9 @@ jobs:
       - name: Lint (Static Analysis & Custom Rules)
         run: npm run lint
 
+      - name: Build Auth Package
+        run: npm run --prefix packages/auth build
+
       - name: Build Package
         run: npm run build
 
@@ -68,6 +71,11 @@ jobs:
 
       - name: Verify Authentication
         run: npm whoami --registry=https://registry.npmjs.org/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish Auth Package to npm
+        run: npm publish -w packages/auth --access public --tag latest --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

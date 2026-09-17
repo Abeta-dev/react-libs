@@ -16,8 +16,10 @@ export type {
   VerifyOtpParams,
   OAuthProvider,
   OAuthOptions,
+  OAuthSignInOptions,
   AuthAdapter,
 } from './types/adapter';
+export { AuthError } from './types/adapter';
 
 export type {
   TokenStorage,
@@ -26,7 +28,13 @@ export type {
 
 // Core Engine & Adapters
 export { TokenManager } from './core/token-manager';
-export { MockAuthAdapter, type MockAdapterOptions } from './core/mock-adapter';
+export { MockAuthAdapter, DEFAULT_MOCK_PASSWORD, type MockAdapterOptions } from './core/mock-adapter';
+export {
+  generateOAuthState,
+  generateCodeVerifier,
+  generateCodeChallenge,
+  isValidRedirectUrl,
+} from './core/pkce';
 
 // Context & Hooks
 export {
@@ -47,6 +55,9 @@ export {
 // Icons
 export { GoogleIcon, type IconProps } from './icons/google-icon';
 export { LinkedInIcon } from './icons/linkedin-icon';
+export { GitHubIcon } from './icons/github-icon';
+export { AppleIcon } from './icons/apple-icon';
+export { MicrosoftIcon } from './icons/microsoft-icon';
 export { EyeIcon, EyeOffIcon } from './icons/eye-icons';
 export { SpinnerIcon } from './icons/spinner-icon';
 

@@ -1,7 +1,10 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: {
+    index: 'src/index.ts',
+    'core/use-click-backpressure': 'src/core/use-click-backpressure.ts',
+  },
   format: ['esm', 'cjs'],
   dts: true,
   sourcemap: true,
@@ -10,5 +13,5 @@ export default defineConfig({
   banner: {
     js: "'use client';",
   },
-  external: ['react', 'react-dom', 'clsx', 'tailwind-merge'],
+  external: ['react', 'react-dom', 'clsx'],
 });

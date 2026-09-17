@@ -3,7 +3,6 @@ import { renderHook, act } from '@testing-library/react';
 import { useClickBackpressure } from '../use-click-backpressure';
 
 describe('useClickBackpressure', () => {
-
   it('fires the first click immediately (leading-edge)', async () => {
     const handler = vi.fn().mockReturnValue('result');
     const { result } = renderHook(() => useClickBackpressure(handler));
@@ -109,7 +108,10 @@ describe('useClickBackpressure', () => {
       useClickBackpressure(asyncAction, { debounceSec: false, onBlocked })
     );
 
-    const firstPromise = result.current.execute();
+    let firstPromise!: Promise<unknown>;
+    act(() => {
+      firstPromise = result.current.execute();
+    });
 
     await vi.waitFor(() => {
       expect(result.current.isPending).toBe(true);
@@ -117,17 +119,19 @@ describe('useClickBackpressure', () => {
     expect(asyncAction).toHaveBeenCalledTimes(1);
 
     // Second click attempted while first is pending
-    result.current.execute();
+    await act(async () => {
+      await result.current.execute();
+    });
     expect(asyncAction).toHaveBeenCalledTimes(1);
     expect(onBlocked).toHaveBeenCalledWith('in_flight');
 
     // Resolve first promise
-    resolvePromise('done');
-    await firstPromise;
-
-    await vi.waitFor(() => {
-      expect(result.current.isPending).toBe(false);
+    await act(async () => {
+      resolvePromise('done');
+      await firstPromise;
     });
+
+    expect(result.current.isPending).toBe(false);
 
     // Third click now succeeds
     asyncAction.mockResolvedValueOnce('second-done');
@@ -139,13 +143,87 @@ describe('useClickBackpressure', () => {
 
   it('clears pending state and rethrows when an async action fails', async () => {
     const failingAction = vi.fn().mockRejectedValue(new Error('Network error'));
-    const { result } = renderHook(() => useClickBackpressure(failingAction));
+    const { result } = renderHook(() =>
+      useClickBackpressure(failingAction, { debounceSec: false })
+    );
 
     await expect(
       act(async () => {
         await result.current.execute();
       })
     ).rejects.toThrow('Network error');
+
+    expect(result.current.isPending).toBe(false);
+
+    // After failure, subsequent clicks are not permanently blocked
+    failingAction.mockResolvedValueOnce('recovered');
+    let secondRet: unknown;
+    await act(async () => {
+      secondRet = await result.current.execute();
+    });
+    expect(secondRet).toBe('recovered');
+  });
+
+  it('acquires lock synchronously BEFORE invoking fn to close TOCTOU window', async () => {
+    let hookResult!: ReturnType<typeof useClickBackpressure>;
+    const onBlocked = vi.fn();
+
+    const reentrantHandler = vi.fn().mockImplementation(() => {
+      // Synchronously attempt a re-entrant click while fn is executing
+      hookResult.execute().catch(() => {});
+      return Promise.resolve('ok');
+    });
+
+    const { result } = renderHook(() => {
+      hookResult = useClickBackpressure(reentrantHandler, {
+        debounceSec: false,
+        onBlocked,
+      });
+      return hookResult;
+    });
+
+    await act(async () => {
+      await result.current.execute();
+    });
+
+    // Initial click called handler once; re-entrant click was blocked immediately
+    expect(reentrantHandler).toHaveBeenCalledTimes(1);
+    expect(onBlocked).toHaveBeenCalledWith('in_flight');
+    expect(result.current.isPending).toBe(false);
+  });
+
+  it('isolates cancellation and execution per invocation (decoupled mutex)', async () => {
+    let resolveFirst!: () => void;
+    const slowPromise = new Promise<void>((resolve) => {
+      resolveFirst = resolve;
+    });
+
+    const handler = vi.fn().mockReturnValue(slowPromise);
+    const onBlocked = vi.fn();
+    const { result } = renderHook(() =>
+      useClickBackpressure(handler, { debounceSec: false, onBlocked })
+    );
+
+    let firstExec!: Promise<unknown>;
+    act(() => {
+      firstExec = result.current.execute();
+    });
+
+    expect(result.current.isPending).toBe(true);
+
+    // Rapid successive click during flight
+    await act(async () => {
+      await result.current.execute();
+    });
+    expect(onBlocked).toHaveBeenCalledWith('in_flight');
+
+    // Ensure first execution is still pending and not corrupted by dropped second click
+    expect(result.current.isPending).toBe(true);
+
+    await act(async () => {
+      resolveFirst();
+      await firstExec;
+    });
 
     expect(result.current.isPending).toBe(false);
   });

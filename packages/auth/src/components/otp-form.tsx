@@ -36,21 +36,45 @@ export const OtpForm: React.FC<OtpFormProps> = ({
   const [localError, setLocalError] = React.useState<string | null>(null);
   const [resendCooldown, setResendCooldown] = React.useState(30);
   const inputsRef = React.useRef<(HTMLInputElement | null)[]>([]);
+  const timerRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const errorId = React.useId();
   const displayError = localError ?? contextError;
+
+  const startCountdown = React.useCallback((seconds: number) => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    setResendCooldown(seconds);
+    if (seconds <= 0) return;
+
+    timerRef.current = setInterval(() => {
+      setResendCooldown((prev) => {
+        if (prev <= 1) {
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, []);
 
   React.useEffect(() => {
     // Focus first input on mount
     inputsRef.current[0]?.focus();
-  }, []);
+    startCountdown(30);
 
-  React.useEffect(() => {
-    if (resendCooldown <= 0) return;
-    const interval = setInterval(() => {
-      setResendCooldown((prev) => prev - 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [resendCooldown]);
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [startCountdown]);
 
   const submitCode = React.useCallback(
     async (codeToSubmit: string) => {
@@ -90,6 +114,7 @@ export const OtpForm: React.FC<OtpFormProps> = ({
     newDigits[index] = char;
     setDigits(newDigits);
     setLocalError(null);
+    clearError();
 
     // Auto-advance
     if (char && index < length - 1) {
@@ -130,6 +155,7 @@ export const OtpForm: React.FC<OtpFormProps> = ({
     }
     setDigits(newDigits);
     setLocalError(null);
+    clearError();
 
     const nextIndex = Math.min(pasted.length, length - 1);
     inputsRef.current[nextIndex]?.focus();
@@ -142,8 +168,9 @@ export const OtpForm: React.FC<OtpFormProps> = ({
   const { execute: debouncedResend, isPending: isResendingPending } = useClickBackpressure(
     async () => {
       if (resendCooldown > 0 || isSubmitting) return;
-      setResendCooldown(60);
+      startCountdown(60);
       setLocalError(null);
+      clearError();
       try {
         await onResendCode?.();
       } catch (err) {
@@ -171,7 +198,9 @@ export const OtpForm: React.FC<OtpFormProps> = ({
 
       {displayError && (
         <div
+          id={errorId}
           role="alert"
+          aria-live="polite"
           className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300 text-left"
         >
           <div className="flex items-center gap-2">
@@ -196,8 +225,11 @@ export const OtpForm: React.FC<OtpFormProps> = ({
             inputMode="numeric"
             pattern="[0-9]*"
             maxLength={1}
+            autoComplete="one-time-code"
             value={digit}
             aria-label={`Digit ${idx + 1} of ${length}`}
+            aria-invalid={Boolean(displayError)}
+            aria-describedby={displayError ? errorId : undefined}
             disabled={isSubmitting}
             onChange={(e) => handleChange(idx, e.target.value)}
             onKeyDown={(e) => handleKeyDown(idx, e)}

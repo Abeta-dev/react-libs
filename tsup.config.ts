@@ -25,7 +25,7 @@ const CLIENT_EXTERNAL = [
   'clsx',
   'tailwind-merge',
   /^@radix-ui\/.+/,
-  '@abeta.dev/auth',
+  /^@abeta\.dev\/auth(\/.+)?$/,
 ];
 
 export default defineConfig([

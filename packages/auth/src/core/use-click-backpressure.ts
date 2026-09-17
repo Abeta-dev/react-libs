@@ -50,7 +50,9 @@ export interface UseClickBackpressureResult<TArgs extends unknown[] = [React.Syn
  * - Leading-edge: The first click fires immediately.
  * - Cooldown window: Subsequent clicks within `debounceSec` seconds (default: 1s) are dropped.
  * - Async backpressure: If the handler returns a Promise, any clicks during execution are dropped.
- * - Configurable: Specify any number of seconds, or disable via `debounceSec={0}` / `debounceSec={false}`.
+ * - Synchronous Lock: isPendingRef.current is locked BEFORE fn invocation to close TOCTOU gap.
+ * - Decoupled Execution: Execution tracking isolated per invocation to prevent mutex corruption.
+ * - Concurrent Mode Purity: Handler ref updated inside useEffect to preserve pure rendering.
  */
 export function useClickBackpressure<TArgs extends unknown[] = [React.SyntheticEvent], TReturn = unknown>(
   handler?: ((...args: TArgs) => TReturn) | undefined,
@@ -61,17 +63,21 @@ export function useClickBackpressure<TArgs extends unknown[] = [React.SyntheticE
   const [isPending, setIsPending] = React.useState(false);
   const isPendingRef = React.useRef(false);
   const lastClickTimeRef = React.useRef<number>(0);
+  const invocationCounterRef = React.useRef<number>(0);
+  const activeExecutionIdRef = React.useRef<number | null>(null);
+
+  // Concurrent mode purity: Update handler ref inside useEffect instead of render body
   const handlerRef = React.useRef(handler);
-  handlerRef.current = handler;
+  React.useEffect(() => {
+    handlerRef.current = handler;
+  }, [handler]);
 
   const isDebounceDisabled = disabled || debounceSec === false || debounceSec <= 0;
   const cooldownMs = isDebounceDisabled ? 0 : (debounceSec as number) * 1000;
 
-  const cancelledRef = React.useRef(false);
-
   const cancelCooldown = React.useCallback(() => {
-    cancelledRef.current = true;
     lastClickTimeRef.current = 0;
+    activeExecutionIdRef.current = null;
     isPendingRef.current = false;
     setIsPending(false);
   }, []);
@@ -99,26 +105,40 @@ export function useClickBackpressure<TArgs extends unknown[] = [React.SyntheticE
           return undefined;
         }
 
-        cancelledRef.current = false;
+        // Synchronously acquire lock BEFORE invoking fn(...args) to close TOCTOU race gap
+        isPendingRef.current = true;
+        const currentExecutionId = ++invocationCounterRef.current;
+        activeExecutionIdRef.current = currentExecutionId;
         lastClickTimeRef.current = now;
 
         let isAsync = false;
         try {
           const result = fn(...args);
-          if (result && typeof (result as unknown as Promise<unknown>).then === 'function') {
-            if (cancelledRef.current) {
-              return undefined;
+          if (result && typeof (result as unknown as { then?: unknown }).then === 'function') {
+            if (activeExecutionIdRef.current === currentExecutionId) {
+              isAsync = true;
+              setIsPending(true);
             }
-            isAsync = true;
-            isPendingRef.current = true;
-            setIsPending(true);
             return (await result) as R;
           }
+          // Synchronous execution: release pending lock immediately
+          isPendingRef.current = false;
+          activeExecutionIdRef.current = null;
           return result;
+        } catch (err) {
+          lastClickTimeRef.current = 0;
+          isPendingRef.current = false;
+          activeExecutionIdRef.current = null;
+          setIsPending(false);
+          throw err;
         } finally {
-          if (isAsync && !cancelledRef.current) {
-            isPendingRef.current = false;
-            setIsPending(false);
+          if (isAsync) {
+            // Decoupled cancellation: only reset if this specific execution is still the active one
+            if (activeExecutionIdRef.current === currentExecutionId) {
+              isPendingRef.current = false;
+              activeExecutionIdRef.current = null;
+              setIsPending(false);
+            }
           }
         }
       };
@@ -127,11 +147,11 @@ export function useClickBackpressure<TArgs extends unknown[] = [React.SyntheticE
   );
 
   const execute = React.useMemo(() => {
-    return wrapHandler((...args: TArgs) => {
+    return wrapHandler<TArgs, TReturn | undefined>((...args: TArgs) => {
       if (handlerRef.current) {
         return handlerRef.current(...args);
       }
-      return undefined as unknown as TReturn;
+      return undefined;
     });
   }, [wrapHandler]);
 

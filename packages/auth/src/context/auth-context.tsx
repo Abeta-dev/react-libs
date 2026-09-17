@@ -31,7 +31,8 @@ export interface AuthContextValue<TUser = AuthUser> {
   tokenManager: TokenManager<TUser>;
 }
 
-export const AuthContext = React.createContext<AuthContextValue<AuthUser> | null>(null);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const AuthContext = React.createContext<AuthContextValue<any> | null>(null);
 
 export interface AuthProviderProps<TUser = AuthUser> {
   adapter: AuthAdapter<TUser>;
@@ -262,5 +263,5 @@ export function AuthProvider<TUser = AuthUser>({
     ]
   );
 
-  return <AuthContext.Provider value={value as unknown as AuthContextValue<AuthUser>}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

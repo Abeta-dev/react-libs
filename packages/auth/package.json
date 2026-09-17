@@ -1,6 +1,6 @@
 {
   "name": "@abeta.dev/auth",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Backend-agnostic React 19 authentication UI library with Google & LinkedIn 3PL, email/password, and concurrent-safe token refresh.",
   "keywords": [
     "react",
@@ -28,6 +28,7 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "files": [
     "dist"
   ],
@@ -41,6 +42,23 @@
         "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
       }
+    },
+    "./core/use-click-backpressure": {
+      "import": {
+        "types": "./dist/core/use-click-backpressure.d.ts",
+        "default": "./dist/core/use-click-backpressure.js"
+      },
+      "require": {
+        "types": "./dist/core/use-click-backpressure.d.cts",
+        "default": "./dist/core/use-click-backpressure.cjs"
+      }
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "core/use-click-backpressure": [
+        "./dist/core/use-click-backpressure.d.ts"
+      ]
     }
   },
   "scripts": {
@@ -50,11 +68,10 @@
     "check:types": "tsc --noEmit"
   },
   "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.5.0"
+    "clsx": "^2.1.1"
   }
 }

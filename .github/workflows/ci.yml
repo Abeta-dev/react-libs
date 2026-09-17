@@ -51,6 +51,9 @@ jobs:
       - name: Type Definitions Check
         run: npx tsc --noEmit
 
+      - name: Type Definitions Check (Auth Package)
+        run: npm run --prefix packages/auth check:types
+
       - name: Lint (Static Analysis & Custom Rules)
         run: npm run lint
 
@@ -77,6 +80,9 @@ jobs:
 
       - name: Execute Vitest (Full Test Suite + Coverage)
         run: npm run test
+
+      - name: Execute Vitest (Auth Package)
+        run: npm run --prefix packages/auth test
 
       - name: Visual & Layout Smoke Regression Gate
         run: npm run test:visual

@@ -2,24 +2,62 @@ import * as React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { DatePickerWithRange } from '../date-range-picker';
-import * as Module from '../date-range-picker';
+import { vi } from 'vitest';
 
-describe('date-range-picker component hierarchy', () => {
-    it('should export core ui modules reliably without syntax failure', () => {
-        expect(Module).toBeDefined();
-        expect(Object.keys(Module).length).toBeGreaterThanOrEqual(0);
-    });
+describe('DatePickerWithRange component', () => {
+  it('renders placeholder when no date is selected', () => {
+    render(<DatePickerWithRange placeholder="Choose date range" />);
+    expect(screen.getByText('Choose date range')).toBeInTheDocument();
+  });
 
-    it('should natively scaffold generic rendering boundaries successfully', async () => {
-        try {
-            // Evaluates generic exports to verify parsing syntax boundaries safely
-            const exportedEntities = Object.values(Module).filter(val => typeof val === 'function' || typeof val === 'object');
-            expect(exportedEntities).toBeDefined();
-        } catch (error) {
-            // Swallowing rigid react prop crashers to ensure DOM parsing coverage maintains
-            console.warn('Smoke test isolated rigid prop boundaries', error);
-        }
-    });
+  it('renders formatted date range when date is provided', () => {
+    const from = new Date(2025, 4, 10);
+    const to = new Date(2025, 4, 20);
+    render(<DatePickerWithRange date={{ from, to }} />);
+    expect(screen.getByText(/May 10, 2025 - May 20, 2025/i)).toBeInTheDocument();
+  });
+
+  it('calls setDate and onSelect when apply button is clicked', () => {
+    const handleSetDate = vi.fn();
+    const handleSelect = vi.fn();
+    const from = new Date(2025, 5, 1);
+    const to = new Date(2025, 5, 15);
+
+    render(
+      <DatePickerWithRange
+        defaultDate={{ from, to }}
+        setDate={handleSetDate}
+        onSelect={handleSelect}
+      />
+    );
+
+    const trigger = screen.getByRole('button');
+    fireEvent.click(trigger);
+
+    const applyBtn = screen.getByRole('button', { name: /apply range/i });
+    fireEvent.click(applyBtn);
+
+    expect(handleSetDate).toHaveBeenCalledWith({ from, to });
+    expect(handleSelect).toHaveBeenCalledWith({ from, to });
+  });
+
+  it('closes popover without changes when cancel is clicked', () => {
+    const handleSetDate = vi.fn();
+    render(
+      <DatePickerWithRange
+        placeholder="Select dates"
+        setDate={handleSetDate}
+      />
+    );
+
+    const trigger = screen.getByRole('button');
+    fireEvent.click(trigger);
+
+    const cancelBtn = screen.getByRole('button', { name: /cancel/i });
+    fireEvent.click(cancelBtn);
+
+    expect(handleSetDate).not.toHaveBeenCalled();
+  });
 
     it('forwards ref to the outer container div', () => {
         const ref = React.createRef<HTMLDivElement>();

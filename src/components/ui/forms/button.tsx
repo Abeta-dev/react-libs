@@ -7,7 +7,7 @@ import { cn } from "../../../lib/utils"
 import { useClickBackpressure } from "../../../hooks/use-click-backpressure"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0" +
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0" +
   " hover-elevate active-elevate-2",
   {
     variants: {
@@ -119,10 +119,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         disabled={disabled || isEffectiveLoading}
+        aria-busy={isLoading || isPending}
         onClick={handleClick}
         {...props}
       >
-        {isLoading ? (
+        {isEffectiveLoading ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin shrink-0" />
             {loadingText ?? children}

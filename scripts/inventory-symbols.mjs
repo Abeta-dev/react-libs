@@ -23,7 +23,7 @@ export function getExportedSymbols() {
   const files = new Set();
 
   // Root repository files
-  const rootFiles = ['LICENSE', 'README.md', 'CHANGELOG.md', 'SECURITY.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'MIGRATION.md', 'WIKI.md'];
+  const rootFiles = ['LICENSE', 'README.md', 'CHANGELOG.md', 'SECURITY.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'MIGRATION.md', 'WIKI.md', 'QUALITY_STANDARDS_AND_AUDIT_SCORECARD.md'];
   for (const rf of rootFiles) {
     if (existsSync(join(ROOT, rf))) {
       files.add(rf);
@@ -54,6 +54,7 @@ export function getExportedSymbols() {
     'src/utils.ts',
     'src/hooks/use-toast.ts',
     'src/components/ui/pdf-viewer.tsx',
+    'packages/auth/src/index.ts',
   ];
 
   for (const rel of barrelFiles) {
@@ -61,8 +62,11 @@ export function getExportedSymbols() {
     if (!existsSync(full)) continue;
     const content = readFileSync(full, 'utf8');
 
-    // Parse export { a, b } ...
-    const namedMatches = content.matchAll(/export\s*\{\s*([^}]+)\s*\}/g);
+    // Parse export { a, b } and export type { a, b } ...
+    const namedMatches = [
+      ...content.matchAll(/export\s*\{([^}]+)\}/g),
+      ...content.matchAll(/export\s+type\s*\{([^}]+)\}/g),
+    ];
     for (const m of namedMatches) {
       const parts = m[1].split(',');
       for (const p of parts) {
@@ -227,13 +231,14 @@ export function verifyChangelogSymbols() {
 
       for (const token of backtickedTokens) {
         // Skip format/syntax tokens
-        if (['.d.ts', './style.css', 'use client', 'onError'].includes(token)) continue;
+        if (['.d.ts', './style.css', 'use client', 'onError', 'AbortController'].includes(token)) continue;
 
         // Check if token matches symbol, file, or subpath
         if (
           symbols.has(token) ||
           files.has(token) ||
           token.startsWith('@abeta.dev/react-libs') ||
+          token.startsWith('@abeta.dev/auth') ||
           token.startsWith('./')
         ) {
           // OK

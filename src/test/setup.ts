@@ -62,6 +62,19 @@ if (typeof window !== 'undefined') {
     window.HTMLElement.prototype.scrollIntoView = () => {};
   }
 
+  // Radix UI Select / Slider pointerCapture polyfills for JSDOM
+  if (window.Element) {
+    if (!window.Element.prototype.hasPointerCapture) {
+      window.Element.prototype.hasPointerCapture = () => false;
+    }
+    if (!window.Element.prototype.setPointerCapture) {
+      window.Element.prototype.setPointerCapture = () => {};
+    }
+    if (!window.Element.prototype.releasePointerCapture) {
+      window.Element.prototype.releasePointerCapture = () => {};
+    }
+  }
+
   // Provide standard requestAnimationFrame fallback if not available in environment
   if (typeof window.requestAnimationFrame === "undefined") {
     window.requestAnimationFrame = (callback: FrameRequestCallback) => {

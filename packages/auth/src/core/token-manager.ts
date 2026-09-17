@@ -5,15 +5,17 @@ import type { TokenManagerOptions, TokenStorage } from '../types/tokens';
  * Concurrency-safe Token Lifecycle Manager.
  *
  * Guarantees:
- * 1. Proactive silent refresh before token expiry.
- * 2. Deduplicated refresh requests (single in-flight Promise mutex).
- * 3. Memory or custom storage persistence.
- * 4. SSR and client-side safe execution.
+ * 1. Proactive silent refresh before token expiry with 32-bit integer overflow protection.
+ * 2. Deduplicated refresh requests (single in-flight Promise mutex shared by proactive & caller requests).
+ * 3. Session resurrection prevention via AbortController on signOut / destroy.
+ * 4. Memory primary with verified storage read/write/eviction hygiene.
+ * 5. SSR and client-side safe execution.
  */
 export class TokenManager<TUser = AuthUser> {
   private currentSession: AuthSession<TUser> | null = null;
   private refreshPromise: Promise<string | null> | null = null;
   private refreshTimer: ReturnType<typeof setTimeout> | null = null;
+  private abortController: AbortController | null = null;
   private readonly refreshThresholdMs: number;
   private readonly storage: TokenStorage | null;
   private readonly tokenKey: string;
@@ -27,6 +29,55 @@ export class TokenManager<TUser = AuthUser> {
     this.storage = options.storage ?? null;
     this.tokenKey = options.tokenStorageKey ?? 'abeta_access_token';
     this.refreshKey = options.refreshTokenStorageKey ?? 'abeta_refresh_token';
+
+    this.checkInitialStorage();
+  }
+
+  /**
+   * Check storage on initialization to avoid write-only storage leaks.
+   */
+  private checkInitialStorage(): void {
+    if (!this.storage) return;
+
+    try {
+      const storedAccessToken = this.storage.getItem(this.tokenKey);
+      const storedRefreshToken = this.storage.getItem(this.refreshKey);
+
+      const applyStoredTokens = (
+        accessToken: string | null,
+        refreshToken: string | null
+      ) => {
+        if (!this.currentSession && (accessToken || refreshToken)) {
+          this.currentSession = {
+            user: {} as TUser,
+            accessToken: accessToken ?? '',
+            refreshToken: refreshToken ?? undefined,
+            expiresAt: 0,
+          };
+        }
+      };
+
+      if (
+        storedAccessToken &&
+        typeof (storedAccessToken as Promise<string | null>).then === 'function'
+      ) {
+        Promise.all([
+          storedAccessToken as Promise<string | null>,
+          storedRefreshToken as Promise<string | null>,
+        ])
+          .then(([access, refresh]) => {
+            applyStoredTokens(access, refresh);
+          })
+          .catch(() => {});
+      } else {
+        applyStoredTokens(
+          storedAccessToken as string | null,
+          storedRefreshToken as string | null
+        );
+      }
+    } catch {
+      // Storage read errors handled gracefully
+    }
   }
 
   /**
@@ -34,14 +85,16 @@ export class TokenManager<TUser = AuthUser> {
    * Schedules proactive background refresh if expiresAt is provided.
    */
   public setSession(session: AuthSession<TUser> | null): void {
-    this.currentSession = session;
     this.clearTimer();
 
     if (!session) {
+      this.abortInFlightRefresh();
+      this.currentSession = null;
       this.clearStoredTokens();
       return;
     }
 
+    this.currentSession = session;
     this.persistTokens(session);
     this.scheduleProactiveRefresh(session);
   }
@@ -73,21 +126,14 @@ export class TokenManager<TUser = AuthUser> {
   /**
    * Obtain a guaranteed valid access token.
    * If current token is expired or close to expiry, safely executes a refresh.
-   * Concurrent callers share a single in-flight Promise mutex.
+   * Concurrent callers and background timers share a single in-flight Promise mutex.
    */
   public async getValidToken(): Promise<string | null> {
     if (this.isTokenValid()) {
       return this.currentSession?.accessToken ?? null;
     }
 
-    // Deduplicate concurrent refresh requests
-    if (!this.refreshPromise) {
-      this.refreshPromise = this.executeRefresh().finally(() => {
-        this.refreshPromise = null;
-      });
-    }
-
-    return this.refreshPromise;
+    return this.executeRefresh();
   }
 
   /**
@@ -100,15 +146,36 @@ export class TokenManager<TUser = AuthUser> {
 
   /**
    * Execute token refresh via adapter.
+   * Deduplicates concurrent refresh requests using an in-flight Promise mutex.
    */
   public async executeRefresh(): Promise<string | null> {
+    if (this.refreshPromise) {
+      return this.refreshPromise;
+    }
+
+    this.refreshPromise = this.performRefresh().finally(() => {
+      this.refreshPromise = null;
+    });
+
+    return this.refreshPromise;
+  }
+
+  private async performRefresh(): Promise<string | null> {
     if (!this.adapter.refreshToken) {
       return this.currentSession?.accessToken ?? null;
     }
 
+    const abortController = new AbortController();
+    this.abortController = abortController;
+    const { signal } = abortController;
+
     try {
       const currentRefreshToken = this.currentSession?.refreshToken;
       const newSession = await this.adapter.refreshToken(currentRefreshToken);
+
+      if (signal.aborted) {
+        return null;
+      }
 
       if (newSession) {
         this.setSession(newSession);
@@ -121,14 +188,22 @@ export class TokenManager<TUser = AuthUser> {
       this.options.onSessionExpired?.(new Error('Session refresh returned empty'));
       return null;
     } catch (err) {
+      if (signal.aborted) {
+        return null;
+      }
       this.setSession(null);
-      this.options.onSessionExpired?.(err);
+      this.options.onSessionExpired?.(err instanceof Error ? err : new Error(String(err)));
       return null;
+    } finally {
+      if (this.abortController === abortController) {
+        this.abortController = null;
+      }
     }
   }
 
   /**
    * Schedule automatic silent refresh before expiration.
+   * Clamps delay to 32-bit signed integer max (2147483647 ms) to avoid timer overflow.
    */
   private scheduleProactiveRefresh(session: AuthSession<TUser>): void {
     if (typeof session.expiresAt !== 'number' || typeof window === 'undefined') {
@@ -136,16 +211,54 @@ export class TokenManager<TUser = AuthUser> {
     }
 
     const msUntilRefresh = Math.max(0, session.expiresAt - Date.now() - this.refreshThresholdMs);
+    const safeDelay = Math.min(msUntilRefresh, 2147483647);
 
     this.refreshTimer = setTimeout(() => {
-      this.executeRefresh().catch(() => {});
-    }, msUntilRefresh);
+      if (this.refreshPromise) {
+        this.refreshPromise.catch(() => {});
+      } else {
+        this.executeRefresh().catch(() => {});
+      }
+    }, safeDelay);
   }
 
   private clearTimer(): void {
     if (this.refreshTimer) {
       clearTimeout(this.refreshTimer);
       this.refreshTimer = null;
+    }
+  }
+
+  private abortInFlightRefresh(): void {
+    if (this.abortController) {
+      this.abortController.abort();
+      this.abortController = null;
+    }
+    this.refreshPromise = null;
+  }
+
+  /**
+   * Terminate active session and abort any pending refresh operations.
+   */
+  public signOut(): void {
+    this.abortInFlightRefresh();
+    this.setSession(null);
+  }
+
+  /**
+   * Retrieve tokens currently stored in persistence storage.
+   */
+  public async getStoredTokens(): Promise<{
+    accessToken: string | null;
+    refreshToken: string | null;
+  } | null> {
+    if (!this.storage) return null;
+    try {
+      const accessToken = await this.storage.getItem(this.tokenKey);
+      const refreshToken = await this.storage.getItem(this.refreshKey);
+      return { accessToken, refreshToken };
+    } catch {
+      return null;
     }
   }
 
@@ -186,9 +299,10 @@ export class TokenManager<TUser = AuthUser> {
   }
 
   /**
-   * Teardown timer and clear references.
+   * Teardown timer, abort in-flight refresh, and clear references.
    */
   public destroy(): void {
+    this.abortInFlightRefresh();
     this.clearTimer();
     this.currentSession = null;
     this.refreshPromise = null;

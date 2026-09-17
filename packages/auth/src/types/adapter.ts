@@ -54,6 +54,24 @@ export interface OAuthOptions {
   mode?: 'redirect' | 'popup' | undefined;
   scopes?: string[] | undefined;
   state?: string | undefined;
+  codeVerifier?: string | undefined;
+  codeChallenge?: string | undefined;
+  codeChallengeMethod?: 'S256' | 'plain' | undefined;
+}
+
+export type OAuthSignInOptions = OAuthOptions;
+
+export class AuthError extends Error {
+  public readonly code: string;
+  public readonly status: number;
+
+  constructor(message: string, code: string = 'INVALID_TOKEN', status: number = 401) {
+    super(message);
+    this.name = 'AuthError';
+    this.code = code;
+    this.status = status;
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
 }
 
 /**

@@ -50,6 +50,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [localError, setLocalError] = React.useState<string | null>(null);
 
+  const emailId = React.useId();
+  const passwordId = React.useId();
+  const rememberMeId = React.useId();
+  const errorId = React.useId();
+
   const displayError = localError ?? contextError;
 
   const { execute: debouncedSubmit, cancelCooldown } = useClickBackpressure(
@@ -98,7 +103,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     <form onSubmit={(e) => void debouncedSubmit(e)} noValidate className={clsx('space-y-4', className)}>
       {displayError && (
         <div
+          id={errorId}
           role="alert"
+          aria-live="polite"
           className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300"
         >
           <div className="flex items-center gap-2">
@@ -110,21 +117,26 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
       <div className="space-y-1.5">
         <label
-          htmlFor="auth-login-email"
+          htmlFor={emailId}
           className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
         >
           Email address
         </label>
         <input
-          id="auth-login-email"
+          id={emailId}
           name="email"
           type="email"
           autoComplete="email"
           required
           value={email}
+          aria-invalid={Boolean(displayError)}
+          aria-describedby={displayError ? errorId : undefined}
           onChange={(e) => {
             setEmail(e.target.value);
-            if (displayError) setLocalError(null);
+            if (displayError) {
+              setLocalError(null);
+              clearError();
+            }
           }}
           placeholder="name@example.com"
           className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
@@ -134,7 +146,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
           <label
-            htmlFor="auth-login-password"
+            htmlFor={passwordId}
             className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
           >
             Password
@@ -151,24 +163,30 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         </div>
         <div className="relative">
           <input
-            id="auth-login-password"
+            id={passwordId}
             name="password"
             type={showPassword ? 'text' : 'password'}
             autoComplete="current-password"
             required
             value={password}
+            aria-invalid={Boolean(displayError)}
+            aria-describedby={displayError ? errorId : undefined}
             onChange={(e) => {
               setPassword(e.target.value);
-              if (displayError) setLocalError(null);
+              if (displayError) {
+                setLocalError(null);
+                clearError();
+              }
             }}
             placeholder="••••••••"
-            className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 pr-10 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
+            className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 pr-12 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
           />
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 focus:outline-none"
+            aria-label="Toggle password visibility"
+            aria-pressed={showPassword}
+            className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center min-w-[44px] min-h-[44px] p-2 rounded-md text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
           >
             {showPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
           </button>
@@ -178,7 +196,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       {showRememberMe && (
         <div className="flex items-center">
           <input
-            id="auth-login-remember"
+            id={rememberMeId}
             name="rememberMe"
             type="checkbox"
             checked={rememberMe}
@@ -186,7 +204,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             className="h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500 dark:border-neutral-700 dark:bg-neutral-900"
           />
           <label
-            htmlFor="auth-login-remember"
+            htmlFor={rememberMeId}
             className="ml-2 block text-xs text-neutral-600 dark:text-neutral-400"
           >
             Remember me for 30 days

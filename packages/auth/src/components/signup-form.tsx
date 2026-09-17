@@ -52,6 +52,23 @@ function isValidEmail(val: string): boolean {
   return atIndex > 0 && dotIndex > atIndex + 1 && dotIndex < val.length - 1 && !val.includes(' ');
 }
 
+function sanitizeUrl(url?: string): string {
+  if (!url) return '#';
+  const trimmed = url.trim();
+  if (trimmed.startsWith('#') || trimmed.startsWith('/')) {
+    return trimmed;
+  }
+  try {
+    const parsed = new URL(trimmed);
+    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+      return trimmed;
+    }
+  } catch {
+    return '#';
+  }
+  return '#';
+}
+
 export const SignUpForm: React.FC<SignUpFormProps> = ({
   onSuccess,
   onError,
@@ -72,6 +89,17 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
   const [showPassword, setShowPassword] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [localError, setLocalError] = React.useState<string | null>(null);
+
+  const nameId = React.useId();
+  const emailId = React.useId();
+  const passwordId = React.useId();
+  const confirmPasswordId = React.useId();
+  const termsId = React.useId();
+  const errorId = React.useId();
+  const strengthId = React.useId();
+
+  const safeTermsUrl = sanitizeUrl(termsUrl);
+  const safePrivacyUrl = sanitizeUrl(privacyUrl);
 
   const displayError = localError ?? contextError;
   const strength = calculatePasswordStrength(password);
@@ -132,11 +160,20 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
     { debounceSec, onBlocked }
   );
 
+  let passwordDescribedBy: string | undefined;
+  if (displayError) {
+    passwordDescribedBy = errorId;
+  } else if (password.length > 0) {
+    passwordDescribedBy = strengthId;
+  }
+
   return (
     <form onSubmit={(e) => void debouncedSubmit(e)} noValidate className={clsx('space-y-4', className)}>
       {displayError && (
         <div
+          id={errorId}
           role="alert"
+          aria-live="polite"
           className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300"
         >
           <div className="flex items-center gap-2">
@@ -148,21 +185,26 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 
       <div className="space-y-1.5">
         <label
-          htmlFor="auth-signup-name"
+          htmlFor={nameId}
           className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
         >
           Full name
         </label>
         <input
-          id="auth-signup-name"
+          id={nameId}
           name="name"
           type="text"
           autoComplete="name"
           required
           value={name}
+          aria-invalid={Boolean(displayError)}
+          aria-describedby={displayError ? errorId : undefined}
           onChange={(e) => {
             setName(e.target.value);
-            if (displayError) setLocalError(null);
+            if (displayError) {
+              setLocalError(null);
+              clearError();
+            }
           }}
           placeholder="Jane Doe"
           className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
@@ -171,21 +213,26 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 
       <div className="space-y-1.5">
         <label
-          htmlFor="auth-signup-email"
+          htmlFor={emailId}
           className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
         >
           Email address
         </label>
         <input
-          id="auth-signup-email"
+          id={emailId}
           name="email"
           type="email"
           autoComplete="email"
           required
           value={email}
+          aria-invalid={Boolean(displayError)}
+          aria-describedby={displayError ? errorId : undefined}
           onChange={(e) => {
             setEmail(e.target.value);
-            if (displayError) setLocalError(null);
+            if (displayError) {
+              setLocalError(null);
+              clearError();
+            }
           }}
           placeholder="name@example.com"
           className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
@@ -194,46 +241,61 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 
       <div className="space-y-1.5">
         <label
-          htmlFor="auth-signup-password"
+          htmlFor={passwordId}
           className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
         >
           Password
         </label>
         <div className="relative">
           <input
-            id="auth-signup-password"
+            id={passwordId}
             name="password"
             type={showPassword ? 'text' : 'password'}
             autoComplete="new-password"
             required
             value={password}
+            aria-invalid={Boolean(displayError)}
+            aria-describedby={passwordDescribedBy}
             onChange={(e) => {
               setPassword(e.target.value);
-              if (displayError) setLocalError(null);
+              if (displayError) {
+                setLocalError(null);
+                clearError();
+              }
             }}
             placeholder="At least 8 characters"
-            className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 pr-10 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
+            className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 pr-12 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
           />
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 focus:outline-none"
+            aria-label="Toggle password visibility"
+            aria-pressed={showPassword}
+            className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center min-w-[44px] min-h-[44px] p-2 rounded-md text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
           >
             {showPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
           </button>
         </div>
 
         {password.length > 0 && (
-          <div className="pt-1.5 space-y-1">
+          <div id={strengthId} className="pt-1.5 space-y-1">
             <div className="flex justify-between items-center text-xs text-neutral-500">
               <span>Password strength:</span>
               <span className="font-medium text-neutral-700 dark:text-neutral-300">{strength.label}</span>
             </div>
-            <div className="grid grid-cols-4 gap-1.5 h-1.5">
+            <div
+              role="meter"
+              aria-label="Password strength"
+              aria-valuenow={strength.score}
+              aria-valuemin={0}
+              aria-valuemax={4}
+              aria-valuetext={`Password strength: ${strength.label}`}
+              className="grid grid-cols-4 gap-1.5 h-1.5"
+            >
               {[1, 2, 3, 4].map((step) => (
                 <div
                   key={step}
+                  aria-hidden="true"
                   className={clsx(
                     'rounded-full transition-all duration-300',
                     step <= strength.score ? strength.color : 'bg-neutral-200 dark:bg-neutral-700'
@@ -247,21 +309,26 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 
       <div className="space-y-1.5">
         <label
-          htmlFor="auth-signup-confirm"
+          htmlFor={confirmPasswordId}
           className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
         >
           Confirm password
         </label>
         <input
-          id="auth-signup-confirm"
+          id={confirmPasswordId}
           name="confirmPassword"
           type={showPassword ? 'text' : 'password'}
           autoComplete="new-password"
           required
           value={confirmPassword}
+          aria-invalid={Boolean(displayError)}
+          aria-describedby={displayError ? errorId : undefined}
           onChange={(e) => {
             setConfirmPassword(e.target.value);
-            if (displayError) setLocalError(null);
+            if (displayError) {
+              setLocalError(null);
+              clearError();
+            }
           }}
           placeholder="Repeat password"
           className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
@@ -270,7 +337,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 
       <div className="flex items-start">
         <input
-          id="auth-signup-terms"
+          id={termsId}
           name="acceptTerms"
           type="checkbox"
           checked={acceptTerms}
@@ -278,15 +345,15 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           className="mt-0.5 h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500 dark:border-neutral-700 dark:bg-neutral-900"
         />
         <label
-          htmlFor="auth-signup-terms"
+          htmlFor={termsId}
           className="ml-2 block text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed"
         >
           I agree to the{' '}
-          <a href={termsUrl} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">
+          <a href={safeTermsUrl} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">
             Terms of Service
           </a>{' '}
           and{' '}
-          <a href={privacyUrl} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">
+          <a href={safePrivacyUrl} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">
             Privacy Policy
           </a>
         </label>

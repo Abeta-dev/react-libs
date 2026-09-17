@@ -9,13 +9,18 @@ export default defineConfig({
     testTimeout: 20000,
     hookTimeout: 20000,
     setupFiles: ['./src/test/setup.ts'],
-    include: ['src/**/__tests__/**/*.test.{ts,tsx}', 'src/**/*.test.{ts,tsx}'],
+    include: [
+      'src/**/__tests__/**/*.test.{ts,tsx}',
+      'src/**/*.test.{ts,tsx}',
+      'packages/auth/src/**/__tests__/**/*.test.{ts,tsx}',
+    ],
     exclude: [
       'src/**/*.stories.{ts,tsx}',
       'node_modules/**',
     ],
     coverage: {
       provider: 'v8',
+      clean: false,
       reporter: ['text', 'json-summary', 'html'],
       reportsDirectory: './coverage',
       include: ['src/components/ui/**', 'src/lib/**', 'src/hooks/**', 'src/india/**', 'src/utils.ts'],

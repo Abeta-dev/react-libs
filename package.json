@@ -1,6 +1,6 @@
 {
   "name": "@abeta.dev/react-libs",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "React 19 component library with Tailwind CSS v4 & Radix UI primitives.",
   "keywords": [
     "react",
@@ -32,7 +32,7 @@
     "packages/*"
   ],
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=20.0.0"
   },
   "type": "module",
   "main": "./dist/index.cjs",
@@ -118,13 +118,15 @@
   ],
   "scripts": {
     "prepare": "node -e \"if (!fs.existsSync('dist/index.d.ts')) { const cp = require('child_process'); cp.execSync('npm run build', { stdio: 'inherit' }); }\"",
-    "build": "node -e \"fs.rmSync('dist', { recursive: true, force: true })\" && tsup && node scripts/build-css.mjs",
+    "build": "npm run --prefix packages/auth build && node -e \"fs.rmSync('dist', { recursive: true, force: true })\" && tsup && node scripts/build-css.mjs",
+    "build:css": "node scripts/build-css.mjs",
     "prepack": "node -e \"if (!fs.existsSync('dist/index.d.ts')) { const cp = require('child_process'); cp.execSync('npm run build', { stdio: 'inherit' }); }\"",
     "prepublishOnly": "npm run build",
     "test": "vitest run --coverage",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "perf": "node scripts/generate-performance-report.mjs",
+    "check:types": "tsc --noEmit",
     "check:types-pkg": "npx --yes @arethetypeswrong/cli --pack .",
     "check:directives": "node scripts/verify-directives.mjs && npm run check:ssr",
     "check:ssr": "vitest run src/__tests__/ssr-smoke.test.tsx",

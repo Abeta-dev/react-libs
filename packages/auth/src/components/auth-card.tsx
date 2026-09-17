@@ -5,6 +5,7 @@ import { LoginForm, type LoginFormProps } from './login-form';
 import { SignUpForm, type SignUpFormProps } from './signup-form';
 import { ForgotPasswordForm } from './forgot-password-form';
 import { OtpForm } from './otp-form';
+import { AuthContext } from '../context/auth-context';
 import type { AuthSession, OAuthOptions, OAuthProvider } from '../types/adapter';
 
 export type AuthCardMode = 'signIn' | 'signUp' | 'forgotPassword' | 'otp';
@@ -47,10 +48,18 @@ export const AuthCard: React.FC<AuthCardProps> = ({
   className,
   debounceSec = 1,
 }) => {
+  const auth = React.useContext(AuthContext);
   const [internalMode, setInternalMode] = React.useState<AuthCardMode>(initialMode);
   const currentMode = controlledMode ?? internalMode;
 
+  const baseId = React.useId();
+  const signInTabId = `${baseId}-tab-signin`;
+  const signUpTabId = `${baseId}-tab-signup`;
+  const signInPanelId = `${baseId}-panel-signin`;
+  const signUpPanelId = `${baseId}-panel-signup`;
+
   const setMode = (newMode: AuthCardMode) => {
+    auth?.clearError?.();
     setInternalMode(newMode);
     onModeChange?.(newMode);
   };
@@ -108,12 +117,20 @@ export const AuthCard: React.FC<AuthCardProps> = ({
 
       {/* Tabs (Sign In / Sign Up) */}
       {(currentMode === 'signIn' || currentMode === 'signUp') && (
-        <div className="grid grid-cols-2 rounded-lg bg-neutral-100 p-1 dark:bg-neutral-800 mb-6">
+        <div
+          role="tablist"
+          aria-label="Authentication modes"
+          className="grid grid-cols-2 rounded-lg bg-neutral-100 p-1 dark:bg-neutral-800 mb-6"
+        >
           <button
+            id={signInTabId}
             type="button"
+            role="tab"
+            aria-selected={currentMode === 'signIn'}
+            aria-controls={signInPanelId}
             onClick={() => setMode('signIn')}
             className={clsx(
-              'rounded-md py-1.5 text-xs font-semibold transition-all',
+              'rounded-md py-1.5 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
               currentMode === 'signIn'
                 ? 'bg-white text-neutral-900 shadow-xs dark:bg-neutral-900 dark:text-white'
                 : 'text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200'
@@ -122,10 +139,14 @@ export const AuthCard: React.FC<AuthCardProps> = ({
             Sign In
           </button>
           <button
+            id={signUpTabId}
             type="button"
+            role="tab"
+            aria-selected={currentMode === 'signUp'}
+            aria-controls={signUpPanelId}
             onClick={() => setMode('signUp')}
             className={clsx(
-              'rounded-md py-1.5 text-xs font-semibold transition-all',
+              'rounded-md py-1.5 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
               currentMode === 'signUp'
                 ? 'bg-white text-neutral-900 shadow-xs dark:bg-neutral-900 dark:text-white'
                 : 'text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200'
@@ -160,28 +181,42 @@ export const AuthCard: React.FC<AuthCardProps> = ({
 
       {/* Mode Body */}
       {currentMode === 'signIn' && (
-        <LoginForm
-          onSuccess={onSuccess}
-          onError={onError}
-          onForgotPasswordClick={() => setMode('forgotPassword')}
-          onSignUpClick={() => setMode('signUp')}
-          debounceSec={debounceSec}
-          {...loginProps}
-        />
+        <div
+          id={signInPanelId}
+          role="tabpanel"
+          aria-labelledby={signInTabId}
+        >
+          <LoginForm
+            onSuccess={onSuccess}
+            onError={onError}
+            onForgotPasswordClick={() => setMode('forgotPassword')}
+            onSignUpClick={() => setMode('signUp')}
+            debounceSec={debounceSec}
+            {...loginProps}
+          />
+        </div>
       )}
 
       {currentMode === 'signUp' && (
-        <SignUpForm
-          onSuccess={onSuccess}
-          onError={onError}
-          onSignInClick={() => setMode('signIn')}
-          debounceSec={debounceSec}
-          {...signUpProps}
-        />
+        <div
+          id={signUpPanelId}
+          role="tabpanel"
+          aria-labelledby={signUpTabId}
+        >
+          <SignUpForm
+            onSuccess={onSuccess}
+            onError={onError}
+            onSignInClick={() => setMode('signIn')}
+            debounceSec={debounceSec}
+            {...signUpProps}
+          />
+        </div>
       )}
 
       {currentMode === 'forgotPassword' && (
         <ForgotPasswordForm
+          onSuccess={onSuccess ? () => onSuccess(undefined as unknown as AuthSession) : undefined}
+          onError={onError}
           onBackToSignIn={() => setMode('signIn')}
           debounceSec={debounceSec}
         />

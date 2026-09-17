@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.0] - 2026-09-17
+
+### Added
+- Exported `generateCodeChallenge`, `generateCodeVerifier`, and `generateOAuthState` in `@abeta.dev/auth` (`packages/auth/src/core/pkce.ts`) implementing RFC 7636 SHA-256 PKCE challenge generation and cryptographically secure state nonces for OAuth flows.
+- Exported `GitHubIcon`, `AppleIcon`, and `MicrosoftIcon` SVG branding components in `@abeta.dev/auth` for OAuth authentication buttons.
+- Added comprehensive engineering quality scorecard `QUALITY_STANDARDS_AND_AUDIT_SCORECARD.md` covering 26 automated quality parameters across security, architecture, accessibility, concurrency, and testing rigor.
+
+### Changed
+- Expanded automated test suite from 1,346 to 1,463 passing tests across 153 test suites with zero failures (100% pass rate).
+- Integrated `@abeta.dev/auth` test suites directly into root `vitest.config.ts` and GitHub Actions CI pipelines.
+- Relaxed Node engine requirement in `package.json` to `node >= 20.0.0` and aligned peer dependencies across workspace packages to React `^18.2.0 || ^19.0.0`.
+- Configured Tailwind CSS v4 `@source` scanner in `src/styles/tailwind-bundle.css` to ingest `@abeta.dev/auth` component styles, compiling complete auth utility classes into the unified stylesheet bundle.
+- Synchronized Turborepo task graph so root build topologically depends on `@abeta.dev/auth` build, and ordered npm publication in `.github/workflows/publish.yml`.
+
+### Fixed
+- Fixed authentication bypass vulnerability in `MockAuthAdapter.refreshToken()` by enforcing active token validation and rotation (RTR) and rejecting invalid tokens with `AuthError('Invalid refresh token')`.
+- Hardened OAuth and form security by validating redirect URL origins against open redirects and sanitizing terms and privacy URLs against `javascript:` injection (CWE-79).
+- Hardened `TokenManager` concurrency: synchronized proactive background refresh with consumer requests via shared mutex, clamped timer intervals against 32-bit integer overflow, and integrated `AbortController` on sign-out to prevent post-logout session resurrection.
+- Hardened `useClickBackpressure` hook: closed TOCTOU race window with synchronous lock acquisition before handler execution, decoupled cancellation state per invocation, and ensured ref purity for React 19 Concurrent Mode.
+- Fixed WCAG 2.2 Level A/AA violations across all auth forms (`LoginForm`, `SignUpForm`, `ForgotPasswordForm`, `OtpForm`, `AuthCard`): added unique `React.useId()` dynamic IDs, linked error banners via `role="alert"` and `aria-describedby`, added `role="meter"` to password strength indicators, grouped OTP inputs with `autocomplete="one-time-code"`, and expanded password visibility toggle touch target to 44×44px with high-contrast focus rings.
+- Purged all synthetic smoke tests and generator script `scripts/generate-smoke-tests.mjs`, replacing them with genuine DOM mounting and behavioral assertions across 15 component test suites.
+- Restored ADR 0007 compliance (`exactOptionalPropertyTypes: true`) across `TokenManagerOptions` in `@abeta.dev/auth`.
+
 ## [0.13.0] - 2026-09-16
 
 ### Added

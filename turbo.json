@@ -23,6 +23,7 @@
       "dependsOn": ["build"]
     },
     "//#build": {
+      "dependsOn": ["@abeta.dev/auth#build"],
       "outputs": ["dist/**"]
     },
     "//#test": {

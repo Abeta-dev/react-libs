@@ -9,6 +9,7 @@ import type {
   SignUpCredentials,
   VerifyOtpParams,
 } from '../types/adapter';
+import { AuthError } from '../types/adapter';
 
 export interface MockAdapterOptions {
   /** Simulated network latency in milliseconds. Default: 120ms */
@@ -19,7 +20,8 @@ export interface MockAdapterOptions {
   initialUsers?: AuthUser[] | undefined;
 }
 
-const DEFAULT_MOCK_PASSWORD = ['Pass', 'word', '123', '!'].join('');
+// eslint-disable-next-line sonarjs/no-hardcoded-passwords
+export const DEFAULT_MOCK_PASSWORD = 'Password123!';
 
 /**
  * High-fidelity Mock Auth Adapter for local development, Storybook,
@@ -27,10 +29,12 @@ const DEFAULT_MOCK_PASSWORD = ['Pass', 'word', '123', '!'].join('');
  */
 export class MockAuthAdapter implements AuthAdapter<AuthUser> {
   private users: Map<string, { user: AuthUser; passwordHash: string }> = new Map();
+  private validRefreshTokens: Map<string, { user: AuthUser; expiresAt: number }> = new Map();
   private currentSession: AuthSession<AuthUser> | null = null;
   private readonly latencyMs: number;
   private readonly tokenTtlMs: number;
   private idCounter = 1000;
+  public lastOAuthOptions?: OAuthOptions | undefined;
 
   constructor(options: MockAdapterOptions = {}) {
     this.latencyMs = options.latencyMs ?? 120;
@@ -70,12 +74,17 @@ export class MockAuthAdapter implements AuthAdapter<AuthUser> {
 
   private createSession(user: AuthUser): AuthSession<AuthUser> {
     const randomSuffix = this.nextUniqueId('jwt');
-    return {
+    const session: AuthSession<AuthUser> = {
       user,
       accessToken: `mock_jwt_access_${user.id}_${randomSuffix}`,
       refreshToken: `mock_jwt_refresh_${user.id}_${randomSuffix}`,
       expiresAt: Date.now() + this.tokenTtlMs,
     };
+    this.validRefreshTokens.set(session.refreshToken!, {
+      user,
+      expiresAt: Date.now() + this.tokenTtlMs * 4,
+    });
+    return session;
   }
 
   public async signInWithPassword(credentials: PasswordCredentials): Promise<AuthSession<AuthUser>> {
@@ -117,19 +126,33 @@ export class MockAuthAdapter implements AuthAdapter<AuthUser> {
 
   public async signOut(): Promise<void> {
     await this.delay();
+    if (this.currentSession?.refreshToken) {
+      this.validRefreshTokens.delete(this.currentSession.refreshToken);
+    }
     this.currentSession = null;
   }
 
   public async refreshToken(currentToken?: string): Promise<AuthSession<AuthUser> | null> {
     await this.delay();
-    if (!this.currentSession && !currentToken) {
-      return null;
+    const tokenToValidate = currentToken ?? this.currentSession?.refreshToken;
+    if (!tokenToValidate) {
+      throw new AuthError('Invalid refresh token');
     }
 
-    const user = this.currentSession?.user ?? Array.from(this.users.values())[0]?.user;
-    if (!user) return null;
+    const tokenRecord = this.validRefreshTokens.get(tokenToValidate);
+    if (!tokenRecord) {
+      throw new AuthError('Invalid refresh token');
+    }
 
-    this.currentSession = this.createSession(user);
+    if (Date.now() > tokenRecord.expiresAt) {
+      this.validRefreshTokens.delete(tokenToValidate);
+      throw new AuthError('Invalid refresh token');
+    }
+
+    // Refresh token rotation: invalidate used refresh token
+    this.validRefreshTokens.delete(tokenToValidate);
+
+    this.currentSession = this.createSession(tokenRecord.user);
     return this.currentSession;
   }
 
@@ -137,6 +160,7 @@ export class MockAuthAdapter implements AuthAdapter<AuthUser> {
     provider: OAuthProvider,
     options?: OAuthOptions
   ): Promise<AuthSession<AuthUser>> {
+    this.lastOAuthOptions = options;
     if (options?.mode === 'popup') {
       // Mock popup mode simulation
     }
