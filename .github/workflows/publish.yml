@@ -88,6 +88,14 @@ jobs:
           else
             npm publish -w packages/auth --access public --tag latest --provenance
           fi
+          for i in {1..15}; do
+            if [ "$(npm view "${AUTH_NAME}@${AUTH_VERSION}" version --registry=https://registry.npmjs.org/ 2>/dev/null || true)" = "${AUTH_VERSION}" ]; then
+              echo "Verified ${AUTH_NAME}@${AUTH_VERSION} on npm registry."
+              break
+            fi
+            echo "Waiting for npm registry cache replication of ${AUTH_NAME}@${AUTH_VERSION} (attempt $i/15)..."
+            sleep 4
+          done
           test "$(npm view "${AUTH_NAME}@${AUTH_VERSION}" version --registry=https://registry.npmjs.org/)" = "${AUTH_VERSION}"
 
       - name: Verify or publish root package after exact auth dependency resolves
@@ -105,6 +113,14 @@ jobs:
           else
             npm publish --access public --tag latest --provenance
           fi
+          for i in {1..15}; do
+            if [ "$(npm view "${ROOT_NAME}@${ROOT_VERSION}" version --registry=https://registry.npmjs.org/ 2>/dev/null || true)" = "${ROOT_VERSION}" ]; then
+              echo "Verified ${ROOT_NAME}@${ROOT_VERSION} on npm registry."
+              break
+            fi
+            echo "Waiting for npm registry cache replication of ${ROOT_NAME}@${ROOT_VERSION} (attempt $i/15)..."
+            sleep 4
+          done
           test "$(npm view "${ROOT_NAME}@${ROOT_VERSION}" version --registry=https://registry.npmjs.org/)" = "${ROOT_VERSION}"
 
       - name: Create GitHub Release when absent

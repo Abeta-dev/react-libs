@@ -5,6 +5,11 @@ All notable changes to `@abeta.dev/auth` are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-09-17
+
+### Changed
+- Updated repository metadata casing to match GitHub organization for provenance verification.
+
 ## [0.3.0] - 2026-09-17
 
 ### Added
