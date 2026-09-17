@@ -1,13 +1,10 @@
-import { describe, it, expect } from 'vitest';
-import { AuthContext as RootAuthContext, AuthProvider as RootAuthProvider } from '../auth';
-import { AuthContext as PkgAuthContext, AuthProvider as PkgAuthProvider } from '@abeta.dev/auth';
+import { describe, expect, it } from 'vitest';
+import { AuthClient, AuthContext as RootAuthContext, AuthProvider as RootAuthProvider } from '../auth';
 
-describe('ARC-05: Auth Context Singleton Identity', () => {
-  it('guarantees identical React context reference across root re-export and package', () => {
-    expect(RootAuthContext).toBe(PkgAuthContext);
-  });
-
-  it('guarantees identical AuthProvider component reference across root re-export and package', () => {
-    expect(RootAuthProvider).toBe(PkgAuthProvider);
+describe('ARC-05: GitHub auth distribution', () => {
+  it('exposes one bundled auth implementation through the root auth subpath', () => {
+    expect(typeof AuthClient).toBe('function');
+    expect(RootAuthContext).toBeDefined();
+    expect(RootAuthProvider).toBeDefined();
   });
 });

@@ -1,6 +1,28 @@
-# Migration Guide: Upgrading to v0.15.0
+# Migration Guide: Upgrading to v0.15.1
 
-This guide details architectural evolutions, security hardening, and migration steps for upgrading to `@abeta.dev/react-libs` v0.15.0 and `@abeta.dev/auth` v0.3.0.
+This guide details architectural evolutions, security hardening, and migration steps for upgrading to `@abeta.dev/react-libs` v0.15.1 and `@abeta.dev/auth` v0.3.0.
+
+---
+
+## Upgrading to v0.15.1
+
+### GitHub installation without an npm registry dependency
+
+Install the root package from an immutable Git commit (or the `v0.15.1` tag once it exists). The root distribution now contains the `@abeta.dev/react-libs/auth` implementation, so consumers must import that root subpath rather than declaring `@abeta.dev/auth` separately:
+
+```json
+{
+  "dependencies": {
+    "@abeta.dev/react-libs": "github:Abeta-dev/react-libs#<immutable-v0.15.1-commit>"
+  }
+}
+```
+
+```ts
+import { AuthClient, createAuthenticatedFetch } from '@abeta.dev/react-libs/auth';
+```
+
+The standalone `@abeta.dev/auth@0.3.0` workspace package remains independently publishable for registry consumers. Do not add it to a Git-installed root consumer: npm cannot resolve a workspace subdirectory from a Git dependency and the root package intentionally has no runtime dependency on the registry artifact.
 
 ---
 

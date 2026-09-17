@@ -2,8 +2,8 @@
 /**
  * Verify immutable release metadata for both published packages.
  *
- * The root package must name an exact @abeta.dev/auth workspace version so its
- * tarball can only be published after that matching auth artifact is available.
+ * The standalone auth workspace remains publishable, while the root GitHub
+ * distribution bundles its auth subpath and must not require a registry lookup.
  */
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -33,7 +33,6 @@ function fail(message) {
 try {
   const rootPackage = readJson('package.json');
   const authPackage = readJson('packages/auth/package.json');
-  const requiredAuthVersion = rootPackage.dependencies?.[authPackage.name];
 
   if (topChangelogVersion('CHANGELOG.md') !== rootPackage.version) {
     fail(`package.json version ${rootPackage.version} does not match the top CHANGELOG.md release.`);
@@ -41,8 +40,8 @@ try {
   if (topChangelogVersion('packages/auth/CHANGELOG.md') !== authPackage.version) {
     fail(`packages/auth/package.json version ${authPackage.version} does not match its top changelog release.`);
   }
-  if (requiredAuthVersion !== authPackage.version) {
-    fail(`${rootPackage.name} must depend on ${authPackage.name} with the exact workspace version ${authPackage.version}; found ${requiredAuthVersion ?? 'no dependency'}.`);
+  if (rootPackage.dependencies?.[authPackage.name]) {
+    fail(`${rootPackage.name} must not declare ${authPackage.name}: Git installs must not require the npm registry.`);
   }
 
   const refType = process.env.GITHUB_REF_TYPE;
@@ -54,7 +53,7 @@ try {
   }
 
   console.log(`✅ ${authPackage.name}@${authPackage.version} changelog and manifest agree.`);
-  console.log(`✅ ${rootPackage.name}@${rootPackage.version} pins ${authPackage.name}@${authPackage.version}.`);
+  console.log(`✅ ${rootPackage.name}@${rootPackage.version} bundles its ${authPackage.name} subpath without a registry dependency.`);
   if (isTagBuild && refName) console.log(`✅ Git tag ${refName} matches the root package version.`);
 } catch (error) {
   fail(error instanceof Error ? error.message : String(error));

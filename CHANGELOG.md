@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.1] - 2026-09-17
+
+### Fixed
+- Made the root GitHub distribution self-contained: `@abeta.dev/react-libs/auth` now bundles the matching auth implementation instead of resolving `@abeta.dev/auth` from npm at install or runtime.
+- Extended the packed external-consumer check to install the root tarball without `@abeta.dev/auth`, catching registry dependencies hidden by the workspace.
+
 ## [0.15.0] - 2026-09-17
 
 ### Added
