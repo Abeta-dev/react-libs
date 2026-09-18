@@ -20,6 +20,7 @@ const CLIENT_EXTERNAL = [
   /^lucide-react(\/.+)?$/,
   'sonner',
   'input-otp',
+  'qrcode',
   /^react-resizable-panels(\/.+)?$/,
   'class-variance-authority',
   'clsx',

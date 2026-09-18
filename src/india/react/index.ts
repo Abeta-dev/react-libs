@@ -6,3 +6,4 @@
  */
 
 export * from "../components/amount-summary-card-india";
+export * from "../components/upi-qr-card";
