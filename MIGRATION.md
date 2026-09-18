@@ -1,6 +1,65 @@
-# Migration Guide: Upgrading to v0.15.0
+# Migration Guide: Upgrading to v0.16.0
 
-This guide details architectural evolutions, security hardening, and migration steps for upgrading to `@abeta.dev/react-libs` v0.15.0 and `@abeta.dev/auth` v0.3.0.
+This guide details architectural evolutions, new regional capabilities, and migration steps for upgrading to `@abeta.dev/react-libs` v0.16.0.
+
+---
+
+## Upgrading to v0.16.0
+
+### 1. Pure NPCI-Compliant UPI Domain Utilities (`@abeta.dev/react-libs/india`)
+
+`@abeta.dev/react-libs/india` now provides pure, zero-DOM UPI payment utilities compliant with NPCI UPI 2.0 specifications. These can be executed safely in React Server Components, Node.js API routes, server actions, and Edge workers:
+
+- `generateUpiPayUri(params)`: Generates valid `upi://pay` deep links with strictly validated VPA, formatted amounts (`1499.00`), transaction references (`tr`), and encoded notes (`tn`).
+- `validateUpiId(vpa)`: Validates handles according to NPCI handle specifications (allowing alphanumeric, dots, hyphens, and underscores before `@`).
+- `parseUpiPayUri(uri)`: Parses and extracts query parameters from a `upi://pay` URI into typed `UpiPayParams`.
+
+```typescript
+import { generateUpiPayUri, validateUpiId } from "@abeta.dev/react-libs/india";
+
+if (validateUpiId("billing@hdfcbank")) {
+  const uri = generateUpiPayUri({
+    payeeVpa: "billing@hdfcbank",
+    payeeName: "Vendor Billing Desk",
+    amount: 2499.50,
+    transactionNote: "INV-9842",
+  });
+  // Output: upi://pay?pa=billing%40hdfcbank&pn=Vendor%20Billing%20Desk&am=2499.50&cu=INR&tn=INV-9842
+}
+```
+
+### 2. Interactive Counter Standee Component (`@abeta.dev/react-libs/india/react`)
+
+To present a consumer-facing QR standee on retail counters or payment checkouts, consume `<UpiQrCard />` from `@abeta.dev/react-libs/india/react`:
+
+- **Accessibility**: Includes full WCAG 2.2 Level AA compliance with high-contrast visible focus rings, `role="img"`, descriptive `aria-label`, and live copy button announcements.
+- **Micro-Interactions**: Built-in 1-click VPA clipboard copy with automatic 2-second checkmark feedback animation (unmount-safe).
+- **Features**: Supports preset amounts or interactive user-editable amount inputs, offline QR code download, and compact standee variants.
+
+```tsx
+import { UpiQrCard } from "@abeta.dev/react-libs/india/react";
+
+export function CounterPayment() {
+  return (
+    <UpiQrCard
+      payeeVpa="merchant@icici"
+      payeeName="ACME Retail Store"
+      amount={499}
+      transactionNote="Counter Checkout #12"
+      allowAmountEdit
+    />
+  );
+}
+```
+
+### 3. Dual Registry Installation: GitHub Packages & npm
+
+Packages are now dual-published to both npmjs.org and GitHub Packages (`npm.pkg.github.com`). If your CI or deployment pipelines consume internal enterprise packages from GitHub Packages, configure your project `.npmrc`:
+
+```ini
+@abeta:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
 
 ---
 

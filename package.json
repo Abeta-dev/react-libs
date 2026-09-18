@@ -1,6 +1,6 @@
 {
   "name": "@abeta.dev/react-libs",
-  "version": "0.15.1",
+  "version": "0.16.0",
   "description": "Production-grade, highly performant React 19 component library with strict TypeScript types, atomic exports, and zero dependency leakage.",
   "keywords": [
     "react",

@@ -1081,6 +1081,87 @@ export function Announcement() {
 
 ---
 
+## India Regional & UPI Payment Primitives
+
+### 1. UpiQrCard (Counter Standee & POS Display)
+
+```tsx
+import { UpiQrCard } from "@abeta.dev/react-libs/india/react"
+
+// Counter Standee with Fixed Amount
+export function CounterBilling() {
+  return (
+    <UpiQrCard
+      payeeVpa="store@okhdfcbank"
+      payeeName="Fresh Supermarket"
+      amount={1250.00}
+      transactionNote="Invoice #9021"
+      allowAmountEdit={false}
+      showVpaCopy
+      showDownload
+    />
+  )
+}
+
+// Open Amount Standee (Customer Enters Amount)
+export function DonationOrTipStandee() {
+  return (
+    <UpiQrCard
+      payeeVpa="ngo@icici"
+      payeeName="Hope Foundation"
+      allowAmountEdit
+    />
+  )
+}
+```
+
+### 2. Pure UPI Utilities (NPCI 2.0 Compliant)
+
+```typescript
+import { generateUpiPayUri, validateUpiId, parseUpiPayUri } from "@abeta.dev/react-libs/india"
+
+// Validate handle syntax
+const isValid = validateUpiId("merchant@hdfcbank") // true
+
+// Generate deep-link URI
+const uri = generateUpiPayUri({
+  payeeVpa: "merchant@hdfcbank",
+  payeeName: "Vendor Logistics",
+  amount: 4500,
+  transactionNote: "LR-3021",
+})
+// Output: upi://pay?pa=merchant%40hdfcbank&pn=Vendor%20Logistics&am=4500.00&cu=INR&tn=LR-3021
+
+// Parse existing UPI URI
+const parsed = parseUpiPayUri(uri)
+console.log(parsed.payeeVpa, parsed.amount) // "merchant@hdfcbank", 4500
+```
+
+### 3. AmountSummaryCardIndia (GST Tax Split)
+
+```tsx
+import { AmountSummaryCardIndia } from "@abeta.dev/react-libs/india/react"
+
+export function InvoiceTaxBreakdown() {
+  return (
+    <AmountSummaryCardIndia
+      subtotal={10000}
+      discount={500}
+      shipping={200}
+      taxBreakdown={{
+        type: "intra_state",
+        ratePercent: 18,
+        cgst: 873,
+        sgst: 873,
+      }}
+      total={11446}
+    />
+  )
+}
+```
+
+---
+
 ## Accessibility & Quality Gates
 
 - **Automated WCAG 2.1 AA Checks**: Enforced via `axe-core` across interactive component tests in `src/components/ui/__tests__/accessibility.test.tsx`.

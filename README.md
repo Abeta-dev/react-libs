@@ -4,7 +4,7 @@
 > Built for multi-tenant vendor portals, procurement dashboards, statutory compliance, and financial workflows.
 > Combines accessible Tailwind CSS v4 & Radix UI primitives, India statutory validation (GSTIN, PAN, IFSC), pluggable behavioral telemetry, and offline-resilient PWA mutations into isolated, tree-shakeable subpaths.
 
-[![Version](https://img.shields.io/badge/version-0.15.1-blue)](https://www.npmjs.com/package/@abeta.dev/react-libs)
+[![Version](https://img.shields.io/badge/version-0.16.0-blue)](https://www.npmjs.com/package/@abeta.dev/react-libs)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#testing)
 [![React](https://img.shields.io/badge/react-19-blue)](https://react.dev)
 [![Tailwind](https://img.shields.io/badge/tailwind-v4-38bdf8)](https://tailwindcss.com)
@@ -94,8 +94,8 @@ The library exposes dedicated entry points for UI components, server-safe utilit
 |---|---|---|---|
 | `@abeta.dev/react-libs` | ESM (`import`), CJS (`require`) | **Client Components** (`'use client'`) | Primary UI component library (accessible Tailwind UI components, primitives, forms, dialogs, charts, error boundaries, and hooks). SSR-compatible with browser APIs guarded inside lifecycle hooks. |
 | `@abeta.dev/react-libs/utils` | ESM (`import`), CJS (`require`) | **RSC & Server-Safe** | Pure utility helpers, formatters, universal validators, masking, and `cn`. Zero DOM and zero React dependencies; safe in Next.js Server Components, Server Actions, Route Handlers, and Edge runtimes. |
-| `@abeta.dev/react-libs/india` | ESM (`import`), CJS (`require`) | **RSC & Server-Safe** | Dedicated domain subpath containing India compliance logic: GSTIN, PAN, IFSC, FSSAI, and Pincode validators, GST tax calculation splits, regional constants (`INDIA_STATES`, `INDIA_CITIES`). |
-| `@abeta.dev/react-libs/india/react` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Interactive regional components (e.g. `AmountSummaryCardIndia`). |
+| `@abeta.dev/react-libs/india` | ESM (`import`), CJS (`require`) | **RSC & Server-Safe** | Dedicated domain subpath containing India compliance logic: GSTIN, PAN, IFSC, FSSAI, and Pincode validators, GST tax calculation splits, regional constants (`INDIA_STATES`, `INDIA_CITIES`), and pure NPCI UPI payment URI generators (`generateUpiPayUri`, `validateUpiId`, `parseUpiPayUri`). |
+| `@abeta.dev/react-libs/india/react` | ESM (`import`), CJS (`require`) | **Client Component** (`'use client'`) | Interactive regional components (e.g. `AmountSummaryCardIndia`, `UpiQrCard` counter standee). |
 | `@abeta.dev/react-libs/analytics` | ESM (`import`), CJS (`require`) | **RSC & Server-Safe** | Pure behavioral analytics tracking engine, DOM auto-tracking, batching pipeline, and destination adapters. Zero React hooks. |
 | `@abeta.dev/react-libs/analytics/react` | ESM (`import`), CJS (`require`) | **Client Components** (`'use client'`) | React integration layer for analytics: `AnalyticsProvider`, `useAnalytics`, `TrackArea`, and `PageViewTracker`. |
 | `@abeta.dev/react-libs/pdf` | ESM (`import`), CJS (`require`) | **Client-Only** (`'use client'`) | Dedicated client subpath for `PdfViewer`. Isolated from root to prevent Node SSR from executing browser-only PDF workers (`pdfjs-dist`). |
@@ -230,6 +230,41 @@ import { initAnalytics } from "@abeta.dev/react-libs/analytics";
 initAnalytics({
   autoTrackDom: true,
 });
+```
+
+### India Regional & UPI Subpaths Import
+
+Pure server-side compliance and payment URI generation (zero React/DOM overhead):
+
+```tsx
+import { generateUpiPayUri, validateUpiId } from "@abeta.dev/react-libs/india";
+
+// Validate and generate standard NPCI URI
+if (validateUpiId("merchant@icici")) {
+  const upiUri = generateUpiPayUri({
+    payeeVpa: "merchant@icici",
+    payeeName: "Vendor Billing",
+    amount: 1499.00,
+    transactionNote: "Invoice #1042",
+  });
+}
+```
+
+Interactive client components (`'use client'`):
+
+```tsx
+import { UpiQrCard } from "@abeta.dev/react-libs/india/react";
+
+export function CheckoutStandee() {
+  return (
+    <UpiQrCard
+      payeeVpa="merchant@icici"
+      payeeName="Vendor Billing"
+      amount={1499}
+      transactionNote="Invoice #1042"
+    />
+  );
+}
 ```
 
 ---
@@ -372,6 +407,8 @@ All standard UI components are directly importable from `@abeta.dev/react-libs` 
 | | `DateRangePicker` | Two-date selection picker with presets |
 | | `LanguageToggle` | Multi-language switcher toggle |
 | | `Kbd` | Keyboard shortcut badge |
+| **Regional & India** | `AmountSummaryCardIndia` | B2B invoice amount breakdown with CGST/SGST/IGST tax splits. *Imported via `@abeta.dev/react-libs/india/react`.* |
+| | `UpiQrCard` | Dynamic NPCI-compliant UPI payment counter standee card with high-density QR code, amount entry, and offline PNG download. *Imported via `@abeta.dev/react-libs/india/react`.* |
 
 ---
 
@@ -650,7 +687,7 @@ Explore our formal design decisions in [`docs/adr/`](./docs/adr/):
 
 ## Community & Contributing
 
-- **[Migration Guide](./MIGRATION.md)**: Upgrading to v0.15.1.
+- **[Migration Guide](./MIGRATION.md)**: Upgrading to v0.16.0.
 - **[Quality Standards & Scorecard](./QUALITY_STANDARDS_AND_AUDIT_SCORECARD.md)**: Perpetual quality parameters, security invariants, and audit scorecard.
 - **[Code of Conduct](./CODE_OF_CONDUCT.md)**: We are committed to providing a friendly, safe, and welcoming environment for all contributors.
 - **[Security Policy](./SECURITY.md)**: Guidelines for reporting security vulnerabilities responsibly.

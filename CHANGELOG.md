@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.0] - 2026-09-19
+
+### Added
+- Added pure NPCI-compliant UPI utilities in `@abeta.dev/react-libs/india`: `generateUpiPayUri`, `validateUpiId`, and `parseUpiPayUri` with RFC 3986 parameter encoding, amount formatters, and handle validation.
+- Added interactive counter standee component `UpiQrCard` in `@abeta.dev/react-libs/india/react` with dynamic QR rendering, 1-click VPA clipboard copy, offline PNG download, and open amount inputs.
+- Added dual-publishing GitHub Actions workflow to publish artifacts to GitHub Packages (`npm.pkg.github.com`) alongside npm.
+- Added comprehensive test suites and Storybook stories for UPI primitives and the `UpiQrCard` component.
+
+### Changed
+- Externalized third-party QR generation dependencies in packaging bundle configurations.
+
 ## [0.15.1] - 2026-09-17
 
 ### Changed
