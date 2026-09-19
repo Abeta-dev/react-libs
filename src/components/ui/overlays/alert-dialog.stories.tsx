@@ -21,7 +21,7 @@ import { Button } from '../forms/button';
  * Cancel or Confirm. Built on Radix UI AlertDialog.
  */
 const meta = {
-  title: 'UI/Overlays/AlertDialog',
+  title: 'Overlays/AlertDialog',
   component: AlertDialog,
   parameters: {
     layout: 'centered',

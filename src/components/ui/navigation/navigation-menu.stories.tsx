@@ -93,7 +93,7 @@ const NavigationMenuDemo = () => (
 );
 
 const meta = {
-  title: 'UI/Navigation/NavigationMenu',
+  title: 'Navigation/NavigationMenu',
   component: NavigationMenuDemo,
   parameters: {
     layout: 'centered',

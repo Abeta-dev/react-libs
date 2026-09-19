@@ -7,7 +7,7 @@ import { Separator } from './separator';
  * Use to group related content or create visual hierarchy.
  */
 const meta = {
-  title: 'UI/Layout/Separator',
+  title: 'Layout/Separator',
   component: Separator,
   parameters: {
     layout: 'centered',

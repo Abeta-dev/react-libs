@@ -7,7 +7,7 @@ import { SkeletonList } from './skeleton-list';
  * Use as a drop-in replacement for data lists while loading.
  */
 const meta = {
-  title: 'UI/Feedback/SkeletonList',
+  title: 'Feedback/SkeletonList',
   component: SkeletonList,
   parameters: {
     layout: 'padded',

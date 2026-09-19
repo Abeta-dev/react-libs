@@ -11,7 +11,7 @@ import { Button } from "./button";
  * - `secondary` variant uses a low-opacity primary fill instead of generic bg-secondary
  */
 const meta = {
-  title: "UI/Forms/Button",
+  title: "Forms/Button",
   component: Button,
   parameters: {
     layout: "centered",

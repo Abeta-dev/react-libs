@@ -13,7 +13,7 @@ import { Separator } from './separator';
  * - Now pass `orientation="horizontal"` or `"both"` to `<ScrollArea>` directly
  */
 const meta = {
-  title: 'UI/Layout/ScrollArea',
+  title: 'Layout/ScrollArea',
   component: ScrollArea,
   parameters: {
     layout: 'centered',

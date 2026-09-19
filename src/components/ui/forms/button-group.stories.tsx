@@ -12,7 +12,7 @@ import { Input } from './input';
  * and `ButtonGroupSeparator` for visual dividers between items.
  */
 const meta = {
-  title: 'UI/Forms/ButtonGroup',
+  title: 'Forms/ButtonGroup',
   component: ButtonGroup,
   parameters: {
     layout: 'centered',

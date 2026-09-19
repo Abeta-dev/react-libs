@@ -14,7 +14,7 @@ import { Info, AlertTriangle, CheckCircle2, XCircle, ShieldAlert, Megaphone } fr
  * - New `onDismiss` prop renders an ✕ button
  */
 const meta = {
-  title: 'UI/Feedback/Alert',
+  title: 'Feedback/Alert',
   component: Alert,
   parameters: {
     layout: 'padded',

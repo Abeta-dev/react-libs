@@ -8,7 +8,8 @@ const config: StorybookConfig = {
   // any legacy .mdx file with old Storybook 7/8 imports (Meta from addon-docs)
   // exists in git history and gets checked out in CI.
   "stories": [
-    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
+    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../packages/auth/src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
   "addons": [
     "@chromatic-com/storybook",
@@ -16,7 +17,6 @@ const config: StorybookConfig = {
     "@storybook/addon-a11y",
     "@storybook/addon-themes",
     "@storybook/addon-docs",
-    "@storybook/addon-onboarding",
     "@storybook/addon-mcp"
   ],
   "framework": "@storybook/react-vite",
@@ -24,6 +24,7 @@ const config: StorybookConfig = {
     if (!config.resolve) config.resolve = {};
     if (!config.resolve.alias) config.resolve.alias = {};
     (config.resolve.alias as any)["@ui"] = path.resolve(process.cwd(), "src/components/ui");
+    (config.resolve.alias as any)["@abeta.dev/auth"] = path.resolve(process.cwd(), "packages/auth/src");
 
     // Tailwind v4: inject the Vite plugin so @theme blocks are compiled into
     // proper CSS custom properties and all utility classes are generated.

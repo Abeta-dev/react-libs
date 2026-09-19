@@ -7,7 +7,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from './resizabl
  * Built on `react-resizable-panels`.
  */
 const meta = {
-  title: 'UI/Layout/ResizablePanelGroup',
+  title: 'Layout/ResizablePanelGroup',
   component: ResizablePanelGroup,
   parameters: {
     layout: 'centered',

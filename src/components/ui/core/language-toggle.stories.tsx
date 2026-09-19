@@ -13,7 +13,7 @@ import { LanguageToggle, type SupportedLanguage } from "./language-toggle";
  * - Dropdown items show native script + English subtitle
  */
 const meta = {
-  title: "UI/Core/LanguageToggle",
+  title: "Core/LanguageToggle",
   component: LanguageToggle,
   parameters: {
     layout: "centered",

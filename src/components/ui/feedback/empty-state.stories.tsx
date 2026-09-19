@@ -14,7 +14,7 @@ import { PackageOpen, SearchX, ShieldAlert, FileX2, Plus, RefreshCcw } from 'luc
  * - Description uses `text-muted-foreground`
  */
 const meta = {
-  title: 'UI/Feedback/EmptyState',
+  title: 'Feedback/EmptyState',
   component: EmptyState,
   parameters: {
     layout: 'centered',

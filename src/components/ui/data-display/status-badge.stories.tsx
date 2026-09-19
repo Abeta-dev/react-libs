@@ -11,7 +11,7 @@ import { StatusBadge } from './status-badge';
  * - `suspended` = orange (blocked, needs attention, ≠ just inactive)
  */
 const meta = {
-  title: 'UI/Data-display/StatusBadge',
+  title: 'Data Display/StatusBadge',
   component: StatusBadge,
   parameters: {
     layout: 'centered',

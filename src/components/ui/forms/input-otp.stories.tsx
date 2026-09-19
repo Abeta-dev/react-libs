@@ -19,7 +19,7 @@ import {
  * - Active cell highlights with `border-primary ring-2 ring-primary/20`
  */
 const meta = {
-  title: "UI/Forms/InputOTP",
+  title: "Forms/InputOTP",
   component: InputOTP,
   parameters: {
     layout: "centered",

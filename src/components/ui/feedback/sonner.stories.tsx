@@ -10,7 +10,7 @@ import { Button } from '../forms/button';
  * Theme is driven by `next-themes` automatically.
  */
 const meta = {
-  title: 'UI/Feedback/Toaster',
+  title: 'Feedback/Sonner',
   component: Toaster,
   parameters: {
     layout: 'centered',

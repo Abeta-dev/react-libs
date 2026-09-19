@@ -23,7 +23,7 @@ import {
  * - Selected Row now uses `bg-primary/5` (subtle primary tint) instead of `bg-muted`
  */
 const meta = {
-  title: 'UI/Data-display/Table',
+  title: 'Data Display/Table',
   component: Table,
   parameters: {
     layout: 'padded',

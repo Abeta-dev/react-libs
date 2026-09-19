@@ -7,7 +7,7 @@ import { RoleEmptyState } from './role-empty-state';
  * Shows a skeleton loader for `loadingMs` milliseconds before revealing content.
  */
 const meta = {
-  title: 'UI/Feedback/RoleEmptyState',
+  title: 'Feedback/RoleEmptyState',
   component: RoleEmptyState,
   parameters: {
     layout: 'padded',
