@@ -287,6 +287,7 @@ Run all gates locally to ensure CI will pass without regressions:
 ```bash
 npm run check:truth            # Version alignment, 22 ATTW subpaths & module directive check
 node scripts/verify-release-version.mjs
+npm run verify:ci-gate         # Proves CI release gate against historical & simulated check-runs
 npm run verify:packed-consumers
 npm run check:size
 npm run lint                   # ESLint with --max-warnings 0
@@ -311,12 +312,13 @@ git push origin vx.y.z
 ### What `.github/workflows/publish.yml` Executes Automatically
 
 When a `v*` tag is pushed:
-1. Executes all 26 verification gates (truth gate, ATTW matrix, directives, tests).
-2. Compiles root package, CSS bundle, and Storybook.
-3. Automatically extracts the release notes for that version from `CHANGELOG.md` via `node scripts/extract-release-notes.mjs --output dist/release-notes.md`.
-4. Publishes to npmjs.org with `--provenance`.
-5. **Automatically creates the GitHub Release** with title, tag, and extracted markdown release notes (`gh release create "$TAG" --notes-file dist/release-notes.md --title "$TAG"`).
-6. Publishes to GitHub Packages (`npm.pkg.github.com`).
+1. **Pre-Publish CI Gate (`gate-ci` job)**: Queries the GitHub check-runs API (`repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs`) for the release commit. If any non-publish check-run has `conclusion: failure`, it immediately terminates with exit code 1. Downstream `publish` is automatically skipped, preventing accidental publishing during red CI windows.
+2. **Quality Verification**: Executes all 26 verification and truth gates (truth gate, ATTW matrix, directives, ESLint, TypeScript, tests).
+3. **Build Pipeline**: Compiles root package, CSS bundle, and Storybook.
+4. **Release Notes Extraction**: Automatically extracts version notes from `CHANGELOG.md` via `node scripts/extract-release-notes.mjs --output dist/release-notes.md`.
+5. **npm Publish**: Publishes to npmjs.org with `--provenance`.
+6. **GitHub Release**: Automatically creates the GitHub Release with title, tag, and extracted markdown release notes (`gh release create "$TAG" --notes-file dist/release-notes.md --title "$TAG"`).
+7. **GitHub Packages**: Dual-publishes packages to `npm.pkg.github.com`.
 
 ### After Publishing
 

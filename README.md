@@ -653,6 +653,7 @@ Releases are fully automated via GitHub Actions (`.github/workflows/publish.yml`
    ```bash
    npm run check:truth            # Asserts version alignment, ATTW matrix & directive purity
    node scripts/verify-release-version.mjs
+   npm run verify:ci-gate         # Proves CI gate blocks on failure & permits clean release
    npm run verify:packed-consumers
    npm run check:size
    npm run lint && npx tsc --noEmit
@@ -673,11 +674,12 @@ Releases are fully automated via GitHub Actions (`.github/workflows/publish.yml`
 ### What the Automated Pipeline Executes
 
 Whenever a `v*` tag is pushed, GitHub Actions automatically:
-1. Executes all 26 verification and truth gates (TypeScript, ESLint, ATTW, module directives, P95 perf, and unit tests).
-2. Extracts version-specific release notes from `CHANGELOG.md` via `scripts/extract-release-notes.mjs`.
-3. Publishes verified packages to the **npm registry** with provenance.
-4. **Automatically creates the GitHub Release** with the tag, title, and extracted release notes (`gh release create "$TAG" --notes-file dist/release-notes.md`).
-5. Dual-publishes packages to **GitHub Packages** (`npm.pkg.github.com`).
+1. **Pre-Publish CI Gate (`gate-ci`)**: Queries commit check-runs via GitHub API and strictly blocks publishing if any non-publish CI check has failed on that commit.
+2. Executes all 26 verification and truth gates (TypeScript, ESLint, ATTW, module directives, P95 perf, and unit tests).
+3. Extracts version-specific release notes from `CHANGELOG.md` via `scripts/extract-release-notes.mjs`.
+4. Publishes verified packages to the **npm registry** with provenance.
+5. **Automatically creates the GitHub Release** with the tag, title, and extracted release notes (`gh release create "$TAG" --notes-file dist/release-notes.md`).
+6. Dual-publishes packages to **GitHub Packages** (`npm.pkg.github.com`).
 
 ---
 

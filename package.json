@@ -139,6 +139,7 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "perf:open": "node scripts/generate-performance-report.mjs && open docs/performance-report.md",
+    "verify:ci-gate": "node scripts/verify-ci-gate.mjs",
     "verify:packed-consumers": "node scripts/verify-packed-consumers.mjs"
   },
   "exports": {
