@@ -1162,6 +1162,110 @@ export function InvoiceTaxBreakdown() {
 
 ---
 
+## Learning, Verification & Engagement Primitives
+
+### 1. ProofOfWorkCertificate (Verifiable Credentials)
+
+```tsx
+import { ProofOfWorkCertificate } from "@abeta.dev/react-libs"
+
+export function CertificateDisplay() {
+  return (
+    <ProofOfWorkCertificate
+      certificateId="CERT-POW-9042"
+      recipientName="Alex Rivera"
+      projectTitle="Distributed Systems Primitives"
+      issuerName="Abeta Academy"
+      skills={["TypeScript", "React 19", "CRDTs"]}
+      verificationUrl="https://verify.abeta.dev/cert/9042"
+      showActions
+    />
+  )
+}
+```
+
+### 2. CheckpointRunner (Interactive Milestone Execution)
+
+```tsx
+import { CheckpointRunner } from "@abeta.dev/react-libs"
+
+export function MilestoneAudit() {
+  return (
+    <CheckpointRunner
+      checkpoints={[
+        { id: "cp-1", title: "Linting & Formatter", command: "npm run lint", completed: true },
+        { id: "cp-2", title: "Full Unit Test Suite", command: "npm test", evidenceRequired: true },
+      ]}
+      onToggleCheckpoint={(id, evidence) => console.log("Toggled", id, evidence)}
+    />
+  )
+}
+```
+
+### 3. ReactionBar (Applause & Reading Progress)
+
+```tsx
+import { ReactionBar } from "@abeta.dev/react-libs"
+
+export function ArticleFeedback() {
+  return (
+    <ReactionBar
+      initialClaps={15}
+      maxClapsPerUser={10}
+      showReadingProgress
+      onClap={(count) => console.log("Claps:", count)}
+      onToggleBookmark={(saved) => console.log("Bookmarked:", saved)}
+    />
+  )
+}
+```
+
+### 4. DiagnosticQuiz (Skill Track Assessment Modal)
+
+```tsx
+import { useState } from "react"
+import { DiagnosticQuiz } from "@abeta.dev/react-libs"
+
+export function TrackAssessment() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <DiagnosticQuiz
+      open={open}
+      onOpenChange={setOpen}
+      questions={[
+        {
+          id: "q1",
+          title: "Primary architectural ecosystem?",
+          options: [
+            { label: "Frontend & UI Engineering", trackAffinity: "frontend", weight: 2 },
+            { label: "Distributed Backend Services", trackAffinity: "backend", weight: 2 },
+          ],
+        },
+      ]}
+      onComplete={(track, scores) => console.log(track, scores)}
+    />
+  )
+}
+```
+
+### 5. useLocalFirstStore (Synchronized Local State)
+
+```typescript
+import { useLocalFirstStore } from "@abeta.dev/react-libs"
+
+export function useWorkbenchConfig() {
+  return useLocalFirstStore<{ layout: string; sidebarCollapsed: boolean }>({
+    key: "workbench-config-v1",
+    version: 1,
+    initialValue: { layout: "dual-pane", sidebarCollapsed: false },
+    broadcastSync: true,
+  })
+}
+```
+
+---
+
 ## Accessibility & Quality Gates
 
 - **Automated WCAG 2.1 AA Checks**: Enforced via `axe-core` across interactive component tests in `src/components/ui/__tests__/accessibility.test.tsx`.
