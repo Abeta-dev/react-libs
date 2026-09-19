@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.17.0] - 2026-09-20
+
+### Added
+- Added verifiable credential display component `ProofOfWorkCertificate` in `@abeta.dev/react-libs` (`src/components/ui/data-display/proof-of-work-certificate.tsx`) with cryptographic certificate IDs, issuer customization, skills tags, PDF printing, and Web Share API fallback.
+- Added interactive verification runner component `CheckpointRunner` in `@abeta.dev/react-libs` (`src/components/ui/feedback/checkpoint-runner.tsx`) with command snippet execution, verification evidence tracking, progress calculation, and expandable hints.
+- Added social engagement component `ReactionBar` in `@abeta.dev/react-libs` (`src/components/ui/feedback/reaction-bar.tsx`) with multi-clap applause limits, controlled bookmark toggling, clipboard share fallback, and reading progress tracking.
+- Added interactive skill assessment modal `DiagnosticQuiz` in `@abeta.dev/react-libs` (`src/components/ui/overlays/diagnostic-quiz.tsx`) with multi-step question flow, radio accessibility, empty question guards, and automated track recommendation.
+- Exported canonical local-first state hook `useLocalFirstStore` in `@abeta.dev/react-libs` (`src/hooks/use-local-first-store.ts`) with versioned schema migrations, cross-tab broadcast synchronization, and sanitized JSON export/import.
+- Added comprehensive unit test suites (28 tests across 5 test suites) and CSF 3 Storybook stories for all promoted components.
+
+### Fixed
+- Fixed `jsx-a11y/label-has-associated-control` in `CheckpointRunner` by explicitly associating label element with evidence input element.
+- Fixed SSR hydration mismatch in `ProofOfWorkCertificate` by ensuring dates are hydrated safely post-mount.
+- Fixed prototype injection hazards in `DiagnosticQuiz` scoring by adopting typed map data structures.
+- Adjusted `dist/index.js` bundle size budget in `scripts/check-bundle-size.mjs` to accommodate new learning and verification primitives (<= 530 KB raw, <= 105 KB gzip).
+
 ## [0.16.0] - 2026-09-19
 
 ### Added

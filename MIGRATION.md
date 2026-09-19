@@ -1,6 +1,139 @@
-# Migration Guide: Upgrading to v0.16.0
+# Migration Guide: Upgrading to v0.17.0
 
-This guide details architectural evolutions, new regional capabilities, and migration steps for upgrading to `@abeta.dev/react-libs` v0.16.0.
+This guide details architectural evolutions, new learning and verification primitives, and migration steps for upgrading to `@abeta.dev/react-libs` v0.17.0.
+
+---
+
+## Upgrading to v0.17.0
+
+v0.17.0 introduces enterprise-grade learning, verification, and social engagement primitives along with local-first persistent state synchronization. All new exports are completely non-breaking and backwards-compatible with v0.16.0.
+
+### 1. Verifiable Credential Display (`<ProofOfWorkCertificate />`)
+
+Consume `<ProofOfWorkCertificate />` from `@abeta.dev/react-libs` for displaying cryptographic certificates, course completions, and hackathon awards:
+
+- **Print & PDF Layout**: Built-in `@media print` CSS ensures clean one-page output without action toolbars or headers.
+- **SSR Safe**: Date rendering employs post-mount hydration to prevent Next.js / Remix SSR hydration mismatches.
+- **Sharing**: Uses Web Share API with an automatic 1-click clipboard fallback.
+
+```tsx
+import { ProofOfWorkCertificate } from "@abeta.dev/react-libs";
+
+export function StudentCertificate() {
+  return (
+    <ProofOfWorkCertificate
+      certificateId="POW-2026-9042"
+      recipientName="Sarah Connor"
+      recipientHandle="@sconnor"
+      projectTitle="Advanced Distributed State Primitives"
+      projectSlug="distributed-state-primitives"
+      issuerName="Abeta Engineering Academy"
+      skills={["TypeScript", "Distributed Consensus", "React 19", "WebSockets"]}
+      verificationUrl="https://verify.abeta.dev/cert/POW-2026-9042"
+      showActions
+    />
+  );
+}
+```
+
+### 2. Interactive Verification Runner (`<CheckpointRunner />`)
+
+Consume `<CheckpointRunner />` from `@abeta.dev/react-libs` to guide developers through sequential verification milestones:
+
+- **Runnable Commands**: Inline terminal snippets with 1-click copy and optional async execution hooks.
+- **Evidence Capture**: Retains proof of work (git commit SHAs, test outputs) for auditing.
+- **Accessibility**: Includes accessible `role="progressbar"` tracks and explicitly linked label controls.
+
+```tsx
+import { CheckpointRunner } from "@abeta.dev/react-libs";
+
+export function ReleaseVerification() {
+  return (
+    <CheckpointRunner
+      checkpoints={[
+        { id: "cp-1", title: "Run unit tests", command: "npm test", completed: true },
+        { id: "cp-2", title: "Record git commit hash", evidenceRequired: true },
+      ]}
+      onToggleCheckpoint={(id, evidence) => console.log(id, evidence)}
+    />
+  );
+}
+```
+
+### 3. Engagement & Reading Progress (`<ReactionBar />`)
+
+Consume `<ReactionBar />` from `@abeta.dev/react-libs` for floating or in-page user engagement:
+
+- **Applause**: Rapid-fire multi-clap applause up to `maxClapsPerUser` (debouncing bypassed for instantaneous feedback).
+- **Controlled or Uncontrolled Bookmarks**: Full support for both internal state and external database binding.
+- **Reading Progress Indicator**: Tracks document scroll percentage with division-by-zero protection.
+
+```tsx
+import { ReactionBar } from "@abeta.dev/react-libs";
+
+export function ArticleReactions() {
+  return (
+    <ReactionBar
+      initialClaps={42}
+      maxClapsPerUser={10}
+      showReadingProgress
+      onClap={(total) => api.recordClap(total)}
+      onToggleBookmark={(isSaved) => api.saveBookmark(isSaved)}
+    />
+  );
+}
+```
+
+### 4. Interactive Assessment Modal (`<DiagnosticQuiz />`)
+
+Consume `<DiagnosticQuiz />` from `@abeta.dev/react-libs` for interactive user onboarding and skill track diagnosis:
+
+```tsx
+import { DiagnosticQuiz } from "@abeta.dev/react-libs";
+
+export function TrackDiagnosisModal({ open, setOpen }) {
+  return (
+    <DiagnosticQuiz
+      open={open}
+      onOpenChange={setOpen}
+      title="Engineering Assessment"
+      questions={[
+        {
+          id: "q-1",
+          title: "Primary focus area",
+          options: [
+            { label: "Frontend", trackAffinity: "frontend", weight: 3 },
+            { label: "Backend", trackAffinity: "backend", weight: 3 },
+          ],
+        },
+      ]}
+      onComplete={(track, scores) => console.log("Recommended:", track, scores)}
+    />
+  );
+}
+```
+
+### 5. Local-First Synchronized State Hook (`useLocalFirstStore`)
+
+Exported from `@abeta.dev/react-libs`:
+
+```typescript
+import { useLocalFirstStore } from "@abeta.dev/react-libs";
+
+interface Settings {
+  theme: "dark" | "light";
+  notifications: boolean;
+}
+
+export function useUserSettings() {
+  return useLocalFirstStore<Settings>({
+    key: "user-settings-v1",
+    version: 1,
+    initialValue: { theme: "light", notifications: true },
+    broadcastSync: true, // Syncs across browser tabs via BroadcastChannel
+  });
+}
+```
 
 ---
 
