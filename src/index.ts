@@ -20,6 +20,7 @@ export * from "./hooks/use-platform";
 export * from "./hooks/use-pwa-install";
 export * from "./hooks/use-offline-queue";
 export * from "./hooks/use-click-backpressure";
+export * from "./hooks/use-local-first-store";
 
 // ─── Forms & Inputs ──────────────────────────────────────────────────────────
 export * from "./components/ui/forms/async-select";
@@ -77,6 +78,7 @@ export * from "./components/ui/data-display/payment-ledger";
 // Note: PdfViewer is exported exclusively via '@abeta.dev/react-libs/pdf' to safeguard Node.js SSR environments from DOMMatrix evaluation.
 export * from "./components/ui/data-display/pipeline-kanban";
 export * from "./components/ui/data-display/proof-of-work-card";
+export * from "./components/ui/data-display/proof-of-work-certificate";
 export * from "./components/ui/data-display/radar-sweep";
 export * from "./components/ui/data-display/salary-range-display";
 export * from "./components/ui/data-display/status-badge";
@@ -120,11 +122,13 @@ export * from "./components/ui/overlays/dropdown-menu";
 export * from "./components/ui/overlays/hover-card";
 export * from "./components/ui/overlays/sheet";
 export * from "./components/ui/overlays/tooltip";
+export * from "./components/ui/overlays/diagnostic-quiz";
 
 // ─── Feedback, Loading & Status ──────────────────────────────────────────────
 export * from "./components/ui/feedback/alert";
 export * from "./components/ui/feedback/app-splash-screen";
 export * from "./components/ui/feedback/banner";
+export * from "./components/ui/feedback/checkpoint-runner";
 export * from "./components/ui/feedback/copy-button";
 export * from "./components/ui/feedback/empty";
 export * from "./components/ui/feedback/empty-state";
@@ -136,6 +140,7 @@ export * from "./components/ui/feedback/loading-state";
 export * from "./components/ui/feedback/onboarding-notice";
 export * from "./components/ui/feedback/progress";
 export * from "./components/ui/feedback/progress-ring";
+export * from "./components/ui/feedback/reaction-bar";
 export * from "./components/ui/feedback/role-empty-state";
 export * from "./components/ui/feedback/skeleton";
 export * from "./components/ui/feedback/skeleton-list";
