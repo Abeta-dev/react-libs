@@ -35,7 +35,7 @@ export function ProofOfWorkCertificate({
   recipientHandle,
   projectTitle,
   projectSlug,
-  issueDate = new Date().toISOString().split("T")[0],
+  issueDate: propIssueDate,
   issuerName = "Abeta Studio & Open Lab",
   issuerLogoUrl,
   skills = [],
@@ -47,20 +47,39 @@ export function ProofOfWorkCertificate({
   ...props
 }: ProofOfWorkCertificateProps) {
   const [copied, setCopied] = React.useState(false);
+  const [clientDate, setClientDate] = React.useState<string>(propIssueDate || "");
+  const copiedTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  React.useEffect(() => {
+    if (!propIssueDate) {
+      setClientDate(new Date().toISOString().split("T")[0] ?? "");
+    }
+  }, [propIssueDate]);
+
+  React.useEffect(() => {
+    return () => {
+      if (copiedTimerRef.current) {
+        clearTimeout(copiedTimerRef.current);
+      }
+    };
+  }, []);
+
+  const issueDate = propIssueDate || clientDate || "Verified";
 
   const handleCopyLink = () => {
     const url = verificationUrl || (typeof window !== "undefined" ? window.location.href : "");
     if (url && typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(url);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+      copiedTimerRef.current = setTimeout(() => setCopied(false), 2000);
     }
   };
 
   const handlePrint = () => {
     if (onPrint) {
       onPrint();
-    } else if (typeof window !== "undefined") {
+    } else if (typeof window !== "undefined" && typeof window.print === "function") {
       window.print();
     }
   };
@@ -78,8 +97,10 @@ export function ProofOfWorkCertificate({
           text: `${recipientName} completed ${projectTitle} on ${issuerName}`,
           url,
         });
-      } catch {
-        handleCopyLink();
+      } catch (err) {
+        if ((err as Error)?.name !== "AbortError") {
+          handleCopyLink();
+        }
       }
     } else {
       handleCopyLink();
@@ -98,8 +119,12 @@ export function ProofOfWorkCertificate({
         <div className="text-center space-y-6">
           {/* Header */}
           <div className="flex flex-col items-center gap-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 text-amber-300 dark:bg-amber-400 dark:text-slate-950 shadow-md">
-              <Award className="h-6 w-6" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 text-amber-300 dark:bg-amber-400 dark:text-slate-950 shadow-md overflow-hidden">
+              {issuerLogoUrl ? (
+                <img src={issuerLogoUrl} alt={issuerName} className="h-full w-full object-contain p-1" />
+              ) : (
+                <Award className="h-6 w-6" />
+              )}
             </div>
             <div className="space-y-1">
               <span className="text-[11px] font-mono tracking-widest uppercase text-slate-500 dark:text-slate-400">
@@ -165,7 +190,10 @@ export function ProofOfWorkCertificate({
                 <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
                 <span className="text-[10px] uppercase font-bold tracking-wider">Verified On-Chain / Browser Hash</span>
               </div>
-              <span className="text-[10px] text-slate-400 truncate max-w-[200px]" title={certificateId}>
+              <span
+                className="text-[10px] text-slate-400 truncate max-w-[200px]"
+                title={projectSlug ? `${projectSlug} (${certificateId})` : certificateId}
+              >
                 ID: {certificateId}
               </span>
             </div>
@@ -176,17 +204,40 @@ export function ProofOfWorkCertificate({
       {/* Action Toolbar */}
       {showActions && (
         <div className="flex flex-wrap items-center justify-between gap-2 px-1 print:hidden">
-          <Button variant="outline" size="sm" onClick={handlePrint} className="gap-2 font-mono text-xs">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handlePrint}
+            debounceSec={false}
+            className="gap-2 font-mono text-xs"
+            aria-label="Print or save certificate as PDF"
+          >
             <Printer className="h-3.5 w-3.5" /> Print / PDF
           </Button>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleCopyLink} className="gap-2 font-mono text-xs">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleCopyLink}
+              debounceSec={false}
+              className="gap-2 font-mono text-xs"
+              aria-label={copied ? "Verification link copied to clipboard" : "Copy verification link"}
+            >
               <Copy className="h-3.5 w-3.5" /> {copied ? "Copied!" : "Copy Link"}
             </Button>
-            <Button size="sm" onClick={handleShare} className="gap-2 font-mono text-xs">
+            <Button
+              size="sm"
+              onClick={handleShare}
+              debounceSec={false}
+              className="gap-2 font-mono text-xs"
+              aria-label="Share certificate"
+            >
               <Share2 className="h-3.5 w-3.5" /> Share
             </Button>
+            <span className="sr-only" role="status" aria-live="polite">
+              {copied ? "Verification link copied to clipboard" : ""}
+            </span>
           </div>
         </div>
       )}

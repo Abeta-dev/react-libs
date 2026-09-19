@@ -34,6 +34,11 @@ export function useLocalFirstStore<T>({
   const [data, setDataInternal] = React.useState<T>(initialValue);
   const [isHydrated, setIsHydrated] = React.useState(false);
 
+  const onMigrateRef = React.useRef(onMigrate);
+  React.useEffect(() => {
+    onMigrateRef.current = onMigrate;
+  }, [onMigrate]);
+
   const eventName = `local-store-change:${key}`;
 
   // Read stored data on initial mount
@@ -47,8 +52,8 @@ export function useLocalFirstStore<T>({
         if (parsed && typeof parsed === "object" && "_v" in parsed && "_data" in parsed) {
           if (parsed._v === version) {
             setDataInternal(parsed._data as T);
-          } else if (onMigrate) {
-            const migrated = onMigrate(parsed._data, parsed._v);
+          } else if (onMigrateRef.current) {
+            const migrated = onMigrateRef.current(parsed._data, parsed._v);
             setDataInternal(migrated);
             window.localStorage.setItem(key, JSON.stringify({ _v: version, _data: migrated }));
           } else {
@@ -63,14 +68,18 @@ export function useLocalFirstStore<T>({
     } finally {
       setIsHydrated(true);
     }
-  }, [key, version, onMigrate]);
+  }, [key, version]);
 
   // Listen for storage events (cross-tab) and custom events (same-tab)
   React.useEffect(() => {
     if (typeof window === "undefined") return;
 
     const handleStorage = (e: StorageEvent) => {
-      if (e.key === key && e.newValue) {
+      if (e.key === key) {
+        if (!e.newValue) {
+          setDataInternal(initialValue);
+          return;
+        }
         try {
           const parsed = JSON.parse(e.newValue);
           const nextData = parsed && typeof parsed === "object" && "_data" in parsed ? parsed._data : parsed;
@@ -95,7 +104,7 @@ export function useLocalFirstStore<T>({
       window.removeEventListener("storage", handleStorage);
       window.removeEventListener(eventName, handleCustomEvent);
     };
-  }, [key, eventName]);
+  }, [key, eventName, initialValue]);
 
   // Set data with synchronous write and event broadcast
   const setData = React.useCallback(
@@ -125,14 +134,15 @@ export function useLocalFirstStore<T>({
 
   // Export as downloadable JSON
   const exportJson = React.useCallback(
-    (fileName = `${key}-backup.json`) => {
+    (fileName?: string) => {
       if (typeof window === "undefined") return;
+      const safeName = (fileName || `${key}-backup.json`).replace(/[^a-zA-Z0-9._-]/g, "_");
       const json = JSON.stringify({ key, version, exportedAt: new Date().toISOString(), data }, null, 2);
       const blob = new Blob([json], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = fileName;
+      a.download = safeName;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

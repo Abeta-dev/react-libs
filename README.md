@@ -369,6 +369,7 @@ All standard UI components are directly importable from `@abeta.dev/react-libs` 
 | | `Accordion` | Accessible collapsible accordion panels |
 | | `Collapsible` | Expandable content section |
 | | `Carousel` | Touch-friendly Embla-powered carousel slider |
+| | `ProofOfWorkCertificate` | Verifiable completion credential displaying project accomplishments, cryptographic ID, skills, and sharing |
 | **Layout** | `PageHeader` | Standardized header container with title, breadcrumb slot, and action buttons |
 | | `Separator` | Semantic horizontal or vertical divider |
 | | `ScrollArea` | Cross-browser custom scrollbar container |
@@ -385,6 +386,7 @@ All standard UI components are directly importable from `@abeta.dev/react-libs` 
 | | `ContextMenu` | Right-click contextual menu |
 | | `Command` | Fast cmdk-powered search & command palette |
 | | `Drawer` | Mobile-first bottom drawer sheet (vaul) |
+| | `DiagnosticQuiz` | Multi-step interactive assessment modal for skill evaluation and automated track recommendation |
 | **Navigation** | `Sidebar` | Collapsible desktop and mobile application sidebar |
 | | `Stepper` | Multi-step wizard and workflow progression indicator |
 | | `NavigationMenu` | Top-level dropdown navigation header |
@@ -394,6 +396,8 @@ All standard UI components are directly importable from `@abeta.dev/react-libs` 
 | | `Pagination` | Accessible pagination controls with page jumpers |
 | **Feedback** | `Banner` | System announcement banner with call-to-action and dismiss controls |
 | | `CopyButton` | 1-click clipboard copy button with checkmark feedback animation |
+| | `CheckpointRunner` | Interactive verification runner for stepped command execution, verification evidence, and progress tracking |
+| | `ReactionBar` | Floating or inline engagement bar with multi-clap applause, bookmarks, web sharing, and reading progress |
 | | `Toast` / `Toaster` | Notification toast system |
 | | `Sonner` | Sonner toast provider alternative |
 | | `Skeleton` | Content loading placeholder skeleton |

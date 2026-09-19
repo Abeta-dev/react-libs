@@ -45,15 +45,38 @@ export function DiagnosticQuiz({
   onComplete,
 }: DiagnosticQuizProps) {
   const [currentStep, setCurrentStep] = React.useState(0);
-  const [selectedAnswers, setSelectedAnswers] = React.useState<Record<number, number>>({});
+  const [selectedAnswers, setSelectedAnswers] = React.useState<Map<number, number>>(() => new Map());
   const [result, setResult] = React.useState<string | null>(null);
 
-  const activeQuestion = questions[currentStep];
+  if (questions.length === 0) {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="max-w-md p-6 text-center">
+          <DialogHeader>
+            <DialogTitle>No Questions Available</DialogTitle>
+            <DialogDescription>This assessment currently has no questions configured.</DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="justify-center pt-4">
+            <Button size="sm" onClick={() => onOpenChange(false)} debounceSec={false}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  const totalQuestions = Math.max(1, questions.length);
+  const activeQuestion = questions.at(currentStep);
   const isLastQuestion = currentStep === questions.length - 1;
-  const hasSelected = selectedAnswers[currentStep] !== undefined;
+  const hasSelected = selectedAnswers.has(currentStep);
 
   const handleSelectOption = (index: number) => {
-    setSelectedAnswers((prev) => ({ ...prev, [currentStep]: index }));
+    setSelectedAnswers((prev) => {
+      const next = new Map(prev);
+      next.set(currentStep, index);
+      return next;
+    });
   };
 
   const handleNext = () => {
@@ -69,21 +92,23 @@ export function DiagnosticQuiz({
   };
 
   const calculateResult = () => {
-    const scores: Record<string, number> = {};
+    const scores = new Map<string, number>();
 
     questions.forEach((q, qIndex) => {
-      const optionIndex = selectedAnswers[qIndex];
-      if (optionIndex !== undefined && q.options[optionIndex]) {
-        const option = q.options[optionIndex];
-        const track = option.trackAffinity;
-        const weight = option.weight ?? 1;
-        scores[track] = (scores[track] || 0) + weight;
+      const optionIndex = selectedAnswers.get(qIndex);
+      if (optionIndex !== undefined && optionIndex >= 0 && optionIndex < q.options.length) {
+        const option = q.options.at(optionIndex);
+        if (option) {
+          const track = option.trackAffinity;
+          const weight = option.weight ?? 1;
+          scores.set(track, (scores.get(track) ?? 0) + weight);
+        }
       }
     });
 
-    let topTrack = questions[0]?.options[0]?.trackAffinity || "fullstack";
+    let topTrack = questions.at(0)?.options.at(0)?.trackAffinity || "fullstack";
     let maxScore = -1;
-    Object.entries(scores).forEach(([track, score]) => {
+    scores.forEach((score, track) => {
       if (score > maxScore) {
         maxScore = score;
         topTrack = track;
@@ -91,12 +116,16 @@ export function DiagnosticQuiz({
     });
 
     setResult(topTrack);
-    onComplete(topTrack, scores);
+    const scoreMap: Record<string, number> = {};
+    scores.forEach((score, track) => {
+      Object.assign(scoreMap, { [track]: score });
+    });
+    onComplete(topTrack, scoreMap);
   };
 
   const handleReset = () => {
     setCurrentStep(0);
-    setSelectedAnswers({});
+    setSelectedAnswers(new Map());
     setResult(null);
   };
 
@@ -108,7 +137,7 @@ export function DiagnosticQuiz({
             <DialogHeader className="space-y-2">
               <div className="flex items-center justify-between">
                 <Badge variant="outline" className="font-mono text-xs uppercase">
-                  {title} • {currentStep + 1} of {questions.length}
+                  {title} • {currentStep + 1} of {totalQuestions}
                 </Badge>
                 {activeQuestion?.category && (
                   <span className="text-xs font-mono text-slate-400 uppercase">
@@ -117,27 +146,40 @@ export function DiagnosticQuiz({
                 )}
               </div>
               <DialogTitle className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-                {activeQuestion?.title}
+                {activeQuestion?.title || "Assessment Question"}
               </DialogTitle>
               {description && <DialogDescription>{description}</DialogDescription>}
             </DialogHeader>
 
             {/* Step Progress Bar */}
-            <div className="h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden my-2">
+            <div
+              className="h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden my-2"
+              role="progressbar"
+              aria-valuenow={Math.round(((currentStep + 1) / totalQuestions) * 100)}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="Quiz progress"
+            >
               <div
                 className="h-full bg-slate-900 dark:bg-slate-100 transition-all duration-300"
-                style={{ width: `${((currentStep + 1) / questions.length) * 100}%` }}
+                style={{ width: `${Math.min(100, Math.round(((currentStep + 1) / totalQuestions) * 100))}%` }}
               />
             </div>
 
             {/* Options */}
-            <div className="space-y-2.5 my-4">
+            <div
+              className="space-y-2.5 my-4"
+              role="radiogroup"
+              aria-label={activeQuestion?.title || "Quiz options"}
+            >
               {activeQuestion?.options.map((opt, idx) => {
-                const isSelected = selectedAnswers[currentStep] === idx;
+                const isSelected = selectedAnswers.get(currentStep) === idx;
                 return (
                   <button
                     key={idx}
                     type="button"
+                    role="radio"
+                    aria-checked={isSelected}
                     onClick={() => handleSelectOption(idx)}
                     className={cn(
                       "w-full text-left p-4 rounded-lg border transition-all flex items-start gap-3",
@@ -177,6 +219,7 @@ export function DiagnosticQuiz({
                 size="sm"
                 onClick={handlePrev}
                 disabled={currentStep === 0}
+                debounceSec={false}
                 className="gap-1.5 font-mono text-xs"
               >
                 <ArrowLeft className="h-3.5 w-3.5" /> Back
@@ -185,6 +228,7 @@ export function DiagnosticQuiz({
                 size="sm"
                 onClick={handleNext}
                 disabled={!hasSelected}
+                debounceSec={false}
                 className="gap-1.5 font-mono text-xs"
               >
                 {isLastQuestion ? "Complete & Recommend" : "Next"} <ArrowRight className="h-3.5 w-3.5" />
@@ -193,24 +237,26 @@ export function DiagnosticQuiz({
           </>
         ) : (
           <div className="text-center py-6 space-y-5">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400 mx-auto">
-              <Trophy className="h-7 w-7" />
-            </div>
-            <div className="space-y-1.5">
-              <span className="text-xs font-mono uppercase text-slate-400">Diagnosis Complete</span>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                Recommended Track: <span className="capitalize">{result}</span>
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-                Based on your experience, goals, and architectural preferences, this track will deliver the highest leverage.
-              </p>
-            </div>
+            <DialogHeader className="text-center space-y-2">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400 mx-auto">
+                <Trophy className="h-7 w-7" />
+              </div>
+              <div className="space-y-1.5">
+                <span className="text-xs font-mono uppercase text-slate-400">Diagnosis Complete</span>
+                <DialogTitle className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                  Recommended Track: <span className="capitalize">{result}</span>
+                </DialogTitle>
+                <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+                  Based on your experience, goals, and architectural preferences, this track will deliver the highest leverage.
+                </DialogDescription>
+              </div>
+            </DialogHeader>
 
             <div className="flex justify-center gap-3 pt-4">
-              <Button variant="outline" size="sm" onClick={handleReset} className="font-mono text-xs">
+              <Button variant="outline" size="sm" onClick={handleReset} debounceSec={false} className="font-mono text-xs">
                 Retake Quiz
               </Button>
-              <Button size="sm" onClick={() => onOpenChange(false)} className="font-mono text-xs">
+              <Button size="sm" onClick={() => onOpenChange(false)} debounceSec={false} className="font-mono text-xs">
                 Explore Curriculum
               </Button>
             </div>

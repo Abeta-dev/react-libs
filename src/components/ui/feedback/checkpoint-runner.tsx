@@ -44,6 +44,18 @@ export function CheckpointRunner({
   const [activeHintId, setActiveHintId] = React.useState<string | null>(null);
   const [copiedCmd, setCopiedCmd] = React.useState<string | null>(null);
   const [executingCmd, setExecutingCmd] = React.useState<string | null>(null);
+  const copiedTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isMountedRef = React.useRef(true);
+
+  React.useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      if (copiedTimerRef.current) {
+        clearTimeout(copiedTimerRef.current);
+      }
+    };
+  }, []);
 
   const completedCount = checkpoints.filter((c) => c.completed).length;
   const progressPercent = checkpoints.length > 0 ? Math.round((completedCount / checkpoints.length) * 100) : 0;
@@ -52,7 +64,10 @@ export function CheckpointRunner({
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(command);
       setCopiedCmd(command);
-      setTimeout(() => setCopiedCmd(null), 2000);
+      if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+      copiedTimerRef.current = setTimeout(() => {
+        if (isMountedRef.current) setCopiedCmd(null);
+      }, 2000);
     }
   };
 
@@ -61,8 +76,12 @@ export function CheckpointRunner({
     setExecutingCmd(command);
     try {
       await onRunCommand(command);
+    } catch (e) {
+      console.error(`[CheckpointRunner] Command execution failed: ${command}`, e);
     } finally {
-      setExecutingCmd(null);
+      if (isMountedRef.current) {
+        setExecutingCmd(null);
+      }
     }
   };
 
@@ -87,7 +106,14 @@ export function CheckpointRunner({
             <span>Progress</span>
             <span>{progressPercent}%</span>
           </div>
-          <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div
+            className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden"
+            role="progressbar"
+            aria-valuenow={progressPercent}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Checkpoint completion progress"
+          >
             <div
               className="h-full bg-emerald-500 transition-all duration-300 rounded-full"
               style={{ width: `${progressPercent}%` }}
@@ -100,6 +126,7 @@ export function CheckpointRunner({
       <div className="space-y-3">
         {checkpoints.map((cp, idx) => {
           const isDone = Boolean(cp.completed);
+          const evidenceInputId = `checkpoint-evidence-${cp.id}`;
 
           return (
             <div
@@ -115,7 +142,7 @@ export function CheckpointRunner({
                 <div className="flex items-start gap-3">
                   <button
                     type="button"
-                    onClick={() => onToggleCheckpoint?.(cp.id, evidenceMap[cp.id])}
+                    onClick={() => onToggleCheckpoint?.(cp.id, evidenceMap[cp.id] ?? cp.evidence)}
                     className="mt-0.5 shrink-0 text-slate-400 hover:text-emerald-600 transition-colors"
                     aria-label={`Mark checkpoint ${idx + 1} as ${isDone ? "incomplete" : "complete"}`}
                   >
@@ -152,6 +179,7 @@ export function CheckpointRunner({
                             onClick={() => handleCopy(cp.command!)}
                             className="p-1 hover:text-emerald-300 transition-colors text-slate-400"
                             title="Copy command"
+                            aria-label="Copy command"
                           >
                             {copiedCmd === cp.command ? (
                               <Check className="h-3 w-3 text-emerald-400" />
@@ -166,6 +194,7 @@ export function CheckpointRunner({
                               disabled={executingCmd === cp.command}
                               className="p-1 hover:text-emerald-300 transition-colors text-slate-400 disabled:opacity-50"
                               title="Run in environment"
+                              aria-label="Run command in environment"
                             >
                               <Play className="h-3 w-3" />
                             </button>
@@ -185,10 +214,14 @@ export function CheckpointRunner({
                     {/* Evidence Input */}
                     {cp.evidenceRequired && !isDone && (
                       <div className="mt-2.5 space-y-1">
-                        <label className="text-[11px] font-mono text-slate-500 uppercase">
+                        <label
+                          htmlFor={evidenceInputId}
+                          className="text-[11px] font-mono text-slate-500 uppercase"
+                        >
                           Verification Evidence / Output:
                         </label>
                         <input
+                          id={evidenceInputId}
                           type="text"
                           placeholder="e.g., commit hash, terminal response, test summary"
                           value={evidenceMap[cp.id] ?? cp.evidence ?? ""}
@@ -208,6 +241,7 @@ export function CheckpointRunner({
                       variant="ghost"
                       size="sm"
                       onClick={() => setActiveHintId(activeHintId === cp.id ? null : cp.id)}
+                      debounceSec={false}
                       className="h-7 w-7 p-0 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                       aria-label="Toggle hint"
                     >
@@ -217,7 +251,8 @@ export function CheckpointRunner({
                   <Button
                     size="sm"
                     variant={isDone ? "outline" : "default"}
-                    onClick={() => onToggleCheckpoint?.(cp.id, evidenceMap[cp.id])}
+                    onClick={() => onToggleCheckpoint?.(cp.id, evidenceMap[cp.id] ?? cp.evidence)}
+                    debounceSec={false}
                     className="h-7 text-xs font-mono"
                   >
                     {isDone ? "Undo" : "Verify"}
