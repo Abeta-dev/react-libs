@@ -268,42 +268,64 @@ it("has no accessibility violations", async () => {
 
 ---
 
-## 6. Publishing
+## 6. Publishing & Release Process
 
-Publishing is triggered automatically by pushing a version tag. **Do not run `npm publish` manually** unless it's an emergency fix.
+Releases are triggered automatically by pushing an annotated version tag (`v*`). **Do not run `npm publish` manually**.
 
-### Normal Release Flow
+### Standard Release Protocol ("Going Forward")
 
+Follow this sequential checklist for every release:
+
+#### 1. Version Manifests & Release Notes
+- Update `"version"` in root `package.json` and run `npm install --package-lock-only` to synchronize `package-lock.json`.
+- Add release notes at the top of `CHANGELOG.md` under `## [x.y.z] - YYYY-MM-DD` with `### Added`, `### Changed`, and `### Fixed`.
+- Update the version badge and migration guide link in `README.md`.
+- Add upgrade guidance under `## Upgrading to vx.y.z` in `MIGRATION.md`.
+
+#### 2. Pre-Flight Verification Gates
+Run all gates locally to ensure CI will pass without regressions:
 ```bash
-# 1. Ensure all tests pass
-npm run test
-
-# 2. Bump version (patch | minor | major)
-npm version patch    # e.g. 0.1.0 → 0.1.1
-
-# 3. Commit & tag
-git add package.json package-lock.json
-git commit -m "chore: bump @abeta.dev/react-libs to 0.1.1"
-git tag v0.1.1
-
-# 4. Push — CI runs + auto-publishes
-git push && git push --tags
+npm run check:truth            # Version alignment, 22 ATTW subpaths & module directive check
+node scripts/verify-release-version.mjs
+npm run verify:packed-consumers
+npm run check:size
+npm run lint                   # ESLint with --max-warnings 0
+npx tsc --noEmit               # Strict TypeScript checks
+npm run test                   # Full Vitest test suite
 ```
 
-### What publish.yml Does
+#### 3. Pull Request & Merge
+- Create a release branch: `git checkout -b release/vx.y.z`
+- Commit: `git commit -m "chore(release): prepare vx.y.z ..."`
+- Push and create a Pull Request against `main`.
+- Merge the Pull Request into `main`.
 
-1. Verifies tag version matches `package.json`
-2. Installs dependencies
-3. Runs full type check + test suite + Storybook build + package build
-4. Configures npm auth with `NPM_TOKEN`
-5. Verifies auth via `npm whoami`
-6. Publishes to npm registry with `--access public --tag latest --provenance`
+#### 4. Tag & Automated Release
+Once merged into `main`:
+```bash
+git checkout main && git pull origin main
+git tag -a vx.y.z -m "Release vx.y.z: <Summary>"
+git push origin vx.y.z
+```
+
+### What `.github/workflows/publish.yml` Executes Automatically
+
+When a `v*` tag is pushed:
+1. Executes all 26 verification gates (truth gate, ATTW matrix, directives, tests).
+2. Compiles root package, CSS bundle, and Storybook.
+3. Automatically extracts the release notes for that version from `CHANGELOG.md` via `node scripts/extract-release-notes.mjs --output dist/release-notes.md`.
+4. Publishes to npmjs.org with `--provenance`.
+5. **Automatically creates the GitHub Release** with title, tag, and extracted markdown release notes (`gh release create "$TAG" --notes-file dist/release-notes.md --title "$TAG"`).
+6. Publishes to GitHub Packages (`npm.pkg.github.com`).
 
 ### After Publishing
 
-Update the version in consuming apps:
+Consume the new release in downstream applications:
 
 ```bash
-# In consuming web portals
+# From npm
 npm install @abeta.dev/react-libs@latest
+
+# From GitHub Packages
+npm install @abeta.dev/react-libs@latest --registry=https://npm.pkg.github.com
 ```
