@@ -10,7 +10,7 @@ import { Input } from "./input";
  * suppress the focus ring on click — they look and behave as read-only, not active.
  */
 const meta = {
-  title: "UI/Forms/Input",
+  title: "Forms/Input",
   component: Input,
   parameters: {
     layout: "centered",

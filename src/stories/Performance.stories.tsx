@@ -184,18 +184,45 @@ function PerformanceDashboard() {
           }}
         >
           <div>
-            <h1
-              style={{
-                margin: 0,
-                fontSize: 26,
-                fontWeight: 700,
-                color: "#111827",
-              }}
-            >
-              ⚡ Test Performance Dashboard
-            </h1>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+              <h1
+                style={{
+                  margin: 0,
+                  fontSize: 26,
+                  fontWeight: 700,
+                  color: "#111827",
+                }}
+              >
+                ⚡ Test Performance Dashboard
+              </h1>
+              <span
+                style={{
+                  fontSize: 12,
+                  fontWeight: 700,
+                  borderRadius: 9999,
+                  background: "#111827",
+                  color: "#ffffff",
+                  padding: "2px 10px",
+                }}
+              >
+                v0.17.0
+              </span>
+              <span
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  borderRadius: 9999,
+                  background: "#f0fdf4",
+                  color: "#15803d",
+                  border: "1px solid #bbf7d0",
+                  padding: "2px 10px",
+                }}
+              >
+                CI Budget: P95 ≤ 750ms (Active)
+              </span>
+            </div>
             <p style={{ margin: "6px 0 0", fontSize: 13, color: "#6b7280" }}>
-              @abeta.dev/react-libs · Generated {data.generatedAt}
+              @abeta.dev/react-libs · Generated {data.generatedAt} · 1,465 Tests Verified
             </p>
           </div>
           <div
@@ -346,16 +373,21 @@ function PerformanceDashboard() {
             <tbody>
               {data.components.map((row, i) => {
                 const budget = getBudgetColor(row.p95);
-                // Extract readable name: "src/components/ui/forms/button.stories.tsx" → "button.stories"
-                const parts = row.component.split("/");
-                const lastPart = parts[parts.length - 1] ?? "";
-                const displayName = lastPart
-                  .replace(".stories.tsx", "")
-                  .replace(".test.tsx", "")
-                  .replace(".test.ts", "")
-                  .replace(/__tests__\//g, "")
-                  .replace(/-/g, " ");
-                const domain = parts.length >= 4 ? (parts[parts.length - 3] ?? "") : "";
+                // Extract readable category and name
+                let domain = "General";
+                let displayName = row.component;
+                if (row.component.includes(" / ")) {
+                  const segs = row.component.split(" / ");
+                  domain = segs[0]?.trim() ?? "General";
+                  displayName = segs[1]?.trim() ?? row.component;
+                } else if (row.component.includes("/")) {
+                  const parts = row.component.split("/");
+                  domain = parts.length >= 3 ? (parts[parts.length - 2]?.trim() ?? "General") : "General";
+                  displayName = (parts[parts.length - 1] ?? "")
+                    .replace(/\.(test|stories)\.(tsx|ts)/, "")
+                    .replace(/-/g, " ")
+                    .trim();
+                }
                 const isStory = row.component.includes(".stories");
 
                 return (
@@ -654,7 +686,7 @@ function PerformanceDashboard() {
 // Storybook Meta
 // ---------------------------------------------------------------------------
 const meta = {
-  title: "Docs/Performance Dashboard",
+  title: "Overview & Docs/Performance Dashboard",
   component: PerformanceDashboard,
   parameters: {
     layout: "fullscreen",

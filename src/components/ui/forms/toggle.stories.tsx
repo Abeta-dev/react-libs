@@ -4,7 +4,7 @@ import { Toggle } from "./toggle";
 import { Bold, Italic, Underline } from "lucide-react";
 
 const meta = {
-  title: "UI/Forms/Toggle",
+  title: "Forms/Toggle",
   component: Toggle,
   parameters: {
     layout: "centered",

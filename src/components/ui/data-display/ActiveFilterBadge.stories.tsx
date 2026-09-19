@@ -8,7 +8,7 @@ import { ActiveFilterBadge } from "./ActiveFilterBadge";
  * Shows the current filter label and provides a clear button.
  */
 const meta = {
-  title: "UI/Data-display/ActiveFilterBadge",
+  title: "Data Display/ActiveFilterBadge",
   component: ActiveFilterBadge,
   parameters: {
     layout: "padded",

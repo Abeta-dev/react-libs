@@ -7,7 +7,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
  * Built on Radix UI Tabs — fully keyboard navigable with arrow keys.
  */
 const meta = {
-  title: 'UI/Navigation/Tabs',
+  title: 'Navigation/Tabs',
   component: Tabs,
   parameters: {
     layout: 'centered',

@@ -20,7 +20,7 @@ import {
  * - `selectedIndex` and `scrollSnaps` now tracked from Embla API
  */
 const meta = {
-  title: "UI/Data-display/Carousel",
+  title: "Data Display/Carousel",
   component: Carousel,
   parameters: {
     layout: "centered",

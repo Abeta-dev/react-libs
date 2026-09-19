@@ -21,7 +21,7 @@ import { Label } from '../forms/label';
  * Use for detail panels, settings, and filter drawers.
  */
 const meta = {
-  title: 'UI/Overlays/Sheet',
+  title: 'Overlays/Sheet',
   component: Sheet,
   parameters: {
     layout: 'centered',

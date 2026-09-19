@@ -21,7 +21,7 @@ import { Label } from '../forms/label';
  * the built-in ✕ button.
  */
 const meta = {
-  title: 'UI/Overlays/Dialog',
+  title: 'Overlays/Dialog',
   component: Dialog,
   parameters: {
     layout: 'centered',

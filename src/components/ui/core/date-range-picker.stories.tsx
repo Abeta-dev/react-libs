@@ -50,7 +50,7 @@ function ControlledDateRangeStory(args: DateRangePickerStoryArgs) {
  * The trigger supports button variants and range changes are committed only when users click Apply.
  */
 const meta = {
-  title: "UI/Core/DateRangePicker",
+  title: "Core/DateRangePicker",
   component: DatePickerWithRange,
   parameters: {
     layout: "centered",

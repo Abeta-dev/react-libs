@@ -5,7 +5,7 @@ import { ToggleGroup, ToggleGroupItem } from "./toggle-group";
 import { AlignLeft, AlignCenter, AlignRight } from "lucide-react";
 
 const meta = {
-  title: "UI/Forms/ToggleGroup",
+  title: "Forms/ToggleGroup",
   component: ToggleGroup,
   parameters: {
     layout: "centered",

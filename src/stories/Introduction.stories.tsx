@@ -6,14 +6,14 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Rendered as a TSX docs-only story to avoid Vite MDX transformation issues.
  */
 const meta = {
-  title: 'Introduction',
+  title: 'Overview & Docs/Introduction',
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
         component:
           '**@abeta.dev/react-libs** — UI component library for web applications. ' +
-          '50+ accessible Tailwind UI components · Storybook 10 · Tailwind v4 · React 19',
+          '120 accessible components · Storybook 10 · Tailwind v4 · React 19 · Strict TypeScript',
       },
     },
   },
@@ -246,9 +246,9 @@ export const ComponentDirectory: Story = {
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 20 }}>
             {[
-              { label: 'v0.1.0', accent: true },
-              { label: '50+ components' },
-              { label: '784 tests' },
+              { label: 'v0.17.0', accent: true },
+              { label: '120 components' },
+              { label: '1,465 tests' },
               { label: '≥80% coverage' },
               { label: 'Vitest passing' },
               { label: 'Storybook 10' },
@@ -265,11 +265,12 @@ export const ComponentDirectory: Story = {
 
         {/* ── Stats ── */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
-          <StatCard value="50+" label="Components" sub="Across UI domains" />
-          <StatCard value="784" label="Tests" sub="Verified ≥80% Coverage" accent="#16a34a" />
+          <StatCard value="120" label="Components" sub="Core, India & Auth" />
+          <StatCard value="1,465" label="Tests" sub="Verified ≥80% Coverage" accent="#16a34a" />
           <StatCard value="Passing" label="Test Suite" sub="Vitest unit tests" accent="#16a34a" />
-          <StatCard value="14ms" label="P50 Latency" sub="Median test time" />
-          <StatCard value="580ms" label="P95 Latency" sub="95th percentile" />
+          <StatCard value="12.5ms" label="P50 Latency" sub="Median test time" />
+          <StatCard value="301.3ms" label="P95 Latency" sub="CI Gate <= 750ms" accent="#16a34a" />
+          <StatCard value="511.1ms" label="P99 Latency" sub="99th percentile" />
         </div>
 
         {/* ── Installation ── */}
@@ -332,8 +333,8 @@ import { initAnalytics } from '@abeta.dev/react-libs/analytics';`}</CodeBlock>
                 Orange Accent theme
               </p>
               <CodeBlock>{`:root {
-  --color-primary: 24.6 95% 53.1%;
-  /* hsl(25, 95%, 53%) — Primary orange accent */
+  --primary: 24.6 95% 53.1%;
+  --primary-foreground: 0 0% 100%;
 }`}</CodeBlock>
             </div>
             <div>
@@ -341,14 +342,14 @@ import { initAnalytics } from '@abeta.dev/react-libs/analytics';`}</CodeBlock>
                 Default Workspace (emerald theme)
               </p>
               <CodeBlock>{`:root {
-  /* Uses react-lib defaults */
-  /* --color-primary: 142.1 76.2% 36.3% */
+  /* Default calibrated emerald theme */
+  --primary: 142.1 76.2% 28%; /* WCAG AA >= 4.5:1 */
 }`}</CodeBlock>
             </div>
           </div>
 
           <p style={{ fontSize: 12, color: '#9ca3af', marginTop: 12 }}>
-            Token reference → <strong>Docs / Design Tokens</strong> in the sidebar.
+            Token reference → <strong>Overview & Docs / Design Tokens</strong> in the sidebar.
           </p>
         </div>
 
@@ -362,64 +363,95 @@ import { initAnalytics } from '@abeta.dev/react-libs/analytics';`}</CodeBlock>
             marginBottom: 32,
           }}
         >
-          <SectionTitle>🧩 Component Domains</SectionTitle>
+          <SectionTitle>🧩 Component Domains (120 Components)</SectionTitle>
+
+          <Section
+            emoji="⚙️"
+            color="#f3f4f6"
+            title="Core (7)"
+            items={['Calendar', 'DateRangePicker', 'Item', 'Kbd', 'LanguageToggle', 'Popover', 'Typography']}
+          />
 
           <Section
             emoji="🎨"
             color="#fef3c7"
-            title="Forms"
+            title="Forms (23)"
             items={[
-              'Button', 'ButtonGroup', 'Checkbox', 'RadioGroup', 'Select', 'FilterSelect',
-              'Input', 'InputGroup', 'InputOTP', 'Switch', 'Toggle', 'ToggleGroup',
-              'Textarea', 'Slider', 'Form', 'Label', 'Field',
+              'AsyncSelect', 'Button', 'ButtonGroup', 'Checkbox', 'Combobox', 'Field', 'FileUpload',
+              'FilterSelect', 'Form', 'Input', 'InputGroup', 'InputOtp', 'Label', 'MultiSelect',
+              'RadioGroup', 'SearchField', 'Select', 'SkillTagCloud', 'Slider', 'Switch', 'Textarea',
+              'Toggle', 'ToggleGroup',
             ]}
           />
 
           <Section
             emoji="📊"
             color="#dbeafe"
-            title="Data Display"
+            title="Data Display (27)"
             items={[
-              'Accordion', 'Avatar', 'Badge', 'ActiveFilterBadge', 'StatusBadge',
-              'Card', 'Chart', 'Collapsible', 'Carousel', 'DataTable', 'Table', 'HoverCard',
-            ]}
-          />
-
-          <Section
-            emoji="🖼️"
-            color="#ede9fe"
-            title="Overlays"
-            items={[
-              'Dialog', 'AlertDialog', 'ConfirmDialog', 'Popover', 'Tooltip',
-              'Sheet', 'DropdownMenu', 'ContextMenu', 'Command', 'Drawer',
-            ]}
-          />
-
-          <Section
-            emoji="🧭"
-            color="#d1fae5"
-            title="Navigation & Layout"
-            items={[
-              'Tabs', 'Breadcrumb', 'Menubar', 'Pagination', 'Sidebar',
-              'NavigationMenu', 'AspectRatio', 'ResizablePanelGroup', 'ScrollArea', 'Separator',
+              'Accordion', 'ActiveFilterBadge', 'AmountSummaryCard', 'Avatar', 'Badge', 'BilingualTooltip',
+              'Carousel', 'Chart', 'Collapsible', 'DataTable', 'ImageViewer', 'InfoList', 'KPICard',
+              'LineItemsCard', 'MatchScoreGauge', 'MetricTicker', 'PaymentLedger', 'PdfViewer', 'PipelineKanban',
+              'ProofOfWorkCard', 'ProofOfWorkCertificate', 'QuotaCard', 'RadarSweep', 'SalaryRangeDisplay',
+              'StatusBadge', 'Table', 'Timeline',
             ]}
           />
 
           <Section
             emoji="💬"
             color="#fce7f3"
-            title="Feedback"
+            title="Feedback (25)"
             items={[
-              'Progress', 'Skeleton', 'SkeletonList', 'Toaster', 'Sonner', 'Alert',
-              'EmptyState', 'RoleEmptyState', 'Spinner', 'SuccessMicroInteraction',
+              'Alert', 'AppSplashScreen', 'Banner', 'CheckpointRunner', 'CopyButton', 'Empty',
+              'EmptyState', 'ErrorBoundary', 'ErrorState', 'ImpersonationBanner', 'InstallPwaBanner',
+              'LoadingState', 'OnboardingNotice', 'Progress', 'ProgressRing', 'ReactionBar',
+              'RoleEmptyState', 'Skeleton', 'SkeletonList', 'Sonner', 'Spinner',
+              'SuccessMicroInteraction', 'Toast', 'Toaster', 'WorkspaceBanner',
             ]}
           />
 
           <Section
-            emoji="⚙️"
-            color="#f3f4f6"
-            title="Core"
-            items={['Calendar', 'DateRangePicker', 'LanguageToggle', 'Kbd']}
+            emoji="🖼️"
+            color="#ede9fe"
+            title="Overlays (12)"
+            items={[
+              'AlertDialog', 'Command', 'ConfirmDialog', 'ContextMenu', 'CreateEntityPanel',
+              'DiagnosticQuiz', 'Dialog', 'Drawer', 'DropdownMenu', 'HoverCard', 'Sheet', 'Tooltip',
+            ]}
+          />
+
+          <Section
+            emoji="🧭"
+            color="#d1fae5"
+            title="Navigation (10)"
+            items={[
+              'Breadcrumb', 'Menubar', 'MobileBottomNav', 'NavigationMenu', 'OnboardingPanel',
+              'Pagination', 'PersonaDropdown', 'Sidebar', 'Stepper', 'Tabs',
+            ]}
+          />
+
+          <Section
+            emoji="📐"
+            color="#ffedd5"
+            title="Layout (7)"
+            items={['AspectRatio', 'Card', 'DetailGrid', 'PageHeader', 'ResizablePanelGroup', 'ScrollArea', 'Separator']}
+          />
+
+          <Section
+            emoji="🇮🇳"
+            color="#fef9c3"
+            title="India Primitives (2)"
+            items={['AmountSummaryCardIndia', 'UpiQrCard']}
+          />
+
+          <Section
+            emoji="🔐"
+            color="#e0e7ff"
+            title="Authentication (@abeta.dev/auth) (7)"
+            items={[
+              'AuthCard', 'LoginForm', 'SignUpForm', 'ForgotPasswordForm', 'OtpForm',
+              'OAuthButton', 'OAuthButtonGroup',
+            ]}
           />
         </div>
 
@@ -439,8 +471,16 @@ import {
   Button, Card, Badge, Dialog, Tabs,
   Spinner, EmptyState, RoleEmptyState,
   Calendar, DateRangePicker, LanguageToggle,
-  ActiveFilterBadge, StatusBadge, useToast
+  ActiveFilterBadge, StatusBadge, useToast,
+  ProofOfWorkCertificate, CheckpointRunner, ReactionBar, DiagnosticQuiz
 } from '@abeta.dev/react-libs';
+
+// India Statutory Compliance & Regional UI
+import { UpiQrCard, AmountSummaryCardIndia } from '@abeta.dev/react-libs/india/react';
+import { validateGSTIN, validatePAN, validateIFSC } from '@abeta.dev/react-libs/india';
+
+// Authentication Primitives
+import { AuthCard, LoginForm, SignUpForm, OtpForm } from '@abeta.dev/react-libs/auth';
 
 // Pure Utilities & Formatters (Server/RSC Safe)
 import { cn, formatCurrency, formatDate, isValidEmail } from '@abeta.dev/react-libs/utils';
@@ -465,28 +505,40 @@ import { PdfViewer } from '@abeta.dev/react-libs/pdf';`}</CodeBlock>
           <SectionTitle>🔗 Quick Links</SectionTitle>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
             <QuickLink
-              href="?path=/docs/docs-design-tokens--docs"
+              href="?path=/story/playground--workbench"
+              icon="🛠️"
+              label="Interactive Playground"
+              subtitle="Full component workbench & scenario sandboxes"
+            />
+            <QuickLink
+              href="?path=/story/overview-docs-how-to-use-storybook--guide"
+              icon="📘"
+              label="Storybook Guide"
+              subtitle="Controls, theming, a11y & workflow guide"
+            />
+            <QuickLink
+              href="?path=/story/overview-docs-design-tokens--palette"
               icon="🎨"
               label="Design Tokens"
               subtitle="Semantic color, radius & typography reference"
             />
             <QuickLink
-              href="?path=/docs/docs-performance-dashboard--docs"
+              href="?path=/story/overview-docs-performance-dashboard--dashboard"
               icon="⚡"
               label="Performance Dashboard"
-              subtitle="Live P50/P95/P99 latency per component"
+              subtitle="Live P50/P95/P99 latency across 1,465 tests"
             />
             <QuickLink
-              href="https://github.com/abeta-dev/react-libs"
+              href="https://github.com/Abeta-dev/react-libs"
               icon="📖"
               label="GitHub Repository"
               subtitle="Source code, issues & releases"
             />
             <QuickLink
-              href="https://github.com/abeta-dev/react-libs/releases"
+              href="https://github.com/Abeta-dev/react-libs/releases"
               icon="🚀"
               label="Changelog"
-              subtitle="Release notes & version history"
+              subtitle="v0.17.0 release notes & history"
             />
           </div>
         </div>
@@ -505,10 +557,10 @@ import { PdfViewer } from '@abeta.dev/react-libs/pdf';`}</CodeBlock>
             {[
               { cmd: 'npm run storybook', desc: 'Start Storybook dev server (port 6006)' },
               { cmd: 'npm run build-storybook', desc: 'Build static Storybook for CI/deploy' },
-              { cmd: 'npm test -- --coverage', desc: 'Run 828 tests with coverage report' },
+              { cmd: 'npm test', desc: 'Run 1,465 tests with coverage verification' },
               { cmd: 'npm run perf', desc: 'Regenerate performance benchmark data' },
-              { cmd: 'npm run build', desc: 'Build the library for publishing' },
-              { cmd: 'npm publish', desc: 'Publish to GitHub Packages (CI only)' },
+              { cmd: 'npm run build', desc: 'Build library & subpaths for release' },
+              { cmd: 'npm run check:truth', desc: 'Validate all 26 CI truth gates' },
             ].map(({ cmd, desc }) => (
               <div
                 key={cmd}

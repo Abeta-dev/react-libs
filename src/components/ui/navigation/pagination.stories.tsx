@@ -4,7 +4,7 @@ import { expect, within, userEvent, waitFor } from 'storybook/test';
 import { DataTablePagination } from './pagination';
 
 const meta = {
-  title: 'UI/Navigation/DataTablePagination',
+  title: 'Navigation/DataTablePagination',
   component: DataTablePagination,
   parameters: {
     layout: 'centered',

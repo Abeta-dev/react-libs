@@ -7,7 +7,7 @@ import { Badge } from './badge';
  * Supports `default`, `secondary`, `destructive`, and `outline` variants.
  */
 const meta = {
-  title: 'UI/Data-display/Badge',
+  title: 'Data Display/Badge',
   component: Badge,
   parameters: {
     layout: 'centered',

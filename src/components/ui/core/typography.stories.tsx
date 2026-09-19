@@ -4,7 +4,7 @@ import { expect } from "storybook/test"
 import { Typography } from "./typography"
 
 const meta = {
-  title: "UI/Core/Typography",
+  title: "Core/Typography",
   component: Typography,
   parameters: {
     layout: "padded",

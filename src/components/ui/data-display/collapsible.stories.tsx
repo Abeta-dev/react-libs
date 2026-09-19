@@ -22,7 +22,7 @@ import { ChevronDown } from 'lucide-react';
  * - Bare `Collapsible` primitives remain unchanged for custom layouts
  */
 const meta = {
-  title: 'UI/Data-display/Collapsible',
+  title: 'Data Display/Collapsible',
   component: Collapsible,
   parameters: {
     layout: 'centered',

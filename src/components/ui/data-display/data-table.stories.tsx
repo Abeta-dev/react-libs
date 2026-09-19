@@ -15,7 +15,7 @@ import { StatusBadge } from './status-badge';
  * - `aria-label` on Prev/Next + `aria-current="page"` on active page button
  */
 const meta = {
-  title: 'UI/Data-display/DataTable',
+  title: 'Data Display/DataTable',
   component: DataTable,
   parameters: {
     layout: 'padded',

@@ -14,6 +14,10 @@
 @import "tailwindcss";
 @import "../src/styles/theme.css";
 
+/* ─── Tailwind v4 dark mode class variant ───────────────────────── */
+/* Ensure dark:* utility classes compile for .dark class on html/container */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ─── Storybook canvas reset ─────────────────────────────────── */
 /* Ensure the Storybook preview iframe body uses our token system */
 body {

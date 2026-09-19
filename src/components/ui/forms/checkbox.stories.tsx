@@ -8,7 +8,7 @@ import { Checkbox } from './checkbox';
  * Use with `<label>` for full accessibility.
  */
 const meta = {
-  title: 'UI/Forms/Checkbox',
+  title: 'Forms/Checkbox',
   component: Checkbox,
   parameters: {
     layout: 'centered',

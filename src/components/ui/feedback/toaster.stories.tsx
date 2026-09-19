@@ -1,63 +1,33 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, within, userEvent } from 'storybook/test';
-import { Toaster } from './sonner';
-import { toast } from 'sonner';
+import { Toaster } from './toaster';
+import { toast, useToast } from '../../../hooks/use-toast';
+import { ToastAction } from './toast';
 import { Button } from '../forms/button';
 
 /**
- * The global toast notification container.
- * Mount `<Toaster />` once at the app root, then trigger toasts anywhere via `toast()` from `sonner`.
+ * The Radix UI based toast notification container.
+ * Mount `<Toaster />` once in your app layout, then trigger notifications anywhere via `toast()` or `useToast()`.
  */
 const meta = {
-  title: 'UI/Feedback/Toaster',
+  title: 'Feedback/Toaster',
   component: Toaster,
   parameters: {
-    layout: 'fullscreen',
+    layout: 'centered',
     docs: {
       description: {
         component:
-          'Global toast provider powered by `sonner`. Mount `<Toaster />` once in your app root layout. ' +
-          'Trigger notifications anywhere using the `toast()`, `toast.success()`, `toast.error()`, ' +
-          '`toast.warning()`, and `toast.loading()` helpers.',
+          'Accessible, Radix-based toast notification system. Mount `<Toaster />` once at your root layout. ' +
+          'Trigger toasts imperatively with `toast({ title, description, variant, action })` or using the `useToast` hook.',
       },
     },
   },
   tags: ['autodocs'],
-  argTypes: {
-    position: {
-      control: 'select',
-      options: [
-        'top-left', 'top-center', 'top-right',
-        'bottom-left', 'bottom-center', 'bottom-right',
-      ],
-      description: 'Where toasts appear on screen.',
-      table: { category: 'Layout', defaultValue: { summary: 'bottom-right' } },
-    },
-    richColors: {
-      control: 'boolean',
-      description: 'When true, success/error toasts use semantic green/red backgrounds.',
-      table: { category: 'Appearance', defaultValue: { summary: 'false' } },
-    },
-    expand: {
-      control: 'boolean',
-      description: 'Expands all toasts to full width instead of stacking.',
-      table: { category: 'Behaviour', defaultValue: { summary: 'false' } },
-    },
-    duration: {
-      control: { type: 'range', min: 1000, max: 10000, step: 500 },
-      description: 'Auto-dismiss duration in milliseconds.',
-      table: { category: 'Behaviour', defaultValue: { summary: '4000' } },
-    },
-    closeButton: {
-      control: 'boolean',
-      description: 'Shows a close button on every toast.',
-      table: { category: 'Appearance', defaultValue: { summary: 'false' } },
-    },
-  },
   decorators: [
     (Story) => (
-      <div className="min-h-[300px] flex flex-col items-center justify-center gap-3 p-8">
+      <div className="min-h-[260px] flex flex-col items-center justify-center p-6">
         <Story />
+        <Toaster />
       </div>
     ),
   ],
@@ -66,54 +36,92 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Fire each type of toast notification by clicking the buttons. */
-export const Interactive: Story = {
-  render: (args) => (
-    <>
-      <Toaster richColors {...args} />
-      <p className="text-sm text-muted-foreground mb-4">Click a button to see each toast type:</p>
+function ToastDemo() {
+  const { toast: triggerToast } = useToast();
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <p className="text-sm text-muted-foreground">
+        Click below to dispatch Radix-driven toast notifications:
+      </p>
       <div className="flex flex-wrap gap-2 justify-center">
-        <Button onClick={() => toast('Default message toast')} variant="outline" size="sm">
-          Default
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            triggerToast({
+              title: 'Purchase Order Created',
+              description: 'PO #PO-98234 has been queued for buyer review.',
+            });
+          }}
+        >
+          Standard Toast
         </Button>
-        <Button onClick={() => toast.success('Changes saved successfully!')} variant="outline" size="sm">
-          Success
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => {
+            triggerToast({
+              variant: 'destructive',
+              title: 'Settlement Failed',
+              description: 'Bank verification timed out. Please re-enter IFSC details.',
+              action: (
+                <ToastAction altText="Try again" onClick={() => console.log('Retrying settlement')}>
+                  Retry
+                </ToastAction>
+              ),
+            });
+          }}
+        >
+          Destructive with Action
         </Button>
-        <Button onClick={() => toast.error('Failed to upload file.')} variant="outline" size="sm">
-          Error
-        </Button>
-        <Button onClick={() => toast.warning('Storage is 90% full.')} variant="outline" size="sm">
-          Warning
-        </Button>
-        <Button onClick={() => toast.info('New version available.')} variant="outline" size="sm">
-          Info
-        </Button>
-        <Button onClick={() => toast.loading('Uploading...')} variant="outline" size="sm">
-          Loading
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => {
+            triggerToast({
+              title: 'GSTIN Verified',
+              description: '27AAAAA0000A1Z5 successfully validated against GSTN gateway.',
+            });
+          }}
+        >
+          Compliance Verified
         </Button>
       </div>
-    </>
-  ),
+    </div>
+  );
+}
+
+/** Interactive trigger buttons dispatching standard and destructive toasts with actions. */
+export const Interactive: Story = {
+  render: () => <ToastDemo />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // Click the success button
-    await userEvent.click(canvas.getByRole('button', { name: /success/i }));
-    // Wait a moment for toast animation
-    await new Promise(r => setTimeout(r, 300));
-    // Verify Toaster is mounted
-    expect(canvas.getByRole('button', { name: /error/i })).toBeInTheDocument();
+    const triggerBtn = canvas.getByRole('button', { name: /standard toast/i });
+    await userEvent.click(triggerBtn);
+    await new Promise((r) => setTimeout(r, 200));
+    expect(canvas.getByRole('button', { name: /destructive with action/i })).toBeInTheDocument();
   },
 };
 
-/** Top-center position with close buttons. */
-export const TopCenter: Story = {
-  args: { position: 'top-center', closeButton: true },
-  render: (args) => (
-    <>
-      <Toaster {...args} />
-      <Button onClick={() => toast.success('Saved!')} variant="outline">
-        Show Top Toast
-      </Button>
-    </>
+/** Toast with action callback */
+export const WithAction: Story = {
+  render: () => (
+    <Button
+      variant="outline"
+      onClick={() => {
+        toast({
+          title: 'Document deleted',
+          description: 'TaxInvoice_AUG_2025.pdf was moved to trash.',
+          action: (
+            <ToastAction altText="Undo file deletion" onClick={() => console.log('Undo triggered')}>
+              Undo
+            </ToastAction>
+          ),
+        });
+      }}
+    >
+      Delete Document
+    </Button>
   ),
 };

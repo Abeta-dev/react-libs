@@ -9,7 +9,7 @@ import { Checkbox } from './checkbox';
  * Always associate with a form control via `htmlFor` matching the control's `id`.
  */
 const meta = {
-  title: 'UI/Forms/Label',
+  title: 'Forms/Label',
   component: Label,
   parameters: {
     layout: 'centered',

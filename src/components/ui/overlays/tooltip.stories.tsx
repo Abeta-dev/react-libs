@@ -14,7 +14,7 @@ import { Info, HelpCircle, Keyboard } from 'lucide-react';
  * - `font-medium` + `shadow-sm` for cleaner appearance
  */
 const meta = {
-  title: 'UI/Overlays/Tooltip',
+  title: 'Overlays/Tooltip',
   component: Tooltip,
   parameters: {
     layout: 'centered',

@@ -15,7 +15,7 @@ import { Kbd, KbdGroup, KbdShortcut } from "./kbd";
  *   - Override detection with `os="mac"` or `os="windows"`
  */
 const meta = {
-  title: "UI/Core/Kbd",
+  title: "Core/Kbd",
   component: Kbd,
   parameters: {
     layout: "centered",
