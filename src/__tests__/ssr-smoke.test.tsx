@@ -46,6 +46,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from ".
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../components/ui/data-display/accordion";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "../components/ui/data-display/collapsible";
 import { ProofOfWorkCard } from "../components/ui/data-display/proof-of-work-card";
+import { ProofOfWorkCertificate } from "../components/ui/data-display/proof-of-work-certificate";
 import { PipelineKanban } from "../components/ui/data-display/pipeline-kanban";
 import { MetricTicker } from "../components/ui/data-display/metric-ticker";
 
@@ -72,6 +73,8 @@ import { Progress } from "../components/ui/feedback/progress";
 import { ProgressRing } from "../components/ui/feedback/progress-ring";
 import { Skeleton } from "../components/ui/feedback/skeleton";
 import { Spinner } from "../components/ui/feedback/spinner";
+import { CheckpointRunner } from "../components/ui/feedback/checkpoint-runner";
+import { ReactionBar } from "../components/ui/feedback/reaction-bar";
 
 describe("SSR Smoke Test Suite - renderToString Zero Crash Check", () => {
   const components: Array<{ name: string; element: React.ReactElement }> = [
@@ -199,6 +202,37 @@ describe("SSR Smoke Test Suite - renderToString Zero Crash Check", () => {
       element: (
         <ProofOfWorkCard
           item={{ title: "Review Task", type: "github", verified: true }}
+        />
+      ),
+    },
+    {
+      name: "ProofOfWorkCertificate",
+      element: (
+        <ProofOfWorkCertificate
+          certificateId="CERT-TEST-1234"
+          recipientName="Alex Developer"
+          projectTitle="Distributed Systems"
+          skills={["Rust", "WebAssembly"]}
+        />
+      ),
+    },
+    {
+      name: "CheckpointRunner",
+      element: (
+        <CheckpointRunner
+          checkpoints={[
+            { id: "c1", title: "Setup Environment", command: "npm test", completed: true },
+          ]}
+        />
+      ),
+    },
+    {
+      name: "ReactionBar",
+      element: (
+        <ReactionBar
+          initialClaps={12}
+          shareTitle="Test Article"
+          showReadingProgress={false}
         />
       ),
     },
