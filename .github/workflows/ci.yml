@@ -118,10 +118,30 @@ jobs:
       - name: Verify Module Directives & Universal Packaging
         run: node scripts/verify-directives.mjs
 
-  # ── 4. Deploy (main only, after all 3 parallel jobs pass) ───────────────────
+  # ── 4. Validate Aggregate (Satisfies Branch Protection Check) ───────────────
+  validate:
+    name: validate
+    needs: [static-and-storybook, test-and-perf, build-and-verify]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check All Upstream CI Results
+        run: |
+          echo "Static Analysis & Storybook: ${{ needs.static-and-storybook.result }}"
+          echo "Test Suite & Performance Gate: ${{ needs.test-and-perf.result }}"
+          echo "Build & Release Integrity: ${{ needs.build-and-verify.result }}"
+          if [ "${{ needs.static-and-storybook.result }}" != "success" ] || \
+             [ "${{ needs.test-and-perf.result }}" != "success" ] || \
+             [ "${{ needs.build-and-verify.result }}" != "success" ]; then
+            echo "❌ One or more parallel CI jobs failed!" >&2
+            exit 1
+          fi
+          echo "✅ All parallel CI jobs passed successfully!"
+
+  # ── 5. Deploy (main only, after validation passes) ──────────────────────────
   deploy:
     name: Deploy to GitHub Pages
-    needs: [static-and-storybook, test-and-perf, build-and-verify]
+    needs: [validate]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
