@@ -1,8 +1,5 @@
 User-agent: *
 Allow: /
 
-# Host
-Host: https://react-libs.abeta.dev
-
 # Sitemaps
-Sitemap: https://react-libs.abeta.dev/sitemap.xml
+Sitemap: https://abeta-dev.github.io/react-libs/sitemap.xml
