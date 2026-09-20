@@ -37,20 +37,27 @@ const EXCLUDE_PATTERNS = [
 ];
 
 // ---------------------------------------------------------------------------
-// 2. Run vitest with JSON reporter
+// 2. Run vitest with JSON reporter (or reuse existing report)
 // ---------------------------------------------------------------------------
-console.log('⏱  Running test suite (json reporter)…');
-const start = Date.now();
+const useExisting = process.argv.includes('--use-existing') || process.argv.includes('--from-existing');
+const hasExisting = existsSync(JSON_TMP);
 
+let start = Date.now();
 let rawJson;
-try {
-  execSync(
-    `npx vitest run --reporter=json --outputFile="${JSON_TMP}" --coverage=false`,
-    { cwd: ROOT, stdio: ['ignore', 'ignore', 'ignore'] }
-  );
-  // Even on threshold failure (coverage off here), results are written
-} catch {
-  // vitest exits non-zero if tests fail — we still want to parse timings
+
+if (useExisting && hasExisting) {
+  console.log(`⏱  Reusing existing Vitest JSON report (${JSON_TMP})…`);
+} else {
+  console.log('⏱  Running test suite (json reporter)…');
+  try {
+    execSync(
+      `npx vitest run --reporter=json --outputFile="${JSON_TMP}" --coverage=false`,
+      { cwd: ROOT, stdio: ['ignore', 'ignore', 'ignore'] }
+    );
+    // Even on threshold failure (coverage off here), results are written
+  } catch {
+    // vitest exits non-zero if tests fail — we still want to parse timings
+  }
 }
 
 try {
@@ -68,7 +75,9 @@ try {
   }
 }
 
-const totalWallMs = Date.now() - start;
+const totalWallMs = (rawJson.startTime && rawJson.endTime && rawJson.endTime > rawJson.startTime)
+  ? Math.round(rawJson.endTime - rawJson.startTime)
+  : (Date.now() - start);
 
 // ---------------------------------------------------------------------------
 // 2. Extract per-test timing
@@ -294,11 +303,13 @@ writeFileSync(
   'utf8'
 );
 
-// Cleanup temp file
-try {
-  const { unlinkSync } = await import('fs');
-  unlinkSync(JSON_TMP);
-} catch { /* ignore */ }
+// Cleanup temp file (only if we ran standalone and created it)
+if (!useExisting) {
+  try {
+    const { unlinkSync } = await import('fs');
+    unlinkSync(JSON_TMP);
+  } catch { /* ignore */ }
+}
 
 console.log(`✅  Report written to docs/performance-report.md`);
 console.log(`✅  Data written to src/stories/performance-data.json`);

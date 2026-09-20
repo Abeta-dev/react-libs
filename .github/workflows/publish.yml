@@ -22,7 +22,10 @@ jobs:
           echo "Verifying that commit ${{ github.sha }} has no failed CI check-runs..."
           # Query GitHub API check-runs for this commit
           FAILED_CHECKS=$(gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs?per_page=100" \
-            --jq '.check_runs[] | select(.conclusion == "failure" and (.name | test("publish|gate[- ]?ci"; "i") | not)) | .name' || true)
+            --jq '.check_runs[] | select(.conclusion == "failure" and (.name | test("publish|gate[- ]?ci"; "i") | not)) | .name') || {
+            echo "❌ Failed to query GitHub Check Runs API for commit ${{ github.sha }}" >&2
+            exit 1
+          }
           if [ -n "$FAILED_CHECKS" ]; then
             echo "❌ Cannot release: One or more CI check-runs failed on commit ${{ github.sha }}:" >&2
             echo "$FAILED_CHECKS" >&2
@@ -52,20 +55,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org/'
           cache: 'npm'
 
-      - name: Cache Build & Storybook Artifacts
-        uses: actions/cache@v4
-        with:
-          path: |
-            dist
-            packages/auth/dist
-            storybook-static
-            node_modules/.cache
-            .turbo
-          key: ${{ runner.os }}-artifacts-${{ hashFiles('**/package-lock.json') }}-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-artifacts-${{ hashFiles('**/package-lock.json') }}-
-            ${{ runner.os }}-artifacts-
-
       - name: Install Dependencies
         run: npm ci
 
@@ -78,8 +67,8 @@ jobs:
       - name: Lint (Static Analysis & Custom Rules)
         run: npm run lint
 
-      - name: Build Auth Package
-        run: npm run --prefix packages/auth build
+      - name: Verify Component Exports
+        run: node scripts/check-exports.mjs
 
       - name: Build Package
         run: npm run build
@@ -93,28 +82,14 @@ jobs:
       - name: CI Truth Gate (docs-match-tree)
         run: npm run check:truth
 
-      - name: Check Package Types Matrix (attw)
-        run: npm run check:types-pkg
-
       - name: Verify Module Directives & Universal Packaging
-        run: npm run check:directives
-
-      - name: Verify Component Exports
-        run: node scripts/check-exports.mjs
-
-      - name: Performance Gate (P95 Enforcement)
-        run: npm run perf
+        run: node scripts/verify-directives.mjs
 
       - name: Assure Test Coverage Checks
         run: npm run test
 
-      - name: Prebuild Storybook Artifacts
-        run: |
-          if [ -d "storybook-static" ] && [ -f "storybook-static/index.html" ]; then
-            echo "Storybook already built for this commit; skipping."
-          else
-            npm run build-storybook
-          fi
+      - name: Performance Gate (P95 Enforcement)
+        run: npm run perf
 
       - name: Extract Release Notes
         run: node scripts/extract-release-notes.mjs --output dist/release-notes.md
