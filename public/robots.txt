@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://abeta-dev.github.io/react-libs/sitemap.xml

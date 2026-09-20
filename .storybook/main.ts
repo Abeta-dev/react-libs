@@ -11,6 +11,7 @@ const config: StorybookConfig = {
     "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
     "../packages/auth/src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
+  "staticDirs": ["../public"],
   "addons": [
     "@chromatic-com/storybook",
     "@storybook/addon-vitest",
