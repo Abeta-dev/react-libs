@@ -40,6 +40,7 @@ docs/performance-report.md
 graphify-out/
 *.graphify*
 vitest-kbd.json
+.vitest-report.json
 *-output.txt
 *_results.txt
 test_output.txt

@@ -91,6 +91,20 @@ if (failuresC.length !== 2 || !failuresC.includes('validate') || !failuresC.incl
 }
 pass('Multiple concurrent non-publish failures are all captured');
 
+// Case D: Failure in parallel DAG jobs
+const mockParallelFailure = [
+  { name: 'Static Analysis & Storybook', conclusion: 'success', status: 'completed' },
+  { name: 'Test Suite & Performance Gate', conclusion: 'failure', status: 'completed' },
+  { name: 'Build & Release Integrity', conclusion: 'success', status: 'completed' },
+  { name: 'Deploy to GitHub Pages', conclusion: 'skipped', status: 'completed' },
+  { name: 'Gate CI Check Runs', conclusion: 'success', status: 'completed' }
+];
+const failuresD = evaluateCheckRuns(mockParallelFailure);
+if (failuresD.length !== 1 || failuresD[0] !== 'Test Suite & Performance Gate') {
+  fail(`Mock parallel failure test failed. Expected ['Test Suite & Performance Gate'], got: ${JSON.stringify(failuresD)}`);
+}
+pass('Parallel DAG failure ("Test Suite & Performance Gate") is correctly caught by gate logic');
+
 // 3. Empirical Verification Against Real Historical Commits
 console.log('\n🔍 [Step 3] Empirical Verification Against Real Historical Commits...');
 
