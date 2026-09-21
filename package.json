@@ -425,9 +425,6 @@
   },
   "dependencies": {
     "@abeta.dev/auth": "0.3.1",
-    "@abeta.dev/india": "*",
-    "@abeta.dev/talent": "*",
-    "@abeta.dev/ui": "*",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.8",
