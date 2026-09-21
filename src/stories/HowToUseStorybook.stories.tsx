@@ -12,15 +12,15 @@ import {
 } from 'lucide-react';
 
 const meta: Meta = {
-  title: 'Overview & Docs/How to Use Storybook',
+  title: 'Foundations & Docs/How to Use Storybook',
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
         component:
-          'Comprehensive guide for developers and designers on leveraging the full power of Storybook 8: ' +
-          'sidebar navigation, live controls, theme switching, accessibility audits, responsive viewports, ' +
-          'and interaction testing.',
+          'Comprehensive guide for developers and designers on leveraging the full power of Storybook 10: ' +
+          '6-tier sidebar navigation, live controls, 4-theme switching, accessibility audits, responsive viewports, ' +
+          'interactive testing, and production code recipes from living workflows.',
       },
     },
   },
@@ -43,7 +43,7 @@ function GuideDoc() {
           <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
             Developer & Designer Manual
           </Badge>
-          <Badge variant="outline">Storybook 8.6 + Tailwind v4</Badge>
+          <Badge variant="outline">Storybook 10 + Tailwind v4</Badge>
         </div>
         <h1 className="text-3xl font-bold tracking-tight">How to Use the Storybook Workspace</h1>
         <p className="text-muted-foreground text-sm max-w-3xl leading-relaxed">
@@ -62,27 +62,35 @@ function GuideDoc() {
               <div className="p-2 rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400">
                 <FolderTree className="h-5 w-5" />
               </div>
-              <CardTitle className="text-base">1. Structured Sidebar Hierarchy</CardTitle>
+              <CardTitle className="text-base">1. 6-Tier Sidebar Hierarchy</CardTitle>
             </div>
             <CardDescription className="text-xs">
-              Every component is organized into clean, predictable categories.
+              Every component is organized into our clean, strict 6-tier system taxonomy.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2 text-xs text-muted-foreground leading-relaxed">
             <p>
-              The left sidebar follows our strict architecture taxonomy:
+              The left sidebar follows our strict 6-tier architecture hierarchy:
             </p>
-            <ul className="list-disc pl-4 space-y-1 text-foreground">
-              <li><strong>Overview & Docs:</strong> Tokens, guidelines, and performance metrics.</li>
-              <li><strong>Playground:</strong> End-to-end interactive workbench.</li>
-              <li><strong>Authentication:</strong> Login, SignUp, OTP, OAuth, and AuthCard.</li>
-              <li><strong>Core:</strong> Typography, popovers, calendars, keyboards.</li>
-              <li><strong>Forms:</strong> Inputs, buttons, switches, sliders, selects.</li>
-              <li><strong>Data Display:</strong> Tables, charts, cards, carousels, badges.</li>
-              <li><strong>Feedback:</strong> Toasts (Sonner & Radix), alerts, skeletons.</li>
-              <li><strong>Navigation:</strong> Sidebars, breadcrumbs, menus, steppers.</li>
-              <li><strong>Overlays:</strong> Dialogs, sheets, context menus, command palletes.</li>
-              <li><strong>India Primitives:</strong> UPI QR code standees, GST & TDS calculation cards.</li>
+            <ul className="list-disc pl-4 space-y-1.5 text-foreground">
+              <li>
+                <strong>Tier 1 — Foundations &amp; Docs:</strong> Design tokens (colors, typography, radius scales), Storybook manual, and live Vitest performance dashboard.
+              </li>
+              <li>
+                <strong>Tier 2 — Living Enterprise Workflows:</strong> Production-grade full-page composite workflows (Vendor Onboarding &amp; KYC, Procurement Settlement, Multi-Tenant Admin, and Interactive Workbench).
+              </li>
+              <li>
+                <strong>Tier 3 — Core UI Primitives &amp; Layout:</strong> Atomic primitives (Calendar, Kbd, Typography, Item, Popover) and layout containers (Card, PageHeader, Resizable, AspectRatio, ScrollArea, Separator).
+              </li>
+              <li>
+                <strong>Tier 4 — Forms &amp; Inputs:</strong> 23 accessible form components (Buttons, Inputs, Selects, Combobox, MultiSelect, Checkbox, RadioGroup, Switch, Slider, InputOTP, FileUpload, Form, Field, Label).
+              </li>
+              <li>
+                <strong>Tier 5 — Data Display &amp; Feedback:</strong> Dense visualizations (DataTable, Charts, KPICard, MetricTicker, Timeline, PaymentLedger) and feedback systems (Sonner, Radix Toasters, Alerts, Skeletons).
+              </li>
+              <li>
+                <strong>Tier 6 — Domain &amp; Regional Primitives:</strong> India Statutory Compliance (AmountSummaryCardIndia, UpiQrCard, GST/TDS calculators), Enterprise Authentication (@abeta.dev/auth), and Talent Lab.
+              </li>
             </ul>
             <div className="pt-2">
               <span className="bg-muted px-2 py-1 rounded font-mono text-[11px]">Pro-tip: Press &apos;/&apos; to search anywhere</span>
@@ -134,27 +142,32 @@ function GuideDoc() {
               <div className="p-2 rounded-lg bg-purple-50 text-purple-600 dark:bg-purple-950 dark:text-purple-400">
                 <Palette className="h-5 w-5" />
               </div>
-              <CardTitle className="text-base">3. Multi-Tenant Themes &amp; Dark Mode</CardTitle>
+              <CardTitle className="text-base">3. 4-Theme Dropdown Selector</CardTitle>
             </div>
             <CardDescription className="text-xs">
-              Preview how components look across brand themes and dark mode.
+              Seamlessly switch between brand palettes and dark mode with instant reactivity.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3 text-xs text-muted-foreground leading-relaxed">
             <p>
-              In the top toolbar, click the <strong>Palette icon</strong> to toggle between our pre-calibrated multi-tenant themes:
+              In the top Storybook toolbar, click the <strong>Theme Selector dropdown</strong> to test across our 4 pre-calibrated enterprise themes:
             </p>
-            <div className="grid grid-cols-2 gap-2 text-foreground">
-              <div className="p-2 border rounded-md bg-emerald-50/50 dark:bg-emerald-950/50 border-emerald-300">
-                <strong>Emerald (Default):</strong> Enterprise banking &amp; vendor portal.
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-foreground">
+              <div className="p-2.5 border rounded-md bg-emerald-50/50 dark:bg-emerald-950/50 border-emerald-300">
+                <strong>Light (Emerald):</strong> Default enterprise banking &amp; vendor portal theme.
               </div>
-              <div className="p-2 border rounded-md bg-orange-50/50 dark:bg-orange-950/50 border-orange-300">
-                <strong>Orange:</strong> Logistics &amp; direct consumer portal.
+              <div className="p-2.5 border rounded-md bg-emerald-900/40 dark:bg-emerald-950/80 border-emerald-600">
+                <strong>Dark (Emerald):</strong> High-contrast banking dark mode (applies <code className="text-xs bg-muted px-1 py-0.5 rounded">.dark</code>).
+              </div>
+              <div className="p-2.5 border rounded-md bg-orange-50/50 dark:bg-orange-950/50 border-orange-300">
+                <strong>Light (Orange):</strong> High-energy logistics and marketplace theme (applies <code className="text-xs bg-muted px-1 py-0.5 rounded">.theme-orange</code>).
+              </div>
+              <div className="p-2.5 border rounded-md bg-orange-900/40 dark:bg-orange-950/80 border-orange-600">
+                <strong>Dark (Orange):</strong> Dark mode with warm amber &amp; orange highlights (applies <code className="text-xs bg-muted px-1 py-0.5 rounded">.dark.theme-orange</code>).
               </div>
             </div>
             <p>
-              Click the <strong>Moon/Sun icon</strong> to switch between light and dark modes. Dark mode styles leverage
-              Tailwind v4 class-based variants.
+              All components consume semantic CSS custom properties and adapt instantly without manual style overrides.
             </p>
           </CardContent>
         </Card>
@@ -248,23 +261,63 @@ function GuideDoc() {
         </Card>
       </div>
 
-      {/* Playground Feature Highlight */}
-      <div className="p-6 rounded-2xl border bg-card/60 space-y-4">
+      {/* Living Enterprise Workflows & Code Recipes Highlight */}
+      <div className="p-6 rounded-2xl border bg-card/60 space-y-6">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-primary text-primary-foreground">
             <Sparkles className="h-6 w-6" />
           </div>
           <div>
-            <h2 className="text-lg font-bold">Try the Interactive Workbench</h2>
+            <h2 className="text-lg font-bold">Living Enterprise Workflows &amp; Code Recipes</h2>
             <p className="text-xs text-muted-foreground">
-              Ready to experiment? Open <strong>Playground → Interactive Workbench</strong> from the sidebar.
+              Production blueprints combining forms, overlays, India tax compliance, and telemetry into full-stack recipes.
             </p>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          The workbench lets you test dynamic form inputs, credit limit sliders, urgent liquidity switches,
-          live Indian GST/TDS tax calculations, and NPCI UPI standees in a real multi-column enterprise layout.
-        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-4 rounded-xl border bg-muted/20 space-y-2">
+            <div className="font-semibold text-xs text-foreground flex items-center gap-1.5">
+              <span>🏢</span> Vendor Onboarding &amp; KYC
+            </div>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              4-step statutory registration with live GSTIN/PAN/IFSC checksum verification, bilingual English/Hindi toggle, and file upload mocks.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl border bg-muted/20 space-y-2">
+            <div className="font-semibold text-xs text-foreground flex items-center gap-1.5">
+              <span>📑</span> Procurement &amp; Invoicing
+            </div>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              3-way PO/GRN matching, real-time GST dual-splits (CGST/SGST vs IGST), TDS withholding under Section 194C/J, running AP ledger, and dynamic UPI QR standees.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl border bg-muted/20 space-y-2">
+            <div className="font-semibold text-xs text-foreground flex items-center gap-1.5">
+              <span>🛡️</span> Multi-Tenant Administration
+            </div>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              Enterprise workspace switcher, live vendor admin impersonation with safe exit banners, quota consumption gauges, and payload audit trails.
+            </p>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-xl border border-dashed bg-muted/10 space-y-2">
+          <div className="text-xs font-bold text-foreground">How to Copy Production Code Recipes:</div>
+          <ol className="list-decimal pl-5 text-xs text-muted-foreground space-y-1">
+            <li>
+              Select any workflow under <strong>Living Enterprise Workflows</strong> or open the <strong>Playground → Interactive Workbench</strong>.
+            </li>
+            <li>
+              Click the <strong>Docs</strong> tab in the top navigation or click the <strong>&lt;&gt; Show Code</strong> button at the bottom right of the canvas.
+            </li>
+            <li>
+              Copy the complete component recipe into your application. All imports cleanly reference public subpaths (<code className="bg-muted px-1 py-0.5 rounded text-[11px]">@abeta.dev/react-libs</code>, <code className="bg-muted px-1 py-0.5 rounded text-[11px]">@abeta.dev/react-libs/india</code>, and <code className="bg-muted px-1 py-0.5 rounded text-[11px]">@abeta.dev/react-libs/auth</code>).
+            </li>
+          </ol>
+        </div>
       </div>
     </div>
   );

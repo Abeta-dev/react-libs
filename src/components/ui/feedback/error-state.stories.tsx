@@ -5,7 +5,7 @@ import { ErrorState } from './error-state';
  * Centered error card with warning icon, title, description, and retry action.
  */
 const meta = {
-  title: 'Feedback/ErrorState',
+  title: 'Core UI Primitives/Feedback & States/ErrorState',
   component: ErrorState,
   tags: ['autodocs'],
   parameters: {

@@ -121,7 +121,7 @@ const SidebarDemo = () => (
 );
 
 const meta = {
-  title: 'Navigation/Sidebar',
+  title: 'Core UI Primitives/Navigation & Shell/Sidebar',
   component: SidebarDemo,
   parameters: {
     layout: 'fullscreen',

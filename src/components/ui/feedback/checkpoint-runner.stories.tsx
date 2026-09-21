@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { CheckpointRunner } from "./checkpoint-runner";
 
 const meta: Meta<typeof CheckpointRunner> = {
-  title: "Feedback/CheckpointRunner",
+  title: "Domain & Talent Lab/CheckpointRunner",
   component: CheckpointRunner,
   tags: ["autodocs"],
   parameters: {

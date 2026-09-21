@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { AsyncSelect } from "./async-select";
 
 const meta = {
-  title: "Forms/AsyncSelect",
+  title: "Core UI Primitives/Forms & Inputs/AsyncSelect",
   component: AsyncSelect,
   parameters: {
     layout: "centered",

@@ -102,7 +102,7 @@ function MultipleCalendarStory(args: CalendarStoryArgs) {
  * - Range styling: start/end = filled circles; middle = soft accent fill, no radius
  */
 const meta = {
-  title: "Core/Calendar",
+  title: "Core UI Primitives/Forms & Inputs/Calendar",
   component: Calendar,
   parameters: {
     layout: "centered",

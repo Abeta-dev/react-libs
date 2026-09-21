@@ -7,7 +7,7 @@ import { Textarea } from './textarea';
  * A styled multi-line text input. Forwards all standard `<textarea>` HTML attributes.
  */
 const meta = {
-  title: 'Forms/Textarea',
+  title: 'Core UI Primitives/Forms & Inputs/Textarea',
   component: Textarea,
   parameters: {
     layout: 'centered',

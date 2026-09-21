@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { RadarSweep } from "./radar-sweep";
 
 const meta: Meta<typeof RadarSweep> = {
-  title: "Data Display/RadarSweep",
+  title: "Domain & Talent Lab/RadarSweep",
   component: RadarSweep,
   tags: ["autodocs"],
   parameters: {

@@ -3,7 +3,7 @@ import * as React from "react";
 import { PipelineKanban, type KanbanColumn, type KanbanCardItem } from "./pipeline-kanban";
 
 const meta: Meta<typeof PipelineKanban> = {
-  title: "Data Display/PipelineKanban",
+  title: "Domain & Talent Lab/PipelineKanban",
   component: PipelineKanban,
   tags: ["autodocs"],
   parameters: {

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { MetricTicker, type TickerItem } from "./metric-ticker";
 
 const meta: Meta<typeof MetricTicker> = {
-  title: "Data Display/MetricTicker",
+  title: "Core UI Primitives/Data Display/MetricTicker",
   component: MetricTicker,
   tags: ["autodocs"],
   parameters: {

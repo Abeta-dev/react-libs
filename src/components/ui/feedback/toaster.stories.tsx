@@ -10,7 +10,7 @@ import { Button } from '../forms/button';
  * Mount `<Toaster />` once in your app layout, then trigger notifications anywhere via `toast()` or `useToast()`.
  */
 const meta = {
-  title: 'Feedback/Toaster',
+  title: 'Core UI Primitives/Feedback & States/Toaster',
   component: Toaster,
   parameters: {
     layout: 'centered',

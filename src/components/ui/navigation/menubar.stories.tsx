@@ -26,7 +26,7 @@ import {
  * - Chevron `ChevronRight` is already on `MenubarSubTrigger`
  */
 const meta = {
-  title: 'Navigation/Menubar',
+  title: 'Core UI Primitives/Navigation & Shell/Menubar',
   component: Menubar,
   parameters: {
     layout: 'centered',

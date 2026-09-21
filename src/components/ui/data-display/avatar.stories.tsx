@@ -11,7 +11,7 @@ import { Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "./avatar";
  * - Added `AvatarGroup` component with `ring-2 ring-background` gap and overflow `+N` badge
  */
 const meta = {
-  title: "Data Display/Avatar",
+  title: "Core UI Primitives/Data Display/Avatar",
   component: Avatar,
   parameters: {
     layout: "centered",

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ProofOfWorkCertificate } from "./proof-of-work-certificate";
 
 const meta: Meta<typeof ProofOfWorkCertificate> = {
-  title: "Data Display/ProofOfWorkCertificate",
+  title: "Domain & Talent Lab/ProofOfWorkCertificate",
   component: ProofOfWorkCertificate,
   tags: ["autodocs"],
   parameters: {

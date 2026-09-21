@@ -8,7 +8,7 @@ import { Switch } from "./switch";
  * Pair with `<label>` for accessibility.
  */
 const meta = {
-  title: "Forms/Switch",
+  title: "Core UI Primitives/Forms & Inputs/Switch",
   component: Switch,
   parameters: {
     layout: "centered",

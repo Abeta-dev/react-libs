@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { SalaryRangeDisplay } from "./salary-range-display";
 
 const meta: Meta<typeof SalaryRangeDisplay> = {
-  title: "Data Display/SalaryRangeDisplay",
+  title: "Domain & Talent Lab/SalaryRangeDisplay",
   component: SalaryRangeDisplay,
   tags: ["autodocs"],
   parameters: {

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { AmountSummaryCard } from "./amount-summary-card";
 
 const meta: Meta<typeof AmountSummaryCard> = {
-  title: "Data Display/AmountSummaryCard",
+  title: "Core UI Primitives/Data Display/AmountSummaryCard",
   component: AmountSummaryCard,
   tags: ["autodocs"],
   parameters: {

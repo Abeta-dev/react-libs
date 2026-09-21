@@ -3,7 +3,7 @@ import * as React from "react";
 import { MultiSelect, Option } from "./multi-select";
 
 const meta: Meta<typeof MultiSelect> = {
-  title: "Forms/MultiSelect",
+  title: "Core UI Primitives/Forms & Inputs/MultiSelect",
   component: MultiSelect,
   tags: ["autodocs"],
   parameters: {

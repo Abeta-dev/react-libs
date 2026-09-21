@@ -13,7 +13,7 @@ import { Input } from "./input";
 import { Button } from "./button";
 
 const meta: Meta<typeof Form> = {
-  title: "Forms/Form",
+  title: "Core UI Primitives/Forms & Inputs/Form",
   component: Form,
   tags: ["autodocs"],
   parameters: {

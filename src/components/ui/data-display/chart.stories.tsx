@@ -25,7 +25,7 @@ import {
  * - Added Area, Line, Pie chart variants
  */
 const meta = {
-  title: 'Data Display/Chart',
+  title: 'Core UI Primitives/Data Display/Chart',
   component: ChartContainer,
   parameters: {
     layout: 'padded',

@@ -3,7 +3,7 @@ import * as React from "react";
 import { SkillTagCloud, type SkillTag } from "./skill-tag-cloud";
 
 const meta: Meta<typeof SkillTagCloud> = {
-  title: "Forms/SkillTagCloud",
+  title: "Core UI Primitives/Forms & Inputs/SkillTagCloud",
   component: SkillTagCloud,
   tags: ["autodocs"],
   parameters: {

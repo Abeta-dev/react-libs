@@ -4,7 +4,7 @@ import { AuthProvider } from '../context/auth-context';
 import { MockAuthAdapter, DEFAULT_MOCK_PASSWORD } from '../core/mock-adapter';
 
 const meta: Meta<typeof LoginForm> = {
-  title: 'Authentication/LoginForm',
+  title: 'Enterprise Authentication/LoginForm',
   component: LoginForm,
   tags: ['autodocs'],
   parameters: {

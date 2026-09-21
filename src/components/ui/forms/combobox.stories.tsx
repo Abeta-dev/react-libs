@@ -3,7 +3,7 @@ import * as React from "react";
 import { Combobox } from "./combobox";
 
 const meta: Meta<typeof Combobox> = {
-  title: "Forms/Combobox",
+  title: "Core UI Primitives/Forms & Inputs/Combobox",
   component: Combobox,
   tags: ["autodocs"],
   parameters: {

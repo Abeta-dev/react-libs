@@ -19,7 +19,7 @@ import { CheckCircle2, AlertTriangle, AlertCircle, Info } from 'lucide-react';
  * For accessible, headless-composed toast layouts, use these primitives directly.
  */
 const meta = {
-  title: 'Feedback/Toast',
+  title: 'Core UI Primitives/Feedback & States/Toast',
   component: Toast,
   tags: ['autodocs'],
   parameters: {

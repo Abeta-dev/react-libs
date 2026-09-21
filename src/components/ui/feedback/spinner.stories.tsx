@@ -7,7 +7,7 @@ import { Spinner } from './spinner';
  * Size is controlled via `className` (Tailwind `size-*`), not a `size` prop.
  */
 const meta = {
-  title: 'Feedback/Spinner',
+  title: 'Core UI Primitives/Feedback & States/Spinner',
   component: Spinner,
   parameters: {
     layout: 'centered',

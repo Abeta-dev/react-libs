@@ -29,7 +29,7 @@ import {
  * the user types.
  */
 const meta = {
-  title: 'Overlays/Command',
+  title: 'Core UI Primitives/Overlays & Dialogs/Command',
   component: Command,
   parameters: {
     layout: 'centered',

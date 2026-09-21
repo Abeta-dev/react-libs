@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { MatchScoreGauge } from "./match-score-gauge";
 
 const meta: Meta<typeof MatchScoreGauge> = {
-  title: "Data Display/MatchScoreGauge",
+  title: "Domain & Talent Lab/MatchScoreGauge",
   component: MatchScoreGauge,
   tags: ["autodocs"],
   parameters: {

@@ -13,7 +13,7 @@ import { Progress } from './progress';
  * - Smooth `transition-all duration-500` on indicator movement
  */
 const meta = {
-  title: 'Feedback/Progress',
+  title: 'Core UI Primitives/Feedback & States/Progress',
   component: Progress,
   parameters: {
     layout: 'centered',

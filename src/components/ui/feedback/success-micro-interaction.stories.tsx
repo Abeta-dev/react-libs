@@ -15,7 +15,7 @@ import { Sparkles, CheckCircle2, ShieldCheck, MousePointerClick } from 'lucide-r
  * click-to-burst micro-interactions for rewarding user achievements.
  */
 const meta = {
-  title: 'Feedback/SuccessMicroInteraction',
+  title: 'Core UI Primitives/Feedback & States/SuccessMicroInteraction',
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',

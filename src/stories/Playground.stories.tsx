@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 
 const meta: Meta = {
-  title: 'Playground/Interactive Workbench',
+  title: 'Living Enterprise Workflows/Interactive Workbench',
   parameters: {
     layout: 'fullscreen',
     docs: {

@@ -15,7 +15,7 @@ import { Button } from "../forms/button";
 import { FileText, ChevronRight, CheckCircle2, AlertTriangle, ArrowUpRight } from "lucide-react";
 
 const meta: Meta<typeof Item> = {
-  title: "Core/Item",
+  title: "Core UI Primitives/Primitives/Item",
   component: Item,
   tags: ["autodocs"],
   parameters: {

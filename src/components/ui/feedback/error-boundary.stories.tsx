@@ -11,7 +11,7 @@ import { AlertTriangle, RefreshCcw, Terminal } from 'lucide-react';
  * logs diagnostic errors, and presents resilient fallback recovery states.
  */
 const meta = {
-  title: 'Feedback/ErrorBoundary',
+  title: 'Core UI Primitives/Feedback & States/ErrorBoundary',
   component: ErrorBoundary,
   tags: ['autodocs'],
   parameters: {

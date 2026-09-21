@@ -5,7 +5,7 @@ import { ImpersonationBanner } from './impersonation-banner';
  * Top alert banner indicating that an administrator is actively impersonating another user.
  */
 const meta = {
-  title: 'Feedback/ImpersonationBanner',
+  title: 'Core UI Primitives/Feedback & States/ImpersonationBanner',
   component: ImpersonationBanner,
   tags: ['autodocs'],
   parameters: {

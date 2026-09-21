@@ -8,7 +8,7 @@ import { Building2, ShieldCheck, Sparkles, Cpu, Layers } from 'lucide-react';
  * Provides visual tenant and workspace identity across the top of multi-tenant dashboards.
  */
 const meta = {
-  title: 'Feedback/WorkspaceBanner',
+  title: 'Core UI Primitives/Feedback & States/WorkspaceBanner',
   component: WorkspaceBanner,
   tags: ['autodocs'],
   parameters: {

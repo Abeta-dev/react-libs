@@ -3,7 +3,7 @@ import { expect, within, userEvent, waitFor } from 'storybook/test';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from './hover-card';
 
 const meta = {
-  title: 'Overlays/HoverCard',
+  title: 'Core UI Primitives/Overlays & Dialogs/HoverCard',
   component: HoverCard,
   parameters: { layout: 'centered' },
   tags: ['autodocs'],

@@ -4,7 +4,7 @@ import { AuthProvider } from '../context/auth-context';
 import { MockAuthAdapter } from '../core/mock-adapter';
 
 const meta: Meta<typeof OAuthButtonGroup> = {
-  title: 'Authentication/OAuthButtonGroup',
+  title: 'Enterprise Authentication/OAuthButtonGroup',
   component: OAuthButtonGroup,
   tags: ['autodocs'],
   parameters: {

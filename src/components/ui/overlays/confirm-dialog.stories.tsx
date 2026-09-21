@@ -5,7 +5,7 @@ import { ConfirmDialog } from './confirm-dialog';
 import { Button } from '../forms/button';
 
 const meta = {
-  title: 'Overlays/ConfirmDialog',
+  title: 'Core UI Primitives/Overlays & Dialogs/ConfirmDialog',
   component: ConfirmDialog,
   parameters: { layout: 'centered' },
   tags: ['autodocs'],

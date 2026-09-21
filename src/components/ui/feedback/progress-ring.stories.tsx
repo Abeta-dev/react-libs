@@ -6,7 +6,7 @@ import { ProgressRing } from './progress-ring';
  * Circular progress ring with threshold-aware coloring, SVG smooth transitions, and optional centered label.
  */
 const meta = {
-  title: 'Feedback/ProgressRing',
+  title: 'Core UI Primitives/Feedback & States/ProgressRing',
   component: ProgressRing,
   tags: ['autodocs'],
   parameters: {

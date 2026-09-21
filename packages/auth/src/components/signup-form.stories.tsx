@@ -4,7 +4,7 @@ import { AuthProvider } from '../context/auth-context';
 import { MockAuthAdapter } from '../core/mock-adapter';
 
 const meta: Meta<typeof SignUpForm> = {
-  title: 'Authentication/SignUpForm',
+  title: 'Enterprise Authentication/SignUpForm',
   component: SignUpForm,
   tags: ['autodocs'],
   parameters: {

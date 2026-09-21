@@ -3,7 +3,7 @@ import { DollarSign, Users, ShoppingCart, Activity } from "lucide-react";
 import { KPICard } from "./kpi-card";
 
 const meta: Meta<typeof KPICard> = {
-  title: "Data Display/KPICard",
+  title: "Core UI Primitives/Data Display/KPICard",
   component: KPICard,
   tags: ["autodocs"],
   parameters: {
