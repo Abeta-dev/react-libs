@@ -5,7 +5,7 @@ import { Button } from "./button";
 import { Filter, SlidersHorizontal } from "lucide-react";
 
 const meta: Meta<typeof SearchField> = {
-  title: "Forms/SearchField",
+  title: "Core UI Primitives/Forms & Inputs/SearchField",
   component: SearchField,
   tags: ["autodocs"],
   parameters: {

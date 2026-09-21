@@ -3,7 +3,7 @@ import { QuotaCard } from "./quota-card";
 import { Database, Zap, HardDrive } from "lucide-react";
 
 const meta: Meta<typeof QuotaCard> = {
-  title: "Data Display/QuotaCard",
+  title: "Core UI Primitives/Data Display/QuotaCard",
   component: QuotaCard,
   tags: ["autodocs"],
   parameters: {

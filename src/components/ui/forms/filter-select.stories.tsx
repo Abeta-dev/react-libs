@@ -10,7 +10,7 @@ const statusOptions = [
 ];
 
 const meta = {
-  title: "Forms/FilterSelect",
+  title: "Core UI Primitives/Forms & Inputs/FilterSelect",
   component: FilterSelect,
   parameters: { layout: "centered" },
   tags: ["autodocs"],

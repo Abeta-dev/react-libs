@@ -7,7 +7,7 @@ import { AspectRatio } from './aspect-ratio';
  * Use for images, videos, and embeds to prevent layout shift.
  */
 const meta = {
-  title: 'Layout/AspectRatio',
+  title: 'Core UI Primitives/Navigation & Shell/AspectRatio',
   component: AspectRatio,
   parameters: {
     layout: 'centered',

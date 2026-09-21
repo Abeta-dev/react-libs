@@ -18,7 +18,7 @@ import {
  * Use `BreadcrumbEllipsis` to collapse middle segments on narrow screens.
  */
 const meta = {
-  title: 'Navigation/Breadcrumb',
+  title: 'Core UI Primitives/Navigation & Shell/Breadcrumb',
   component: Breadcrumb,
   parameters: {
     layout: 'padded',

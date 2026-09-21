@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { PaymentLedger } from "./payment-ledger";
 
 const meta: Meta<typeof PaymentLedger> = {
-  title: "Data Display/PaymentLedger",
+  title: "Core UI Primitives/Data Display/PaymentLedger",
   component: PaymentLedger,
   tags: ["autodocs"],
   parameters: {

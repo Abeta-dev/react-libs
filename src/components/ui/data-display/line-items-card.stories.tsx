@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { LineItemsCard, type LineItem } from "./line-items-card";
 
 const meta: Meta<typeof LineItemsCard> = {
-  title: "Data Display/LineItemsCard",
+  title: "Core UI Primitives/Data Display/LineItemsCard",
   component: LineItemsCard,
   tags: ["autodocs"],
   parameters: {

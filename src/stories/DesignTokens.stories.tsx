@@ -8,7 +8,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Override them in your app's :root to re-theme across light and dark modes.
  */
 const meta = {
-  title: 'Overview & Docs/Design Tokens',
+  title: 'Foundations & Docs/Design Tokens',
   parameters: {
     layout: 'padded',
     docs: {

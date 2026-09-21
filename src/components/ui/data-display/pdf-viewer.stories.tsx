@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { PdfViewer } from './pdf-viewer'
 
 const meta = {
-  title: 'Data Display/PdfViewer',
+  title: 'Core UI Primitives/Data Display/PdfViewer',
   component: PdfViewer,
   parameters: {
     layout: 'centered',

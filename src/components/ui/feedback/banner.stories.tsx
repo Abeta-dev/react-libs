@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Banner } from "./banner";
 
 const meta: Meta<typeof Banner> = {
-  title: "Feedback/Banner",
+  title: "Core UI Primitives/Feedback & States/Banner",
   component: Banner,
   tags: ["autodocs"],
   parameters: {

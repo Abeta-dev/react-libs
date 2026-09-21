@@ -15,7 +15,7 @@ import {
 type PopoverContentStoryArgs = React.ComponentProps<typeof PopoverContent>;
 
 const meta = {
-  title: "Core/Popover",
+  title: "Core UI Primitives/Overlays & Dialogs/Popover",
   component: PopoverContent,
   parameters: {
     layout: "centered",

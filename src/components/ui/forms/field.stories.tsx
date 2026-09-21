@@ -23,7 +23,7 @@ import { Checkbox } from "./checkbox";
  * orientations. Group multiple fields with `FieldGroup` inside a `FieldSet`.
  */
 const meta = {
-  title: "Forms/Field",
+  title: "Core UI Primitives/Forms & Inputs/Field",
   component: Field,
   parameters: {
     layout: "centered",

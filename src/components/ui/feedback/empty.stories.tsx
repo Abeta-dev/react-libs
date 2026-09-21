@@ -14,7 +14,7 @@ import { PackageSearch, SearchX, FileText, Plus, RefreshCw } from 'lucide-react'
  * Composable modular empty-state primitives following atomic slot composition.
  */
 const meta = {
-  title: 'Feedback/Empty',
+  title: 'Core UI Primitives/Feedback & States/Empty',
   component: Empty,
   tags: ['autodocs'],
   parameters: {

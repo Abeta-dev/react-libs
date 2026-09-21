@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { CopyButton } from "./copy-button";
 
 const meta: Meta<typeof CopyButton> = {
-  title: "Feedback/CopyButton",
+  title: "Core UI Primitives/Primitives/CopyButton",
   component: CopyButton,
   tags: ["autodocs"],
   parameters: {

@@ -4,7 +4,7 @@ import { DiagnosticQuiz, type QuizQuestion } from "./diagnostic-quiz";
 import { Button } from "../forms/button";
 
 const meta: Meta<typeof DiagnosticQuiz> = {
-  title: "Overlays/DiagnosticQuiz",
+  title: "Domain & Talent Lab/DiagnosticQuiz",
   component: DiagnosticQuiz,
   tags: ["autodocs"],
   parameters: {

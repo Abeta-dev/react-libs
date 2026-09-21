@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ReactionBar } from "./reaction-bar";
 
 const meta: Meta<typeof ReactionBar> = {
-  title: "Feedback/ReactionBar",
+  title: "Core UI Primitives/Feedback & States/ReactionBar",
   component: ReactionBar,
   tags: ["autodocs"],
   parameters: {

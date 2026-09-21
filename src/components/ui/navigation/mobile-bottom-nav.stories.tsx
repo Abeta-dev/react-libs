@@ -17,7 +17,7 @@ const standardItems: MobileNavItem[] = [
 ];
 
 const meta = {
-  title: 'Navigation/MobileBottomNav',
+  title: 'Core UI Primitives/Navigation & Shell/MobileBottomNav',
   component: MobileBottomNav,
   tags: ['autodocs'],
   parameters: {

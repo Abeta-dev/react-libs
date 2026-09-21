@@ -16,7 +16,7 @@ import { Filter } from 'lucide-react';
  * - `rounded-t-[10px]` → `rounded-t-[12px]` for softer top edge
  */
 const meta = {
-  title: 'Overlays/Drawer',
+  title: 'Core UI Primitives/Overlays & Dialogs/Drawer',
   component: Drawer,
   parameters: {
     layout: 'centered',

@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "./card";
 import { DollarSign, ShoppingCart, TrendingUp, AlertCircle } from "lucide-react";
 
 const meta: Meta<typeof DetailGrid> = {
-  title: "Layout/DetailGrid",
+  title: "Core UI Primitives/Navigation & Shell/DetailGrid",
   component: DetailGrid,
   tags: ["autodocs"],
   parameters: {

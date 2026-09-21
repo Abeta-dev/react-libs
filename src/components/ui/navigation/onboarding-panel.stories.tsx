@@ -6,7 +6,7 @@ import { Input } from "../forms/input";
 import { Label } from "../forms/label";
 
 const meta: Meta<typeof OnboardingPanel> = {
-  title: "Navigation/OnboardingPanel",
+  title: "Core UI Primitives/Navigation & Shell/OnboardingPanel",
   component: OnboardingPanel,
   tags: ["autodocs"],
   parameters: {

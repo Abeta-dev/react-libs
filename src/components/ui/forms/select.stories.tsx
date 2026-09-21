@@ -17,7 +17,7 @@ import {
  * Always pair with a visible label for accessibility.
  */
 const meta = {
-  title: "Forms/Select",
+  title: "Core UI Primitives/Forms & Inputs/Select",
   component: Select,
   parameters: {
     layout: "centered",

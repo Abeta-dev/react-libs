@@ -686,7 +686,7 @@ function PerformanceDashboard() {
 // Storybook Meta
 // ---------------------------------------------------------------------------
 const meta = {
-  title: "Overview & Docs/Performance Dashboard",
+  title: "Foundations & Docs/Performance Dashboard",
   component: PerformanceDashboard,
   parameters: {
     layout: "fullscreen",

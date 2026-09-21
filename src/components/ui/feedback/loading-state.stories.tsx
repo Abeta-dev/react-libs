@@ -5,7 +5,7 @@ import { LoadingState } from './loading-state';
  * Standard card-based loading placeholder with spinner and customizable label.
  */
 const meta = {
-  title: 'Feedback/LoadingState',
+  title: 'Core UI Primitives/Feedback & States/LoadingState',
   component: LoadingState,
   tags: ['autodocs'],
   parameters: {

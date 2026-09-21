@@ -32,7 +32,7 @@ import {
  * - Radio indicator upgraded from `h-2 w-2` → `h-2.5 w-2.5` for better visibility
  */
 const meta = {
-  title: 'Overlays/DropdownMenu',
+  title: 'Core UI Primitives/Overlays & Dialogs/DropdownMenu',
   component: DropdownMenu,
   parameters: {
     layout: 'centered',

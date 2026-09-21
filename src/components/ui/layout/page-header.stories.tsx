@@ -9,7 +9,7 @@ import { Badge } from '../data-display/badge';
  * Slots for breadcrumbs, title, badge, description, and action buttons.
  */
 const meta = {
-  title: 'Layout/PageHeader',
+  title: 'Core UI Primitives/Navigation & Shell/PageHeader',
   component: PageHeader,
   parameters: {
     layout: 'padded',

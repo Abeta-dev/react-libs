@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ImageViewer } from './image-viewer';
 
 const meta = {
-  title: 'Data Display/ImageViewer',
+  title: 'Core UI Primitives/Data Display/ImageViewer',
   component: ImageViewer,
   parameters: {
     layout: 'centered',

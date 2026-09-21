@@ -46,7 +46,7 @@ const StoryFrame = ({
 );
 
 const meta = {
-  title: "Forms/InputGroup",
+  title: "Core UI Primitives/Forms & Inputs/InputGroup",
   component: InputGroup,
   parameters: {
     layout: "centered",

@@ -16,7 +16,7 @@ import {
  * - Content text uses `text-muted-foreground` + `leading-relaxed` for better readability
  */
 const meta = {
-  title: "Data Display/Accordion",
+  title: "Core UI Primitives/Data Display/Accordion",
   component: Accordion,
   parameters: {
     layout: "centered",

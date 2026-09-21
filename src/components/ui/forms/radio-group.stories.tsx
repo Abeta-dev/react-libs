@@ -9,7 +9,7 @@ import { Label } from "./label";
  * or `value` + `onValueChange` for controlled usage.
  */
 const meta = {
-  title: "Forms/RadioGroup",
+  title: "Core UI Primitives/Forms & Inputs/RadioGroup",
   component: RadioGroup,
   parameters: {
     layout: "centered",

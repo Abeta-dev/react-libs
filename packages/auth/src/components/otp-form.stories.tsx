@@ -4,7 +4,7 @@ import { AuthProvider } from '../context/auth-context';
 import { MockAuthAdapter } from '../core/mock-adapter';
 
 const meta: Meta<typeof OtpForm> = {
-  title: 'Authentication/OtpForm',
+  title: 'Enterprise Authentication/OtpForm',
   component: OtpForm,
   tags: ['autodocs'],
   parameters: {

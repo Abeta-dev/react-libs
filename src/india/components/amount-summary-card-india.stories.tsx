@@ -7,7 +7,7 @@ import { AmountSummaryCardIndia } from "./amount-summary-card-india";
  * TDS deductions under Section 194C/194J, freight / transport costs, and lakh/crore Indian currency formatting.
  */
 const meta: Meta<typeof AmountSummaryCardIndia> = {
-  title: "India Primitives/AmountSummaryCardIndia",
+  title: "India Statutory & Regional/AmountSummaryCardIndia",
   component: AmountSummaryCardIndia,
   tags: ["autodocs"],
   parameters: {

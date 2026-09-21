@@ -23,7 +23,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "../data-display/avatar";
  * - NEW: `CardSeparator` — explicit inline divider for card body sections
  */
 const meta = {
-  title: "Layout/Card",
+  title: "Core UI Primitives/Navigation & Shell/Card",
   component: Card,
   parameters: {
     layout: "centered",

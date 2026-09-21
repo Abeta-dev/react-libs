@@ -5,7 +5,7 @@ import { OnboardingNotice } from './onboarding-notice';
  * Compact informational callout for onboarding steps and prerequisite guidance.
  */
 const meta = {
-  title: 'Feedback/OnboardingNotice',
+  title: 'Core UI Primitives/Feedback & States/OnboardingNotice',
   component: OnboardingNotice,
   tags: ['autodocs'],
   parameters: {

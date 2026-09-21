@@ -3,7 +3,7 @@ import * as React from "react";
 import { Stepper, StepItem } from "./stepper";
 
 const meta: Meta<typeof Stepper> = {
-  title: "Navigation/Stepper",
+  title: "Core UI Primitives/Navigation & Shell/Stepper",
   component: Stepper,
   tags: ["autodocs"],
   parameters: {

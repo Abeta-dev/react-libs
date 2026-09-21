@@ -11,7 +11,7 @@ import { Button } from '../forms/button';
  * and desktop/mobile app-like experience. Detects iOS Safari vs Chromium/Android browsers.
  */
 const meta = {
-  title: 'Feedback/InstallPwaBanner',
+  title: 'Core UI Primitives/Feedback & States/InstallPwaBanner',
   component: InstallPwaBanner,
   tags: ['autodocs'],
   parameters: {

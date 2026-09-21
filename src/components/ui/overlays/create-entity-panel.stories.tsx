@@ -7,7 +7,7 @@ import { Label } from "../forms/label";
 import { Building2, Plus, FileSpreadsheet, Eye } from "lucide-react";
 
 const meta: Meta<typeof CreateEntityPanel> = {
-  title: "Overlays/CreateEntityPanel",
+  title: "Core UI Primitives/Overlays & Dialogs/CreateEntityPanel",
   component: CreateEntityPanel,
   tags: ["autodocs"],
   parameters: {

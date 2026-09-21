@@ -11,7 +11,7 @@ import { cn } from "../../../lib/utils";
  * array, so single-value and multi-value sliders share the same API.
  */
 const meta = {
-  title: "Forms/Slider",
+  title: "Core UI Primitives/Forms & Inputs/Slider",
   component: Slider,
   parameters: {
     layout: "centered",

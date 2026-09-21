@@ -6,7 +6,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Rendered as a TSX docs-only story to avoid Vite MDX transformation issues.
  */
 const meta = {
-  title: 'Overview & Docs/Introduction',
+  title: 'Foundations & Docs/Introduction',
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -28,19 +28,11 @@ type Story = StoryObj<typeof meta>;
 function Badge({ children, accent }: { children: React.ReactNode; accent?: boolean | undefined }) {
   return (
     <span
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        borderRadius: 9999,
-        border: '1px solid',
-        padding: '2px 10px',
-        fontSize: 12,
-        fontWeight: 600,
-        background: accent ? '#111827' : '#f3f4f6',
-        color: accent ? '#f9fafb' : '#374151',
-        borderColor: accent ? '#111827' : '#e5e7eb',
-        whiteSpace: 'nowrap' as const,
-      }}
+      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap transition-colors ${
+        accent
+          ? 'border-primary bg-primary text-primary-foreground'
+          : 'border-border bg-muted text-muted-foreground'
+      }`}
     >
       {children}
     </span>
@@ -49,19 +41,7 @@ function Badge({ children, accent }: { children: React.ReactNode; accent?: boole
 
 function ComponentChip({ label }: { label: string }) {
   return (
-    <span
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        borderRadius: 6,
-        border: '1px solid #e5e7eb',
-        padding: '3px 10px',
-        fontSize: 12,
-        fontWeight: 500,
-        background: '#f9fafb',
-        color: '#374151',
-      }}
-    >
+    <span className="inline-flex items-center rounded-md border border-border bg-muted/60 px-2.5 py-1 text-xs font-medium text-foreground hover:bg-muted transition-colors">
       {label}
     </span>
   );
@@ -71,37 +51,28 @@ function Section({
   emoji,
   title,
   items,
-  color,
+  tierBadge,
 }: {
   emoji: string;
   title: string;
   items: string[];
-  color?: string;
+  tierBadge?: string;
 }) {
   return (
-    <div style={{ marginBottom: 28 }}>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          marginBottom: 10,
-        }}
-      >
-        <span
-          style={{
-            fontSize: 18,
-            background: color ?? '#f3f4f6',
-            borderRadius: 8,
-            padding: '4px 8px',
-          }}
-        >
+    <div className="mb-6 last:mb-0">
+      <div className="flex items-center gap-2 mb-2.5 flex-wrap">
+        <span className="text-base rounded-lg p-1.5 bg-muted border border-border flex items-center justify-center leading-none">
           {emoji}
         </span>
-        <span style={{ fontSize: 14, fontWeight: 700, color: '#111827' }}>{title}</span>
-        <span style={{ fontSize: 12, color: '#9ca3af' }}>{items.length} components</span>
+        <span className="text-sm font-bold text-foreground">{title}</span>
+        {tierBadge && (
+          <span className="text-[10px] font-semibold tracking-wide uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+            {tierBadge}
+          </span>
+        )}
+        <span className="text-xs text-muted-foreground ml-auto">{items.length} components</span>
       </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+      <div className="flex flex-wrap gap-1.5">
         {items.map((item) => (
           <ComponentChip key={item} label={item} />
         ))}
@@ -119,41 +90,26 @@ function StatCard({
   value: string;
   label: string;
   sub?: string;
-  accent?: string;
+  accent?: boolean | string;
 }) {
   return (
-    <div
-      style={{
-        background: '#ffffff',
-        border: '1px solid #e5e7eb',
-        borderRadius: 12,
-        padding: '20px 24px',
-        flex: '1 1 120px',
-      }}
-    >
-      <div style={{ fontSize: 28, fontWeight: 800, color: accent ?? '#111827', lineHeight: 1 }}>
+    <div className="flex-1 min-w-[130px] rounded-xl border border-border bg-card p-5 text-card-foreground shadow-xs">
+      <div
+        className={`text-2xl sm:text-3xl font-extrabold leading-none ${
+          accent ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'
+        }`}
+      >
         {value}
       </div>
-      <div style={{ fontSize: 13, fontWeight: 600, color: '#374151', marginTop: 4 }}>{label}</div>
-      {sub && <div style={{ fontSize: 11, color: '#9ca3af', marginTop: 2 }}>{sub}</div>}
+      <div className="text-xs sm:text-sm font-semibold text-foreground mt-2">{label}</div>
+      {sub && <div className="text-[11px] text-muted-foreground mt-0.5">{sub}</div>}
     </div>
   );
 }
 
 function CodeBlock({ children }: { children: string }) {
   return (
-    <pre
-      style={{
-        background: '#111827',
-        color: '#f9fafb',
-        borderRadius: 10,
-        padding: '16px 20px',
-        fontSize: 13,
-        fontFamily: "'JetBrains Mono', 'Fira Code', 'Courier New', monospace",
-        overflow: 'auto',
-        margin: 0,
-      }}
-    >
+    <pre className="rounded-xl border border-border bg-muted/70 dark:bg-muted/30 p-4 text-xs font-mono text-foreground overflow-x-auto">
       <code>{children}</code>
     </pre>
   );
@@ -161,16 +117,7 @@ function CodeBlock({ children }: { children: string }) {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2
-      style={{
-        fontSize: 18,
-        fontWeight: 700,
-        color: '#111827',
-        margin: '0 0 20px',
-        paddingBottom: 12,
-        borderBottom: '1px solid #e5e7eb',
-      }}
-    >
+    <h2 className="text-lg font-bold text-foreground mb-5 pb-3 border-b border-border flex items-center gap-2">
       {children}
     </h2>
   );
@@ -190,67 +137,46 @@ function QuickLink({
   return (
     <a
       href={href}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 4,
-        borderRadius: 10,
-        border: '1px solid #e5e7eb',
-        padding: '16px 18px',
-        textDecoration: 'none',
-        background: '#fafafa',
-        transition: 'background 0.15s',
-      }}
+      className="group flex flex-col gap-1 rounded-xl border border-border bg-card p-4 transition-all hover:bg-muted/50 hover:border-primary/50 text-card-foreground shadow-xs no-underline"
     >
-      <span style={{ fontSize: 20, marginBottom: 2 }}>{icon}</span>
-      <span style={{ fontSize: 14, fontWeight: 600, color: '#111827' }}>{label}</span>
-      <span style={{ fontSize: 12, color: '#6b7280' }}>{subtitle}</span>
+      <span className="text-2xl mb-1">{icon}</span>
+      <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+        {label}
+      </span>
+      <span className="text-xs text-muted-foreground leading-snug">{subtitle}</span>
     </a>
   );
 }
 
+
 // ─── Main Story ────────────────────────────────────────────────────────────────
 
-/** Component directory and architecture guide for @abeta.dev/react-libs. */
+/** Component directory, 6-tier architecture, and enterprise workflows guide for @abeta.dev/react-libs. */
 export const ComponentDirectory: Story = {
   render: () => (
-    <div
-      style={{
-        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-        background: '#f9fafb',
-        minHeight: '100vh',
-        padding: '40px',
-        color: '#111827',
-      }}
-    >
-      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+    <div className="min-h-screen bg-background text-foreground p-6 sm:p-10 font-sans transition-colors duration-200">
+      <div className="max-w-4xl mx-auto space-y-8">
 
         {/* ── Hero ── */}
-        <div
-          style={{
-            background: '#ffffff',
-            border: '1px solid #e5e7eb',
-            borderRadius: 16,
-            padding: '36px 40px',
-            marginBottom: 32,
-          }}
-        >
-          <div style={{ marginBottom: 16 }}>
-            <h1 style={{ margin: '0 0 6px', fontSize: 30, fontWeight: 800, letterSpacing: '-0.5px' }}>
+        <div className="rounded-2xl border border-border bg-card p-6 sm:p-10 shadow-xs text-card-foreground">
+          <div className="space-y-2">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
               @abeta.dev/react-libs
             </h1>
-            <p style={{ margin: 0, fontSize: 15, color: '#6b7280' }}>
-              <strong style={{ color: '#111827' }}>@abeta.dev/react-libs</strong> —
-              UI component library for web applications.
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <strong className="text-foreground">@abeta.dev/react-libs</strong> —
+              Enterprise React 19 UI component system with strict TypeScript, Tailwind v4 design tokens,
+              India statutory compliance primitives, and zero-peer tree-shakable subpaths.
             </p>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 20 }}>
+          <div className="flex flex-wrap gap-2 pt-4">
             {[
               { label: 'v0.17.0', accent: true },
               { label: '120 components' },
+              { label: '6-Tier Architecture' },
+              { label: '3 Living Workflows' },
               { label: '1,465 tests' },
               { label: '≥80% coverage' },
-              { label: 'Vitest passing' },
               { label: 'Storybook 10' },
               { label: 'Tailwind v4' },
               { label: 'React 19' },
@@ -264,118 +190,209 @@ export const ComponentDirectory: Story = {
         </div>
 
         {/* ── Stats ── */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
+        <div className="flex flex-wrap gap-4">
           <StatCard value="120" label="Components" sub="Core, India & Auth" />
-          <StatCard value="1,465" label="Tests" sub="Verified ≥80% Coverage" accent="#16a34a" />
-          <StatCard value="Passing" label="Test Suite" sub="Vitest unit tests" accent="#16a34a" />
+          <StatCard value="1,465" label="Tests" sub="Verified ≥80% Coverage" accent />
+          <StatCard value="Passing" label="Test Suite" sub="Vitest unit tests" accent />
           <StatCard value="12.5ms" label="P50 Latency" sub="Median test time" />
-          <StatCard value="301.3ms" label="P95 Latency" sub="CI Gate <= 750ms" accent="#16a34a" />
+          <StatCard value="301.3ms" label="P95 Latency" sub="CI Gate <= 750ms" accent />
           <StatCard value="511.1ms" label="P99 Latency" sub="99th percentile" />
         </div>
 
-        {/* ── Installation ── */}
-        <div
-          style={{
-            background: '#ffffff',
-            border: '1px solid #e5e7eb',
-            borderRadius: 16,
-            padding: '28px 32px',
-            marginBottom: 32,
-          }}
-        >
-          <SectionTitle>📦 Installation</SectionTitle>
-
-          <p style={{ fontSize: 13, color: '#6b7280', marginTop: 0, marginBottom: 16 }}>
-            Install from npm:
+        {/* ── 6-Tier Architecture & Taxonomy ── */}
+        <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-xs text-card-foreground">
+          <SectionTitle>🏛️ 6-Tier Architecture &amp; System Taxonomy</SectionTitle>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0 mb-6 leading-relaxed">
+            The library follows a strict 6-tier architecture hierarchy designed for modularity, strict encapsulation,
+            tree-shakability, and instant developer discoverability across Storybook and production applications:
           </p>
 
-          <div style={{ marginBottom: 16 }}>
-            <CodeBlock>{`npm install @abeta.dev/react-libs`}</CodeBlock>
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl border border-border bg-muted/30 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                  Tier 1
+                </span>
+                <span className="text-sm font-bold text-foreground">Foundations &amp; Docs</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Design tokens (color palettes, radius scales, typography scales), Storybook workflow manuals,
+                and real-time Vitest performance telemetry.
+              </p>
+            </div>
 
-          <div style={{ marginBottom: 16 }}>
-            <p style={{ fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 8 }}>
-              CSS — import once in your app root (e.g. index.css)
-            </p>
-            <CodeBlock>{`@import "@abeta.dev/react-libs/styles/theme.css";`}</CodeBlock>
-          </div>
+            <div className="p-4 rounded-xl border border-border bg-muted/30 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                  Tier 2
+                </span>
+                <span className="text-sm font-bold text-foreground">Living Enterprise Workflows</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Pre-assembled, full-page business scenarios with real-world state machines: Vendor Onboarding &amp; KYC,
+                Procurement &amp; Invoicing Settlement, Multi-Tenant Administration, and the Interactive Workbench.
+              </p>
+            </div>
 
-          <div>
-            <p style={{ fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 8 }}>
-              Direct Imports — No bundler aliases needed
-            </p>
-            <CodeBlock>{`import { Button, Dialog, Card } from '@abeta.dev/react-libs';
-import { cn, formatCurrency } from '@abeta.dev/react-libs/utils';
-import { initAnalytics } from '@abeta.dev/react-libs/analytics';`}</CodeBlock>
+            <div className="p-4 rounded-xl border border-border bg-muted/30 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                  Tier 3
+                </span>
+                <span className="text-sm font-bold text-foreground">Core UI Primitives &amp; Layout</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Atomic framing primitives: PageHeader, Card, ResizablePanelGroup, AspectRatio, ScrollArea, Separator,
+                along with fundamental utilities like Calendar, Kbd, and Typography.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border border-border bg-muted/30 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                  Tier 4
+                </span>
+                <span className="text-sm font-bold text-foreground">Forms &amp; Input Controls</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                23 accessible form components: Button, Input, Select, Combobox, MultiSelect, Checkbox, RadioGroup,
+                Switch, Slider, DateRangePicker, InputOTP, and FileUpload.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border border-border bg-muted/30 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                  Tier 5
+                </span>
+                <span className="text-sm font-bold text-foreground">Data Display &amp; Feedback</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Data-dense displays: DataTable, Charts, KPICard, MetricTicker, Timeline, PaymentLedger, paired with
+                Feedback systems (Sonner, Radix Toasters, Alerts, ProgressRings, Skeletons).
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border border-border bg-muted/30 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                  Tier 6
+                </span>
+                <span className="text-sm font-bold text-foreground">Domain &amp; Regional Primitives</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                India Statutory Compliance (AmountSummaryCardIndia, UpiQrCard, GST/TDS calculators) and Enterprise
+                Authentication (@abeta.dev/auth forms, AuthCard, OAuth buttons).
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* ── Theming ── */}
-        <div
-          style={{
-            background: '#ffffff',
-            border: '1px solid #e5e7eb',
-            borderRadius: 16,
-            padding: '28px 32px',
-            marginBottom: 32,
-          }}
-        >
-          <SectionTitle>🎨 Theming</SectionTitle>
-
-          <p style={{ fontSize: 13, color: '#6b7280', marginTop: 0, marginBottom: 16 }}>
-            All components consume semantic CSS custom properties. Override them in your app's{' '}
-            <code>:root</code> to apply your brand — no class wrapping needed.
+        {/* ── Living Enterprise Workflows Spotlight ── */}
+        <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-xs text-card-foreground">
+          <SectionTitle>🚀 Living Enterprise Workflows (Interactive Blueprints)</SectionTitle>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0 mb-6 leading-relaxed">
+            Unlike isolated UI atoms, these workflows represent full-stack, battle-tested composite journeys.
+            Each workflow can be copied directly as a production recipe:
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 12 }}>
-            <div>
-              <p style={{ fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 8 }}>
-                Orange Accent theme
-              </p>
-              <CodeBlock>{`:root {
-  --primary: 24.6 95% 53.1%;
-  --primary-foreground: 0 0% 100%;
-}`}</CodeBlock>
-            </div>
-            <div>
-              <p style={{ fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 8 }}>
-                Default Workspace (emerald theme)
-              </p>
-              <CodeBlock>{`:root {
-  /* Default calibrated emerald theme */
-  --primary: 142.1 76.2% 28%; /* WCAG AA >= 4.5:1 */
-}`}</CodeBlock>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <a
+              href="?path=/story/living-enterprise-workflows-vendor-onboarding-kyc-flow--default"
+              className="group p-5 rounded-xl border border-border bg-muted/20 hover:bg-muted/50 hover:border-primary/50 transition-all flex flex-col justify-between text-card-foreground no-underline"
+            >
+              <div className="space-y-2">
+                <div className="text-2xl">🏢</div>
+                <div className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                  Vendor Onboarding &amp; KYC Flow
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  4-step wizard with live GSTIN/PAN/IFSC validation, document upload simulation, English/Hindi language toggle,
+                  and formal compliance confirmation.
+                </p>
+              </div>
+              <span className="text-xs font-semibold text-primary pt-3 inline-flex items-center gap-1">
+                Open Workflow &rarr;
+              </span>
+            </a>
+
+            <a
+              href="?path=/story/living-enterprise-workflows-procurement-invoicing-settlement-flow--default"
+              className="group p-5 rounded-xl border border-border bg-muted/20 hover:bg-muted/50 hover:border-primary/50 transition-all flex flex-col justify-between text-card-foreground no-underline"
+            >
+              <div className="space-y-2">
+                <div className="text-2xl">📑</div>
+                <div className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                  Procurement &amp; Invoicing Settlement Flow
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  3-way PO/GRN invoice matching, dual GST splits (CGST/SGST/IGST), Section 194C/J TDS deductions, running AP ledger,
+                  and instant UPI QR payments.
+                </p>
+              </div>
+              <span className="text-xs font-semibold text-primary pt-3 inline-flex items-center gap-1">
+                Open Workflow &rarr;
+              </span>
+            </a>
+
+            <a
+              href="?path=/story/living-enterprise-workflows-multi-tenant-administration-flow--default"
+              className="group p-5 rounded-xl border border-border bg-muted/20 hover:bg-muted/50 hover:border-primary/50 transition-all flex flex-col justify-between text-card-foreground no-underline"
+            >
+              <div className="space-y-2">
+                <div className="text-2xl">🛡️</div>
+                <div className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                  Multi-Tenant Administration Flow
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Multi-workspace switcher, live vendor admin impersonation with security banners, quota consumption monitors,
+                  and payload audit trails.
+                </p>
+              </div>
+              <span className="text-xs font-semibold text-primary pt-3 inline-flex items-center gap-1">
+                Open Workflow &rarr;
+              </span>
+            </a>
           </div>
 
-          <p style={{ fontSize: 12, color: '#9ca3af', marginTop: 12 }}>
-            Token reference → <strong>Overview & Docs / Design Tokens</strong> in the sidebar.
-          </p>
+          <div className="mt-4 p-4 rounded-xl border border-dashed border-border bg-muted/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div>
+              <span className="text-xs font-bold text-foreground">Interactive Component Workbench: </span>
+              <span className="text-xs text-muted-foreground">
+                Live sandbox to compose forms, credit limits, liquidity switches, and overlays in a multi-column dashboard.
+              </span>
+            </div>
+            <a
+              href="?path=/story/living-enterprise-workflows-interactive-workbench--live-workbench"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors whitespace-nowrap no-underline"
+            >
+              Launch Workbench
+            </a>
+          </div>
         </div>
 
         {/* ── Component Domains ── */}
-        <div
-          style={{
-            background: '#ffffff',
-            border: '1px solid #e5e7eb',
-            borderRadius: 16,
-            padding: '28px 32px',
-            marginBottom: 32,
-          }}
-        >
-          <SectionTitle>🧩 Component Domains (120 Components)</SectionTitle>
+        <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-xs text-card-foreground">
+          <SectionTitle>🧩 Component Directory (120 Components Across Tiers)</SectionTitle>
 
           <Section
             emoji="⚙️"
-            color="#f3f4f6"
-            title="Core (7)"
+            title="Core UI Primitives (7)"
+            tierBadge="Tier 3"
             items={['Calendar', 'DateRangePicker', 'Item', 'Kbd', 'LanguageToggle', 'Popover', 'Typography']}
           />
 
           <Section
+            emoji="📐"
+            title="Layout Containers (7)"
+            tierBadge="Tier 3"
+            items={['AspectRatio', 'Card', 'DetailGrid', 'PageHeader', 'ResizablePanelGroup', 'ScrollArea', 'Separator']}
+          />
+
+          <Section
             emoji="🎨"
-            color="#fef3c7"
-            title="Forms (23)"
+            title="Forms &amp; Input Controls (23)"
+            tierBadge="Tier 4"
             items={[
               'AsyncSelect', 'Button', 'ButtonGroup', 'Checkbox', 'Combobox', 'Field', 'FileUpload',
               'FilterSelect', 'Form', 'Input', 'InputGroup', 'InputOtp', 'Label', 'MultiSelect',
@@ -386,8 +403,8 @@ import { initAnalytics } from '@abeta.dev/react-libs/analytics';`}</CodeBlock>
 
           <Section
             emoji="📊"
-            color="#dbeafe"
             title="Data Display (27)"
+            tierBadge="Tier 5"
             items={[
               'Accordion', 'ActiveFilterBadge', 'AmountSummaryCard', 'Avatar', 'Badge', 'BilingualTooltip',
               'Carousel', 'Chart', 'Collapsible', 'DataTable', 'ImageViewer', 'InfoList', 'KPICard',
@@ -399,8 +416,8 @@ import { initAnalytics } from '@abeta.dev/react-libs/analytics';`}</CodeBlock>
 
           <Section
             emoji="💬"
-            color="#fce7f3"
-            title="Feedback (25)"
+            title="Feedback &amp; Notifications (25)"
+            tierBadge="Tier 5"
             items={[
               'Alert', 'AppSplashScreen', 'Banner', 'CheckpointRunner', 'CopyButton', 'Empty',
               'EmptyState', 'ErrorBoundary', 'ErrorState', 'ImpersonationBanner', 'InstallPwaBanner',
@@ -412,8 +429,8 @@ import { initAnalytics } from '@abeta.dev/react-libs/analytics';`}</CodeBlock>
 
           <Section
             emoji="🖼️"
-            color="#ede9fe"
-            title="Overlays (12)"
+            title="Overlays &amp; Dialogs (12)"
+            tierBadge="Tier 5"
             items={[
               'AlertDialog', 'Command', 'ConfirmDialog', 'ContextMenu', 'CreateEntityPanel',
               'DiagnosticQuiz', 'Dialog', 'Drawer', 'DropdownMenu', 'HoverCard', 'Sheet', 'Tooltip',
@@ -422,8 +439,8 @@ import { initAnalytics } from '@abeta.dev/react-libs/analytics';`}</CodeBlock>
 
           <Section
             emoji="🧭"
-            color="#d1fae5"
-            title="Navigation (10)"
+            title="Navigation &amp; Shell (10)"
+            tierBadge="Tier 5"
             items={[
               'Breadcrumb', 'Menubar', 'MobileBottomNav', 'NavigationMenu', 'OnboardingPanel',
               'Pagination', 'PersonaDropdown', 'Sidebar', 'Stepper', 'Tabs',
@@ -431,23 +448,16 @@ import { initAnalytics } from '@abeta.dev/react-libs/analytics';`}</CodeBlock>
           />
 
           <Section
-            emoji="📐"
-            color="#ffedd5"
-            title="Layout (7)"
-            items={['AspectRatio', 'Card', 'DetailGrid', 'PageHeader', 'ResizablePanelGroup', 'ScrollArea', 'Separator']}
-          />
-
-          <Section
             emoji="🇮🇳"
-            color="#fef9c3"
-            title="India Primitives (2)"
+            title="India Statutory &amp; Regional UI (2)"
+            tierBadge="Tier 6"
             items={['AmountSummaryCardIndia', 'UpiQrCard']}
           />
 
           <Section
             emoji="🔐"
-            color="#e0e7ff"
-            title="Authentication (@abeta.dev/auth) (7)"
+            title="Enterprise Authentication (@abeta.dev/auth) (7)"
+            tierBadge="Tier 6"
             items={[
               'AuthCard', 'LoginForm', 'SignUpForm', 'ForgotPasswordForm', 'OtpForm',
               'OAuthButton', 'OAuthButtonGroup',
@@ -455,17 +465,76 @@ import { initAnalytics } from '@abeta.dev/react-libs/analytics';`}</CodeBlock>
           />
         </div>
 
+        {/* ── Installation ── */}
+        <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-xs text-card-foreground">
+          <SectionTitle>📦 Installation</SectionTitle>
+
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0 mb-4">
+            Install from npm:
+          </p>
+
+          <div className="mb-4">
+            <CodeBlock>{`npm install @abeta.dev/react-libs`}</CodeBlock>
+          </div>
+
+          <div className="mb-4">
+            <p className="text-xs font-semibold text-foreground mb-2">
+              CSS — import once in your app root (e.g. index.css)
+            </p>
+            <CodeBlock>{`@import "@abeta.dev/react-libs/styles/theme.css";`}</CodeBlock>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold text-foreground mb-2">
+              Direct Imports — No bundler aliases needed
+            </p>
+            <CodeBlock>{`import { Button, Dialog, Card } from '@abeta.dev/react-libs';
+import { cn, formatCurrency } from '@abeta.dev/react-libs/utils';
+import { initAnalytics } from '@abeta.dev/react-libs/analytics';`}</CodeBlock>
+          </div>
+        </div>
+
+        {/* ── Theming ── */}
+        <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-xs text-card-foreground">
+          <SectionTitle>🎨 Theming &amp; Multi-Tenant Color Tokens</SectionTitle>
+
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0 mb-4 leading-relaxed">
+            All components consume semantic CSS custom properties. Override them in your app&apos;s{' '}
+            <code className="text-foreground font-mono">`:root`</code> or select one of our pre-calibrated themes.
+            The library adapts automatically to both light and dark backgrounds.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <p className="text-xs font-semibold text-foreground mb-2">
+                Default Workspace (Emerald Theme)
+              </p>
+              <CodeBlock>{`:root {
+  /* Calibrated enterprise banking emerald */
+  --primary: 142.1 76.2% 28%; /* WCAG AA >= 4.5:1 */
+  --primary-foreground: 0 0% 100%;
+}`}</CodeBlock>
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-foreground mb-2">
+                Orange Accent Theme
+              </p>
+              <CodeBlock>{`:root {
+  /* High-energy logistics & marketplace theme */
+  --primary: 24.6 95% 53.1%;
+  --primary-foreground: 0 0% 100%;
+}`}</CodeBlock>
+            </div>
+          </div>
+
+          <p className="text-xs text-muted-foreground mt-3">
+            Full design token reference &rarr; <strong>Foundations &amp; Docs / Design Tokens</strong> in the sidebar.
+          </p>
+        </div>
+
         {/* ── Import Paths ── */}
-        <div
-          style={{
-            background: '#ffffff',
-            border: '1px solid #e5e7eb',
-            borderRadius: 16,
-            padding: '28px 32px',
-            marginBottom: 32,
-          }}
-        >
-          <SectionTitle>📍 Import Paths</SectionTitle>
+        <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-xs text-card-foreground">
+          <SectionTitle>📍 Import Paths &amp; Tree-Shakable Subpaths</SectionTitle>
           <CodeBlock>{`// UI Components (from root package)
 import {
   Button, Card, Badge, Dialog, Tabs,
@@ -479,51 +548,49 @@ import {
 import { UpiQrCard, AmountSummaryCardIndia } from '@abeta.dev/react-libs/india/react';
 import { validateGSTIN, validatePAN, validateIFSC } from '@abeta.dev/react-libs/india';
 
-// Authentication Primitives
+// Enterprise Authentication Primitives
 import { AuthCard, LoginForm, SignUpForm, OtpForm } from '@abeta.dev/react-libs/auth';
 
-// Pure Utilities & Formatters (Server/RSC Safe)
+// Pure Utilities & Formatters (Server/RSC Safe, Zero Bundle Bloat)
 import { cn, formatCurrency, formatDate, isValidEmail } from '@abeta.dev/react-libs/utils';
 
-// Analytics Engine
+// Telemetry & Analytics Engine
 import { initAnalytics, trackEvent } from '@abeta.dev/react-libs/analytics';
 
-// Client-Only PDF Viewer
+// Client-Only PDF Viewer Subpath
 import { PdfViewer } from '@abeta.dev/react-libs/pdf';`}</CodeBlock>
         </div>
 
         {/* ── Quick Links ── */}
-        <div
-          style={{
-            background: '#ffffff',
-            border: '1px solid #e5e7eb',
-            borderRadius: 16,
-            padding: '28px 32px',
-            marginBottom: 32,
-          }}
-        >
+        <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-xs text-card-foreground">
           <SectionTitle>🔗 Quick Links</SectionTitle>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <QuickLink
-              href="?path=/story/playground--workbench"
-              icon="🛠️"
-              label="Interactive Playground"
-              subtitle="Full component workbench & scenario sandboxes"
+              href="?path=/story/living-enterprise-workflows-vendor-onboarding-kyc-flow--default"
+              icon="🚀"
+              label="Living Enterprise Workflows"
+              subtitle="Vendor onboarding, invoice settlement & tenant admin"
             />
             <QuickLink
-              href="?path=/story/overview-docs-how-to-use-storybook--guide"
+              href="?path=/story/living-enterprise-workflows-interactive-workbench--live-workbench"
+              icon="🛠️"
+              label="Interactive Workbench"
+              subtitle="Full component playground & scenario sandboxes"
+            />
+            <QuickLink
+              href="?path=/story/foundations-docs-how-to-use-storybook--guide"
               icon="📘"
               label="Storybook Guide"
-              subtitle="Controls, theming, a11y & workflow guide"
+              subtitle="Controls, 4 themes, a11y & workflow guide"
             />
             <QuickLink
-              href="?path=/story/overview-docs-design-tokens--palette"
+              href="?path=/story/foundations-docs-design-tokens--palette"
               icon="🎨"
               label="Design Tokens"
               subtitle="Semantic color, radius & typography reference"
             />
             <QuickLink
-              href="?path=/story/overview-docs-performance-dashboard--dashboard"
+              href="?path=/story/foundations-docs-performance-dashboard--dashboard"
               icon="⚡"
               label="Performance Dashboard"
               subtitle="Live P50/P95/P99 latency across 1,465 tests"
@@ -534,28 +601,15 @@ import { PdfViewer } from '@abeta.dev/react-libs/pdf';`}</CodeBlock>
               label="GitHub Repository"
               subtitle="Source code, issues & releases"
             />
-            <QuickLink
-              href="https://github.com/Abeta-dev/react-libs/releases"
-              icon="🚀"
-              label="Changelog"
-              subtitle="v0.17.0 release notes & history"
-            />
           </div>
         </div>
 
         {/* ── Commands ── */}
-        <div
-          style={{
-            background: '#ffffff',
-            border: '1px solid #e5e7eb',
-            borderRadius: 16,
-            padding: '28px 32px',
-          }}
-        >
+        <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-xs text-card-foreground">
           <SectionTitle>⌨️ Common Commands</SectionTitle>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {[
-              { cmd: 'npm run storybook', desc: 'Start Storybook dev server (port 6006)' },
+              { cmd: 'npm run storybook', desc: 'Start Storybook 10 dev server (port 6006)' },
               { cmd: 'npm run build-storybook', desc: 'Build static Storybook for CI/deploy' },
               { cmd: 'npm test', desc: 'Run 1,465 tests with coverage verification' },
               { cmd: 'npm run perf', desc: 'Regenerate performance benchmark data' },
@@ -564,17 +618,12 @@ import { PdfViewer } from '@abeta.dev/react-libs/pdf';`}</CodeBlock>
             ].map(({ cmd, desc }) => (
               <div
                 key={cmd}
-                style={{
-                  background: '#f9fafb',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: 10,
-                  padding: '14px 16px',
-                }}
+                className="rounded-xl border border-border bg-muted/40 p-3.5 space-y-1"
               >
-                <code style={{ fontSize: 12, fontWeight: 700, fontFamily: 'monospace', color: '#111827' }}>
+                <code className="text-xs font-mono font-bold text-foreground">
                   {cmd}
                 </code>
-                <p style={{ margin: '6px 0 0', fontSize: 12, color: '#6b7280' }}>{desc}</p>
+                <p className="text-xs text-muted-foreground mt-1 leading-snug">{desc}</p>
               </div>
             ))}
           </div>

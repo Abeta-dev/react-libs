@@ -3,7 +3,7 @@ import * as React from "react";
 import { FileUpload, FileItem } from "./file-upload";
 
 const meta: Meta<typeof FileUpload> = {
-  title: "Forms/FileUpload",
+  title: "Core UI Primitives/Forms & Inputs/FileUpload",
   component: FileUpload,
   tags: ["autodocs"],
   parameters: {

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { BilingualTooltip } from "./bilingual-tooltip";
 
 const meta: Meta<typeof BilingualTooltip> = {
-  title: "Data Display/BilingualTooltip",
+  title: "India Statutory & Regional/BilingualTooltip",
   component: BilingualTooltip,
   tags: ["autodocs"],
   parameters: {

@@ -4,7 +4,7 @@ import { PersonaDropdown, type PersonaOption } from "./persona-dropdown";
 import { ShieldCheck, Truck, Receipt, CheckCircle } from "lucide-react";
 
 const meta: Meta<typeof PersonaDropdown> = {
-  title: "Navigation/PersonaDropdown",
+  title: "Core UI Primitives/Navigation & Shell/PersonaDropdown",
   component: PersonaDropdown,
   tags: ["autodocs"],
   parameters: {

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { UpiQrCard } from "./upi-qr-card";
 
 const meta: Meta<typeof UpiQrCard> = {
-  title: "India Primitives/UpiQrCard",
+  title: "India Statutory & Regional/UpiQrCard",
   component: UpiQrCard,
   tags: ["autodocs"],
   parameters: {

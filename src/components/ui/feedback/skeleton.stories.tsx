@@ -10,7 +10,7 @@ import { Skeleton } from './skeleton';
  * - `bg-muted/80` (slightly more opaque than before) for better contrast on white backgrounds
  */
 const meta = {
-  title: 'Feedback/Skeleton',
+  title: 'Core UI Primitives/Feedback & States/Skeleton',
   component: Skeleton,
   parameters: {
     layout: 'padded',

@@ -9,7 +9,7 @@ import { Building2, Database, ShieldCheck, Zap } from 'lucide-react';
  * or offline IndexedDB caches are populated.
  */
 const meta = {
-  title: 'Feedback/AppSplashScreen',
+  title: 'Core UI Primitives/Feedback & States/AppSplashScreen',
   component: AppSplashScreen,
   tags: ['autodocs'],
   parameters: {

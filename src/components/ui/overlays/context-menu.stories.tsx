@@ -28,7 +28,7 @@ import {
  * - `TableRow` — realistic table row right-click menu
  */
 const meta = {
-  title: 'Overlays/ContextMenu',
+  title: 'Core UI Primitives/Overlays & Dialogs/ContextMenu',
   component: ContextMenu,
   parameters: {
     layout: 'centered',

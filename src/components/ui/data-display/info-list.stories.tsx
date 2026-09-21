@@ -4,7 +4,7 @@ import { StatusBadge } from "./status-badge";
 import { Card, CardHeader, CardTitle, CardContent } from "../layout/card";
 
 const meta: Meta<typeof InfoList> = {
-  title: "Data Display/InfoList",
+  title: "Core UI Primitives/Data Display/InfoList",
   component: InfoList,
   tags: ["autodocs"],
   parameters: {
