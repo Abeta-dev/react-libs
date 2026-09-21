@@ -177,7 +177,14 @@ export default tseslint.config(
 
   // ─── Component source: design token enforcement ────────────────────────────
   {
-    files: ['src/components/**/*.{ts,tsx}', 'src/lib/**/*.{ts,tsx}', 'src/india/**/*.{ts,tsx}'],
+    files: [
+      'src/components/**/*.{ts,tsx}',
+      'src/lib/**/*.{ts,tsx}',
+      'src/india/**/*.{ts,tsx}',
+      'packages/ui/**/*.{ts,tsx}',
+      'packages/india/**/*.{ts,tsx}',
+      'packages/talent/**/*.{ts,tsx}',
+    ],
     plugins: {
       'design-tokens': {
         rules: { 

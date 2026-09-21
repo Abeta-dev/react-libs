@@ -9,7 +9,7 @@ const config: StorybookConfig = {
   // exists in git history and gets checked out in CI.
   "stories": [
     "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    "../packages/auth/src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
+    "../packages/*/src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
   "staticDirs": ["../public"],
   "addons": [
@@ -25,7 +25,6 @@ const config: StorybookConfig = {
     if (!config.resolve) config.resolve = {};
     if (!config.resolve.alias) config.resolve.alias = {};
     (config.resolve.alias as any)["@ui"] = path.resolve(process.cwd(), "src/components/ui");
-    (config.resolve.alias as any)["@abeta.dev/auth"] = path.resolve(process.cwd(), "packages/auth/src");
 
     // Tailwind v4: inject the Vite plugin so @theme blocks are compiled into
     // proper CSS custom properties and all utility classes are generated.

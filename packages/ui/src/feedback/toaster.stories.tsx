@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, within, userEvent } from 'storybook/test';
 import { Toaster } from './toaster';
-import { toast, useToast } from '../../../hooks/use-toast';
+import { toast, useToast } from '../hooks/use-toast';
 import { ToastAction } from './toast';
 import { Button } from '../forms/button';
 

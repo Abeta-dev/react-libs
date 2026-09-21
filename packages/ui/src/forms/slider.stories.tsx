@@ -2,7 +2,7 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect, within, userEvent } from "storybook/test";
 import { Slider } from "./slider";
-import { cn } from "../../../lib/utils";
+import { cn } from "../lib/utils";
 
 /**
  * A range slider built on Radix UI Slider.
