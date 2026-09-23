@@ -2,7 +2,9 @@ import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
 
 import { cn } from "../../../lib/utils"
-
+/**
+ * @deprecated Importing Drawer from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/drawer' is deprecated. Migrate to '@abeta.dev/ui' or '@abeta.dev/ui/drawer'.
+ */
 const Drawer = ({
   shouldScaleBackground = true,
   ...props

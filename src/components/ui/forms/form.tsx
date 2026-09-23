@@ -12,7 +12,9 @@ import {
 
 import { cn } from "../../../lib/utils"
 import { Label } from "./label"
-
+/**
+ * @deprecated Importing Form from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/form' is deprecated. Migrate to '@abeta.dev/ui' or '@abeta.dev/ui/form'.
+ */
 const Form = FormProvider
 
 type FormFieldContextValue<

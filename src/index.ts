@@ -1,3 +1,15 @@
+/**
+ * @module @abeta.dev/react-libs
+ * @deprecated The umbrella package '@abeta.dev/react-libs' is deprecated in favor of modular scoped packages.
+ * All exports are maintained for backward compatibility only and will be sunset in a future major version.
+ * 
+ * Recommended migrations:
+ * - Core UI Primitives & Design System: migrate to '@abeta.dev/ui'
+ * - India FinTech & Statutory Compliance: migrate to '@abeta.dev/india' or '@abeta.dev/india/react'
+ * - Assessment & Candidate Evaluation Widgets: migrate to '@abeta.dev/talent'
+ * - Enterprise Authentication: migrate to '@abeta.dev/auth'
+ */
+
 export { cn } from "./lib/utils";
 
 // ─── Formatters & Utilities ──────────────────────────────────────────────────

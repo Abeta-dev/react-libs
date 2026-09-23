@@ -25,6 +25,9 @@ export interface UpiQrCardProps extends React.HTMLAttributes<HTMLDivElement> {
   badgeLabel?: string | undefined;
 }
 
+/**
+ * @deprecated Importing UpiQrCard from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/india/react' is deprecated. Migrate to '@abeta.dev/india/react'.
+ */
 export const UpiQrCard = React.forwardRef<HTMLDivElement, UpiQrCardProps>(
   (
     {

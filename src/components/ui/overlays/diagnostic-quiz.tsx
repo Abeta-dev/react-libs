@@ -35,6 +35,8 @@ export interface DiagnosticQuizProps {
  *
  * Multi-step onboarding and diagnostic quiz dialog for classifying learners
  * or customers into tailored learning paths or product tracks.
+ *
+ * @deprecated Importing DiagnosticQuiz from '@abeta.dev/react-libs' is deprecated. Migrate to '@abeta.dev/talent'.
  */
 export function DiagnosticQuiz({
   open,

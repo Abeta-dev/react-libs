@@ -93,6 +93,9 @@ function resolveBreakdownItems(
   return list;
 }
 
+/**
+ * @deprecated Importing SalaryRangeDisplay from '@abeta.dev/react-libs' is deprecated. Migrate to '@abeta.dev/talent'.
+ */
 export function SalaryRangeDisplay({
   min,
   max,

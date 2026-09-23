@@ -2,6 +2,9 @@ import * as React from "react"
 
 import { cn } from "../../../lib/utils"
 
+/**
+ * @deprecated Importing Input from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/input' is deprecated. Migrate to '@abeta.dev/ui' or '@abeta.dev/ui/input'.
+ */
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, ...props }, ref) => {
     return (

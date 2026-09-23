@@ -35,6 +35,9 @@ function formatINRCurrency(value: number): string {
   return "₹" + Math.round(value).toLocaleString("en-IN");
 }
 
+/**
+ * @deprecated Importing AmountSummaryCardIndia from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/india/react' is deprecated. Migrate to '@abeta.dev/india/react'.
+ */
 export const AmountSummaryCardIndia = React.forwardRef<HTMLDivElement, AmountSummaryCardIndiaProps>(
   (
     {
