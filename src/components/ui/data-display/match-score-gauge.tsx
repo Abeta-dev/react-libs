@@ -12,6 +12,9 @@ export interface MatchScoreGaugeProps extends React.HTMLAttributes<HTMLDivElemen
   showGrade?: boolean;
 }
 
+/**
+ * @deprecated Importing MatchScoreGauge from '@abeta.dev/react-libs' is deprecated. Migrate to '@abeta.dev/talent'.
+ */
 export function MatchScoreGauge({
   score,
   label = "Match Score",

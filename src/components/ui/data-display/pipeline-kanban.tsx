@@ -39,6 +39,9 @@ export interface PipelineKanbanProps extends React.HTMLAttributes<HTMLDivElement
   emptyMessage?: string;
 }
 
+/**
+ * @deprecated Importing PipelineKanban from '@abeta.dev/react-libs' is deprecated. Migrate to '@abeta.dev/talent'.
+ */
 export function PipelineKanban({
   columns = [],
   onCardClick,

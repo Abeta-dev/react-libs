@@ -33,6 +33,9 @@ export interface PdfViewerProps {
   onLoadError?: (error: Error) => void
 }
 
+/**
+ * @deprecated Importing PdfViewer from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/pdf' is deprecated. Migrate to '@abeta.dev/ui' or dedicated viewer.
+ */
 export function PdfViewer({
   file,
   className,

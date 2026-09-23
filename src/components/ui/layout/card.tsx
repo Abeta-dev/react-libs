@@ -2,6 +2,9 @@ import * as React from "react"
 
 import { cn } from "../../../lib/utils"
 
+/**
+ * @deprecated Importing Card from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/card' is deprecated. Migrate to '@abeta.dev/ui' or '@abeta.dev/ui/card'.
+ */
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>

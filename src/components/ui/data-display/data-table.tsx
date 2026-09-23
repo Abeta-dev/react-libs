@@ -350,6 +350,9 @@ function DataTableInternal<T extends Record<string, unknown>>(
   )
 }
 
+/**
+ * @deprecated Importing DataTable from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/data-table' is deprecated. Migrate to '@abeta.dev/ui' or '@abeta.dev/ui/data-table'.
+ */
 export const DataTable = React.forwardRef(DataTableInternal) as <T extends Record<string, unknown>>(
   props: DataTableProps<T> & React.RefAttributes<HTMLDivElement>
 ) => React.ReactElement | null;

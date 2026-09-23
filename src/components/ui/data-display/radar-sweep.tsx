@@ -19,6 +19,9 @@ export interface RadarSweepProps extends React.HTMLAttributes<HTMLDivElement> {
   statusText?: string;
 }
 
+/**
+ * @deprecated Importing RadarSweep from '@abeta.dev/react-libs' is deprecated. Migrate to '@abeta.dev/talent'.
+ */
 export function RadarSweep({
   size = 320,
   blips = [],

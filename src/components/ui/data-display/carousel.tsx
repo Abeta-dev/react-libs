@@ -46,6 +46,9 @@ function useCarousel() {
   return context;
 }
 
+/**
+ * @deprecated Importing Carousel from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/carousel' is deprecated. Migrate to '@abeta.dev/ui' or '@abeta.dev/ui/carousel'.
+ */
 const Carousel = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & CarouselProps
