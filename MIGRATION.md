@@ -4,6 +4,50 @@ This guide details architectural evolutions, new learning and verification primi
 
 ---
 
+## Migrating from `@abeta.dev/react-libs` to Modular Packages
+
+`@abeta.dev/react-libs` is deprecated in favor of four domain-scoped modular packages. This architectural evolution dramatically reduces consumer bundle footprint and dependency bloat by allowing applications to install only the domain slices they require.
+
+> [!NOTE]
+> **100% Backward Compatible**: All legacy export paths from `@abeta.dev/react-libs` (including root exports and subpaths like `@abeta.dev/react-libs/button`, `@abeta.dev/react-libs/india`, `@abeta.dev/react-libs/auth`, etc.) remain fully operational and non-breaking for existing applications.
+
+### Package Mapping Table
+
+| Domain / Area | Legacy Import (`@abeta.dev/react-libs`) | New Modular Package |
+| :--- | :--- | :--- |
+| **Core UI Components** | `import { Button, Card, Dialog } from "@abeta.dev/react-libs"` | `import { Button, Card, Dialog } from "@abeta.dev/ui"` |
+| **Standalone UI Subpaths** | `import { Button } from "@abeta.dev/react-libs/button"` | `import { Button } from "@abeta.dev/ui"` |
+| **India Statutory Validation** | `import { validateGSTIN, validatePAN } from "@abeta.dev/react-libs/india"` | `import { validateGSTIN, validatePAN } from "@abeta.dev/india"` |
+| **India React Components** | `import { AmountSummaryCardIndia, UpiQrCard } from "@abeta.dev/react-libs/india/react"` | `import { AmountSummaryCardIndia, UpiQrCard } from "@abeta.dev/india/react"` |
+| **Talent & Verification** | `import { ProofOfWorkCertificate, CheckpointRunner } from "@abeta.dev/react-libs"` | `import { ProofOfWorkCertificate, CheckpointRunner } from "@abeta.dev/talent"` |
+| **Authentication & Roles** | `import { useAuth, AuthProvider } from "@abeta.dev/react-libs/auth"` | `import { useAuth, AuthProvider } from "@abeta.dev/auth"` |
+
+### Migration Steps
+
+1. **Install the required scoped package(s)**:
+   ```bash
+   # Install only what your app uses:
+   npm install @abeta.dev/ui
+   npm install @abeta.dev/india
+   npm install @abeta.dev/talent
+   npm install @abeta.dev/auth
+   ```
+
+2. **Update your import statements**:
+   ```tsx
+   // Before (deprecated):
+   import { Button, Card } from "@abeta.dev/react-libs";
+   import { validateGSTIN } from "@abeta.dev/react-libs/india";
+   import { ProofOfWorkCertificate } from "@abeta.dev/react-libs";
+
+   // After (recommended):
+   import { Button, Card } from "@abeta.dev/ui";
+   import { validateGSTIN } from "@abeta.dev/india";
+   import { ProofOfWorkCertificate } from "@abeta.dev/talent";
+   ```
+
+---
+
 ## Upgrading to v0.17.0
 
 v0.17.0 introduces enterprise-grade learning, verification, and social engagement primitives along with local-first persistent state synchronization. All new exports are completely non-breaking and backwards-compatible with v0.16.0.

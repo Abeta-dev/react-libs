@@ -5,7 +5,9 @@ import { Search } from "lucide-react"
 
 import { cn } from "../../../lib/utils"
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "./dialog"
-
+/**
+ * @deprecated Importing Command from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/command' is deprecated. Migrate to '@abeta.dev/ui' or '@abeta.dev/ui/command'.
+ */
 const Command = React.forwardRef<
   React.ComponentRef<typeof CommandPrimitive>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive>

@@ -4,7 +4,7 @@ import { AuthProvider } from '../context/auth-context';
 import { MockAuthAdapter } from '../core/mock-adapter';
 
 const meta: Meta<typeof AuthCard> = {
-  title: 'Authentication/AuthCard',
+  title: 'Enterprise Authentication/AuthCard',
   component: AuthCard,
   tags: ['autodocs'],
   parameters: {

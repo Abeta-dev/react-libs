@@ -7,57 +7,77 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Overview & Documentation -->
+  <!-- Foundations & Documentation -->
   <url>
-    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/overview-docs-introduction--docs</loc>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/foundations-docs-introduction--docs</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/overview-docs-how-to-use-storybook--docs</loc>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/foundations-docs-how-to-use-storybook--docs</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/overview-docs-design-tokens--docs</loc>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/foundations-docs-design-tokens--docs</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/foundations-docs-performance-dashboard--docs</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- Interactive Workbench / Playground -->
+  <!-- Living Enterprise Workflows -->
   <url>
-    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/playground-interactive-workbench--docs</loc>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/living-enterprise-workflows-vendor-onboarding-kyc-flow--docs</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/living-enterprise-workflows-procurement-invoicing-settlement-flow--docs</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/living-enterprise-workflows-multi-tenant-administration-flow--docs</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/living-enterprise-workflows-interactive-workbench--docs</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Core UI Primitives -->
   <url>
-    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/forms-button--docs</loc>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/core-ui-primitives-forms-inputs-button--docs</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/data-display-datatable--docs</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Authentication Components -->
-  <url>
-    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/authentication-authcard--docs</loc>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/core-ui-primitives-data-display-datatable--docs</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- India Statutory Compliance Primitives -->
+  <!-- India Statutory & Regional -->
   <url>
-    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/india-primitives-amountsummarycardindia--docs</loc>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/india-statutory-regional-amountsummarycardindia--docs</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/india-primitives-upiqrcard--docs</loc>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/india-statutory-regional-upiqrcard--docs</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Enterprise Authentication -->
+  <url>
+    <loc>https://abeta-dev.github.io/react-libs/?path=/docs/enterprise-authentication-authcard--docs</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

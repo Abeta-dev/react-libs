@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { OAuthButton } from './oauth-button';
 
 const meta: Meta<typeof OAuthButton> = {
-  title: 'Authentication/OAuthButton',
+  title: 'Enterprise Authentication/OAuthButton',
   component: OAuthButton,
   tags: ['autodocs'],
   parameters: {

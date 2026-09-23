@@ -40,6 +40,9 @@ function isSameDateRange(a?: DateRange, b?: DateRange): boolean {
   return a.from?.getTime() === b.from?.getTime() && a.to?.getTime() === b.to?.getTime();
 }
 
+/**
+ * @deprecated Importing DatePickerWithRange from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/date-picker' is deprecated. Migrate to '@abeta.dev/ui' or '@abeta.dev/ui/date-range-picker'.
+ */
 export const DatePickerWithRange = React.forwardRef<
   HTMLDivElement,
   DatePickerWithRangeProps

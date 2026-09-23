@@ -64,6 +64,9 @@ export interface ButtonProps
   onBlocked?: ((reason: 'in_flight' | 'cooldown') => void) | undefined
 }
 
+/**
+ * @deprecated Importing Button from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/button' is deprecated. Migrate to '@abeta.dev/ui' or '@abeta.dev/ui/button'.
+ */
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {

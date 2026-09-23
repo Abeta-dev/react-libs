@@ -30,6 +30,9 @@ export interface ProofOfWorkCardProps extends React.HTMLAttributes<HTMLDivElemen
   item: ProofOfWorkItem;
 }
 
+/**
+ * @deprecated Importing ProofOfWorkCard from '@abeta.dev/react-libs' is deprecated. Migrate to '@abeta.dev/talent'.
+ */
 export function ProofOfWorkCard({
   item,
   className,

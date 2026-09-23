@@ -63,6 +63,9 @@ function sanitizeCssColor(value: unknown): string {
   )
 }
 
+/**
+ * @deprecated Importing ChartContainer from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/charts' is deprecated. Migrate to '@abeta.dev/ui' or '@abeta.dev/ui/chart'.
+ */
 const ChartContainer = React.forwardRef<
   HTMLDivElement,
   ChartContainerProps

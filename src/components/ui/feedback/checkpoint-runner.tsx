@@ -30,6 +30,8 @@ export interface CheckpointRunnerProps extends React.HTMLAttributes<HTMLDivEleme
  *
  * Interactive step verification component for hands-on technical tutorials,
  * architectural labs, and course checkpoints.
+ *
+ * @deprecated Importing CheckpointRunner from '@abeta.dev/react-libs' is deprecated. Migrate to '@abeta.dev/talent'.
  */
 export function CheckpointRunner({
   checkpoints = [],

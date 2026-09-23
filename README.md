@@ -12,6 +12,18 @@
 
 ---
 
+> [!WARNING]
+> **Package Deprecation Notice**: `@abeta.dev/react-libs` is deprecated in favor of modular scoped packages.
+> To decrease dependency footprints and install only what you need, migrate to:
+> - **`@abeta.dev/ui`**: Accessible Tailwind CSS v4 & Radix UI core components, layouts, forms, and charts.
+> - **`@abeta.dev/india`**: India statutory validation (GSTIN, PAN, IFSC), currency formatting, and fintech components (`@abeta.dev/india/react`).
+> - **`@abeta.dev/talent`**: Proof-of-work certificates, checkpoint runners, diagnostic quizzes, and career telemetry widgets.
+> - **`@abeta.dev/auth`**: JWT authentication sessions, multi-tenant roles, and auth guards.
+>
+> All legacy export surfaces in `@abeta.dev/react-libs` remain 100% backward-compatible and fully functional for existing applications. See [Migration Guide](./MIGRATION.md#migrating-from-abetadevreact-libs-to-modular-packages) for migration instructions.
+
+---
+
 ## Table of Contents
 
 1. [Installation](#installation)

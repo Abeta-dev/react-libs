@@ -28,6 +28,8 @@ export interface ProofOfWorkCertificateProps extends React.HTMLAttributes<HTMLDi
  *
  * Verifiable, print-ready credential certificate component showcasing
  * completed project deliverables, skills acquired, and cryptographic-style serial hashes.
+ *
+ * @deprecated Importing ProofOfWorkCertificate from '@abeta.dev/react-libs' is deprecated. Migrate to '@abeta.dev/talent'.
  */
 export function ProofOfWorkCertificate({
   certificateId,

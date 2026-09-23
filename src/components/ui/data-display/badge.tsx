@@ -33,6 +33,9 @@ export interface BadgeProps
   extends React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {}
 
+/**
+ * @deprecated Importing Badge from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/badge' is deprecated. Migrate to '@abeta.dev/ui' or '@abeta.dev/ui/badge'.
+ */
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (
     <span className={cn(badgeVariants({ variant }), className)} {...props} />

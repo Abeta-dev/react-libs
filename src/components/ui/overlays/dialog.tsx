@@ -4,7 +4,9 @@ import { X } from "lucide-react"
 
 import { cn } from "../../../lib/utils"
 
-
+/**
+ * @deprecated Importing Dialog from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/dialog' is deprecated. Migrate to '@abeta.dev/ui' or '@abeta.dev/ui/dialog'.
+ */
 const Dialog = DialogPrimitive.Root
 
 const DialogTrigger = DialogPrimitive.Trigger

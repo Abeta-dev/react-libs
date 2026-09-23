@@ -4,7 +4,7 @@ import { AuthProvider } from '../context/auth-context';
 import { MockAuthAdapter } from '../core/mock-adapter';
 
 const meta: Meta<typeof ForgotPasswordForm> = {
-  title: 'Authentication/ForgotPasswordForm',
+  title: 'Enterprise Authentication/ForgotPasswordForm',
   component: ForgotPasswordForm,
   tags: ['autodocs'],
   parameters: {
