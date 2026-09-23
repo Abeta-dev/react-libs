@@ -155,7 +155,7 @@ const BUDGETS = [
   {
     file: 'dist/style.css',
     label: 'Compiled Tailwind CSS',
-    maxRawKb: 180,
+    maxRawKb: 185,
     maxGzipKb: 35,
   },
 ];

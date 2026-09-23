@@ -1,0 +1,27 @@
+{
+  "name": "@abeta.dev/ui",
+  "version": "0.1.0",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./utils": "./src/utils.tsx",
+    "./button": "./src/forms/button.tsx",
+    "./dialog": "./src/overlays/dialog.tsx",
+    "./card": "./src/layout/card.tsx",
+    "./badge": "./src/data-display/badge.tsx",
+    "./input": "./src/forms/input.tsx",
+    "./data-table": "./src/data-display/data-table.tsx",
+    "./table": "./src/data-display/table.tsx",
+    "./select": "./src/forms/select.tsx",
+    "./form": "./src/forms/form.tsx",
+    "./sheet": "./src/overlays/sheet.tsx",
+    "./drawer": "./src/overlays/drawer.tsx",
+    "./popover": "./src/core/popover.tsx",
+    "./tooltip": "./src/overlays/tooltip.tsx",
+    "./calendar": "./src/core/calendar.tsx",
+    "./date-range-picker": "./src/core/date-range-picker.tsx",
+    "./command": "./src/overlays/command.tsx",
+    "./chart": "./src/data-display/chart.tsx",
+    "./carousel": "./src/data-display/carousel.tsx"
+  }
+}
