@@ -38,12 +38,24 @@ try {
   if (topChangelogVersion('CHANGELOG.md') !== rootPackage.version) {
     fail(`package.json version ${rootPackage.version} does not match the top CHANGELOG.md release.`);
   }
-  if (topChangelogVersion('packages/auth/CHANGELOG.md') !== authPackage.version) {
-    fail(`packages/auth/package.json version ${authPackage.version} does not match its top changelog release.`);
+  const scopedPackages = [
+    { manifest: 'packages/auth/package.json', changelog: 'packages/auth/CHANGELOG.md' },
+    { manifest: 'packages/ui/package.json', changelog: 'packages/ui/CHANGELOG.md' },
+    { manifest: 'packages/india/package.json', changelog: 'packages/india/CHANGELOG.md' },
+    { manifest: 'packages/talent/package.json', changelog: 'packages/talent/CHANGELOG.md' },
+  ];
+
+  for (const pkg of scopedPackages) {
+    const pkgJson = readJson(pkg.manifest);
+    if (topChangelogVersion(pkg.changelog) !== pkgJson.version) {
+      fail(`${pkg.manifest} version ${pkgJson.version} does not match its top changelog release.`);
+    }
+    console.log(`✅ ${pkgJson.name}@${pkgJson.version} changelog and manifest agree.`);
   }
   if (requiredAuthVersion !== authPackage.version) {
     fail(`${rootPackage.name} must depend on ${authPackage.name} with the exact workspace version ${authPackage.version}; found ${requiredAuthVersion ?? 'no dependency'}.`);
   }
+  console.log(`✅ ${rootPackage.name}@${rootPackage.version} pins ${authPackage.name}@${authPackage.version}.`);
 
   const refType = process.env.GITHUB_REF_TYPE;
   const refName = process.env.GITHUB_REF_NAME;
@@ -52,9 +64,6 @@ try {
   if (isTagBuild && refName && refName.replace(/^v/, '') !== rootPackage.version) {
     fail(`Git tag ${refName} does not match root package version ${rootPackage.version}.`);
   }
-
-  console.log(`✅ ${authPackage.name}@${authPackage.version} changelog and manifest agree.`);
-  console.log(`✅ ${rootPackage.name}@${rootPackage.version} pins ${authPackage.name}@${authPackage.version}.`);
   if (isTagBuild && refName) console.log(`✅ Git tag ${refName} matches the root package version.`);
 } catch (error) {
   fail(error instanceof Error ? error.message : String(error));

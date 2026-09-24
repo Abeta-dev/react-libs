@@ -70,8 +70,26 @@ jobs:
       - name: Verify Component Exports
         run: node scripts/check-exports.mjs
 
-      - name: Build Package
-        run: npm run build
+      - name: Build All Packages
+        run: |
+          echo "🔨 Compiling monorepo packages in dependency order..."
+
+          echo "📦 [1/5] Building @abeta.dev/ui (packages/ui)..."
+          npm run --workspace=packages/ui build
+
+          echo "📦 [2/5] Building @abeta.dev/india (packages/india)..."
+          npm run --workspace=packages/india build
+
+          echo "📦 [3/5] Building @abeta.dev/talent (packages/talent)..."
+          npm run --workspace=packages/talent build
+
+          echo "📦 [4/5] Building @abeta.dev/auth (packages/auth)..."
+          npm run --workspace=packages/auth build
+
+          echo "📦 [5/5] Building root @abeta.dev/react-libs..."
+          npm run build
+
+          echo "✅ All 5 packages built successfully."
 
       - name: Verify Packed External Consumers
         run: npm run verify:packed-consumers
@@ -99,20 +117,63 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish auth package
+      - name: Publish @abeta.dev/ui package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          UI_NAME=$(node -p "require('./packages/ui/package.json').name")
+          UI_VERSION=$(node -p "require('./packages/ui/package.json').version")
+          if npm view "${UI_NAME}@${UI_VERSION}" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
+            echo "ℹ️  ${UI_NAME}@${UI_VERSION} already exists on npm; leaving untouched."
+          else
+            echo "🚀 Publishing ${UI_NAME}@${UI_VERSION} to npm..."
+            npm publish -w packages/ui --access public --tag latest --provenance
+            echo "✅ Successfully published ${UI_NAME}@${UI_VERSION} to npm."
+          fi
+
+      - name: Publish @abeta.dev/india package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          INDIA_NAME=$(node -p "require('./packages/india/package.json').name")
+          INDIA_VERSION=$(node -p "require('./packages/india/package.json').version")
+          if npm view "${INDIA_NAME}@${INDIA_VERSION}" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
+            echo "ℹ️  ${INDIA_NAME}@${INDIA_VERSION} already exists on npm; leaving untouched."
+          else
+            echo "🚀 Publishing ${INDIA_NAME}@${INDIA_VERSION} to npm..."
+            npm publish -w packages/india --access public --tag latest --provenance
+            echo "✅ Successfully published ${INDIA_NAME}@${INDIA_VERSION} to npm."
+          fi
+
+      - name: Publish @abeta.dev/talent package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          TALENT_NAME=$(node -p "require('./packages/talent/package.json').name")
+          TALENT_VERSION=$(node -p "require('./packages/talent/package.json').version")
+          if npm view "${TALENT_NAME}@${TALENT_VERSION}" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
+            echo "ℹ️  ${TALENT_NAME}@${TALENT_VERSION} already exists on npm; leaving untouched."
+          else
+            echo "🚀 Publishing ${TALENT_NAME}@${TALENT_VERSION} to npm..."
+            npm publish -w packages/talent --access public --tag latest --provenance
+            echo "✅ Successfully published ${TALENT_NAME}@${TALENT_VERSION} to npm."
+          fi
+
+      - name: Publish @abeta.dev/auth package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           AUTH_NAME=$(node -p "require('./packages/auth/package.json').name")
           AUTH_VERSION=$(node -p "require('./packages/auth/package.json').version")
           if npm view "${AUTH_NAME}@${AUTH_VERSION}" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
-            echo "${AUTH_NAME}@${AUTH_VERSION} already exists on npm; leaving untouched."
+            echo "ℹ️  ${AUTH_NAME}@${AUTH_VERSION} already exists on npm; leaving untouched."
           else
+            echo "🚀 Publishing ${AUTH_NAME}@${AUTH_VERSION} to npm..."
             npm publish -w packages/auth --access public --tag latest --provenance
-            echo "Successfully published ${AUTH_NAME}@${AUTH_VERSION} to npm."
+            echo "✅ Successfully published ${AUTH_NAME}@${AUTH_VERSION} to npm."
           fi
 
-      - name: Publish root package
+      - name: Publish root package (@abeta.dev/react-libs)
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
@@ -122,10 +183,11 @@ jobs:
           AUTH_VERSION=$(node -p "require('./packages/auth/package.json').version")
           test "$(node -p "require('./package.json').dependencies['${AUTH_NAME}']")" = "${AUTH_VERSION}"
           if npm view "${ROOT_NAME}@${ROOT_VERSION}" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
-            echo "${ROOT_NAME}@${ROOT_VERSION} already exists on npm; leaving untouched."
+            echo "ℹ️  ${ROOT_NAME}@${ROOT_VERSION} already exists on npm; leaving untouched."
           else
+            echo "🚀 Publishing ${ROOT_NAME}@${ROOT_VERSION} to npm..."
             npm publish --access public --tag latest --provenance
-            echo "Successfully published ${ROOT_NAME}@${ROOT_VERSION} to npm."
+            echo "✅ Successfully published ${ROOT_NAME}@${ROOT_VERSION} to npm."
           fi
 
       - name: Create GitHub Release when absent
@@ -146,45 +208,89 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          AUTH_VERSION=$(node -p "require('./packages/auth/package.json').version")
-          ROOT_VERSION=$(node -p "require('./package.json').version")
-
           echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
           echo "@abeta-dev:registry=https://npm.pkg.github.com" >> ~/.npmrc
 
-          # Configure auth package for GitHub Packages
+          # Transform all package.json files for GitHub Packages:
+          # 1. Scope remapping: @abeta.dev/* -> @abeta-dev/*
+          # 2. Dependency remapping: all internal @abeta.dev/* deps -> @abeta-dev/*
+          # 3. publishConfig: registry set to https://npm.pkg.github.com
+          # 4. repository link: ensure repository URL and directory are present
           node -e '
             const fs = require("fs");
-            const p = JSON.parse(fs.readFileSync("./packages/auth/package.json", "utf8"));
-            p.name = "@abeta-dev/auth";
-            p.publishConfig = { registry: "https://npm.pkg.github.com" };
-            fs.writeFileSync("./packages/auth/package.json", JSON.stringify(p, null, 2));
-          '
+            const path = require("path");
 
-          if npm view "@abeta-dev/auth@${AUTH_VERSION}" version --registry=https://npm.pkg.github.com/ >/dev/null 2>&1; then
-            echo "@abeta-dev/auth@${AUTH_VERSION} already exists on GitHub Packages; leaving untouched."
-          else
-            npm publish -w packages/auth --registry=https://npm.pkg.github.com/
-            echo "Successfully published @abeta-dev/auth@${AUTH_VERSION} to GitHub Packages."
-          fi
+            const packages = [
+              { dir: "packages/ui", isWorkspace: true },
+              { dir: "packages/india", isWorkspace: true },
+              { dir: "packages/talent", isWorkspace: true },
+              { dir: "packages/auth", isWorkspace: true },
+              { dir: ".", isWorkspace: false }
+            ];
 
-          # Configure root package for GitHub Packages
-          node -e '
-            const fs = require("fs");
-            const p = JSON.parse(fs.readFileSync("./package.json", "utf8"));
-            p.name = "@abeta-dev/react-libs";
-            p.publishConfig = { registry: "https://npm.pkg.github.com" };
-            if (p.dependencies && p.dependencies["@abeta.dev/auth"]) {
-              p.dependencies["@abeta-dev/auth"] = p.dependencies["@abeta.dev/auth"];
-              delete p.dependencies["@abeta.dev/auth"];
+            function transformPackage(pkgPath, dir, isWorkspace) {
+              const p = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+              // 1. Rename scope @abeta.dev -> @abeta-dev
+              p.name = p.name.replace(/^@abeta\.dev\//, "@abeta-dev/");
+              p.publishConfig = { registry: "https://npm.pkg.github.com" };
+
+              // 2. Ensure repository field for GitHub package linkage
+              if (!p.repository || typeof p.repository === "string") {
+                p.repository = {
+                  type: "git",
+                  url: "git+https://github.com/Abeta-dev/react-libs.git"
+                };
+              }
+              if (isWorkspace) {
+                p.repository.directory = dir;
+              }
+
+              // 3. Remap all internal @abeta.dev dependencies to @abeta-dev
+              const depSections = ["dependencies", "peerDependencies", "optionalDependencies", "devDependencies"];
+              for (const section of depSections) {
+                if (!p[section]) continue;
+                for (const depKey of Object.keys(p[section])) {
+                  if (depKey.startsWith("@abeta.dev/")) {
+                    const newKey = depKey.replace(/^@abeta\.dev\//, "@abeta-dev/");
+                    p[section][newKey] = p[section][depKey];
+                    delete p[section][depKey];
+                  }
+                }
+              }
+
+              fs.writeFileSync(pkgPath, JSON.stringify(p, null, 2) + "\n");
+              console.log(`Transformed ${pkgPath} -> ${p.name}`);
             }
-            fs.writeFileSync("./package.json", JSON.stringify(p, null, 2));
+
+            for (const pkg of packages) {
+              transformPackage(path.join(pkg.dir, "package.json"), pkg.dir, pkg.isWorkspace);
+            }
           '
 
-          if npm view "@abeta-dev/react-libs@${ROOT_VERSION}" version --registry=https://npm.pkg.github.com/ >/dev/null 2>&1; then
-            echo "@abeta-dev/react-libs@${ROOT_VERSION} already exists on GitHub Packages; leaving untouched."
-          else
-            npm publish --registry=https://npm.pkg.github.com/
-            echo "Successfully published @abeta-dev/react-libs@${ROOT_VERSION} to GitHub Packages."
-          fi
+          # Publish packages to GitHub Packages in strict dependency order:
+          # 1. @abeta-dev/ui
+          # 2. @abeta-dev/india
+          # 3. @abeta-dev/talent
+          # 4. @abeta-dev/auth
+          # 5. @abeta-dev/react-libs (root)
 
+          PKGS=("packages/ui" "packages/india" "packages/talent" "packages/auth" ".")
+
+          for PKG_DIR in "${PKGS[@]}"; do
+            PKG_JSON="${PKG_DIR}/package.json"
+            PKG_NAME=$(node -p "require('./${PKG_JSON}').name")
+            PKG_VERSION=$(node -p "require('./${PKG_JSON}').version")
+            echo "🔍 Processing ${PKG_NAME}@${PKG_VERSION} for GitHub Packages..."
+
+            if npm view "${PKG_NAME}@${PKG_VERSION}" version --registry=https://npm.pkg.github.com/ >/dev/null 2>&1; then
+              echo "ℹ️  ${PKG_NAME}@${PKG_VERSION} already exists on GitHub Packages; leaving untouched."
+            else
+              echo "🚀 Publishing ${PKG_NAME}@${PKG_VERSION} to GitHub Packages..."
+              if [ "$PKG_DIR" = "." ]; then
+                npm publish --registry=https://npm.pkg.github.com/
+              else
+                npm publish -w "$PKG_DIR" --registry=https://npm.pkg.github.com/
+              fi
+              echo "✅ Successfully published ${PKG_NAME}@${PKG_VERSION} to GitHub Packages."
+            fi
+          done

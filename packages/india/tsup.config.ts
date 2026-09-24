@@ -1,5 +1,16 @@
 import { defineConfig } from "tsup";
 
+const EXTERNAL = [
+  "react",
+  "react/jsx-runtime",
+  "react-dom",
+  "react-dom/client",
+  "@abeta.dev/ui",
+  "clsx",
+  "lucide-react",
+  "qrcode",
+];
+
 export default defineConfig([
   {
     entry: ["src/index.ts"],
@@ -7,17 +18,19 @@ export default defineConfig([
     dts: true,
     clean: true,
     outDir: "dist",
+    external: EXTERNAL,
   },
   {
-    entry: ["src/react/index.ts"],
+    entry: {
+      "react/index": "src/react/index.ts",
+    },
     format: ["cjs", "esm"],
     dts: true,
     clean: false,
-    outDir: "dist/react",
-    esbuildOptions(options) {
-      options.banner = {
-        js: '"use client";',
-      };
+    outDir: "dist",
+    banner: {
+      js: '"use client";',
     },
-  }
+    external: EXTERNAL,
+  },
 ]);

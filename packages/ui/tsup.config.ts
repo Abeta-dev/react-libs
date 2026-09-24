@@ -1,35 +1,71 @@
 import { defineConfig } from "tsup";
 
-export default defineConfig({
-  entry: [
-    "src/index.ts",
-    "src/forms/button.tsx",
-    "src/overlays/dialog.tsx",
-    "src/layout/card.tsx",
-    "src/data-display/badge.tsx",
-    "src/forms/input.tsx",
-    "src/data-display/data-table.tsx",
-    "src/data-display/table.tsx",
-    "src/forms/select.tsx",
-    "src/forms/form.tsx",
-    "src/overlays/sheet.tsx",
-    "src/overlays/drawer.tsx",
-    "src/core/popover.tsx",
-    "src/overlays/tooltip.tsx",
-    "src/core/calendar.tsx",
-    "src/core/date-range-picker.tsx",
-    "src/overlays/command.tsx",
-    "src/data-display/chart.tsx",
-    "src/data-display/carousel.tsx"
-  ],
-  format: ["cjs", "esm"],
-  dts: true,
-  sourcemap: true,
-  clean: true,
-  external: ["react", "react-dom"],
-  esbuildOptions(options) {
-    options.banner = {
-      js: '"use client";'
-    };
-  }
-});
+const EXTERNAL = [
+  "react",
+  "react-dom",
+  "clsx",
+  "tailwind-merge",
+  "class-variance-authority",
+  "lucide-react",
+  "date-fns",
+  "embla-carousel-react",
+  "cmdk",
+  "vaul",
+  "input-otp",
+  "qrcode",
+  "recharts",
+  "next-themes",
+  "sonner",
+  "react-day-picker",
+  "react-hook-form",
+  "react-pdf",
+  "react-resizable-panels",
+  "canvas-confetti",
+  /^@radix-ui\/.+/,
+  "react/jsx-runtime",
+  "react-dom/client",
+];
+
+export default defineConfig([
+  {
+    entry: {
+      index: "src/index.ts",
+      button: "src/forms/button.tsx",
+      dialog: "src/overlays/dialog.tsx",
+      card: "src/layout/card.tsx",
+      badge: "src/data-display/badge.tsx",
+      input: "src/forms/input.tsx",
+      "data-table": "src/data-display/data-table.tsx",
+      table: "src/data-display/table.tsx",
+      select: "src/forms/select.tsx",
+      form: "src/forms/form.tsx",
+      sheet: "src/overlays/sheet.tsx",
+      drawer: "src/overlays/drawer.tsx",
+      popover: "src/core/popover.tsx",
+      tooltip: "src/overlays/tooltip.tsx",
+      calendar: "src/core/calendar.tsx",
+      "date-range-picker": "src/core/date-range-picker.tsx",
+      command: "src/overlays/command.tsx",
+      chart: "src/data-display/chart.tsx",
+      carousel: "src/data-display/carousel.tsx",
+    },
+    format: ["esm", "cjs"],
+    dts: true,
+    sourcemap: true,
+    clean: true,
+    banner: {
+      js: "'use client';",
+    },
+    external: EXTERNAL,
+  },
+  {
+    entry: {
+      utils: "src/utils.ts",
+    },
+    format: ["esm", "cjs"],
+    dts: true,
+    sourcemap: true,
+    clean: false,
+    external: EXTERNAL,
+  },
+]);

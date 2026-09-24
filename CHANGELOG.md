@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.17.1] - 2026-09-24
+
+### Added
+- Scaffolding for modular scoped packages `@abeta.dev/ui`, `@abeta.dev/india`, and `@abeta.dev/talent` in preparation for phased migration from monolithic `@abeta.dev/react-libs`.
+- Authored CSF 3 Storybook stories for 8 previously unrepresented components: `AmountSummaryCardIndia`, `LoginForm`, `SignUpForm`, `ForgotPasswordForm`, `OtpForm`, `OAuthButton`, `OAuthButtonGroup`, and `AuthCard`.
+- Storybook SEO meta tags, OpenGraph card assets, schema.org JSON-LD structured data, robots.txt, and sitemap.xml for documentation discovery.
+- Three living enterprise interactive workflow stories demonstrating vendor onboarding, compliance checkpoint verification, and multi-tenant authentication.
+
+### Changed
+- Marked legacy `@abeta.dev/react-libs` exports as deprecated with JSDoc annotations directing consumers to scoped packages according to `MIGRATION.md`.
+- Overhauled Storybook taxonomy into a unified 6-tier hierarchy and added interactive sandbox workbench.
+- Parallelized CI validation pipeline into 3 concurrent jobs: static analysis with Storybook, test suites with performance gates, and build verification.
+- Consolidated Vitest single-pass test execution with dual reporting, eliminating redundant test suite runs in CI.
+
+### Fixed
+- Fixed Storybook GitHub Pages deployment silent-skip issue caused by stale cache checks.
+- Fixed Tailwind v4 custom dark theme CSS variables and radius scale computation in Storybook preview.
+
 ## [0.17.0] - 2026-09-20
 
 ### Added
