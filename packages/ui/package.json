@@ -1,27 +1,327 @@
 {
   "name": "@abeta.dev/ui",
   "version": "0.1.0",
-  "main": "./src/index.ts",
+  "description": "Accessible, high-performance React 19 UI component primitives built with Tailwind CSS v4 and Radix UI.",
+  "author": "Umesh Gupta <umesh@abeta.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abeta-dev/react-libs.git",
+    "directory": "packages/ui"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": [
+    "*.css",
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "exports": {
-    ".": "./src/index.ts",
-    "./utils": "./src/utils.tsx",
-    "./button": "./src/forms/button.tsx",
-    "./dialog": "./src/overlays/dialog.tsx",
-    "./card": "./src/layout/card.tsx",
-    "./badge": "./src/data-display/badge.tsx",
-    "./input": "./src/forms/input.tsx",
-    "./data-table": "./src/data-display/data-table.tsx",
-    "./table": "./src/data-display/table.tsx",
-    "./select": "./src/forms/select.tsx",
-    "./form": "./src/forms/form.tsx",
-    "./sheet": "./src/overlays/sheet.tsx",
-    "./drawer": "./src/overlays/drawer.tsx",
-    "./popover": "./src/core/popover.tsx",
-    "./tooltip": "./src/overlays/tooltip.tsx",
-    "./calendar": "./src/core/calendar.tsx",
-    "./date-range-picker": "./src/core/date-range-picker.tsx",
-    "./command": "./src/overlays/command.tsx",
-    "./chart": "./src/data-display/chart.tsx",
-    "./carousel": "./src/data-display/carousel.tsx"
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./utils": {
+      "import": {
+        "types": "./dist/utils.d.ts",
+        "default": "./dist/utils.js"
+      },
+      "require": {
+        "types": "./dist/utils.d.cts",
+        "default": "./dist/utils.cjs"
+      }
+    },
+    "./button": {
+      "import": {
+        "types": "./dist/button.d.ts",
+        "default": "./dist/button.js"
+      },
+      "require": {
+        "types": "./dist/button.d.cts",
+        "default": "./dist/button.cjs"
+      }
+    },
+    "./dialog": {
+      "import": {
+        "types": "./dist/dialog.d.ts",
+        "default": "./dist/dialog.js"
+      },
+      "require": {
+        "types": "./dist/dialog.d.cts",
+        "default": "./dist/dialog.cjs"
+      }
+    },
+    "./card": {
+      "import": {
+        "types": "./dist/card.d.ts",
+        "default": "./dist/card.js"
+      },
+      "require": {
+        "types": "./dist/card.d.cts",
+        "default": "./dist/card.cjs"
+      }
+    },
+    "./badge": {
+      "import": {
+        "types": "./dist/badge.d.ts",
+        "default": "./dist/badge.js"
+      },
+      "require": {
+        "types": "./dist/badge.d.cts",
+        "default": "./dist/badge.cjs"
+      }
+    },
+    "./input": {
+      "import": {
+        "types": "./dist/input.d.ts",
+        "default": "./dist/input.js"
+      },
+      "require": {
+        "types": "./dist/input.d.cts",
+        "default": "./dist/input.cjs"
+      }
+    },
+    "./data-table": {
+      "import": {
+        "types": "./dist/data-table.d.ts",
+        "default": "./dist/data-table.js"
+      },
+      "require": {
+        "types": "./dist/data-table.d.cts",
+        "default": "./dist/data-table.cjs"
+      }
+    },
+    "./table": {
+      "import": {
+        "types": "./dist/table.d.ts",
+        "default": "./dist/table.js"
+      },
+      "require": {
+        "types": "./dist/table.d.cts",
+        "default": "./dist/table.cjs"
+      }
+    },
+    "./select": {
+      "import": {
+        "types": "./dist/select.d.ts",
+        "default": "./dist/select.js"
+      },
+      "require": {
+        "types": "./dist/select.d.cts",
+        "default": "./dist/select.cjs"
+      }
+    },
+    "./form": {
+      "import": {
+        "types": "./dist/form.d.ts",
+        "default": "./dist/form.js"
+      },
+      "require": {
+        "types": "./dist/form.d.cts",
+        "default": "./dist/form.cjs"
+      }
+    },
+    "./sheet": {
+      "import": {
+        "types": "./dist/sheet.d.ts",
+        "default": "./dist/sheet.js"
+      },
+      "require": {
+        "types": "./dist/sheet.d.cts",
+        "default": "./dist/sheet.cjs"
+      }
+    },
+    "./drawer": {
+      "import": {
+        "types": "./dist/drawer.d.ts",
+        "default": "./dist/drawer.js"
+      },
+      "require": {
+        "types": "./dist/drawer.d.cts",
+        "default": "./dist/drawer.cjs"
+      }
+    },
+    "./popover": {
+      "import": {
+        "types": "./dist/popover.d.ts",
+        "default": "./dist/popover.js"
+      },
+      "require": {
+        "types": "./dist/popover.d.cts",
+        "default": "./dist/popover.cjs"
+      }
+    },
+    "./tooltip": {
+      "import": {
+        "types": "./dist/tooltip.d.ts",
+        "default": "./dist/tooltip.js"
+      },
+      "require": {
+        "types": "./dist/tooltip.d.cts",
+        "default": "./dist/tooltip.cjs"
+      }
+    },
+    "./calendar": {
+      "import": {
+        "types": "./dist/calendar.d.ts",
+        "default": "./dist/calendar.js"
+      },
+      "require": {
+        "types": "./dist/calendar.d.cts",
+        "default": "./dist/calendar.cjs"
+      }
+    },
+    "./date-range-picker": {
+      "import": {
+        "types": "./dist/date-range-picker.d.ts",
+        "default": "./dist/date-range-picker.js"
+      },
+      "require": {
+        "types": "./dist/date-range-picker.d.cts",
+        "default": "./dist/date-range-picker.cjs"
+      }
+    },
+    "./command": {
+      "import": {
+        "types": "./dist/command.d.ts",
+        "default": "./dist/command.js"
+      },
+      "require": {
+        "types": "./dist/command.d.cts",
+        "default": "./dist/command.cjs"
+      }
+    },
+    "./chart": {
+      "import": {
+        "types": "./dist/chart.d.ts",
+        "default": "./dist/chart.js"
+      },
+      "require": {
+        "types": "./dist/chart.d.cts",
+        "default": "./dist/chart.cjs"
+      }
+    },
+    "./carousel": {
+      "import": {
+        "types": "./dist/carousel.d.ts",
+        "default": "./dist/carousel.js"
+      },
+      "require": {
+        "types": "./dist/carousel.d.cts",
+        "default": "./dist/carousel.cjs"
+      }
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "utils": ["./dist/utils.d.ts"],
+      "button": ["./dist/button.d.ts"],
+      "dialog": ["./dist/dialog.d.ts"],
+      "card": ["./dist/card.d.ts"],
+      "badge": ["./dist/badge.d.ts"],
+      "input": ["./dist/input.d.ts"],
+      "data-table": ["./dist/data-table.d.ts"],
+      "table": ["./dist/table.d.ts"],
+      "select": ["./dist/select.d.ts"],
+      "form": ["./dist/form.d.ts"],
+      "sheet": ["./dist/sheet.d.ts"],
+      "drawer": ["./dist/drawer.d.ts"],
+      "popover": ["./dist/popover.d.ts"],
+      "tooltip": ["./dist/tooltip.d.ts"],
+      "calendar": ["./dist/calendar.d.ts"],
+      "date-range-picker": ["./dist/date-range-picker.d.ts"],
+      "command": ["./dist/command.d.ts"],
+      "chart": ["./dist/chart.d.ts"],
+      "carousel": ["./dist/carousel.d.ts"]
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.12",
+    "@radix-ui/react-alert-dialog": "^1.1.15",
+    "@radix-ui/react-aspect-ratio": "^1.1.8",
+    "@radix-ui/react-avatar": "^1.1.11",
+    "@radix-ui/react-checkbox": "^1.3.3",
+    "@radix-ui/react-collapsible": "^1.1.12",
+    "@radix-ui/react-context-menu": "^2.2.16",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-hover-card": "^1.1.15",
+    "@radix-ui/react-label": "^2.1.8",
+    "@radix-ui/react-menubar": "^1.1.16",
+    "@radix-ui/react-navigation-menu": "^1.2.14",
+    "@radix-ui/react-popover": "^1.1.15",
+    "@radix-ui/react-progress": "^1.1.8",
+    "@radix-ui/react-radio-group": "^1.3.8",
+    "@radix-ui/react-scroll-area": "^1.2.10",
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-separator": "^1.1.8",
+    "@radix-ui/react-slider": "^1.3.6",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-switch": "^1.2.6",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@radix-ui/react-toast": "^1.2.7",
+    "@radix-ui/react-toggle": "^1.1.10",
+    "@radix-ui/react-toggle-group": "^1.1.11",
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "input-otp": "^1.4.2",
+    "lucide-react": "^0.577.0",
+    "qrcode": "^1.5.4",
+    "react-resizable-panels": "^4.7.5",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.5.0"
+  },
+  "peerDependencies": {
+    "canvas-confetti": "^1.9.4",
+    "cmdk": "^1.1.1",
+    "embla-carousel-react": "^8.6.0",
+    "jspdf": ">=2.5.0",
+    "jspdf-autotable": ">=3.8.0",
+    "next-themes": "^0.4.6",
+    "react": "^18.2.0 || ^19.0.0",
+    "react-day-picker": "^9.14.0",
+    "react-dom": "^18.2.0 || ^19.0.0",
+    "react-hook-form": "^7.72.0",
+    "react-pdf": "^10.0.0",
+    "recharts": "^3.8.0",
+    "vaul": "^1.1.2",
+    "xlsx": ">=0.18.0"
+  },
+  "peerDependenciesMeta": {
+    "canvas-confetti": { "optional": true },
+    "cmdk": { "optional": true },
+    "embla-carousel-react": { "optional": true },
+    "jspdf": { "optional": true },
+    "jspdf-autotable": { "optional": true },
+    "next-themes": { "optional": true },
+    "react-day-picker": { "optional": true },
+    "react-hook-form": { "optional": true },
+    "react-pdf": { "optional": true },
+    "recharts": { "optional": true },
+    "vaul": { "optional": true },
+    "xlsx": { "optional": true }
   }
 }

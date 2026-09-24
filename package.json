@@ -1,6 +1,6 @@
 {
   "name": "@abeta.dev/react-libs",
-  "version": "0.17.0",
+  "version": "0.17.1",
   "description": "Production-grade, highly performant React 19 component library with strict TypeScript types, atomic exports, and zero dependency leakage.",
   "deprecated": "@abeta.dev/react-libs is deprecated. Please migrate to the scoped packages: @abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, or @abeta.dev/auth.",
   "keywords": [
@@ -120,6 +120,7 @@
   "scripts": {
     "prepare": "node -e \"if (!fs.existsSync('dist/index.d.ts')) { const cp = require('child_process'); cp.execSync('npm run build', { stdio: 'inherit' }); }\"",
     "build": "npm run --prefix packages/auth build && node -e \"fs.rmSync('dist', { recursive: true, force: true })\" && tsup && node scripts/build-css.mjs",
+    "build:packages": "npm run --workspace=packages/ui build && npm run --workspace=packages/india build && npm run --workspace=packages/talent build && npm run --workspace=packages/auth build",
     "build:css": "node scripts/build-css.mjs",
     "prepack": "npm run build",
     "prepublishOnly": "npm run build",

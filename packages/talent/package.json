@@ -2,24 +2,58 @@
   "name": "@abeta.dev/talent",
   "version": "0.1.0",
   "description": "Interactive assessment, candidate evaluation, checkpoint runners, and kanban pipeline UI for React 19.",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "author": "Umesh Gupta <umesh@abeta.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abeta-dev/react-libs.git",
+    "directory": "packages/talent"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     }
   },
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@abeta.dev/ui": "^0.1.0",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.577.0",
-    "@abeta.dev/ui": "*"
+    "lucide-react": "^0.577.0"
+  },
+  "peerDependencies": {
+    "canvas-confetti": "^1.9.4",
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "canvas-confetti": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.9.0",
@@ -28,15 +62,5 @@
     "canvas-confetti": "^1.9.4",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0"
-  },
-  "peerDependencies": {
-    "canvas-confetti": "^1.9.4",
-    "react": ">=18",
-    "react-dom": ">=18"
-  },
-  "peerDependenciesMeta": {
-    "canvas-confetti": {
-      "optional": true
-    }
   }
 }

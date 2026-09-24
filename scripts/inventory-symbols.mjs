@@ -238,8 +238,7 @@ export function verifyChangelogSymbols() {
         if (
           symbols.has(token) ||
           files.has(token) ||
-          token.startsWith('@abeta.dev/react-libs') ||
-          token.startsWith('@abeta.dev/auth') ||
+          token.startsWith('@abeta.dev/') ||
           token.startsWith('./')
         ) {
           // OK
