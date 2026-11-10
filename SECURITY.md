@@ -19,7 +19,7 @@ We strongly advise all users to stay updated with the latest releases to ensure 
 
 If you believe you have discovered a security vulnerability in `@abeta.dev/react-libs`, please report it responsibly by following these steps:
 
-1. Send an email directly to **[security@abeta.dev](mailto:security@abeta.dev)** (or **[umesh@abeta.dev](mailto:umesh@abeta.dev)**) with the subject line:  
+1. Send an email directly to **[security@abeta.dev](mailto:security@abeta.dev)** (or **[contact@abeta.dev](mailto:contact@abeta.dev)**) with the subject line:  
    `[Security Vulnerability]: @abeta.dev/react-libs - <Brief Description>`
 2. Include the following information in your report:
    - A clear description of the vulnerability and its potential impact.

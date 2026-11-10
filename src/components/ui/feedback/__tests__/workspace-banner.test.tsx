@@ -19,8 +19,8 @@ describe("WorkspaceBanner", () => {
     ).toBeInTheDocument();
 
     const bannerDiv = container.firstChild as HTMLElement;
-    expect(bannerDiv.className).toContain("from-indigo-600");
-    expect(bannerDiv.className).toContain("to-indigo-800");
+    expect(bannerDiv.className).toContain("from-slate-900");
+    expect(bannerDiv.className).toContain("to-slate-800");
   });
 
   it("renders without subtitle gracefully without empty paragraph", () => {
@@ -70,7 +70,7 @@ describe("WorkspaceBanner", () => {
     expect(bannerDiv.className).toContain("from-amber-600");
     expect(bannerDiv.className).toContain("via-orange-600");
     expect(bannerDiv.className).toContain("to-rose-700");
-    expect(bannerDiv.className).not.toContain("from-indigo-600");
+    expect(bannerDiv.className).not.toContain("from-slate-900");
   });
 
   it("supports rich ReactNode elements for title and subtitle", () => {
@@ -103,7 +103,7 @@ describe("WorkspaceBanner", () => {
         id: "org-1",
         name: "Mahavir Packaging (North Zone)",
         desc: "Active GSTIN: 07AAAAA0000A1Z5",
-        gradient: "from-blue-700 to-indigo-900",
+        gradient: "from-blue-700 to-slate-900",
       },
       {
         id: "org-2",

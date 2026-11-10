@@ -1,0 +1,42 @@
+---
+description: CI invariants, Truth Gates, ATT W typing rules, directive boundaries, and performance testing for @abeta.dev libraries
+globs: ["scripts/**/*", ".github/**/*", "tests/**/*", "src/**/__tests__/**/*", ".attw.json"]
+---
+
+# CI Truth Gates & Quality Invariants
+
+## 1. Zero `--ignore-rules` Invariant
+- **Rule**: `@arethetypeswrong/cli` (`attw`) must validate type definitions with ZERO suppressed rules.
+- **Enforcement**: Any presence of `--ignore-rules` in `package.json`, `.github/workflows/`, or `.attw.json` triggers immediate CI failure.
+- **Verification**: Run `npm run check:types-pkg`.
+
+## 2. Module Directive Boundaries (`use client` vs Universal)
+- **Client Bundles**:
+  - `dist/index.js`, `dist/pdf.js`, `dist/hooks/use-toast.js`, `dist/india/react/index.js`, and standalone UI subpaths must have `'use client';` as the literal first token (first 40 bytes).
+  - No duplicate directives allowed.
+- **Universal / Server Modules**:
+  - `dist/utils.js`, `dist/india/index.js`, and `dist/analytics/index.js` must NEVER contain `'use client'` anywhere in the file.
+- **Verification**: Run `node scripts/verify-directives.mjs`.
+
+## 3. Truth Gate & Tree Integrity (`scripts/docs-match-tree.mjs`)
+- **Version Alignment**: `package.json` version, `README.md` badge, and top entry in `CHANGELOG.md` must match target release version.
+- **GitHub Actions**: Workflows must use pinned official major versions (`actions/checkout@v4`, `actions/setup-node@v4`, `actions/upload-pages-artifact@v3`, `actions/deploy-pages@v4`).
+- **Symbol Inventory**: Every component mentioned in `README.md` and every `### Added` item in `CHANGELOG.md` must exist in codebase exports.
+- **Measured Metrics**: Test counts, coverage, and bundle sizes in docs must be dynamically verifiable via `scripts/measure-metrics.mjs`. Hardcoded fake numbers are rejected.
+- **Verification**: Run `npm run check:truth`.
+
+## 4. P95 Performance Gate
+- **Threshold**: Component render and mount latency must not exceed **750ms** at P95 (`PERF_P95_THRESHOLD=750`).
+- **Verification**: Run `npm run perf`.
+
+## 5. Bundle Size Budget Enforcement
+- Production bundles must strictly respect raw and gzipped size ceilings:
+  - `dist/index.js`: Max Raw 530 KB, Max Gzip 105 KB
+  - `dist/utils.js`: Max Raw 20 KB, Max Gzip 5 KB
+  - `dist/india/index.js`: Max Raw 25 KB, Max Gzip 8 KB
+  - Standalone primitives (`button`, `dialog`, `card`, `badge`, `input`): Max Raw 6-15 KB, Max Gzip 2-5 KB
+- **Verification**: Run `npm run check:size`.
+
+## 6. Testing Standards
+- Full test coverage required for interactive states, accessibility attributes, and error boundaries.
+- SSR hydration smoke tests must verify zero window/document access before component mount (`npm run check:ssr`).

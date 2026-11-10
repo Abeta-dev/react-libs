@@ -168,7 +168,7 @@ export const ClickToBurstCanvas: Story = {
         }}
         className="w-[500px] h-[300px] rounded-2xl border-2 border-dashed border-primary/30 bg-primary/5 flex flex-col items-center justify-center text-center p-6 cursor-crosshair select-none hover:border-primary/50 transition-colors"
       >
-        <MousePointerClick className="w-8 h-8 text-primary mb-2 animate-bounce" />
+        <MousePointerClick className="w-8 h-8 text-primary mb-2 transition-transform duration-300 ease-out hover:scale-110" />
         <h4 className="text-sm font-bold text-foreground">Interactive Click Canvas</h4>
         <p className="text-xs text-muted-foreground mt-1 max-w-xs">
           Click anywhere inside this area to fire a localized micro-burst originating precisely from your cursor.

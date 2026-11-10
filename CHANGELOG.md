@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.20.0] - 2026-11-10
+
+### Changed
+- Domain and author transition across repository manifests and documentation to `abeta-dev` and `contact@abeta.dev`.
+- Updated package author and maintainer identity in `package.json`, `packages/ui/package.json`, `packages/india/package.json`, `packages/talent/package.json`, and `packages/auth/package.json`.
+- Updated repository license copyright notice, code of conduct enforcement email, and security vulnerability contact channels.
+- Synchronized version bump of all scoped monorepo packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, and `@abeta.dev/auth`) to `0.20.0`.
+- Standardized design system token architectures across theme variables and documentation, eliminating unverified AI-slop color palettes in favor of accessible, high-contrast tokens.
+
+### Added
+- Dedicated AI Agent configurations and developer guidelines including `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.cursorrules`, `.cursor/rules/*.mdc`, GitHub Copilot instructions, and agent skills.
+- Impeccable design system review, tokens documentation, and formal design guidelines for accessible UI primitives.
+- Monorepo dependency alignment ensuring `@abeta.dev/react-libs` explicitly pins `@abeta.dev/auth` at `0.20.0`.
+
 ## [0.17.1] - 2026-09-24
 
 ### Added

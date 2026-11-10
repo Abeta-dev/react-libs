@@ -85,7 +85,14 @@ describe('Item Component Suite', () => {
   });
 
   it('renders ItemMedia with image variant', () => {
-    const { container } = render(<ItemMedia variant="image"><img src="#" alt="thumb" /></ItemMedia>);
+    const { container } = render(
+      <ItemMedia variant="image">
+        <img
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><rect width='24' height='24' fill='%23ccc'/></svg>"
+          alt="thumb"
+        />
+      </ItemMedia>
+    );
     expect(container.querySelector('[data-variant="image"]')).toBeInTheDocument();
   });
 
