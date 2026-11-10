@@ -1,0 +1,61 @@
+---
+description: Tailwind CSS v4 design system, tokens, accessible patterns, and Radix UI conventions for @abeta.dev UI components
+globs: ["packages/ui/**/*", "src/components/**/*", "src/styles/**/*"]
+---
+
+# UI Design System & Component Guidelines
+
+## 1. Tailwind CSS v4 Architecture
+
+- **No `tailwind.config.js`**:
+  Tailwind v4 is configured entirely via CSS. Do NOT add `tailwind.config.js` or `tailwind.config.ts`.
+- **CSS Custom Property Tokens**:
+  All design tokens are defined in `src/styles/theme.css`:
+  - Colors: `--background`, `--foreground`, `--primary`, `--primary-foreground`, `--muted`, `--muted-foreground`, `--border`, `--destructive`, etc.
+  - Metrics: `--radius`, `--font-sans`, `--font-mono`.
+- **Class Merging**:
+  Always use the `cn(...)` utility helper (`clsx` + `tailwind-merge`) when applying or extending classes:
+  ```tsx
+  import { cn } from "@/utils";
+  
+  export function MyComponent({ className, ...props }: ComponentProps) {
+    return <div className={cn("base-classes bg-primary text-primary-foreground", className)} {...props} />;
+  }
+  ```
+- **No Inline Styles**:
+  Do not use `style={{ ... }}` for static styling, layout, or color assignments. Use Tailwind classes.
+
+## 2. Radix UI & Component Composition
+
+- **Polymorphism with `Slot` (`asChild`)**:
+  Interactive primitives (Button, Link, Card triggers) must support the `asChild` prop via Radix UI `@radix-ui/react-slot`:
+  ```tsx
+  import { Slot } from "@radix-ui/react-slot";
+  
+  export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+    ({ asChild = false, className, ...props }, ref) => {
+      const Comp = asChild ? Slot : "button";
+      return <Comp ref={ref} className={cn(buttonVariants({ ... }), className)} {...props} />;
+    }
+  );
+  ```
+- **Controlled vs Uncontrolled States**:
+  Support both controlled (`value`/`onValueChange`) and uncontrolled (`defaultValue`) patterns in input, select, dialog, and tab components.
+
+## 3. Accessibility Standards (WCAG 2.2 AA)
+
+- **Dynamic IDs**: Always use `React.useId()` to generate element IDs:
+  ```tsx
+  const id = React.useId();
+  // <label htmlFor={id}>
+  // <input id={id} aria-describedby={`${id}-error`} />
+  // <p id={`${id}-error`} role="alert">
+  ```
+- **Loading & Busy States**:
+  Buttons in `isPending` or loading states must show an accessible spinner and announce `aria-busy="true"`.
+- **Form Error Association**:
+  Invalid inputs must set `aria-invalid="true"` and point `aria-describedby` to the error element.
+- **Focus Rings**:
+  Never remove outline focus rings without providing an accessible alternative (`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`).
+- **Touch Targets**:
+  Ensure minimum interactive hit targets of >= 24x24px (desktop) and >= 44x44px (mobile touch).

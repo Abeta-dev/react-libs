@@ -1,0 +1,46 @@
+---
+description: Monorepo architecture, package boundaries, export maps, and backward compatibility rules for @abeta.dev libraries
+globs: ["packages/**/*", "src/**/*", "package.json", "tsup.config.ts"]
+---
+
+# Monorepo Architecture & Package Guidelines
+
+## 1. Five-Package Topology
+
+The repository follows an npm workspace monorepo layout:
+
+1. **`@abeta.dev/ui` (`packages/ui`)**:
+   - Contains 111 accessible primitives built with Tailwind CSS v4 and Radix UI.
+   - Atomic subpath exports for micro-bundles (`@abeta.dev/ui/button`, `@abeta.dev/ui/dialog`, `@abeta.dev/ui/card`, etc.).
+   - Isolate heavy peer dependencies (`cmdk`, `vaul`, `recharts`, `react-day-picker`) to dedicated subpaths.
+
+2. **`@abeta.dev/india` (`packages/india`)**:
+   - Pure domain statutory validation and currency formatting under `@abeta.dev/india` (RSC and server-safe).
+   - Interactive regional UI components under `@abeta.dev/india/react` (`'use client'`).
+
+3. **`@abeta.dev/talent` (`packages/talent`)**:
+   - Candidate assessment, diagnostic quizzes, checkpoint runners, and `ProofOfWorkCertificate`.
+   - Built-in `@media print` single-page layouts and hydration-safe date handling.
+
+4. **`@abeta.dev/auth` (`packages/auth`)**:
+   - `@abeta.dev/auth/core`: Pure TypeScript, zero React runtime, zero `'use client'`. Handles in-memory session snapshots, HttpOnly cookie refresh, CSRF protection, and single-flight refresh mutex.
+   - `@abeta.dev/auth/react`: React 19 client provider, hooks (`useAuthClientSnapshot`, `useClickBackpressure`), and UI components.
+
+5. **`@abeta.dev/react-libs` (Root `.`)**:
+   - Omnibus umbrella package.
+   - Preserves 100% backward compatibility for all existing imports.
+   - Re-exports modular packages and legacy utilities/analytics.
+
+## 2. Export Maps & Build Configuration
+
+- **Dual ESM & CJS Output**:
+  Every package builds to both ESM (`.js`, `.d.ts`) and CommonJS (`.cjs`, `.d.cts`) via `tsup`.
+- **typesVersions Synchronization**:
+  Whenever a new subpath is added to `package.json#exports`, it MUST also be added to `package.json#typesVersions["*"]` to ensure compatibility with legacy TypeScript resolution strategies.
+- **Tree-Shaking Integrity**:
+  Ensure `"sideEffects": false` (or explicitly declare `"sideEffects": ["*.css", "**/*.css"]`) in every package.
+
+## 3. Backward Compatibility Mandates
+
+- Never delete or rename an existing exported symbol from root `src/index.ts` or root subpaths.
+- If a component or function is relocated to a workspace package, re-export it from root with backward-compatible typing.

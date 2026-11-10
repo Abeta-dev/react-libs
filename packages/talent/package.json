@@ -1,8 +1,8 @@
 {
   "name": "@abeta.dev/talent",
-  "version": "0.1.0",
+  "version": "0.20.0",
   "description": "Interactive assessment, candidate evaluation, checkpoint runners, and kanban pipeline UI for React 19.",
-  "author": "Umesh Gupta <umesh@abeta.dev>",
+  "author": "abeta-dev <contact@abeta.dev>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -41,7 +41,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@abeta.dev/ui": "^0.1.0",
+    "@abeta.dev/ui": "^0.20.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.577.0"
   },

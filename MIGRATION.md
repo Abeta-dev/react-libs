@@ -48,6 +48,21 @@ This guide details architectural evolutions, new learning and verification primi
 
 ---
 
+## Upgrading to v0.20.0
+
+v0.20.0 transitions maintainer and package metadata to `abeta-dev`, introduces comprehensive multi-agent tooling configurations, standardizes design system tokens without AI-slop color palettes, and synchronizes versions across all scoped packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, and `@abeta.dev/auth` at `0.20.0`).
+
+### 1. Domain & Author Alignment
+Package manifests, licensing, security, and contact channels have transitioned to `abeta-dev <contact@abeta.dev>`.
+
+### 2. Design System Tokens Review
+Color tokens have been audited for contrast and accessibility compliance, replacing unverified AI-slop palettes with production-grade color tokens.
+
+### 3. Synchronized Scoped Packages
+All scoped packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, and `@abeta.dev/auth`) are bumped in lockstep to `0.20.0`.
+
+---
+
 ## Upgrading to v0.17.0
 
 v0.17.0 introduces enterprise-grade learning, verification, and social engagement primitives along with local-first persistent state synchronization. All new exports are completely non-breaking and backwards-compatible with v0.16.0.

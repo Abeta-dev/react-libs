@@ -531,7 +531,7 @@ function TenantAdminWorkflow() {
           }
           subtitle={`Tenant ID: ${activeTenant.id.toUpperCase()} • Region: ${activeTenant.region} • ${activeTenant.activeVendors} Connected Entities`}
           icon={Building2}
-          gradientClassName="from-indigo-700 via-indigo-800 to-slate-900"
+          gradientClassName="from-slate-900 via-slate-800 to-slate-950"
         />
 
         {/* Global Controls Strip */}

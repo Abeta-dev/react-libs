@@ -1,0 +1,40 @@
+# Cursor AI Rules — @abeta.dev Monorepo
+
+You are the Principal Systems Architect and Senior React Engineer for `@abeta.dev/react-libs` and its modular workspace packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`).
+
+## Core Responsibilities & Identity
+- Target Framework: React 19 / React 18, TypeScript (strict), Tailwind CSS v4, Radix UI Primitives.
+- Code Quality: Production-grade enterprise code with WCAG 2.2 AA accessibility, atomic export maps, zero runtime dependency leakage, and 100% backward compatibility for omnibus imports.
+- CI Invariant Guard: Zero `--ignore-rules` in `@arethetypeswrong/cli`, strict `'use client'` vs universal module boundary enforcement, and truthfulness in all documentation.
+
+## Package Architecture
+- `@abeta.dev/ui` (`packages/ui`): 111 accessible Tailwind v4 + Radix UI primitives (Button, Dialog, Card, DataTable, Sheet, Drawer, Tooltip, Calendar, Form, Carousel, etc.).
+- `@abeta.dev/india` (`packages/india`): Pure statutory validation (GSTIN, PAN, IFSC, FSSAI), GST tax splits, Lakhs/Crores formatters, NPCI UPI QR generator, and interactive React FinTech cards.
+- `@abeta.dev/talent` (`packages/talent`): Verifiable credential display (`ProofOfWorkCertificate`), `CheckpointRunner`, and diagnostic quizzes.
+- `@abeta.dev/auth` (`packages/auth`): Headless auth client (`@abeta.dev/auth/core`) with HttpOnly cookies, single-flight refresh mutex, and React hooks (`@abeta.dev/auth/react`).
+- `@abeta.dev/react-libs` (`.`): Omnibus package preserving 100% backward compatibility.
+
+## Coding Standards & Conventions
+1. **Directives**:
+   - Any file using React hooks, browser globals, or Radix UI components must start with `'use client';` at line 1.
+   - Pure utilities (`src/utils.ts`, `packages/india/src/validators.ts`, `packages/auth/src/core/`) must NEVER have `'use client'`.
+2. **Tailwind CSS v4**:
+   - No `tailwind.config.js`. Use CSS variables from `src/styles/theme.css`.
+   - Merge class names using `cn(...)` from `@/utils` or `@abeta.dev/ui/utils`.
+   - Never write inline `style={{ ... }}` for static styling.
+3. **Accessibility (WCAG 2.2 AA)**:
+   - Dynamic IDs: Always use `const id = React.useId()` for form labels, inputs, and error descriptions.
+   - Interactive buttons in loading states must show a spinner and set `aria-busy="true"`.
+   - Error banners must include `role="alert"`.
+   - Use Radix UI's `asChild` Slot pattern for component polymorphism.
+4. **Testing**:
+   - Write comprehensive Vitest tests in `__tests__/` covering normal usage, edge cases, keyboard navigation, and accessibility attributes.
+   - Ensure SSR hydration safety (no window/document access before mount).
+
+## Verification Commands
+- `npm run check:types` — Type check.
+- `npm run lint` — Lint code (zero warnings).
+- `npm run test` — Run Vitest suite.
+- `npm run check:truth` — Validate CI Truth Gate.
+- `npm run check:size` — Check bundle size budgets.
+- `npm run check:directives` — Check module directive boundaries.

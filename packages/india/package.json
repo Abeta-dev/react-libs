@@ -1,8 +1,8 @@
 {
   "name": "@abeta.dev/india",
-  "version": "0.1.0",
+  "version": "0.20.0",
   "description": "India statutory validation, FinTech cards, GSTIN/PAN/IFSC, UPI QR generation, and bilingual support for React 19.",
-  "author": "Umesh Gupta <umesh@abeta.dev>",
+  "author": "abeta-dev <contact@abeta.dev>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -58,7 +58,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@abeta.dev/ui": "^0.1.0",
+    "@abeta.dev/ui": "^0.20.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.577.0",
     "qrcode": "^1.5.4"

@@ -1289,7 +1289,7 @@ function VendorOnboardingWorkflow() {
       <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
         <DialogContent className="max-w-md p-6">
           <DialogHeader className="text-center sm:text-center items-center">
-            <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-2 animate-bounce">
+            <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-2 animate-pulse">
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <DialogTitle className="text-lg font-bold">{t.modalTitle}</DialogTitle>

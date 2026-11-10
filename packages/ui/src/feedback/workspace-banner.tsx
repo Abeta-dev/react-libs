@@ -14,7 +14,7 @@ export function WorkspaceBanner({
   title,
   subtitle,
   icon: Icon,
-  gradientClassName = "from-indigo-600 to-indigo-800",
+  gradientClassName = "from-slate-900 to-slate-800",
   className,
   ...props
 }: WorkspaceBannerProps) {

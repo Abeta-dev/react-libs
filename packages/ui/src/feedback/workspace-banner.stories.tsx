@@ -35,14 +35,14 @@ const meta = {
     gradientClassName: {
       control: 'text',
       description: 'Tailwind gradient classes for background styling.',
-      table: { category: 'Appearance', defaultValue: { summary: 'from-indigo-600 to-indigo-800' } },
+      table: { category: 'Appearance', defaultValue: { summary: 'from-slate-900 to-slate-800' } },
     },
   },
   args: {
     title: 'Acme Global Logistics',
     subtitle: 'Primary Production Workspace • US-East Region',
     icon: Building2,
-    gradientClassName: 'from-indigo-600 to-indigo-800',
+    gradientClassName: 'from-slate-900 to-slate-800',
   },
 } satisfies Meta<typeof WorkspaceBanner>;
 
@@ -50,7 +50,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Default indigo brand gradient.
+ * Default slate brand gradient.
  */
 export const Default: Story = {
   render: (args) => (
@@ -78,17 +78,17 @@ export const ComplianceVault: Story = {
 };
 
 /**
- * Sunset purple-rose gradient for innovation or AI tool suites.
+ * Amber and rose gradient for innovation or executive tool suites.
  */
-export const AiSuite: Story = {
+export const AnalyticsSuite: Story = {
   render: (args) => (
     <div className="w-[600px] p-4">
       <WorkspaceBanner
         {...args}
-        title="Procurement AI Studio"
+        title="Procurement Analytics Studio"
         subtitle="Automated Invoice Reconciliation & Smart Vendor Matching"
         icon={Sparkles}
-        gradientClassName="from-purple-600 via-pink-600 to-rose-600"
+        gradientClassName="from-amber-600 via-orange-600 to-rose-700"
       />
     </div>
   ),
@@ -137,7 +137,7 @@ export const InPageHeader: Story = {
         title="Supply Chain Central"
         subtitle="Active Organization: Enterprise Multi-Tier Supply"
         icon={Layers}
-        gradientClassName="from-blue-700 to-indigo-900"
+        gradientClassName="from-blue-800 to-slate-900"
       />
       <div className="grid grid-cols-3 gap-4 text-center">
         <div className="rounded-xl border border-border p-4 bg-muted/30">
