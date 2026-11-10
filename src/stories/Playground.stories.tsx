@@ -100,7 +100,7 @@ function WorkbenchApp() {
             <div className="flex items-center gap-2">
               <h1 className="text-lg font-bold tracking-tight">Enterprise Component Playground</h1>
               <Badge variant="outline" className="text-xs bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-300">
-                v0.17.0 Live
+                v0.20.0 Live
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground">

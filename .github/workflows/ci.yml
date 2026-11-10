@@ -13,6 +13,9 @@ permissions:
   pages: write       # upload Pages artifact
   id-token: write    # OIDC token for trusted deployment
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   # ── 1. Static Analysis & Documentation ──────────────────────────────────────
   static-and-storybook:

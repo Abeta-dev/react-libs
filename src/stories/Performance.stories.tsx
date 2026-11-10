@@ -205,7 +205,7 @@ function PerformanceDashboard() {
                   padding: "2px 10px",
                 }}
               >
-                v0.17.0
+                v0.20.0
               </span>
               <span
                 style={{
