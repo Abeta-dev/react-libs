@@ -20,7 +20,7 @@ globs: ["scripts/**/*", ".github/**/*", "tests/**/*", "src/**/__tests__/**/*", "
 
 ## 3. Truth Gate & Tree Integrity (`scripts/docs-match-tree.mjs`)
 - **Version Alignment**: `package.json` version, `README.md` badge, top entry in `CHANGELOG.md`, `llms.txt` / `public/llms*.txt`, and `skills/react-libs*/SKILL.md` must match target release version.
-- **GitHub Actions**: Workflows must use pinned official major versions (`actions/checkout@v4`, `actions/setup-node@v4`, `actions/upload-pages-artifact@v3`, `actions/deploy-pages@v4`).
+- **GitHub Actions**: Workflows must use pinned official major versions (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/upload-pages-artifact@v5`, `actions/deploy-pages@v5`, `actions/upload-artifact@v7`).
 - **Symbol Inventory**: Every component mentioned in `README.md` and every `### Added` item in `CHANGELOG.md` must exist in codebase exports.
 - **Measured Metrics**: Test counts, coverage, and bundle sizes in docs must be dynamically verifiable via `scripts/measure-metrics.mjs`. Hardcoded fake numbers are rejected.
 - **Verification**: Run `npm run check:truth`.

@@ -67,7 +67,7 @@ Gemini and Antigravity agents must never bypass or disable CI truth gates. The f
 * Checks:
   * Version synchronization across `package.json`, `README.md`, `CHANGELOG.md`, and git tags.
   * Directives check (head -c 40 includes `'use client'` on client modules, zero `'use client'` in universal modules).
-  * Static workflow check: action versions must use pinned major tags (e.g. `actions/checkout@v4`, `actions/setup-node@v4`).
+  * Static workflow check: action versions must use pinned major tags (e.g. `actions/checkout@v7`, `actions/setup-node@v7`).
   * Symbol inventory gate: Every component referenced in documentation must exist in code.
 
 ### 3. P95 Performance SLA Gate (`npm run perf`)

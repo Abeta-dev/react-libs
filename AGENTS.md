@@ -119,7 +119,7 @@ Every pull request, commit, and agent operation is validated against six immutab
 
 ### Gate 3: CI Truth Gate (`docs-match-tree.mjs`)
 * **Version Alignment**: Asserts that `package.json` version, `README.md` badges, and top entry in `CHANGELOG.md` match the target git tag or release version exactly.
-* **Action Version Pinning**: All GitHub Actions in `.github/workflows/` must use pinned, legitimate major versions (`actions/checkout@v4`, `actions/setup-node@v4`, `actions/upload-pages-artifact@v3`, `actions/deploy-pages@v4`).
+* **Action Version Pinning**: All GitHub Actions in `.github/workflows/` must use pinned, legitimate major versions (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/upload-pages-artifact@v5`, `actions/deploy-pages@v5`, `actions/upload-artifact@v7`).
 * **Engine Enforcement**: Asserts that docs do not advertise unsupported Node versions (< 20.0.0).
 * **Verification**: `npm run check:truth`.
 
