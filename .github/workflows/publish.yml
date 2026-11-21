@@ -214,8 +214,11 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
-          echo "@abeta-dev:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          export NPM_CONFIG_USERCONFIG="${RUNNER_TEMP:-/tmp}/.npmrc-gh-packages"
+          cat > "$NPM_CONFIG_USERCONFIG" <<EOF
+          //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+          @abeta-dev:registry=https://npm.pkg.github.com/
+          EOF
 
           # Transform all package.json files for GitHub Packages:
           # 1. Scope remapping: @abeta.dev/* -> @abeta-dev/*
@@ -293,9 +296,9 @@ jobs:
             else
               echo "🚀 Publishing ${PKG_NAME}@${PKG_VERSION} to GitHub Packages..."
               if [ "$PKG_DIR" = "." ]; then
-                npm publish --registry=https://npm.pkg.github.com/
+                npm publish --registry=https://npm.pkg.github.com/ --ignore-scripts
               else
-                npm publish -w "$PKG_DIR" --registry=https://npm.pkg.github.com/
+                npm publish -w "$PKG_DIR" --registry=https://npm.pkg.github.com/ --ignore-scripts
               fi
               echo "✅ Successfully published ${PKG_NAME}@${PKG_VERSION} to GitHub Packages."
             fi
