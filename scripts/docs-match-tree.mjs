@@ -265,11 +265,12 @@ function checkGitHubActions() {
   console.log('\n🔍 [Check D] Verifying GitHub Action Major Versions & Language/Node Specs...');
 
   const VALID_ACTION_VERSIONS = {
-    'actions/checkout': ['v4'],
-    'actions/setup-node': ['v4'],
-    'actions/cache': ['v4'],
-    'actions/upload-pages-artifact': ['v3'],
-    'actions/deploy-pages': ['v4'],
+    'actions/checkout': ['v7'],
+    'actions/setup-node': ['v7'],
+    'actions/cache': ['v4', 'v5'],
+    'actions/upload-artifact': ['v7'],
+    'actions/upload-pages-artifact': ['v5'],
+    'actions/deploy-pages': ['v5'],
   };
 
   if (!existsSync(WORKFLOWS_DIR)) {

@@ -9,12 +9,17 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 3
     groups:
-      npm-dependencies:
+      npm-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
         patterns:
           - "*"
-    labels:
-      - "dependencies"
-      - "npm"
+    ignore:
+      # Handle breaking major upgrades deliberately one-by-one (e.g. eslint v10 breaks eslint-plugin-jsx-a11y@6, typescript v7, tsup v9)
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -25,6 +30,3 @@ updates:
       actions-dependencies:
         patterns:
           - "*"
-    labels:
-      - "dependencies"
-      - "actions"
