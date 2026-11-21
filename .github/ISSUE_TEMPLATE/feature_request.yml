@@ -1,44 +1,47 @@
 name: Feature Request
-description: Suggest an idea or new feature for @abeta.dev/react-libs
+description: Propose a new component, utility, or capability across the @abeta.dev/* React ecosystem
 title: "[Feature]: "
 labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for suggesting an enhancement or new feature for `@abeta.dev/react-libs`! Please provide as much detail as possible to help the maintainers and community evaluate the proposal.
+        Thank you for proposing a new feature for the **Abeta React Ecosystem (`@abeta.dev/*`)**!
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Target Package
+      description: Which scoped package should own this capability?
+      options:
+        - "@abeta.dev/ui (Design System & Primitives)"
+        - "@abeta.dev/india (India Statutory & FinTech)"
+        - "@abeta.dev/talent (Credentials, Quizzes & Hiring)"
+        - "@abeta.dev/auth (Headless Auth & Auth UI)"
+        - "New Scoped Package / Ecosystem Tooling"
+    validations:
+      required: true
 
   - type: textarea
     id: problem-description
     attributes:
       label: Problem Description
-      description: Is your feature request related to a specific problem or missing capability? Please describe.
-      placeholder: A clear and concise description of the problem or limitation you encountered...
+      description: Describe the workflow gap or developer pain point this solves.
     validations:
       required: true
 
   - type: textarea
     id: proposed-solution
     attributes:
-      label: Proposed Solution
-      description: Describe the solution or new component/hook/utility you would like to see added.
-      placeholder: Describe the proposed API, props, behavior, and expected developer experience...
+      label: Proposed API & Solution
+      description: Describe the desired exports, props, RSC vs client boundary, and accessibility behavior.
     validations:
       required: true
 
   - type: textarea
-    id: alternative-designs
-    attributes:
-      label: Alternative Designs & Considerations
-      description: Describe any alternative solutions, designs, or workarounds you have considered.
-      placeholder: Alternatives considered, why they were unsuitable, or trade-offs...
-    validations:
-      required: false
-
-  - type: textarea
     id: additional-context
     attributes:
-      label: Additional Context & Examples
-      description: Add any other context, links to design systems (e.g. Radix, shadcn), Figma mockups, or screenshots.
+      label: Alternatives & Examples
+      description: Links to Figma references, Storybook patterns, or prior art.
     validations:
       required: false

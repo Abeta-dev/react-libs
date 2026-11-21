@@ -1,13 +1,37 @@
 {
   "name": "@abeta.dev/ui",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "Accessible, high-performance React 19 UI component primitives built with Tailwind CSS v4 and Radix UI.",
+  "keywords": [
+    "react",
+    "react-19",
+    "tailwind",
+    "tailwindcss",
+    "tailwind-v4",
+    "radix-ui",
+    "design-system",
+    "ui-components",
+    "accessible",
+    "wcag",
+    "b2b",
+    "dashboard",
+    "data-table",
+    "typescript",
+    "abeta"
+  ],
   "author": "abeta-dev <contact@abeta.dev>",
   "license": "MIT",
+  "homepage": "https://abeta-dev.github.io/react-libs/",
+  "bugs": {
+    "url": "https://github.com/Abeta-dev/react-libs/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Abeta-dev/react-libs.git",
     "directory": "packages/ui"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "publishConfig": {
     "access": "public",
@@ -23,7 +47,10 @@
   ],
   "files": [
     "dist",
-    "README.md"
+    "!dist/**/*.map",
+    "!dist/**/* [0-9].*",
+    "README.md",
+    "LICENSE"
   ],
   "exports": {
     ".": {
@@ -44,6 +71,26 @@
       "require": {
         "types": "./dist/utils.d.cts",
         "default": "./dist/utils.cjs"
+      }
+    },
+    "./pdf": {
+      "import": {
+        "types": "./dist/pdf.d.ts",
+        "default": "./dist/pdf.js"
+      },
+      "require": {
+        "types": "./dist/pdf.d.cts",
+        "default": "./dist/pdf.cjs"
+      }
+    },
+    "./hooks/use-toast": {
+      "import": {
+        "types": "./dist/hooks/use-toast.d.ts",
+        "default": "./dist/hooks/use-toast.js"
+      },
+      "require": {
+        "types": "./dist/hooks/use-toast.d.cts",
+        "default": "./dist/hooks/use-toast.cjs"
       }
     },
     "./button": {
@@ -225,11 +272,17 @@
         "types": "./dist/carousel.d.cts",
         "default": "./dist/carousel.cjs"
       }
-    }
+    },
+    "./style.css": "./dist/style.css",
+    "./dist/style.css": "./dist/style.css",
+    "./theme.css": "./dist/theme.css",
+    "./styles/theme.css": "./dist/theme.css"
   },
   "typesVersions": {
     "*": {
       "utils": ["./dist/utils.d.ts"],
+      "pdf": ["./dist/pdf.d.ts"],
+      "hooks/use-toast": ["./dist/hooks/use-toast.d.ts"],
       "button": ["./dist/button.d.ts"],
       "dialog": ["./dist/dialog.d.ts"],
       "card": ["./dist/card.d.ts"],
@@ -251,7 +304,7 @@
     }
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node scripts/build-css.mjs",
     "dev": "tsup --watch",
     "prepack": "npm run build",
     "prepublishOnly": "npm run build"

@@ -5,6 +5,13 @@ All notable changes to `@abeta.dev/auth` are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.21.0] - 2026-11-20
+
+### Changed
+- Synchronized package version to `0.21.0` with the monorepo release.
+- Added high-intent npm discovery keywords (`react-19`, `headless`, `cookie-auth`, `csrf`, `typescript`, `abeta`), `homepage`, `bugs`, `engines` (`node >=20.0.0`), `LICENSE`, and excluded sourcemaps from published tarballs.
+- Expanded `README.md` with entry-point matrix, quickstart examples for headless `AuthClient`, `createAuthenticatedFetch`, `AuthClientProvider`, and drop-in auth UI forms while preserving all security model and adapter contract documentation verbatim.
+
 ## [0.20.0] - 2026-11-10
 
 ### Changed

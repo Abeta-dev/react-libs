@@ -133,5 +133,60 @@ if (existsSync(ANALYTICS_ENTRY)) {
   }
 }
 
-console.log('✅  All UI components and subpath exports are properly verified.');
+// ─── Scoped Monorepo Package Export Coverage (@abeta.dev/ui & @abeta.dev/india) ─
+const PKG_UI_SRC = join(ROOT, 'packages', 'ui', 'src');
+const PKG_UI_ENTRY = join(PKG_UI_SRC, 'index.ts');
+if (existsSync(PKG_UI_ENTRY)) {
+  const pkgUiContent = readFileSync(PKG_UI_ENTRY, 'utf8');
+  const pkgUiSubdirs = ['core', 'data-display', 'feedback', 'forms', 'layout', 'navigation', 'overlays'];
+  const pkgUiExemptions = ['data-display/pdf-viewer'];
+  const missingPkgUi = [];
+
+  for (const sub of pkgUiSubdirs) {
+    const subFiles = getFiles(join(PKG_UI_SRC, sub));
+    for (const file of subFiles) {
+      const relPath = relative(PKG_UI_SRC, file).replace(/\.tsx$/, '');
+      if (pkgUiExemptions.includes(relPath)) continue;
+      const pattern = new RegExp(`^\\s*export\\s+(?:\\*|\\{[^}]+\\})\\s+from\\s+['"]\\.\\/${relPath}['"]`, 'm');
+      if (!pattern.test(pkgUiContent)) {
+        missingPkgUi.push(relPath);
+      }
+    }
+  }
+
+  if (missingPkgUi.length > 0) {
+    console.error('❌  MISSING @abeta.dev/ui EXPORTS FOUND in packages/ui/src/index.ts:');
+    for (const m of missingPkgUi) {
+      console.error(`    - ${m}.tsx`);
+    }
+    process.exit(1);
+  }
+}
+
+const PKG_INDIA_SRC = join(ROOT, 'packages', 'india', 'src');
+const PKG_INDIA_ENTRY = join(PKG_INDIA_SRC, 'index.ts');
+const PKG_INDIA_REACT_ENTRY = join(PKG_INDIA_SRC, 'react', 'index.ts');
+if (existsSync(PKG_INDIA_ENTRY)) {
+  const pkgIndiaContent = readFileSync(PKG_INDIA_ENTRY, 'utf8');
+  for (const mod of ['validators', 'tax', 'constants', 'locations', 'whatsapp', 'upi']) {
+    const pattern = new RegExp(`^\\s*export\\s+.*from\\s+['"]\\.\\/${mod}['"]`, 'm');
+    if (!pattern.test(pkgIndiaContent)) {
+      console.error(`❌  MISSING @abeta.dev/india DOMAIN EXPORT: ${mod} is not exported in packages/india/src/index.ts`);
+      process.exit(1);
+    }
+  }
+}
+if (existsSync(PKG_INDIA_REACT_ENTRY)) {
+  const pkgIndiaReactContent = readFileSync(PKG_INDIA_REACT_ENTRY, 'utf8');
+  for (const file of getFiles(join(PKG_INDIA_SRC, 'components'))) {
+    const baseName = file.split('/').pop().replace(/\.tsx$/, '');
+    const pattern = new RegExp(`^\\s*export\\s+.*from\\s+['"].*${baseName}['"]`, 'm');
+    if (!pattern.test(pkgIndiaReactContent)) {
+      console.error(`❌  MISSING @abeta.dev/india/react EXPORT: ${baseName} is not exported in packages/india/src/react/index.ts`);
+      process.exit(1);
+    }
+  }
+}
+
+console.log('✅  All UI components and scoped monorepo subpath exports are properly verified.');
 process.exit(0);

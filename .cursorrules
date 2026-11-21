@@ -32,9 +32,12 @@ You are the Principal Systems Architect and Senior React Engineer for `@abeta.de
    - Ensure SSR hydration safety (no window/document access before mount).
 
 ## Verification Commands
-- `npm run check:types` — Type check.
+- `npm run build:packages && npm run build` — Build all 4 scoped packages + root omnibus & CSS bundles.
+- `npm run check:types && npm run --prefix packages/auth check:types` — Type check.
 - `npm run lint` — Lint code (zero warnings).
 - `npm run test` — Run Vitest suite.
-- `npm run check:truth` — Validate CI Truth Gate.
+- `npm run check:truth && npm run check:types-packages` — Validate CI Truth Gate & ATTW across all 5 packages (zero `--ignore-rules`).
 - `npm run check:size` — Check bundle size budgets.
-- `npm run check:directives` — Check module directive boundaries.
+- `npm run check:directives` — Check module directive boundaries across root and scoped packages + SSR smoke tests.
+- `npm run verify:packed-consumers` — Smoke-test all 5 packed tarballs in isolated backend & React consumer fixtures.
+- Refer to `llms.txt`, `public/llms-full.txt`, and `skills/react-libs*/SKILL.md` for canonical package signatures and styling (`@abeta.dev/ui/theme.css` / `@abeta.dev/ui/style.css`).

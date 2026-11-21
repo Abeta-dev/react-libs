@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "@abeta.dev/ui/theme.css";
+
+@source "../node_modules/@abeta.dev/ui";
+@source "../node_modules/@abeta.dev/india";

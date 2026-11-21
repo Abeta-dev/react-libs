@@ -353,6 +353,58 @@ function checkMeasuredMetrics() {
   }
 }
 
+// ── Check G: AI Discovery (llms.txt) & Skills Context Parity ────────────────
+function checkAiDiscoveryParity() {
+  console.log('\n🔍 [Check G] Verifying llms.txt & Agent Skills Parity...');
+  const pkg = JSON.parse(readFileSync(PACKAGE_JSON_PATH, 'utf8'));
+  const targetVersion = pkg.version;
+
+  const rootLlmsPath = join(ROOT, 'llms.txt');
+  const publicLlmsPath = join(ROOT, 'public', 'llms.txt');
+  const publicLlmsFullPath = join(ROOT, 'public', 'llms-full.txt');
+
+  if (!existsSync(rootLlmsPath) || !existsSync(publicLlmsPath)) {
+    fail('Root llms.txt and public/llms.txt must both exist.');
+  } else {
+    const rootLlms = readFileSync(rootLlmsPath, 'utf8');
+    const publicLlms = readFileSync(publicLlmsPath, 'utf8');
+    if (rootLlms !== publicLlms) {
+      fail('Root llms.txt has drifted from public/llms.txt. Sync them before merging.');
+    } else if (!rootLlms.includes(targetVersion)) {
+      fail(`llms.txt does not reference current version "${targetVersion}".`);
+    } else {
+      pass(`llms.txt and public/llms.txt are byte-identical and aligned at v${targetVersion}`);
+    }
+  }
+
+  if (!existsSync(publicLlmsFullPath)) {
+    fail('public/llms-full.txt is missing.');
+  } else if (!readFileSync(publicLlmsFullPath, 'utf8').includes(targetVersion)) {
+    fail(`public/llms-full.txt does not reference current version "${targetVersion}".`);
+  } else {
+    pass(`public/llms-full.txt exists and references v${targetVersion}`);
+  }
+
+  const skillFiles = [
+    'skills/react-libs/SKILL.md',
+    'skills/react-libs-ui/SKILL.md',
+    'skills/react-libs-india/SKILL.md',
+    'skills/react-libs-talent/SKILL.md',
+    'skills/react-libs-auth/SKILL.md',
+    '.skills/react-libs/SKILL.md',
+  ];
+  for (const rel of skillFiles) {
+    const full = join(ROOT, rel);
+    if (!existsSync(full)) {
+      fail(`Required Agent Skill file missing: ${rel}`);
+    } else if (!readFileSync(full, 'utf8').includes(targetVersion)) {
+      fail(`${rel} does not reference current version "${targetVersion}".`);
+    } else {
+      pass(`${rel} exists and aligns with v${targetVersion}`);
+    }
+  }
+}
+
 // ── Run All Truth Gate Checks ───────────────────────────────────────────────
 function runTruthGate() {
   console.log('🛡️  Starting CI Truth Gate (docs-match-tree)...');
@@ -363,6 +415,7 @@ function runTruthGate() {
   checkGitHubActions();
   checkSymbolInventory();
   checkMeasuredMetrics();
+  checkAiDiscoveryParity();
 
   console.log('\n─────────────────────────────────────────────────────────────────');
   if (hasFailure) {

@@ -1,6 +1,6 @@
-# Migration Guide: Upgrading to v0.17.0
+# Migration Guide
 
-This guide details architectural evolutions, new learning and verification primitives, and migration steps for upgrading to `@abeta.dev/react-libs` v0.17.0.
+This guide documents architectural evolutions, modular package adoption, and version-by-version upgrade steps across the `@abeta.dev/*` React ecosystem (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`, and legacy `@abeta.dev/react-libs`).
 
 ---
 
@@ -16,7 +16,11 @@ This guide details architectural evolutions, new learning and verification primi
 | Domain / Area | Legacy Import (`@abeta.dev/react-libs`) | New Modular Package |
 | :--- | :--- | :--- |
 | **Core UI Components** | `import { Button, Card, Dialog } from "@abeta.dev/react-libs"` | `import { Button, Card, Dialog } from "@abeta.dev/ui"` |
-| **Standalone UI Subpaths** | `import { Button } from "@abeta.dev/react-libs/button"` | `import { Button } from "@abeta.dev/ui"` |
+| **Standalone UI Subpaths** | `import { Button } from "@abeta.dev/react-libs/button"` | `import { Button } from "@abeta.dev/ui/button"` |
+| **Tailwind v4 Theme Tokens** | `@import "@abeta.dev/react-libs/theme.css";` | `@import "@abeta.dev/ui/theme.css";` |
+| **Precompiled Zero-Tailwind CSS** | `import "@abeta.dev/react-libs/style.css";` | `import "@abeta.dev/ui/style.css";` |
+| **Isolated PDF Viewer** | `import { PdfViewer } from "@abeta.dev/react-libs/pdf"` | `import { PdfViewer } from "@abeta.dev/ui/pdf"` |
+| **Imperative Toast Hook** | `import { useToast, toast } from "@abeta.dev/react-libs/hooks/use-toast"` | `import { useToast, toast } from "@abeta.dev/ui/hooks/use-toast"` |
 | **India Statutory Validation** | `import { validateGSTIN, validatePAN } from "@abeta.dev/react-libs/india"` | `import { validateGSTIN, validatePAN } from "@abeta.dev/india"` |
 | **India React Components** | `import { AmountSummaryCardIndia, UpiQrCard } from "@abeta.dev/react-libs/india/react"` | `import { AmountSummaryCardIndia, UpiQrCard } from "@abeta.dev/india/react"` |
 | **Talent & Verification** | `import { ProofOfWorkCertificate, CheckpointRunner } from "@abeta.dev/react-libs"` | `import { ProofOfWorkCertificate, CheckpointRunner } from "@abeta.dev/talent"` |
@@ -33,7 +37,20 @@ This guide details architectural evolutions, new learning and verification primi
    npm install @abeta.dev/auth
    ```
 
-2. **Update your import statements**:
+2. **Configure styling once** (Tailwind v4 or zero-Tailwind precompiled CSS):
+   ```css
+   /* Option A — Tailwind CSS v4 (app/globals.css or src/index.css) */
+   @import "tailwindcss";
+   @import "@abeta.dev/ui/theme.css";
+   @source "../node_modules/@abeta.dev/ui";
+   @source "../node_modules/@abeta.dev/india";
+   ```
+   ```tsx
+   // Option B — Non-Tailwind / Vite / CRA (src/main.tsx)
+   import "@abeta.dev/ui/style.css";
+   ```
+
+3. **Update your import statements**:
    ```tsx
    // Before (deprecated):
    import { Button, Card } from "@abeta.dev/react-libs";
@@ -45,6 +62,34 @@ This guide details architectural evolutions, new learning and verification primi
    import { validateGSTIN } from "@abeta.dev/india";
    import { ProofOfWorkCertificate } from "@abeta.dev/talent";
    ```
+
+---
+
+## Upgrading to v0.21.0
+
+v0.21.0 completes the modular adoption overhaul across all scoped packages while maintaining 100% backward compatibility with `@abeta.dev/react-libs`.
+
+### 1. Full `@abeta.dev/ui` Exports & Dedicated CSS Delivery
+`@abeta.dev/ui` now ships full design system export parity along with dedicated stylesheets and isolated client subpaths:
+- **Tailwind CSS v4 theme tokens**: Import `@abeta.dev/ui/theme.css` alongside `@source "../node_modules/@abeta.dev/ui";`.
+- **Precompiled zero-Tailwind stylesheet**: Import `@abeta.dev/ui/style.css` in Vite, CRA, Tailwind v3, or plain CSS projects with zero PostCSS plugins.
+- **Isolated subpaths**: Consume `PdfViewer` from `@abeta.dev/ui/pdf` (isolating `pdfjs-dist` workers from SSR) and imperative toasts from `@abeta.dev/ui/hooks/use-toast`.
+
+### 2. Zero-Bloat `@abeta.dev/india`
+`@abeta.dev/india` decouples pure statutory compliance utilities (`validateGSTIN`, `validatePAN`, `validateIFSC`, `calculateGSTSplit`, `calculateTDS`, `generateUpiPayUri`, `validateUpiId`) from heavy UI runtime dependencies, keeping Server Components, API routes, and Edge workers lean while serving `AmountSummaryCardIndia` and `UpiQrCard` via `@abeta.dev/india/react`.
+
+### 3. AI-Ready Documentation (`llms.txt` & `llms-full.txt`)
+Machine-readable LLM documentation following the `llmstxt.org` specification is now published alongside Storybook at:
+- [https://abeta-dev.github.io/react-libs/llms.txt](https://abeta-dev.github.io/react-libs/llms.txt) (`public/llms.txt`)
+- [https://abeta-dev.github.io/react-libs/llms-full.txt](https://abeta-dev.github.io/react-libs/llms-full.txt) (`public/llms-full.txt`)
+
+### 4. Runnable Starter Templates
+Copy-ready starter apps are now available under `examples/`:
+- `examples/nextjs-app-router` — Next.js App Router + Tailwind CSS v4 + RSC `@abeta.dev/india` + Client `@abeta.dev/ui`.
+- `examples/vite-react-19` — Vite + React 19 with zero-Tailwind `@abeta.dev/ui/style.css`, `@abeta.dev/india/react`, and `@abeta.dev/talent`.
+
+### 5. Synchronized Package Versions
+All scoped packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`) and legacy `@abeta.dev/react-libs` are synchronized at `0.21.0`.
 
 ---
 
@@ -209,9 +254,9 @@ export function useUserSettings() {
 ```typescript
 import { generateUpiPayUri, validateUpiId } from "@abeta.dev/react-libs/india";
 
-if (validateUpiId("billing@hdfcbank")) {
+if (validateUpiId("billing@hdfcbank").isValid) {
   const uri = generateUpiPayUri({
-    payeeVpa: "billing@hdfcbank",
+    upiId: "billing@hdfcbank",
     payeeName: "Vendor Billing Desk",
     amount: 2499.50,
     transactionNote: "INV-9842",
@@ -234,7 +279,7 @@ import { UpiQrCard } from "@abeta.dev/react-libs/india/react";
 export function CounterPayment() {
   return (
     <UpiQrCard
-      payeeVpa="merchant@icici"
+      upiId="merchant@icici"
       payeeName="ACME Retail Store"
       amount={499}
       transactionNote="Counter Checkout #12"

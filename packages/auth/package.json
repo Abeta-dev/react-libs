@@ -1,10 +1,11 @@
 {
   "name": "@abeta.dev/auth",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "Backend-agnostic React 19 authentication UI library with Google & LinkedIn 3PL, email/password, and concurrent-safe token refresh.",
   "keywords": [
     "react",
     "react19",
+    "react-19",
     "auth",
     "authentication",
     "oauth",
@@ -12,10 +13,19 @@
     "linkedin-login",
     "refresh-token",
     "tailwind",
-    "design-system"
+    "design-system",
+    "headless",
+    "cookie-auth",
+    "csrf",
+    "typescript",
+    "abeta"
   ],
   "author": "abeta-dev <contact@abeta.dev>",
   "license": "MIT",
+  "homepage": "https://abeta-dev.github.io/react-libs/",
+  "bugs": {
+    "url": "https://github.com/Abeta-dev/react-libs/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Abeta-dev/react-libs.git",
@@ -25,6 +35,9 @@
     "access": "public",
     "provenance": true
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -32,7 +45,9 @@
   "sideEffects": false,
   "files": [
     "dist",
-    "README.md"
+    "!dist/**/*.map",
+    "README.md",
+    "LICENSE"
   ],
   "exports": {
     ".": {
@@ -78,8 +93,12 @@
   },
   "typesVersions": {
     "*": {
-      "core": ["./dist/core.d.ts"],
-      "react": ["./dist/react.d.ts"],
+      "core": [
+        "./dist/core.d.ts"
+      ],
+      "react": [
+        "./dist/react.d.ts"
+      ],
       "core/use-click-backpressure": [
         "./dist/core/use-click-backpressure.d.ts"
       ]
@@ -98,8 +117,12 @@
     "react-dom": "^18.2.0 || ^19.0.0"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "react-dom": { "optional": true }
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
   },
   "dependencies": {
     "clsx": "^2.1.1"

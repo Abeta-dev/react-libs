@@ -1,9 +1,33 @@
 {
   "name": "@abeta.dev/india",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "India statutory validation, FinTech cards, GSTIN/PAN/IFSC, UPI QR generation, and bilingual support for React 19.",
+  "keywords": [
+    "india",
+    "gst",
+    "gstin",
+    "pan",
+    "ifsc",
+    "fssai",
+    "upi",
+    "upi-qr",
+    "npci",
+    "fintech",
+    "invoicing",
+    "lakhs",
+    "crores",
+    "react",
+    "react-19",
+    "rsc",
+    "typescript",
+    "abeta"
+  ],
   "author": "abeta-dev <contact@abeta.dev>",
   "license": "MIT",
+  "homepage": "https://abeta-dev.github.io/react-libs/",
+  "bugs": {
+    "url": "https://github.com/Abeta-dev/react-libs/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Abeta-dev/react-libs.git",
@@ -13,6 +37,9 @@
     "access": "public",
     "provenance": true
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -20,7 +47,9 @@
   "sideEffects": false,
   "files": [
     "dist",
-    "README.md"
+    "!dist/**/*.map",
+    "README.md",
+    "LICENSE"
   ],
   "exports": {
     ".": {
@@ -58,19 +87,35 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@abeta.dev/ui": "^0.20.0",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.577.0",
     "qrcode": "^1.5.4"
   },
   "peerDependencies": {
+    "@abeta.dev/ui": "^0.21.0",
+    "lucide-react": "^0.577.0",
     "react": "^18.2.0 || ^19.0.0",
     "react-dom": "^18.2.0 || ^19.0.0"
   },
+  "peerDependenciesMeta": {
+    "@abeta.dev/ui": {
+      "optional": true
+    },
+    "lucide-react": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@abeta.dev/ui": "^0.21.0",
     "@types/qrcode": "^1.5.5",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "lucide-react": "^0.577.0",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0"
   }

@@ -79,11 +79,16 @@ When writing new features, components, or bugfixes, always identify the appropri
 
 | Package | Path | Responsibility | Primary Entrypoints |
 | :--- | :--- | :--- | :--- |
-| **`@abeta.dev/ui`** | `packages/ui` | 111 accessible Tailwind v4 + Radix UI primitives, forms, data tables, overlays, charts. | `@abeta.dev/ui`, `@abeta.dev/ui/button`, `@abeta.dev/ui/card`, etc. |
-| **`@abeta.dev/india`** | `packages/india` | India statutory tax, GSTIN/PAN/IFSC/FSSAI validators, NPCI UPI QR code generation, bilingual cards. | `@abeta.dev/india` (RSC/Server), `@abeta.dev/india/react` (Client) |
-| **`@abeta.dev/talent`** | `packages/talent` | Diagnostic quizzes, milestone checkpoint runners, verifiable certificates (`ProofOfWorkCertificate`). | `@abeta.dev/talent` |
-| **`@abeta.dev/auth`** | `packages/auth` | Headless authentication client, session state, HttpOnly cookie refresh, CSRF protection, React hooks. | `@abeta.dev/auth/core` (Server/Zero-DOM), `@abeta.dev/auth/react` |
+| **`@abeta.dev/ui`** | `packages/ui` | Full accessible Tailwind v4 + Radix UI design system (111 primitives, hooks, formatters, `PdfViewer`, CSS theme & precompiled bundle). | `@abeta.dev/ui`, `./utils`, `./pdf`, `./hooks/use-toast`, `./theme.css`, `./style.css`, micro-bundles (`./button`, `./card`, etc.) |
+| **`@abeta.dev/india`** | `packages/india` | Zero-bloat India statutory tax (`calculateGSTSplit`, `calculateTDS`), GSTIN/PAN/IFSC/FSSAI validators, NPCI UPI URIs, and regional cards. | `@abeta.dev/india` (RSC/Server), `@abeta.dev/india/react` (Client) |
+| **`@abeta.dev/talent`** | `packages/talent` | `ProofOfWorkCertificate`, `CheckpointRunner`, `DiagnosticQuiz`, `PipelineKanban`, `ProofOfWorkCard`, `MatchScoreGauge`, `RadarSweep`, `SalaryRangeDisplay`. | `@abeta.dev/talent` |
+| **`@abeta.dev/auth`** | `packages/auth` | Headless `AuthClient`, `createAuthenticatedFetch`, HttpOnly cookie refresh, CSRF protection, React providers, and Auth UI (`AuthCard`, `LoginForm`, etc.). | `@abeta.dev/auth/core` (Zero-React), `@abeta.dev/auth/react`, `@abeta.dev/auth` |
 | **`@abeta.dev/react-libs`** | `.` (root) | Omnibus umbrella package preserving 100% backward compatibility for all legacy consumer imports. | `@abeta.dev/react-libs`, `@abeta.dev/react-libs/*` |
+
+### AI Discovery & Starter Templates
+- **`public/llms.txt` & `public/llms-full.txt`**: Machine-readable LLM indexes published alongside Storybook (`https://abeta-dev.github.io/react-libs/llms.txt`).
+- **`examples/nextjs-app-router`**: Minimal Next.js App Router + Tailwind v4 starter (`@abeta.dev/ui/theme.css`, RSC `@abeta.dev/india`, client `@abeta.dev/ui`).
+- **`examples/vite-react-19`**: Minimal Vite + React 19 zero-Tailwind starter (`@abeta.dev/ui/style.css`, `@abeta.dev/india/react`, `@abeta.dev/talent`).
 
 ---
 
@@ -97,11 +102,12 @@ When writing new features, components, or bugfixes, always identify the appropri
    - Utility functions, mathematical algorithms, string formatters, and statutory validators (`packages/india/src/validators.ts`, `src/utils.ts`) must NEVER include `'use client';`.
    - Keep universal modules pure, zero-DOM, and safe for Next.js React Server Components (RSC) and Node/Edge runtimes.
 3. **Dedicated Subpaths for Heavy Peers**:
-   - Heavy or optional dependencies (`recharts`, `pdfjs-dist`, `cmdk`, `vaul`, `react-day-picker`) must be encapsulated within dedicated subpaths (e.g. `@abeta.dev/ui/chart`, `@abeta.dev/ui/command`, `@abeta.dev/react-libs/pdf`) to avoid pulling unused peer dependencies into minimal bundles.
+   - Heavy or optional dependencies (`recharts`, `pdfjs-dist`, `cmdk`, `vaul`, `react-day-picker`) must be encapsulated within dedicated subpaths (e.g. `@abeta.dev/ui/chart`, `@abeta.dev/ui/command`, `@abeta.dev/ui/pdf`, `@abeta.dev/ui/hooks/use-toast`) to avoid pulling unused peer dependencies into minimal bundles.
 
 ### Tailwind CSS v4 & Styling
 1. **No `tailwind.config.js`**:
    - This project uses pure Tailwind CSS v4 with CSS-first configuration.
+   - Consumers import `@abeta.dev/ui/theme.css` (with `@source "../node_modules/@abeta.dev/ui";` for Tailwind v4) or `@abeta.dev/ui/style.css` (precompiled zero-Tailwind bundle).
    - Design tokens and variables are defined in `src/styles/theme.css` (`--background`, `--foreground`, `--primary`, `--border`, `--radius`, etc.).
 2. **Class Merging**:
    - Always merge Tailwind classes using the `cn(...)` utility helper (`clsx` + `tailwind-merge`):

@@ -1,0 +1,88 @@
+# Abeta React Ecosystem (`@abeta.dev/*`)
+
+> Enterprise React 19 / React 18 design system and domain monorepo built with Tailwind CSS v4, Radix UI primitives, strict TypeScript, and dual ESM/CJS outputs. Comprises four modular scoped packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`) plus the backward-compatible legacy omnibus `@abeta.dev/react-libs`.
+
+- **Current Version**: `0.21.0`
+- **Requirements**: React `^18.2.0 || ^19.0.0`, Node.js `>= 20.0.0`, TypeScript 5+
+- **Live Storybook**: https://abeta-dev.github.io/react-libs/
+- **Full Single-File AI Reference**: https://abeta-dev.github.io/react-libs/llms-full.txt
+- **Source Repository**: https://github.com/Abeta-dev/react-libs
+
+## Modular Packages
+
+Install only the domain slices your application needs:
+
+- **`@abeta.dev/ui`** (https://www.npmjs.com/package/@abeta.dev/ui): Full accessible Tailwind CSS v4 + Radix UI design system (111 components, hooks, formatters, validators).
+  - Entrypoints: `.` (client barrel), `./utils` (RSC-safe `cn`), `./pdf` (client-only `PdfViewer` isolating `pdfjs-dist`), `./hooks/use-toast` (`useToast`, `toast`), `./theme.css` (Tailwind v4 tokens), `./style.css` (precompiled zero-Tailwind CSS), plus micro-bundles (`./button`, `./dialog`, `./card`, `./badge`, `./input`, `./data-table`, `./table`, `./select`, `./form`, `./sheet`, `./drawer`, `./popover`, `./tooltip`, `./calendar`, `./date-range-picker`, `./command`, `./chart`, `./carousel`).
+- **`@abeta.dev/india`** (https://www.npmjs.com/package/@abeta.dev/india): Zero-bloat India statutory compliance, tax math, NPCI UPI payment URIs, and regional FinTech UI.
+  - Entrypoints: `.` (pure RSC/Server-safe: `validateGSTIN`, `validatePAN`, `validateIFSC`, `validateFSSAI`, `validatePincode`, `validatePhoneIN`, `validateBankAccountIN`, `calculateGSTSplit`, `calculateTDS`, `generateUpiPayUri`, `validateUpiId`, `parseUpiPayUri`, `formatLakhs`, `formatCrores`, `INDIA_STATES`, `INDIA_CITIES`, `INDIAN_LANGUAGES`, WhatsApp helpers) and `./react` (`'use client'`: `AmountSummaryCardIndia`, `UpiQrCard`, `LanguageToggle`, `BilingualTooltip`).
+- **`@abeta.dev/talent`** (https://www.npmjs.com/package/@abeta.dev/talent): Verifiable credentials, interactive verification runners, skill diagnostics, and hiring pipeline UI (`'use client'`).
+  - Exports: `ProofOfWorkCertificate`, `CheckpointRunner`, `DiagnosticQuiz`, `PipelineKanban`, `ProofOfWorkCard` (`MetricVerificationCard`), `MatchScoreGauge`, `RadarSweep`, `SalaryRangeDisplay` (`MetricRangeDisplay`, `CompensationRangeDisplay`).
+- **`@abeta.dev/auth`** (https://www.npmjs.com/package/@abeta.dev/auth): Backend-agnostic authentication engine and accessible auth UI with HttpOnly cookie refresh, single-flight mutex, CSRF, and RFC 7636 PKCE.
+  - Entrypoints: `./core` (pure TypeScript, zero React, zero `'use client'`: `AuthClient`, `createAuthenticatedFetch`, `AuthClientError`), `./react` (`'use client'`: `AuthClientProvider`, `useAuthClient`, `useAuthClientSnapshot`, `AuthProvider`, `useAuth`, `useToken`, `useUser`, `useOAuth`), `.` (full client bundle adding `AuthCard`, `LoginForm`, `SignUpForm`, `ForgotPasswordForm`, `OtpForm`, `OAuthButton`, `OAuthButtonGroup`, `TokenManager`, `MockAuthAdapter`, `useClickBackpressure`, PKCE helpers, OAuth icons), and `./core/use-click-backpressure`.
+
+## Styling Setup
+
+### Option A: Tailwind CSS v4 (Next.js App Router, Vite + Tailwind v4)
+
+Import `@abeta.dev/ui/theme.css` after Tailwind and register `@source` for each installed `@abeta.dev/*` package so Tailwind scans component classes:
+
+```css
+@import "tailwindcss";
+@import "@abeta.dev/ui/theme.css";
+
+@source "../node_modules/@abeta.dev/ui";
+@source "../node_modules/@abeta.dev/india";
+@source "../node_modules/@abeta.dev/talent";
+@source "../node_modules/@abeta.dev/auth";
+```
+
+### Option B: Without Tailwind CSS (Vite, CRA, Tailwind v3, Plain CSS)
+
+Import the precompiled cascade-layered stylesheet (`@layer abeta-ui`) once at your application root (e.g., `src/main.tsx`):
+
+```tsx
+import "@abeta.dev/ui/style.css";
+```
+
+## RSC vs `'use client'` Boundaries
+
+- **Pure Server / RSC-Safe (Zero DOM, Zero `'use client'`)**:
+  - `@abeta.dev/ui/utils`
+  - `@abeta.dev/india`
+  - `@abeta.dev/auth/core`
+  - `@abeta.dev/react-libs/utils`, `@abeta.dev/react-libs/india`, `@abeta.dev/react-libs/analytics`
+- **Client Components (`'use client'`)**:
+  - `@abeta.dev/ui` and all component micro-bundles (`@abeta.dev/ui/button`, etc.)
+  - `@abeta.dev/ui/hooks/use-toast`
+  - `@abeta.dev/india/react`
+  - `@abeta.dev/talent`
+  - `@abeta.dev/auth` and `@abeta.dev/auth/react`
+- **Client-Only Worker Isolation (`'use client'`)**:
+  - `@abeta.dev/ui/pdf` (`PdfViewer`) isolates `pdfjs-dist` and `react-pdf` so Node.js SSR never evaluates browser-only `DOMMatrix` or worker globals.
+
+## Key Signature Notes for Code Generation
+
+- `calculateGSTSplit(amount, taxRate = 18, isIntraState = true, isTaxInclusive = false)` returns `{ baseAmount, totalTax, cgstAmount, sgstAmount, igstAmount, totalPayable }`.
+- `validateGSTIN(value, { language?: 'en' | 'hi' })` (and `validatePAN`, `validateIFSC`, `validateFSSAI`, `validatePincode`) returns `undefined` when valid, or a localized error message `string` when invalid.
+- `validateUpiId(upiId)` returns `{ isValid: boolean, error?: string }`.
+- `generateUpiPayUri` and `UpiQrCard` accept `upiId` (not `payeeVpa`), plus optional `payeeName`, `amount`, `transactionNote`.
+- `PdfViewer` accepts `file: string | File` (not `url`) and `onLoadSuccess?: (numPages: number) => void`.
+- `ProofOfWorkCertificate` requires `certificateId`, `recipientName`, and `projectTitle`.
+- `useClickBackpressure(handler, options)` returns `{ execute, isPending, cancelCooldown, wrapHandler }`.
+
+## Documentation & Links
+
+- [Full AI Reference (llms-full.txt)](https://abeta-dev.github.io/react-libs/llms-full.txt): Complete API catalog, exact TypeScript props, and copy-pasteable recipes for all four packages.
+- [Live Storybook](https://abeta-dev.github.io/react-libs/): Interactive component playground, design tokens, and living enterprise workflows.
+- [README & Monorepo Hub](https://github.com/Abeta-dev/react-libs/blob/main/README.md): Package matrix, 30-second quickstarts, and full component reference.
+- [Migration Guide](https://github.com/Abeta-dev/react-libs/blob/main/MIGRATION.md): Upgrading to v0.21.0 and migrating from legacy `@abeta.dev/react-libs`.
+- [Next.js App Router Starter](https://github.com/Abeta-dev/react-libs/tree/main/examples/nextjs-app-router): Minimal Tailwind v4 + RSC `@abeta.dev/india` + Client `@abeta.dev/ui` template.
+- [Vite + React 19 Starter](https://github.com/Abeta-dev/react-libs/tree/main/examples/vite-react-19): Zero-Tailwind `@abeta.dev/ui/style.css` + `@abeta.dev/india/react` + `@abeta.dev/talent` template.
+
+## Optional
+
+- [Legacy Omnibus Package (`@abeta.dev/react-libs`)](https://www.npmjs.com/package/@abeta.dev/react-libs): Deprecated umbrella package maintained with 100% backward compatibility.
+- [Changelog](https://github.com/Abeta-dev/react-libs/blob/main/CHANGELOG.md): Full semantic version release history.
+- [Architecture Decision Records](https://github.com/Abeta-dev/react-libs/tree/main/docs/adr): Formal ADRs covering dual ESM/CJS, peer dependencies, RSC purity, accessibility, and domain isolation.
+- [Agent Handbook (AGENTS.md)](https://github.com/Abeta-dev/react-libs/blob/main/AGENTS.md): Monorepo invariants and CI truth gates for contributors.

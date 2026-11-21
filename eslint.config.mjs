@@ -149,6 +149,7 @@ export default tseslint.config(
       'storybook-static/**',
       'coverage/**',
       '.storybook/**',
+      'examples/**',
       '**/*.d.ts',
       '**/*.d.cts',
     ],
@@ -259,7 +260,7 @@ export default tseslint.config(
 
   // ─── Build & Verification Scripts ──────────────────────────────────────────
   {
-    files: ['scripts/**/*.{js,mjs}'],
+    files: ['scripts/**/*.{js,mjs}', 'packages/*/scripts/**/*.{js,mjs}'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -286,9 +287,10 @@ export default tseslint.config(
 
   // ─── Config Files ──────────────────────────────────────────────────────────
   {
-    files: ['*.config.{ts,js,mjs}'],
+    files: ['**/*.config.{ts,js,mjs}'],
     rules: {
       'security/detect-unsafe-regex': 'off',
+      'security/detect-non-literal-fs-filename': 'off',
     },
   },
 
