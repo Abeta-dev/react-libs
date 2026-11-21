@@ -1,6 +1,6 @@
-# Contributing to @abeta.dev/react-libs 🧱
+# Contributing to Abeta React Ecosystem (`@abeta.dev/*`) 🧱
 
-> Production-grade React 19 component library with Tailwind CSS v4 & Radix UI primitives. It is the **single source of truth** for visual components, design tokens, hooks, and formatters.
+> Production-grade React 19 / React 18 monorepo (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`, plus backward-compatible omnibus `@abeta.dev/react-libs`) with Tailwind CSS v4 & Radix UI primitives.
 
 ---
 
@@ -10,24 +10,26 @@
 
 | Tool | Version |
 |---|---|
-| Node.js | `v22.x` |
-| Package manager | `npm` |
+| Node.js | `>= 20.0.0` (CI runs Node 24) |
+| Package manager | `npm` (workspaces) |
 | Browser (interaction tests) | Chromium — auto-installed via Playwright |
 
 ### Installation
 
 ```bash
-git clone https://github.com/abeta-dev/react-libs.git && cd react-libs
+git clone https://github.com/Abeta-dev/react-libs.git && cd react-libs
 npm ci
 ```
 
 ### Verifying Setup
 
 ```bash
-npm run test            # All 845 tests should pass across 126 test suites
-npm run storybook       # Opens http://localhost:6006
-npx tsc --noEmit        # Should produce zero errors
-npm run lint            # Zero ESLint errors with strict hooks rules
+npm run build:packages && npm run build  # Build all 4 scoped packages + legacy omnibus & CSS
+npm run test                             # Run full Vitest suite with V8 coverage
+npm run storybook                        # Opens http://localhost:6006
+npm run check:types                      # Zero TypeScript errors (root + packages/auth)
+npm run lint                             # Zero ESLint warnings (--max-warnings 0)
+npm run check:truth && npm run check:types-packages  # CI truth gates + 5-package ATTW
 ```
 
 ---
@@ -228,24 +230,27 @@ import { expect, within, userEvent, waitFor } from 'storybook/test';
 
 ### Package Imports & Local Development
 
-Consumers install `@abeta.dev/react-libs` and import components and utilities directly:
+Consumers install the modular scoped packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`) and import components and utilities directly:
 
 ```tsx
-import { Button, Card, Dialog } from "@abeta.dev/react-libs";
-import { cn, formatCurrency } from "@abeta.dev/react-libs/utils";
-import { validateGSTIN, INDIA_STATES } from "@abeta.dev/react-libs/india";
+import { Button, Card, Dialog } from "@abeta.dev/ui";
+import { cn, formatCurrency } from "@abeta.dev/ui/utils";
+import { validateGSTIN, calculateGSTSplit, INDIA_STATES } from "@abeta.dev/india";
+import { UpiQrCard, AmountSummaryCardIndia } from "@abeta.dev/india/react";
+import { ProofOfWorkCertificate } from "@abeta.dev/talent";
+import { AuthClient } from "@abeta.dev/auth/core";
 ```
 
 Within the library source code, use relative paths:
 
 ```tsx
-// Inside the library
-import { Button } from "../../forms/button";
+// Inside packages/ui/src or src/components/ui
+import { Button } from "../forms/button";
 ```
 
 ### Dialog Rule
 
-**Never build custom modals.** Always use `Dialog` from `@abeta.dev/react-libs` — it manages portal, overlay, animation, and focus trap via Radix.
+**Never build custom modals.** Always use `Dialog` from `@abeta.dev/ui` — it manages portal, overlay, animation, and focus trap via Radix.
 
 ### Portal Testing Rule
 
@@ -276,23 +281,26 @@ Releases are triggered automatically by pushing an annotated version tag (`v*`).
 
 Follow this sequential checklist for every release:
 
-#### 1. Version Manifests & Release Notes
-- Update `"version"` in root `package.json` and run `npm install --package-lock-only` to synchronize `package-lock.json`.
-- Add release notes at the top of `CHANGELOG.md` under `## [x.y.z] - YYYY-MM-DD` with `### Added`, `### Changed`, and `### Fixed`.
-- Update the version badge and migration guide link in `README.md`.
-- Add upgrade guidance under `## Upgrading to vx.y.z` in `MIGRATION.md`.
+#### 1. Version Manifests, Docs & AI Context
+- Update `"version"` in root `package.json`, all 4 workspace manifests (`packages/{ui,india,talent,auth}/package.json`), pin `@abeta.dev/auth` in root `package.json`, and run `npm install --package-lock-only --ignore-scripts`.
+- Add release notes at the top of `CHANGELOG.md` and each `packages/*/CHANGELOG.md` under `## [x.y.z] - YYYY-MM-DD`.
+- Update the version badge and migration guide link in `README.md`, add `## Upgrading to vx.y.z` in `MIGRATION.md`, update `llms.txt` / `public/llms.txt` / `public/llms-full.txt`, `skills/react-libs*/SKILL.md`, `.skills/react-libs/SKILL.md`, and Storybook version badges.
 
 #### 2. Pre-Flight Verification Gates
 Run all gates locally to ensure CI will pass without regressions:
 ```bash
-npm run check:truth            # Version alignment, 22 ATTW subpaths & module directive check
+npm run build:packages && npm run build
+npm run check:truth && npm run check:types-packages  # Version alignment, 5-package ATTW, directives, llms.txt & skills parity
 node scripts/verify-release-version.mjs
-npm run verify:ci-gate         # Proves CI release gate against historical & simulated check-runs
-npm run verify:packed-consumers
+node scripts/check-exports.mjs
+npm run verify:ci-gate
+npm run verify:packed-consumers                      # All 5 tarballs in isolated backend & React consumer fixtures
 npm run check:size
-npm run lint                   # ESLint with --max-warnings 0
-npx tsc --noEmit               # Strict TypeScript checks
-npm run test                   # Full Vitest test suite
+npm run check:directives
+npm run lint                                         # ESLint with --max-warnings 0
+npm run check:types && npm run --prefix packages/auth check:types
+npm run test                                         # Full Vitest test suite
+npm run build-storybook
 ```
 
 #### 3. Pull Request & Merge
@@ -325,9 +333,9 @@ When a `v*` tag is pushed:
 Consume the new release in downstream applications:
 
 ```bash
-# From npm
-npm install @abeta.dev/react-libs@latest
+# From npm (recommended modular packages)
+npm install @abeta.dev/ui@latest @abeta.dev/india@latest @abeta.dev/talent@latest @abeta.dev/auth@latest
 
-# From GitHub Packages
-npm install @abeta.dev/react-libs@latest --registry=https://npm.pkg.github.com
+# From GitHub Packages (@abeta-dev scope)
+npm install @abeta-dev/ui@latest --registry=https://npm.pkg.github.com
 ```

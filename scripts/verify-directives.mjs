@@ -154,6 +154,100 @@ for (const relPath of CSS_FILES) {
   }
 }
 
+// 5. Verify Scoped Monorepo Package Directives & CSS (when workspace packages are built)
+const SCOPED_CHECKS = [
+  {
+    pkg: '@abeta.dev/ui',
+    distDir: 'packages/ui/dist',
+    clientFiles: [
+      'packages/ui/dist/index.js',
+      'packages/ui/dist/index.cjs',
+      'packages/ui/dist/pdf.js',
+      'packages/ui/dist/pdf.cjs',
+      'packages/ui/dist/hooks/use-toast.js',
+      'packages/ui/dist/hooks/use-toast.cjs',
+    ],
+    universalFiles: ['packages/ui/dist/utils.js', 'packages/ui/dist/utils.cjs'],
+    cssFiles: ['packages/ui/dist/style.css', 'packages/ui/dist/theme.css'],
+  },
+  {
+    pkg: '@abeta.dev/india',
+    distDir: 'packages/india/dist',
+    clientFiles: ['packages/india/dist/react/index.js', 'packages/india/dist/react/index.cjs'],
+    universalFiles: ['packages/india/dist/index.js', 'packages/india/dist/index.cjs'],
+    cssFiles: [],
+  },
+  {
+    pkg: '@abeta.dev/talent',
+    distDir: 'packages/talent/dist',
+    clientFiles: ['packages/talent/dist/index.js', 'packages/talent/dist/index.cjs'],
+    universalFiles: [],
+    cssFiles: [],
+  },
+  {
+    pkg: '@abeta.dev/auth',
+    distDir: 'packages/auth/dist',
+    clientFiles: [
+      'packages/auth/dist/index.js',
+      'packages/auth/dist/index.cjs',
+      'packages/auth/dist/react.js',
+      'packages/auth/dist/react.cjs',
+    ],
+    universalFiles: ['packages/auth/dist/core.js', 'packages/auth/dist/core.cjs'],
+    cssFiles: [],
+  },
+];
+
+for (const scope of SCOPED_CHECKS) {
+  if (!existsSync(join(ROOT, scope.distDir))) continue;
+  console.log(`\n📦 Verifying ${scope.pkg} directives & outputs...`);
+
+  for (const relPath of scope.clientFiles) {
+    const fullPath = join(ROOT, relPath);
+    if (!existsSync(fullPath)) {
+      console.error(`❌ [MISSING] ${relPath}`);
+      failed = true;
+      continue;
+    }
+    const content = readFileSync(fullPath, 'utf8');
+    const trimmed = content.trimStart();
+    if (!trimmed.startsWith("'use client';") && !trimmed.startsWith('"use client";')) {
+      console.error(`❌ [DIRECTIVE ERROR] ${relPath} does NOT start with 'use client';`);
+      failed = true;
+    } else if ((content.match(/['"]use client['"]/g) || []).length > 1) {
+      console.error(`❌ [DUPLICATE DIRECTIVE] ${relPath} contains duplicate 'use client' directives!`);
+      failed = true;
+    } else {
+      console.log(`✅ [CLIENT]  ${relPath} verified.`);
+    }
+  }
+
+  for (const relPath of scope.universalFiles) {
+    const fullPath = join(ROOT, relPath);
+    if (!existsSync(fullPath)) {
+      console.error(`❌ [MISSING] ${relPath}`);
+      failed = true;
+      continue;
+    }
+    const content = readFileSync(fullPath, 'utf8');
+    if (content.includes('use client')) {
+      console.error(`❌ [LEAK ERROR] 'use client' leaked into server-safe module: ${relPath}`);
+      failed = true;
+    } else {
+      console.log(`✅ [SERVER]  ${relPath} is free of 'use client' directives.`);
+    }
+  }
+
+  for (const relPath of scope.cssFiles) {
+    if (!existsSync(join(ROOT, relPath))) {
+      console.error(`❌ [MISSING CSS] ${relPath}`);
+      failed = true;
+    } else {
+      console.log(`✅ [CSS]     ${relPath} exists and is verified.`);
+    }
+  }
+}
+
 console.log('');
 
 if (failed) {

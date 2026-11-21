@@ -1,7 +1,10 @@
 # Enterprise Application Integration Recipe
 ## Complete Architecture: Root Bootstrap, Cascading Theming, Behavioral Analytics & Composite Workflows
 
-This production recipe demonstrates how to integrate `@abeta.dev/react-libs` into an enterprise-grade web application (such as Next.js 15 App Router or React 19 Single Page Applications). It covers everything from global CSS layer configuration to behavioral analytics, multi-brand theming, and an end-to-end composite feature page.
+This production recipe demonstrates how to integrate the Abeta React ecosystem into an enterprise-grade web application (such as Next.js App Router or React 19 Single Page Applications). It covers global CSS layer configuration, behavioral analytics, multi-brand theming, and an end-to-end composite feature page.
+
+> [!TIP]
+> **Greenfield v0.21.0 Applications**: Prefer the modular scoped packages (`@abeta.dev/ui` with `@abeta.dev/ui/theme.css` or `@abeta.dev/ui/style.css`, `@abeta.dev/india` / `@abeta.dev/india/react`, `@abeta.dev/talent`, and `@abeta.dev/auth`). See runnable templates in [`examples/nextjs-app-router`](../../examples/nextjs-app-router/README.md) and [`examples/vite-react-19`](../../examples/vite-react-19/README.md). The omnibus `@abeta.dev/react-libs` imports shown below remain 100% backward-compatible for existing apps.
 
 ---
 

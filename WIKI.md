@@ -1,8 +1,8 @@
-# react-lib Component Wiki
+# Abeta React Component Wiki
 
-> **Visual cookbook for `@abeta.dev/react-libs`** — copy-paste patterns for every component.
-> - Accessible UI components across 6 semantic domains
-> - **Storybook 10** at http://localhost:6006 — live visual playground
+> **Visual cookbook for the `@abeta.dev/*` ecosystem (`v0.21.0`)** — copy-paste patterns for every component.
+> - **Recommended modular packages:** `@abeta.dev/ui` (design system + hooks + `./utils` + `./pdf`), `@abeta.dev/india` / `@abeta.dev/india/react` (India statutory & FinTech), `@abeta.dev/talent` (credentials, quizzes & pipelines), `@abeta.dev/auth` (headless auth & auth UI). Legacy `@abeta.dev/react-libs` remains 100% backward-compatible.
+> - **Live Storybook 10:** [abeta-dev.github.io/react-libs](https://abeta-dev.github.io/react-libs/) (local dev: `http://localhost:6006`) · **AI Index:** [llms.txt](https://abeta-dev.github.io/react-libs/llms.txt)
 
 ### Quick Domain Index
 
@@ -17,17 +17,17 @@
 
 ### Standalone Subpaths (Zero-Peer Tree-Shaking)
 
-| Subpath | Key Component | Isolated Peer |
-|---|---|---|
-| `@abeta.dev/react-libs/charts` | `ChartContainer`, `ChartTooltip` | `recharts` |
-| `@abeta.dev/react-libs/command` | `Command`, `CommandInput` | `cmdk` |
-| `@abeta.dev/react-libs/drawer` | `Drawer`, `DrawerContent` | `vaul` |
-| `@abeta.dev/react-libs/carousel` | `Carousel`, `CarouselContent` | `embla-carousel-react` |
-| `@abeta.dev/react-libs/calendar` | `Calendar` | `react-day-picker` |
-| `@abeta.dev/react-libs/date-picker` | `DatePicker`, `DateRangePicker` | `react-day-picker`, `date-fns` |
-| `@abeta.dev/react-libs/form` | `Form`, `FormField` | `react-hook-form` |
-| `@abeta.dev/react-libs/data-table` | `DataTable` | `@tanstack/react-table` |
-| `@abeta.dev/react-libs/pdf` | `PdfViewer` | `@react-pdf/renderer` |
+| Modular Subpath (`@abeta.dev/ui`) | Legacy Omnibus Subpath | Key Component | Isolated Peer |
+|---|---|---|---|
+| `@abeta.dev/ui/chart` | `@abeta.dev/react-libs/charts` | `ChartContainer`, `ChartTooltip` | `recharts` |
+| `@abeta.dev/ui/command` | `@abeta.dev/react-libs/command` | `Command`, `CommandInput` | `cmdk` |
+| `@abeta.dev/ui/drawer` | `@abeta.dev/react-libs/drawer` | `Drawer`, `DrawerContent` | `vaul` |
+| `@abeta.dev/ui/carousel` | `@abeta.dev/react-libs/carousel` | `Carousel`, `CarouselContent` | `embla-carousel-react` |
+| `@abeta.dev/ui/calendar` | `@abeta.dev/react-libs/calendar` | `Calendar` | `react-day-picker` |
+| `@abeta.dev/ui/date-range-picker` | `@abeta.dev/react-libs/date-picker` | `DateRangePicker` | `react-day-picker`, `date-fns` |
+| `@abeta.dev/ui/form` | `@abeta.dev/react-libs/form` | `Form`, `FormField` | `react-hook-form` |
+| `@abeta.dev/ui/data-table` | `@abeta.dev/react-libs/data-table` | `DataTable` | `@tanstack/react-table` |
+| `@abeta.dev/ui/pdf` | `@abeta.dev/react-libs/pdf` | `PdfViewer` | `react-pdf` (`pdfjs-dist`) |
 
 > Full API docs → [README.md](./README.md)
 
@@ -1086,13 +1086,13 @@ export function Announcement() {
 ### 1. UpiQrCard (Counter Standee & POS Display)
 
 ```tsx
-import { UpiQrCard } from "@abeta.dev/react-libs/india/react"
+import { UpiQrCard } from "@abeta.dev/india/react"
 
 // Counter Standee with Fixed Amount
 export function CounterBilling() {
   return (
     <UpiQrCard
-      payeeVpa="store@okhdfcbank"
+      upiId="store@okhdfcbank"
       payeeName="Fresh Supermarket"
       amount={1250.00}
       transactionNote="Invoice #9021"
@@ -1107,7 +1107,7 @@ export function CounterBilling() {
 export function DonationOrTipStandee() {
   return (
     <UpiQrCard
-      payeeVpa="ngo@icici"
+      upiId="ngo@icici"
       payeeName="Hope Foundation"
       allowAmountEdit
     />
@@ -1115,17 +1115,17 @@ export function DonationOrTipStandee() {
 }
 ```
 
-### 2. Pure UPI Utilities (NPCI 2.0 Compliant)
+### 2. Pure UPI Utilities (NPCI 2.0 Compliant — RSC & Node.js Safe)
 
 ```typescript
-import { generateUpiPayUri, validateUpiId, parseUpiPayUri } from "@abeta.dev/react-libs/india"
+import { generateUpiPayUri, validateUpiId, parseUpiPayUri } from "@abeta.dev/india"
 
 // Validate handle syntax
-const isValid = validateUpiId("merchant@hdfcbank") // true
+const { isValid } = validateUpiId("merchant@hdfcbank") // true
 
 // Generate deep-link URI
 const uri = generateUpiPayUri({
-  payeeVpa: "merchant@hdfcbank",
+  upiId: "merchant@hdfcbank",
   payeeName: "Vendor Logistics",
   amount: 4500,
   transactionNote: "LR-3021",
@@ -1134,13 +1134,13 @@ const uri = generateUpiPayUri({
 
 // Parse existing UPI URI
 const parsed = parseUpiPayUri(uri)
-console.log(parsed.payeeVpa, parsed.amount) // "merchant@hdfcbank", 4500
+console.log(parsed?.upiId, parsed?.amount) // "merchant@hdfcbank", 4500
 ```
 
 ### 3. AmountSummaryCardIndia (GST Tax Split)
 
 ```tsx
-import { AmountSummaryCardIndia } from "@abeta.dev/react-libs/india/react"
+import { AmountSummaryCardIndia } from "@abeta.dev/india/react"
 
 export function InvoiceTaxBreakdown() {
   return (
@@ -1167,7 +1167,7 @@ export function InvoiceTaxBreakdown() {
 ### 1. ProofOfWorkCertificate (Verifiable Credentials)
 
 ```tsx
-import { ProofOfWorkCertificate } from "@abeta.dev/react-libs"
+import { ProofOfWorkCertificate } from "@abeta.dev/talent"
 
 export function CertificateDisplay() {
   return (
@@ -1187,7 +1187,7 @@ export function CertificateDisplay() {
 ### 2. CheckpointRunner (Interactive Milestone Execution)
 
 ```tsx
-import { CheckpointRunner } from "@abeta.dev/react-libs"
+import { CheckpointRunner } from "@abeta.dev/talent"
 
 export function MilestoneAudit() {
   return (
@@ -1205,7 +1205,7 @@ export function MilestoneAudit() {
 ### 3. ReactionBar (Applause & Reading Progress)
 
 ```tsx
-import { ReactionBar } from "@abeta.dev/react-libs"
+import { ReactionBar } from "@abeta.dev/ui"
 
 export function ArticleFeedback() {
   return (
@@ -1224,7 +1224,7 @@ export function ArticleFeedback() {
 
 ```tsx
 import { useState } from "react"
-import { DiagnosticQuiz } from "@abeta.dev/react-libs"
+import { DiagnosticQuiz } from "@abeta.dev/talent"
 
 export function TrackAssessment() {
   const [open, setOpen] = useState(false)
@@ -1252,7 +1252,7 @@ export function TrackAssessment() {
 ### 5. useLocalFirstStore (Synchronized Local State)
 
 ```typescript
-import { useLocalFirstStore } from "@abeta.dev/react-libs"
+import { useLocalFirstStore } from "@abeta.dev/ui"
 
 export function useWorkbenchConfig() {
   return useLocalFirstStore<{ layout: string; sidebarCollapsed: boolean }>({

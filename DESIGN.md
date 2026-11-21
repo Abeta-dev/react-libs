@@ -87,7 +87,7 @@ All design variables are declared in `src/styles/theme.css` using the Tailwind C
 
 ---
 
-## 3. Semantic Color Roles & Palettes
+## Colors
 
 The color architecture separates chromatic identity from structural surfaces. Hues are expressed in HSL format for effortless opacity compounding (`bg-primary/10`).
 
@@ -292,6 +292,19 @@ Every animation and transition respects operating system accessibility preferenc
 
 ---
 
+## Components
+
+Every interactive surface across `@abeta.dev/ui` (111 components), `@abeta.dev/india/react`, `@abeta.dev/talent`, and `@abeta.dev/auth` follows consistent structural and accessibility primitives:
+
+| Component Family | Primitives | Radius & Surface Contract | Focus, Keyboard & State Contract |
+| :--- | :--- | :--- | :--- |
+| **Actions & Inputs** | `Button`, `Input`, `Textarea`, `Select`, `Combobox`, `Checkbox`, `Switch`, `Slider`, `InputOTP` | `--radius-md` (`0.375rem`), `border-input`, `bg-background` | Visible 2px `--ring` focus outline (`>= 3:1` contrast), `aria-busy="true"` + spinner during loading, `React.useId()` label/error pairing (`aria-invalid`, `aria-describedby`), minimum 24–44px touch targets. |
+| **Containers & Layout** | `Card`, `PageHeader`, `DetailGrid`, `Separator`, `ScrollArea`, `Resizable`, `Sidebar` | `--radius-lg` (`0.5rem`), `bg-card`, `border-card-border` | Fluid responsive breakpoints (`sm`/`md`/`lg`/`xl`), zero horizontal overflow on 360px viewports, cookie-hydratable `defaultOpen` state for SSR. |
+| **Overlays & Navigation** | `Dialog`, `AlertDialog`, `ConfirmDialog`, `Sheet`, `Drawer`, `Popover`, `Tooltip`, `Command`, `Tabs`, `Accordion`, `Pagination` | Radix UI portals + `--radius-lg`, `bg-popover` | Automatic focus trapping, `Escape` dismissal, roving `tabIndex` arrow navigation, automatic mobile `Drawer` adaptation on narrow viewports. |
+| **Data & Domain Cards** | `DataTable`, `KPICard`, `AmountSummaryCardIndia`, `UpiQrCard`, `ProofOfWorkCertificate`, `CheckpointRunner`, `PipelineKanban`, `AuthCard` | `tabular-nums` alignment, Okabe-Ito chart tokens (`--chart-1`..`--chart-5`) | Keyboard-scrollable wide tables (`tabIndex={0}`, `role="region"`), `@media print` single-page layout for certificates, `role="alert"` error banners, zero uncalibrated purple/indigo gradients. |
+
+---
+
 ## 7. Anti-Slop Discipline & Craft Invariants
 
 All code, stories, and templates must adhere to the Impeccable Craft Standards:
@@ -299,4 +312,4 @@ All code, stories, and templates must adhere to the Impeccable Craft Standards:
 1. **No Broken Images**: Do not ship `<img src="#" />` or unpopulated image tags. Use semantic SVG placeholders or complete data URIs (`data:image/svg+xml;utf8,...`).
 2. **No AI Purple/Indigo Gradients**: Do not apply generic `from-indigo-600 to-indigo-800` or violet-to-cyan gradients. Use intentional palettes such as `from-slate-900 to-slate-800`, `from-emerald-700 to-teal-900`, or brand primary tokens.
 3. **No Bounce Easing**: Replace `animate-bounce` with smooth cubic ease transitions (`transition-transform duration-300 ease-out`) or subtle contextual pulses (`animate-pulse`).
-4. **Verification**: Run `/Users/umesh/.gemini/config/skills/impeccable/scripts/impeccable detect --json src/ packages/` to enforce zero warnings before every release.
+4. **Verification**: Run `impeccable detect --json src/ packages/ examples/` to enforce zero findings before every release.

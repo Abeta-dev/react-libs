@@ -27,7 +27,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@abeta.dev/ui/dialog";
 import { cn } from "@abeta.dev/ui/utils";
 
 // India statutory validation & FinTech
-import { validateGSTIN, calculateGstSplit, generateUpiPayUri } from "@abeta.dev/india";
+import { validateGSTIN, calculateGSTSplit, generateUpiPayUri } from "@abeta.dev/india";
 import { UpiQrCard, AmountSummaryCardIndia } from "@abeta.dev/india/react";
 
 // Talent & verification
@@ -49,7 +49,8 @@ import { useToast, toast } from "@abeta.dev/react-libs/hooks/use-toast";
 
 ## 3. Styling & Tailwind CSS v4 Rules
 
-* **CSS-First Configuration**: Tailwind v4 is configured via CSS custom properties in `src/styles/theme.css`. Never suggest `tailwind.config.js`.
+* **CSS-First Configuration**: Tailwind v4 is configured via `@abeta.dev/ui/theme.css` (`packages/ui/src/styles/theme.css` / `src/styles/theme.css`) with `@source "../node_modules/@abeta.dev/ui";` (or zero-Tailwind `@abeta.dev/ui/style.css`). Never suggest `tailwind.config.js`.
+* **AI Context & Skills**: Reference `llms.txt` (`public/llms-full.txt`) and `skills/react-libs*/SKILL.md` for canonical prop signatures (`upiId`, `calculateGSTSplit`, `PdfViewer` `file`).
 * **Theme Tokens**: Use semantic tokens: `bg-background`, `text-foreground`, `bg-primary`, `text-primary-foreground`, `border-border`, `bg-muted`, `text-destructive`.
 * **Class Merging**: Always use `cn(...)` (`clsx` + `tailwind-merge`):
   ```tsx

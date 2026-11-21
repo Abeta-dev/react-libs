@@ -254,9 +254,9 @@ export function useUserSettings() {
 ```typescript
 import { generateUpiPayUri, validateUpiId } from "@abeta.dev/react-libs/india";
 
-if (validateUpiId("billing@hdfcbank")) {
+if (validateUpiId("billing@hdfcbank").isValid) {
   const uri = generateUpiPayUri({
-    payeeVpa: "billing@hdfcbank",
+    upiId: "billing@hdfcbank",
     payeeName: "Vendor Billing Desk",
     amount: 2499.50,
     transactionNote: "INV-9842",
@@ -279,7 +279,7 @@ import { UpiQrCard } from "@abeta.dev/react-libs/india/react";
 export function CounterPayment() {
   return (
     <UpiQrCard
-      payeeVpa="merchant@icici"
+      upiId="merchant@icici"
       payeeName="ACME Retail Store"
       amount={499}
       transactionNote="Counter Checkout #12"
