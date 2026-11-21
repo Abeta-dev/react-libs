@@ -69,7 +69,7 @@
   "dependencies": {
     "@abeta.dev/ui": "^0.21.0",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.577.0"
+    "lucide-react": "^1.75.0"
   },
   "peerDependencies": {
     "canvas-confetti": "^1.9.4",
@@ -86,7 +86,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "canvas-confetti": "^1.9.4",
-    "tsup": "^8.0.0",
-    "typescript": "^5.0.0"
+    "tsup": "^9.0.0",
+    "typescript": "^7.0.2"
   }
 }
