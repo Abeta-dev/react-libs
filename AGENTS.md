@@ -47,32 +47,37 @@ This repository is organized as a high-performance **npm workspace monorepo** co
 
 ### 1. `@abeta.dev/ui` (`packages/ui`)
 * **Role**: Primary UI design system layer.
-* **Contents**: 111 accessible Tailwind CSS v4 + Radix UI primitives, data display cards, forms, tables, overlays, and charts.
+* **Contents**: Full accessible Tailwind CSS v4 + Radix UI design system (111 primitives, data display cards, forms, tables, overlays, charts, hooks, formatters, and validators).
 * **Exports**:
-  * `.` — Full UI component library barrel (client components).
-  * `./utils` — Pure RSC-safe utility helpers (`cn`, `clsx`, `tailwind-merge`).
+  * `.` — Full UI component library barrel (`'use client'`).
+  * `./utils` — Pure RSC-safe utility helpers (`cn`).
+  * `./pdf` — Isolated client-only `PdfViewer` subpath keeping `pdfjs-dist` workers out of SSR.
+  * `./hooks/use-toast` — Standalone imperative toast hook (`useToast`, `toast`).
+  * `./theme.css` — Tailwind CSS v4 `@theme` design tokens and cascade layer ordering preset.
+  * `./style.css` — Precompiled standalone stylesheet (`@layer react-libs`) for zero-Tailwind applications.
   * Standalone micro-bundles: `./button`, `./dialog`, `./card`, `./badge`, `./input`, `./data-table`, `./table`, `./select`, `./form`, `./sheet`, `./drawer`, `./popover`, `./tooltip`, `./calendar`, `./date-range-picker`, `./command`, `./chart`, `./carousel`.
-* **Styling**: Tailwind CSS v4 token-driven architecture. The consumer app includes `@source "../node_modules/@abeta.dev/ui"` and `@import "@abeta.dev/ui/dist/style.css"` or uses the precompiled CSS.
+* **Styling**: For Tailwind CSS v4 projects, import `@abeta.dev/ui/theme.css` and register `@source "../node_modules/@abeta.dev/ui";` (plus other installed `@abeta.dev/*` packages). For non-Tailwind projects, import `@abeta.dev/ui/style.css` once at the app entry point.
 
 ### 2. `@abeta.dev/india` (`packages/india`)
-* **Role**: India statutory compliance, invoicing, tax calculation, and regional FinTech components.
+* **Role**: Zero-bloat India statutory compliance, invoicing, tax calculation, and regional FinTech components.
 * **Subpaths**:
-  * `.` (`@abeta.dev/india`) — **RSC & Server-Safe**: Zero-DOM statutory validators (`validateGSTIN`, `validatePAN`, `validateIFSC`, `validateFSSAI`, `validatePincode`), tax calculators (CGST, SGST, IGST splits), Indian currency formatters (Lakhs/Crores), and NPCI UPI payment URI generators (`generateUpiPayUri`, `validateUpiId`, `parseUpiPayUri`).
-  * `./react` (`@abeta.dev/india/react`) — **Client Components** (`'use client'`): Interactive regional components, such as `AmountSummaryCardIndia` and `UpiQrCard` (counter standee with real-time QR generation and bilingual Hindi/English headers).
+  * `.` (`@abeta.dev/india`) — **RSC & Server-Safe (Zero UI/React Bloat)**: Zero-DOM statutory validators (`validateGSTIN`, `validatePAN`, `validateIFSC`, `validateFSSAI`, `validatePincode`, `validatePhoneIN`, `validateBankAccountIN`), tax calculators (`calculateGSTSplit`, `calculateTDS`), Indian currency formatters (`formatLakhs`, `formatCrores`), regional datasets (`INDIA_STATES`, `INDIA_CITIES`, `INDIAN_LANGUAGES`), WhatsApp helpers, and NPCI UPI payment URI generators (`generateUpiPayUri`, `validateUpiId`, `parseUpiPayUri`).
+  * `./react` (`@abeta.dev/india/react`) — **Client Components** (`'use client'`): Interactive regional components (`AmountSummaryCardIndia`, `UpiQrCard`, `LanguageToggle`, `BilingualTooltip`).
 
 ### 3. `@abeta.dev/talent` (`packages/talent`)
-* **Role**: Talent evaluation, candidate assessment, diagnostic quizzes, and verifiable credentials.
+* **Role**: Talent evaluation, candidate assessment, diagnostic quizzes, hiring pipelines, and verifiable credentials.
 * **Contents**:
   * `ProofOfWorkCertificate`: Cryptographically verifiable credential card with `@media print` single-page print stylesheet and hydration-safe date rendering.
-  * `CheckpointRunner`: Multistage milestone assessment runner with local-first persistent state synchronization.
-  * `QuizRunner`: Timed interactive evaluation with telemetry event callbacks.
+  * `CheckpointRunner`: Multistage milestone assessment runner with runnable commands and evidence capture.
+  * `DiagnosticQuiz`: Multi-step interactive assessment modal computing weighted track recommendations.
+  * `PipelineKanban`, `ProofOfWorkCard` (`MetricVerificationCard`), `MatchScoreGauge`, `RadarSweep`, and `SalaryRangeDisplay`.
 
 ### 4. `@abeta.dev/auth` (`packages/auth`)
 * **Role**: Security-first, headless authentication and session lifecycle management.
 * **Subpaths**:
-  * `@abeta.dev/auth/core`: Pure TypeScript, zero React runtime, zero `'use client'`. Manages in-memory token snapshots, single-flight refresh mutex, HttpOnly cookie refresh, CSRF protection, and cross-tab session invalidation via Web Locks and BroadcastChannel.
-  * `@abeta.dev/auth/react` (and `.`): React 19 client provider (`AuthClientProvider`), reactive snapshot subscriber (`useAuthClientSnapshot`), and click backpressure hook (`useClickBackpressure`).
-  * Standalone UI components: `LoginForm`, `MfaChallengeModal`, `RoleGate`, `SessionExpiryBanner`.
+  * `@abeta.dev/auth/core`: Pure TypeScript, zero React runtime, zero `'use client'`. Exports `AuthClient`, `createAuthenticatedFetch`, and `AuthClientError` for in-memory token snapshots, single-flight HttpOnly cookie refresh mutex, CSRF protection, and cross-tab session invalidation.
+  * `@abeta.dev/auth/react`: React client providers and hooks (`AuthClientProvider`, `useAuthClient`, `useAuthClientSnapshot`, `AuthProvider`, `useAuth`, `useToken`, `useUser`, `useOAuth`).
+  * `@abeta.dev/auth` (root): Full client bundle including UI components (`AuthCard`, `LoginForm`, `SignUpForm`, `ForgotPasswordForm`, `OtpForm`, `OAuthButton`, `OAuthButtonGroup`), `TokenManager`, `MockAuthAdapter`, RFC 7636 PKCE utilities, and `useClickBackpressure`.
 
 ### 5. `@abeta.dev/react-libs` (Repository Root `.`)
 * **Role**: Omnibus backward-compatibility package.
@@ -85,6 +90,11 @@ This repository is organized as a high-performance **npm workspace monorepo** co
   * `@abeta.dev/react-libs/hooks/use-toast`
   * `@abeta.dev/react-libs/auth`
   * Micro-bundle subpaths: `/button`, `/dialog`, `/card`, `/badge`, `/input`, `/data-table`, `/charts`, `/command`, `/drawer`, `/carousel`, `/calendar`, `/date-picker`, `/form`.
+
+### 6. AI Discovery & Runnable Starter Templates
+* **`public/llms.txt` & `public/llms-full.txt`**: Machine-readable LLM indexes following `llmstxt.org`, published at `https://abeta-dev.github.io/react-libs/llms.txt` and `https://abeta-dev.github.io/react-libs/llms-full.txt`. Keep signatures synchronized whenever public component props or subpaths change.
+* **`examples/nextjs-app-router`**: Minimal Next.js App Router + Tailwind CSS v4 starter demonstrating `@abeta.dev/ui/theme.css`, RSC `@abeta.dev/india`, and client `@abeta.dev/ui` + `@abeta.dev/india/react`.
+* **`examples/vite-react-19`**: Minimal Vite + React 19 starter demonstrating zero-Tailwind `@abeta.dev/ui/style.css`, `@abeta.dev/india/react`, and `@abeta.dev/talent`.
 
 ---
 

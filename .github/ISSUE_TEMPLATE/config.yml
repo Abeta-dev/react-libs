@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Live Storybook & Interactive Playground
+    url: https://abeta-dev.github.io/react-libs/
+    about: Explore all components, design tokens, and living enterprise workflows interactively.
+  - name: GitHub Discussions
+    url: https://github.com/Abeta-dev/react-libs/discussions
+    about: Ask questions, share integration patterns, and discuss ideas with the community.
+  - name: Security Vulnerability Report
+    url: https://github.com/Abeta-dev/react-libs/security/advisories/new
+    about: Privately report a security vulnerability in any @abeta.dev/* package.

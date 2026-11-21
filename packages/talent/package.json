@@ -1,9 +1,30 @@
 {
   "name": "@abeta.dev/talent",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "Interactive assessment, candidate evaluation, checkpoint runners, and kanban pipeline UI for React 19.",
+  "keywords": [
+    "react",
+    "react-19",
+    "talent",
+    "assessment",
+    "quiz",
+    "certificate",
+    "proof-of-work",
+    "kanban",
+    "hiring",
+    "edtech",
+    "lms",
+    "checkpoint",
+    "tailwind-v4",
+    "typescript",
+    "abeta"
+  ],
   "author": "abeta-dev <contact@abeta.dev>",
   "license": "MIT",
+  "homepage": "https://abeta-dev.github.io/react-libs/",
+  "bugs": {
+    "url": "https://github.com/Abeta-dev/react-libs/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Abeta-dev/react-libs.git",
@@ -13,6 +34,9 @@
     "access": "public",
     "provenance": true
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -20,7 +44,9 @@
   "sideEffects": false,
   "files": [
     "dist",
-    "README.md"
+    "!dist/**/*.map",
+    "README.md",
+    "LICENSE"
   ],
   "exports": {
     ".": {
@@ -41,7 +67,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@abeta.dev/ui": "^0.20.0",
+    "@abeta.dev/ui": "^0.21.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.577.0"
   },

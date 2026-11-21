@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.21.0] - 2026-11-20
+
+### Added
+- Full design system barrel exports, precompiled stylesheet (`@abeta.dev/ui/style.css`), Tailwind v4 theme tokens (`@abeta.dev/ui/theme.css`), isolated `PdfViewer` subpath (`@abeta.dev/ui/pdf`), and standalone toast hook subpath (`@abeta.dev/ui/hooks/use-toast`) in `@abeta.dev/ui`.
+- Machine-readable AI documentation (`llms.txt`, `public/llms.txt`, and `public/llms-full.txt`) published alongside Storybook with verified TypeScript recipes across `@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, and `@abeta.dev/auth`.
+- Portable multi-model agent skills under `skills/react-libs`, `skills/react-libs-ui`, `skills/react-libs-india`, `skills/react-libs-talent`, and `skills/react-libs-auth`, plus repository governance automation (`.github/dependabot.yml`, `.github/CODEOWNERS`, `.github/workflows/codeql.yml`, `.github/workflows/scorecard.yml`, and monorepo PR/issue templates).
+- Runnable starter templates under `examples/nextjs-app-router` (Tailwind v4 + React Server Components with `@abeta.dev/india` and client `@abeta.dev/ui`) and `examples/vite-react-19` (zero-Tailwind precompiled stylesheet with `@abeta.dev/india/react` and `@abeta.dev/talent`).
+
+### Changed
+- Reframed root `README.md` into a modular monorepo hub featuring the four-package matrix, 30-second Next.js App Router and Vite + React 19 quickstarts, starter templates, and live GitHub Pages Storybook and `llms.txt` links.
+- Streamlined `@abeta.dev/india` for zero-bloat server and client packaging across pure compliance exports (`validateGSTIN`, `validatePAN`, `validateIFSC`, `calculateGSTSplit`, `generateUpiPayUri`) and interactive `@abeta.dev/india/react` exports (`AmountSummaryCardIndia`, `UpiQrCard`).
+- Updated `MIGRATION.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.skills/react-libs/SKILL.md` for v0.21.0 styling exports, package entrypoints, starter examples, and verified component signatures.
+- Synchronized version `0.21.0` across `@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`, and legacy `@abeta.dev/react-libs`, and updated Storybook version badges.
+
 ## [0.20.0] - 2026-11-10
 
 ### Changed

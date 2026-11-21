@@ -1,6 +1,6 @@
 {
   "name": "@abeta.dev/react-libs",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "Production-grade, highly performant React 19 component library with strict TypeScript types, atomic exports, and zero dependency leakage.",
   "deprecated": "@abeta.dev/react-libs is deprecated. Please migrate to the scoped packages: @abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, or @abeta.dev/auth.",
   "keywords": [
@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/Abeta-dev/react-libs/issues"
   },
-  "homepage": "https://abeta.dev",
+  "homepage": "https://abeta-dev.github.io/react-libs/",
   "publishConfig": {
     "access": "public",
     "provenance": true
@@ -130,6 +130,7 @@
     "perf": "node scripts/generate-performance-report.mjs --use-existing",
     "check:types": "tsc --noEmit",
     "check:types-pkg": "npx --yes @arethetypeswrong/cli --pack . --exclude-entrypoints ./dist/style.css ./theme.css ./styles/theme.css",
+    "check:types-packages": "npx --yes @arethetypeswrong/cli --pack packages/ui --exclude-entrypoints ./style.css ./dist/style.css ./theme.css ./styles/theme.css && npx --yes @arethetypeswrong/cli --pack packages/india && npx --yes @arethetypeswrong/cli --pack packages/talent && npx --yes @arethetypeswrong/cli --pack packages/auth",
     "check:directives": "node scripts/verify-directives.mjs && npm run check:ssr",
     "check:ssr": "vitest run src/__tests__/ssr-smoke.test.tsx",
     "test:visual": "vitest run src/__tests__/visual-smoke.test.tsx",
@@ -426,7 +427,7 @@
     }
   },
   "dependencies": {
-    "@abeta.dev/auth": "0.20.0",
+    "@abeta.dev/auth": "0.21.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.8",

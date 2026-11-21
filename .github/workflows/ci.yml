@@ -106,11 +106,17 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Build Scoped Workspace Packages
+        run: npm run build:packages
+
       - name: Build Library Package
         run: npm run build
 
       - name: Verify Packed External Consumers
         run: npm run verify:packed-consumers
+
+      - name: Verify Scoped Package Types (attw)
+        run: npm run check:types-packages
 
       - name: Bundle Size Limit Gate
         run: npm run check:size

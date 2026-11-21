@@ -1,14 +1,29 @@
 name: Bug Report
-description: File a bug report to help us improve @abeta.dev/react-libs
+description: Report a bug in any @abeta.dev/* React package
 title: "[Bug]: "
 labels: ["bug", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for taking the time to report a bug! Please ensure you have searched existing issues to see if your problem has already been reported.
+        Thank you for reporting a bug! Please search existing issues first to avoid duplicates.
 
-        *Note: If you have discovered a security vulnerability, please do NOT file a public issue. Follow our [Security Policy](https://github.com/abeta-dev/react-libs/blob/main/SECURITY.md) to report it responsibly.*
+        *Note: If you discovered a security vulnerability, do NOT file a public issue. Follow our [Security Policy](https://github.com/Abeta-dev/react-libs/blob/main/SECURITY.md) or submit a private [Security Advisory](https://github.com/Abeta-dev/react-libs/security/advisories/new).*
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Affected Package
+      description: Which @abeta.dev package is impacted?
+      options:
+        - "@abeta.dev/ui"
+        - "@abeta.dev/india"
+        - "@abeta.dev/talent"
+        - "@abeta.dev/auth"
+        - "@abeta.dev/react-libs (legacy omnibus)"
+        - "Storybook / Documentation / Examples"
+    validations:
+      required: true
 
   - type: textarea
     id: description
@@ -23,12 +38,11 @@ body:
     id: reproduction
     attributes:
       label: Steps to Reproduce
-      description: Detailed steps to reproduce the behavior. Minimal reproduction code or a StackBlitz/CodeSandbox link is strongly encouraged.
+      description: Minimal reproduction code or a StackBlitz/CodeSandbox link is strongly encouraged.
       placeholder: |
-        1. Import component '...'
-        2. Pass prop '...'
-        3. Trigger action '...'
-        4. See error or unexpected visual state
+        1. Import component/utility from '@abeta.dev/...'
+        2. Pass prop / invoke function '...'
+        3. Observe error or unexpected state
     validations:
       required: true
 
@@ -36,39 +50,29 @@ body:
     id: expected-behavior
     attributes:
       label: Expected Behavior
-      description: A clear and concise description of what you expected to happen.
-      placeholder: Describe what should have happened instead...
+      description: Describe what you expected to happen instead.
     validations:
       required: true
-
-  - type: textarea
-    id: screenshots
-    attributes:
-      label: Screenshots / Recordings / Logs
-      description: If applicable, add screenshots, screen recordings, or terminal logs / stack traces to help explain the issue.
-      placeholder: Paste links, images, or stack traces here...
-    validations:
-      required: false
 
   - type: textarea
     id: system-info
     attributes:
       label: Environment & System Info
-      description: Please share your environment details to help us diagnose the issue.
+      description: Share your environment details to help us reproduce quickly.
       value: |
-        - @abeta.dev/react-libs version: 
-        - React version: 
-        - Framework / Bundler (Vite, Next.js, etc.): 
-        - Tailwind CSS version: 
-        - OS & Browser: 
-        - Node.js version: 
+        - Package & version (e.g. @abeta.dev/ui@0.21.0):
+        - React version (18 or 19):
+        - Framework / Bundler (Next.js App Router, Vite, etc.):
+        - Tailwind CSS version (v4 / none):
+        - OS & Browser:
+        - Node.js version:
     validations:
       required: true
 
   - type: textarea
     id: additional-context
     attributes:
-      label: Additional Context
-      description: Any other context, workarounds tested, or relevant details.
+      label: Screenshots / Logs / Additional Context
+      description: Attach screenshots, stack traces, or workarounds tested.
     validations:
       required: false

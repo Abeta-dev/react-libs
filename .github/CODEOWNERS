@@ -1,0 +1,48 @@
+# ==============================================================================
+# Abeta React Ecosystem (@abeta.dev/*) — Code Owners (.github/CODEOWNERS)
+# ==============================================================================
+
+# Default fallback owner
+* @umesh0492
+
+# ------------------------------------------------------------------------------
+# 1. @abeta.dev/ui (skills/react-libs-ui/SKILL.md)
+#    Core UI primitives, Tailwind CSS v4 tokens, hooks & RSC utilities
+# ------------------------------------------------------------------------------
+/packages/ui/                 @umesh0492
+
+# ------------------------------------------------------------------------------
+# 2. @abeta.dev/india (skills/react-libs-india/SKILL.md)
+#    India statutory validators, GST/TDS tax math, UPI URIs & FinTech cards
+# ------------------------------------------------------------------------------
+/packages/india/              @umesh0492
+/src/india/                   @umesh0492
+
+# ------------------------------------------------------------------------------
+# 3. @abeta.dev/talent (skills/react-libs-talent/SKILL.md)
+#    Proof-of-Work certificates, checkpoints, diagnostic quizzes & pipeline UI
+# ------------------------------------------------------------------------------
+/packages/talent/             @umesh0492
+
+# ------------------------------------------------------------------------------
+# 4. @abeta.dev/auth (skills/react-libs-auth/SKILL.md)
+#    Headless cookie-backed AuthClient, CSRF, React provider & auth UI forms
+# ------------------------------------------------------------------------------
+/packages/auth/               @umesh0492
+/src/auth/                    @umesh0492
+
+# ------------------------------------------------------------------------------
+# 5. Platform Governance, CI Truth Gates, Docs, Skills & Examples
+# ------------------------------------------------------------------------------
+/.github/                     @umesh0492
+/scripts/                     @umesh0492
+/docs/                        @umesh0492
+/skills/                      @umesh0492
+/.skills/                     @umesh0492
+/examples/                    @umesh0492
+/public/                      @umesh0492
+/AGENTS.md                    @umesh0492
+/CLAUDE.md                    @umesh0492
+/GEMINI.md                    @umesh0492
+/README.md                    @umesh0492
+/llms.txt                     @umesh0492

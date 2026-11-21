@@ -33,18 +33,23 @@ The repository consists of 4 domain packages under `packages/*` and an omnibus r
 ```
 react-libs/
 ├── packages/
-│   ├── ui/       # @abeta.dev/ui (111 Tailwind v4 + Radix UI accessible primitives)
-│   ├── india/    # @abeta.dev/india (GSTIN/PAN/IFSC/UPI domain & FinTech React cards)
-│   ├── talent/   # @abeta.dev/talent (ProofOfWorkCertificate, CheckpointRunner, Quizzes)
-│   └── auth/     # @abeta.dev/auth (Headless auth client, token refresh mutex, CSRF)
+│   ├── ui/       # @abeta.dev/ui (Full design system, ./pdf, ./hooks/use-toast, ./theme.css, ./style.css)
+│   ├── india/    # @abeta.dev/india (Zero-bloat GSTIN/PAN/IFSC/UPI domain & FinTech React cards)
+│   ├── talent/   # @abeta.dev/talent (ProofOfWorkCertificate, CheckpointRunner, DiagnosticQuiz, PipelineKanban)
+│   └── auth/     # @abeta.dev/auth (Headless AuthClient, createAuthenticatedFetch, CSRF, AuthCard)
+├── examples/
+│   ├── nextjs-app-router/ # Next.js App Router + Tailwind v4 (@abeta.dev/ui/theme.css) + RSC @abeta.dev/india
+│   └── vite-react-19/     # Vite + React 19 zero-Tailwind (@abeta.dev/ui/style.css) + @abeta.dev/india + @abeta.dev/talent
+├── public/       # Static Storybook assets including llms.txt & llms-full.txt (https://abeta-dev.github.io/react-libs/llms.txt)
 ├── src/          # Root omnibus implementation (100% backward compatibility surface)
 ├── scripts/      # Truth gates and CI verification scripts
 └── dist/         # Production build artifacts (ESM, CJS, DTS, CSS)
 ```
 
-### Module Directives & Universal Packaging
-* **Client Boundaries**: Every client component in `src/components/ui/` or `packages/ui/src/` that uses hooks (`useState`, `useEffect`, `useRef`), browser APIs, or Radix UI primitives must start with `'use client';` at byte 0.
-* **Universal Purity**: Modules exported as server/RSC-safe (`packages/india/src/validators.ts`, `src/utils.ts`, `packages/auth/src/core/`) must NEVER contain `'use client'` anywhere in their source or compiled bundle.
+### Module Directives, CSS Delivery & Universal Packaging
+* **Client Boundaries**: Every client component in `src/components/ui/` or `packages/ui/src/` that uses hooks (`useState`, `useEffect`, `useRef`), browser APIs, or Radix UI primitives must start with `'use client';` at byte 0. Browser-only workers (`PdfViewer`) live in isolated `./pdf` subpaths (`@abeta.dev/ui/pdf`, `@abeta.dev/react-libs/pdf`).
+* **Universal Purity**: Modules exported as server/RSC-safe (`packages/india/src/validators.ts`, `packages/ui/src/utils.ts`, `src/utils.ts`, `packages/auth/src/core/`) must NEVER contain `'use client'` anywhere in their source or compiled bundle.
+* **CSS Delivery**: Consumers import `@abeta.dev/ui/theme.css` (with `@source "../node_modules/@abeta.dev/ui";` in Tailwind CSS v4) or `@abeta.dev/ui/style.css` (precompiled `@layer react-libs` bundle for non-Tailwind apps).
 * **Verification**: Run `npm run check:directives` and `npm run check:ssr` to verify SSR hydration safety and directive boundaries.
 
 ---

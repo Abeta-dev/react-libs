@@ -1,0 +1,650 @@
+# Abeta React Ecosystem (`@abeta.dev/*`) — Full AI & Developer Reference
+
+> Comprehensive single-file technical reference for LLM coding assistants, AI agents, and engineers integrating `@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`, and legacy `@abeta.dev/react-libs` (v0.21.0).
+
+- **Version**: `0.21.0`
+- **Runtime Requirements**: React `^18.2.0 || ^19.0.0`, Node.js `>= 20.0.0`, TypeScript 5+
+- **Module Formats**: Dual ESM (`import`) and CommonJS (`require`) with full `.d.ts` / `.d.cts` declarations
+- **Live Storybook**: https://abeta-dev.github.io/react-libs/
+- **Concise Index**: https://abeta-dev.github.io/react-libs/llms.txt
+- **Repository**: https://github.com/Abeta-dev/react-libs
+
+---
+
+## 1. Monorepo Package Matrix
+
+| Package | Install Command | RSC / Server Entrypoints | Client Entrypoints (`'use client'`) | Primary Capabilities |
+| :--- | :--- | :--- | :--- | :--- |
+| **`@abeta.dev/ui`** | `npm i @abeta.dev/ui` | `./utils` | `.`, `./pdf`, `./hooks/use-toast`, micro-bundles (`./button`, `./card`, `./dialog`, etc.) | 111 accessible Tailwind v4 + Radix UI components, hooks, formatters, PDF viewer, CSS theme & precompiled bundle |
+| **`@abeta.dev/india`** | `npm i @abeta.dev/india` | `.` (zero-bloat pure TS) | `./react` | GSTIN/PAN/IFSC/FSSAI/Pincode validators, `calculateGSTSplit`, `calculateTDS`, NPCI UPI URIs, `AmountSummaryCardIndia`, `UpiQrCard` |
+| **`@abeta.dev/talent`** | `npm i @abeta.dev/talent` | — | `.` | `ProofOfWorkCertificate`, `CheckpointRunner`, `DiagnosticQuiz`, `PipelineKanban`, `ProofOfWorkCard`, `MatchScoreGauge`, `RadarSweep`, `SalaryRangeDisplay` |
+| **`@abeta.dev/auth`** | `npm i @abeta.dev/auth` | `./core` (zero React) | `.`, `./react`, `./core/use-click-backpressure` | Headless `AuthClient` (HttpOnly cookie refresh, single-flight mutex, CSRF, epochs), `createAuthenticatedFetch`, `AuthClientProvider`, `AuthCard`, forms, OAuth PKCE |
+| **`@abeta.dev/react-libs`** *(deprecated)* | `npm i @abeta.dev/react-libs` | `./utils`, `./india`, `./analytics` | `.`, `./india/react`, `./analytics/react`, `./pdf`, `./auth`, `./hooks/use-toast`, micro-bundles | 100% backward-compatible legacy omnibus re-export package |
+
+---
+
+## 2. Styling & CSS Delivery
+
+### Strategy A: Tailwind CSS v4 Applications (Next.js App Router, Vite + Tailwind v4)
+
+Add `@abeta.dev/ui/theme.css` after `@import "tailwindcss";` in your global CSS file (e.g., `app/globals.css` or `src/index.css`) and add `@source` directives pointing to every installed `@abeta.dev/*` package in `node_modules`:
+
+```css
+@import "tailwindcss";
+@import "@abeta.dev/ui/theme.css";
+
+/* Required in Tailwind v4 so utility classes inside installed packages are compiled */
+@source "../node_modules/@abeta.dev/ui";
+@source "../node_modules/@abeta.dev/india";
+@source "../node_modules/@abeta.dev/talent";
+@source "../node_modules/@abeta.dev/auth";
+```
+
+### Strategy B: Non-Tailwind / Zero-Config Applications (Vite, CRA, Tailwind v3, Plain CSS)
+
+Import the precompiled stylesheet once at your root client entry (`src/main.tsx` or `_app.tsx`). All library styles are wrapped in `@layer react-libs`, so your unlayered application CSS overrides library styles cleanly without `!important`:
+
+```tsx
+import "@abeta.dev/ui/style.css";
+```
+
+### Design Tokens & Multi-Brand Theming
+
+`@abeta.dev/ui/theme.css` declares cascade layers (`@layer reset, base, react-libs, components, utilities, overrides;`) and semantic HSL CSS custom properties on `:root` and `.dark`:
+
+- `--background`, `--foreground`
+- `--card`, `--card-foreground`, `--card-border`
+- `--popover`, `--popover-foreground`
+- `--primary`, `--primary-foreground`, `--primary-border`
+- `--secondary`, `--secondary-foreground`
+- `--muted`, `--muted-foreground`
+- `--accent`, `--accent-foreground`
+- `--destructive`, `--destructive-foreground`
+- `--border`, `--input`, `--ring`, `--radius`
+- `--chart-1` through `--chart-5` (Okabe-Ito colorblind-safe palette)
+- `--sidebar`, `--sidebar-foreground`, `--sidebar-primary`, `--sidebar-accent`, `--sidebar-border`
+
+Override tokens on `:root` or apply `.theme-orange` to any subtree to rebrand components. Reduced motion (`@media (prefers-reduced-motion: reduce)`) is enabled globally by default.
+
+---
+
+## 3. `@abeta.dev/ui` — Core Design System, Hooks & Utilities
+
+### Subpath Exports
+
+| Subpath | Environment | Exports |
+| :--- | :--- | :--- |
+| `@abeta.dev/ui` | Client (`'use client'`) | Complete UI component barrel, hooks, formatters, validators, masking |
+| `@abeta.dev/ui/utils` | RSC & Server-safe | `cn` (`clsx` + `tailwind-merge`) |
+| `@abeta.dev/ui/pdf` | Client-only (`'use client'`) | `PdfViewer`, `PdfViewerProps` (isolates `react-pdf` / `pdfjs-dist` workers) |
+| `@abeta.dev/ui/hooks/use-toast` | Client (`'use client'`) | `useToast`, `toast`, `reducer` |
+| `@abeta.dev/ui/theme.css` | CSS | Tailwind v4 `@theme` design tokens & layer ordering preset |
+| `@abeta.dev/ui/style.css` | CSS | Standalone precompiled stylesheet (zero Tailwind required) |
+| `@abeta.dev/ui/button` | Client (`'use client'`) | `Button`, `buttonVariants`, `ButtonProps` |
+| `@abeta.dev/ui/card` | Client (`'use client'`) | `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardSeparator`, `CardFooter`, `StandardCard` |
+| `@abeta.dev/ui/badge` | Client (`'use client'`) | `Badge`, `badgeVariants`, `BadgeProps` |
+| `@abeta.dev/ui/input` | Client (`'use client'`) | `Input` |
+| `@abeta.dev/ui/dialog` | Client (`'use client'`) | `Dialog`, `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogFooter`, `DialogTitle`, `DialogDescription`, `DialogClose` |
+| `@abeta.dev/ui/data-table` | Client (`'use client'`) | `DataTable`, `DataTableColumn`, `DataTableProps`, `DataTablePaginationProps`, `SortDirection` |
+| `@abeta.dev/ui/table` | Client (`'use client'`) | `Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableHead`, `TableRow`, `TableCell`, `TableCaption` |
+| `@abeta.dev/ui/select` | Client (`'use client'`) | `Select`, `SelectGroup`, `SelectValue`, `SelectTrigger`, `SelectContent`, `SelectLabel`, `SelectItem`, `SelectSeparator` |
+| `@abeta.dev/ui/form` | Client (`'use client'`) | `Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormDescription`, `FormMessage`, `useFormField` (peer: `react-hook-form`) |
+| `@abeta.dev/ui/sheet` | Client (`'use client'`) | `Sheet`, `SheetTrigger`, `SheetClose`, `SheetContent`, `SheetHeader`, `SheetFooter`, `SheetTitle`, `SheetDescription` |
+| `@abeta.dev/ui/drawer` | Client (`'use client'`) | `Drawer`, `DrawerTrigger`, `DrawerContent`, `DrawerHeader`, `DrawerFooter`, `DrawerTitle`, `DrawerDescription`, `DrawerClose` (peer: `vaul`) |
+| `@abeta.dev/ui/popover` | Client (`'use client'`) | `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverAnchor` |
+| `@abeta.dev/ui/tooltip` | Client (`'use client'`) | `Tooltip`, `TooltipTrigger`, `TooltipContent`, `TooltipProvider` |
+| `@abeta.dev/ui/calendar` | Client (`'use client'`) | `Calendar` (peer: `react-day-picker`) |
+| `@abeta.dev/ui/date-range-picker` | Client (`'use client'`) | `DateRangePicker` (peer: `react-day-picker`) |
+| `@abeta.dev/ui/command` | Client (`'use client'`) | `Command`, `CommandDialog`, `CommandInput`, `CommandList`, `CommandEmpty`, `CommandGroup`, `CommandItem`, `CommandShortcut`, `CommandSeparator` (peer: `cmdk`) |
+| `@abeta.dev/ui/chart` | Client (`'use client'`) | `ChartContainer`, `ChartTooltip`, `ChartTooltipContent`, `ChartLegend`, `ChartLegendContent`, `ChartStyle`, `sanitizeCssColor` (peer: `recharts`) |
+| `@abeta.dev/ui/carousel` | Client (`'use client'`) | `Carousel`, `CarouselContent`, `CarouselItem`, `CarouselPrevious`, `CarouselNext` (peer: `embla-carousel-react`) |
+
+### Optional Peer Dependencies
+
+Only install these if you import the corresponding feature:
+- `recharts` (`ChartContainer`), `react-pdf` (`PdfViewer`), `react-hook-form` (`Form`), `react-day-picker` (`Calendar`, `DateRangePicker`), `cmdk` (`Command`), `vaul` (`Drawer`), `embla-carousel-react` (`Carousel`), `canvas-confetti` (`SuccessMicroInteraction`), `xlsx` (Excel export), `jspdf` + `jspdf-autotable` (PDF export), `next-themes` (dark mode provider).
+
+### Complete Component Inventory (`@abeta.dev/ui`)
+
+- **Forms & Inputs**: `AsyncSelect`, `Button`, `ButtonGroup`, `Checkbox`, `Combobox`, `Field`, `FileUpload`, `FilterSelect`, `Form`, `Input`, `InputGroup`, `InputOTP`, `Label`, `MultiSelect`, `RadioGroup`, `SearchField`, `Select`, `SkillTagCloud`, `Slider`, `Switch`, `Textarea`, `Toggle`, `ToggleGroup`.
+- **Layout**: `AspectRatio`, `Card`, `StandardCard`, `DetailGrid`, `PageHeader`, `ResizablePanelGroup`, `ResizablePanel`, `ResizableHandle`, `ScrollArea`, `Separator`.
+- **Data Display**: `Accordion`, `ActiveFilterBadge`, `AmountSummaryCard`, `Avatar`, `Badge`, `BilingualTooltip`, `Carousel`, `ChartContainer`, `Collapsible`, `DataTable`, `ImageViewer`, `InfoList`, `KPICard`, `LineItemsCard`, `MetricTicker`, `PaymentLedger`, `PdfViewer` (`@abeta.dev/ui/pdf`), `QuotaCard`, `StatusBadge`, `Table`, `Timeline`.
+- **Navigation**: `Breadcrumb`, `Menubar`, `MobileBottomNav`, `NavigationMenu`, `OnboardingPanel`, `Pagination`, `DataTablePagination`, `PersonaDropdown`, `Sidebar`, `SidebarProvider`, `Stepper`, `Tabs`.
+- **Overlays**: `AlertDialog`, `Command`, `ConfirmDialog`, `ContextMenu`, `CreateEntityPanel`, `Dialog`, `Drawer`, `DropdownMenu`, `HoverCard`, `Sheet`, `Tooltip`.
+- **Feedback**: `Alert`, `AppSplashScreen`, `Banner`, `CopyButton`, `Empty`, `EmptyState`, `ErrorBoundary`, `ErrorState`, `ImpersonationBanner`, `InstallPwaBanner`, `LoadingState`, `OnboardingNotice`, `Progress`, `ProgressRing`, `ReactionBar`, `RoleEmptyState`, `Skeleton`, `SkeletonList`, `Sonner` (`SonnerToaster`), `Spinner`, `SuccessMicroInteraction`, `Toast`, `Toaster`, `WorkspaceBanner`.
+- **Core**: `Calendar`, `DateRangePicker`, `Item`, `Kbd`, `LanguageToggle`, `Popover`, `Typography`.
+
+### Hooks & Utilities
+
+- **Hooks**:
+  - `useDebounce<T>(value: T, delay = 400): T`
+  - `useLocalStorage<T>(key: string, initialValue: T): readonly [T, (v: T | ((prev: T) => T)) => void]`
+  - `useIsMobile(): boolean`
+  - `useToast()` & `toast({ title, description, variant, action })` (also via `@abeta.dev/ui/hooks/use-toast`)
+  - `useClickBackpressure(handler?, { debounceSec?: number | false, disabled?: boolean, onBlocked?: (reason: 'in_flight' | 'cooldown') => void })` → `{ execute, isPending, cancelCooldown, wrapHandler }`
+  - `useLocalFirstStore<T>({ key, initialValue, version?, onMigrate? })` → `{ data, setData, resetData, exportJson, importJson, isHydrated }`
+  - `useOfflineQueue<T>({ dbName?, storeName?, syncHandler?, maxRetries?, autoSyncOnOnline? })` → `{ isOnline, pendingCount, isSyncing, queue, enqueue, remove, clear, flushQueue }`
+  - `usePlatform()` → `{ ...PlatformInfo, triggerHaptic, nativeShare }`
+  - `usePWAInstall()` → `{ canInstall, isInstalled, isIOS, promptInstall }`
+- **Formatters**: `formatCurrency(amount, currency = "USD", locale = "en-US")`, `formatNumber`, `formatDate`, `formatDateTime`, `formatRelativeTime`, `formatWeight`, `formatQuantity`, `formatFileSize`, `formatPercent`, `formatLocalizedDate`, `formatLocalizedDateTime`, `formatLocalizedNumber`, `formatBytes`.
+- **Masking**: `maskSensitiveValue(value, { isMasked?, maskPattern?, dataType?, formatAsCurrency? })`.
+- **Universal Validators**: `cleanPhoneNumber`, `isValidEmail`, `isValidPhone`, `validateEmail`, `validatePhone`, `validatePostalCode`, `validateTaxId`, `validateBankAccount`, `validateRoutingCode`, `validateUrl`, `validatePassword`, `validateRequired`, `validatePositiveNumber`, `validateDateRange`, `validateTimeRange`.
+
+### Recipes (`@abeta.dev/ui`)
+
+#### Button with Built-In Click Debouncing & Async Backpressure
+
+`Button` automatically prevents duplicate clicks (default 1s cooldown + async promise lock). Pass `debounceSec={false}` for rapid-fire controls like pagination or zoom.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import { Button } from "@abeta.dev/ui/button";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@abeta.dev/ui/card";
+import { Badge } from "@abeta.dev/ui/badge";
+
+export function ApprovalCard({ onApprove }: { onApprove: () => Promise<void> }) {
+  const [approved, setApproved] = useState(false);
+
+  async function handleApprove() {
+    await onApprove();
+    setApproved(true);
+  }
+
+  return (
+    <Card className="max-w-md">
+      <CardHeader>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle>Purchase Order #PO-4821</CardTitle>
+          <Badge variant={approved ? "default" : "secondary"}>
+            {approved ? "Approved" : "Pending"}
+          </Badge>
+        </div>
+        <CardDescription>Async click backpressure prevents double submissions.</CardDescription>
+      </CardHeader>
+      <CardContent className="text-sm text-muted-foreground">
+        Total value: $14,800.00 · Net 30 terms
+      </CardContent>
+      <CardFooter className="justify-end gap-2">
+        <Button variant="outline" debounceSec={false} onClick={() => setApproved(false)}>
+          Reset
+        </Button>
+        <Button onClick={handleApprove} loadingText="Approving...">
+          Approve PO
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}
+```
+
+#### DataTable + StatusBadge + ConfirmDialog
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import { DataTable, type DataTableColumn, StatusBadge, ConfirmDialog, Button } from "@abeta.dev/ui";
+
+interface InvoiceRow {
+  id: string;
+  vendor: string;
+  amount: string;
+  status: "paid" | "pending" | "overdue_payment";
+}
+
+export function InvoicesTable({ rows }: { rows: InvoiceRow[] }) {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+
+  const columns: DataTableColumn<InvoiceRow>[] = [
+    { key: "id", header: "Invoice #", sortable: true },
+    { key: "vendor", header: "Vendor" },
+    { key: "amount", header: "Amount" },
+    { key: "status", header: "Status", cell: (row) => <StatusBadge status={row.status} /> },
+    {
+      key: "actions",
+      header: "",
+      cell: (row) => (
+        <Button variant="ghost" size="sm" onClick={() => setSelectedId(row.id)}>
+          Void
+        </Button>
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <DataTable
+        columns={columns}
+        data={rows}
+        rowKey={(row) => row.id}
+        pagination={{ page, pageSize: 10, total: rows.length, onPageChange: setPage }}
+      />
+      <ConfirmDialog
+        open={selectedId !== null}
+        onOpenChange={(open) => { if (!open) setSelectedId(null); }}
+        title="Void Invoice?"
+        description="This action marks the invoice as void and cannot be undone."
+        variant="destructive"
+        confirmLabel="Void Invoice"
+        onConfirm={() => setSelectedId(null)}
+      />
+    </>
+  );
+}
+```
+
+#### Isolated PDF Viewer (`@abeta.dev/ui/pdf`)
+
+```tsx
+"use client";
+
+import { PdfViewer } from "@abeta.dev/ui/pdf";
+
+export function ContractPreview() {
+  return (
+    <PdfViewer
+      file="/contracts/vendor-msa.pdf"
+      maxWidth={800}
+      showDownload
+      showPrint
+      onLoadSuccess={(numPages) => console.log(`Loaded ${numPages} pages`)}
+    />
+  );
+}
+```
+
+#### Imperative Toasts (`@abeta.dev/ui/hooks/use-toast`)
+
+```tsx
+"use client";
+
+import { Toaster } from "@abeta.dev/ui";
+import { Button } from "@abeta.dev/ui/button";
+import { useToast } from "@abeta.dev/ui/hooks/use-toast";
+
+export function SaveAction() {
+  const { toast } = useToast();
+  return (
+    <>
+      <Button
+        onClick={() =>
+          toast({
+            title: "Vendor saved",
+            description: "GSTIN and settlement details have been synced.",
+          })
+        }
+      >
+        Save Vendor
+      </Button>
+      <Toaster />
+    </>
+  );
+}
+```
+
+---
+
+## 4. `@abeta.dev/india` — Zero-Bloat India Statutory, GST & UPI
+
+### Architecture & Entrypoints
+
+- **`@abeta.dev/india`** (RSC & Server-Safe): Pure TypeScript with zero React, DOM, or UI component dependencies. Safe in Next.js Server Components, Server Actions, Route Handlers, Node.js scripts, and Edge runtimes.
+- **`@abeta.dev/india/react`** (`'use client'`): Interactive regional React components (`AmountSummaryCardIndia`, `UpiQrCard`, `LanguageToggle`, `BilingualTooltip`).
+
+### Pure Domain API (`@abeta.dev/india`)
+
+#### Statutory Validators (Bilingual English `'en'` & Hindi `'hi'`)
+All validators return `undefined` when valid, or an error message `string` when invalid (`validateFSSAI` treats empty input as optional/valid):
+
+- `validateGSTIN(value?: string | null, options?: { language?: 'en' | 'hi' }): string | undefined`
+- `validatePAN(value?: string | null, options?: { language?: 'en' | 'hi' }): string | undefined`
+- `validateIFSC(value?: string | null, options?: { language?: 'en' | 'hi' }): string | undefined`
+- `validatePhoneIN(value?: string | null, options?: { language?: 'en' | 'hi' }): string | undefined`
+- `validateBankAccountIN(value?: string | null, options?: { language?: 'en' | 'hi' }): string | undefined`
+- `validateFSSAI(value?: string | null, options?: { language?: 'en' | 'hi' }): string | undefined`
+- `validatePincode(value?: string | null, options?: { language?: 'en' | 'hi' }): string | undefined`
+- `cleanPhoneNumber(phone: string): string`
+- Regex constants: `REGEX_GSTIN`, `REGEX_PAN`, `REGEX_PHONE_IN`, `REGEX_IFSC`, `REGEX_BANK_ACCOUNT_IN`, `REGEX_FSSAI`, `REGEX_PINCODE`
+- Message catalogs: `VALIDATION_MESSAGES_IN`, `VALIDATION_MESSAGES_IN_HI`
+
+#### GST & TDS Tax Calculation Engine
+- `calculateGSTSplit(amount: number, taxRate = 18, isIntraState = true, isTaxInclusive = false): GSTCalculationResult`
+  - Returns `{ baseAmount, totalTax, cgstAmount, sgstAmount, igstAmount, totalPayable }`
+  - When `isIntraState === true`: splits tax 50/50 into `cgstAmount` and `sgstAmount` (`igstAmount === 0`).
+  - When `isIntraState === false`: sets `igstAmount = totalTax` (`cgstAmount === 0`, `sgstAmount === 0`).
+- `calculateTDS(baseAmount: number, tdsPercentage: number): number`
+
+#### NPCI UPI Payment URI Engine
+- `validateUpiId(upiId: string): UpiValidationResult` → `{ isValid: boolean; error?: string }`
+- `generateUpiPayUri(options: UpiPayOptions): string`
+  - `UpiPayOptions`: `{ upiId: string; payeeName?: string; amount?: number; transactionNote?: string; currency?: string; transactionRef?: string; merchantCode?: string; refUrl?: string }`
+- `parseUpiPayUri(uri: string): UpiPayOptions | null`
+
+#### Currency Units, Locations & WhatsApp Helpers
+- `formatLakhs(value: number, currencySymbol = "₹"): string` (e.g. `₹3.5L`)
+- `formatCrores(value: number, currencySymbol = "₹"): string` (e.g. `₹1.25Cr`)
+- `INDIAN_LANGUAGES` (`IndianLanguageOption[]`), `INDIA_STATES` (`IndiaState[]`), `INDIA_CITIES` (`IndiaCity[]`)
+- `getCitiesForState(stateCode: string)`, `getStateOptions(placeholder?)`, `getCityOptions(stateCode, placeholder?)`, `isMetroCity(cityName)`
+- `formatPhoneForWhatsApp(phone, defaultCountryCode = "91")`, `generateWhatsAppUrl(phone?, message?, defaultCountryCode?)`, `generateWhatsAppAppUrl(phone?, message?, defaultCountryCode?)`, `openWhatsApp(phone?, message?, defaultCountryCode?)`, `formatWhatsAppTemplate(template, variables)`
+
+### Client React Components (`@abeta.dev/india/react`)
+
+- **`AmountSummaryCardIndia`**:
+  - Props: `baseAmount?: number`, `gstRate?: number` (default `18`), `isIntraState?: boolean` (default `true`), `isTaxInclusive?: boolean` (default `false`), `transportCost?: number`, `tdsPercentage?: number`, `netPayable?: number`, `isUrgent?: boolean`, `urgentLabel?: string`, `size?: "sm" | "default"`.
+- **`UpiQrCard`**:
+  - Props: `upiId: string` *(required)*, `payeeName?: string`, `amount?: number`, `transactionNote?: string`, `showStandee?: boolean` (default `true`), `size?: number` (default `180`), `onDownloadReady?: (dataUrl: string) => void`, `badgeLabel?: string`.
+- **`LanguageToggle`**:
+  - Props: `onLanguageChange?: (lang: string) => void`, `className?: string`.
+- **`BilingualTooltip`**:
+  - Props: `englishText: string`, `hindiText: string`, `children: React.ReactNode`, `className?: string`.
+
+### Recipes (`@abeta.dev/india`)
+
+#### Server-Side GSTIN Validation, GST Split & UPI URI (RSC / Server Action)
+
+```ts
+import {
+  validateGSTIN,
+  validatePAN,
+  validateIFSC,
+  validateUpiId,
+  calculateGSTSplit,
+  calculateTDS,
+  generateUpiPayUri,
+} from "@abeta.dev/india";
+
+export function prepareVendorSettlement(input: {
+  gstin: string;
+  pan: string;
+  ifsc: string;
+  upiId: string;
+  baseAmount: number;
+  isIntraState: boolean;
+}) {
+  const gstinError = validateGSTIN(input.gstin); // undefined if valid
+  const panError = validatePAN(input.pan);
+  const ifscError = validateIFSC(input.ifsc);
+  const upiCheck = validateUpiId(input.upiId);
+
+  if (gstinError || panError || ifscError || !upiCheck.isValid) {
+    throw new Error(gstinError ?? panError ?? ifscError ?? upiCheck.error ?? "Invalid statutory details");
+  }
+
+  const gst = calculateGSTSplit(input.baseAmount, 18, input.isIntraState, false);
+  const tds = calculateTDS(gst.baseAmount, 2); // Section 194C 2%
+  const netPayable = Math.max(0, gst.totalPayable - tds);
+
+  const upiUri = generateUpiPayUri({
+    upiId: input.upiId,
+    payeeName: "Abeta Vendor Settlement",
+    amount: netPayable,
+    transactionNote: "Invoice #INV-2026-1042",
+  });
+
+  return { gst, tds, netPayable, upiUri };
+}
+```
+
+#### Client-Side Invoice Breakdown & UPI QR Standee
+
+```tsx
+"use client";
+
+import { AmountSummaryCardIndia, UpiQrCard } from "@abeta.dev/india/react";
+
+export function InvoiceCheckout() {
+  return (
+    <div className="grid gap-6 md:grid-cols-2">
+      <AmountSummaryCardIndia
+        baseAmount={125000}
+        gstRate={18}
+        isIntraState={true}
+        tdsPercentage={2}
+        transportCost={1500}
+        isUrgent
+        urgentLabel="T+0 Settlement"
+      />
+      <UpiQrCard
+        upiId="billing@okhdfcbank"
+        payeeName="Abeta Logistics Pvt Ltd"
+        amount={146500}
+        transactionNote="Invoice #INV-2026-1042"
+        badgeLabel="0% Commission Direct UPI"
+      />
+    </div>
+  );
+}
+```
+
+---
+
+## 5. `@abeta.dev/talent` — Assessment, Credentials & Hiring Pipeline UI
+
+All exports from `@abeta.dev/talent` are `'use client'` React components:
+
+- **`ProofOfWorkCertificate`**: Verifiable print-ready certificate with `@media print` styling, hydration-safe date rendering, clipboard copy, and Web Share API fallback.
+  - Required props: `certificateId: string`, `recipientName: string`, `projectTitle: string`.
+  - Optional props: `recipientHandle?: string`, `projectSlug?: string`, `issueDate?: string`, `issuerName?: string`, `issuerLogoUrl?: string`, `skills?: string[]`, `verificationUrl?: string`, `showActions?: boolean`, `onPrint?: () => void`, `onShare?: () => void`.
+- **`CheckpointRunner`**: Sequential milestone verification runner with runnable command snippets, copy button, expandable hints, and evidence capture.
+  - Props: `checkpoints: CheckpointItem[]` (`{ id, title, command?, hint?, evidenceRequired?, completed?, evidence? }`), `onToggleCheckpoint?: (id: string, evidence?: string) => void`, `onRunCommand?: (command: string) => Promise<string | void> | void`, `title?: string`, `description?: string`.
+- **`DiagnosticQuiz`**: Multi-step modal assessment dialog that computes weighted track recommendations.
+  - Props: `open: boolean`, `onOpenChange: (open: boolean) => void`, `questions: QuizQuestion[]` (`{ id, title, category?, options: { label, description?, trackAffinity, weight? }[] }`), `onComplete: (recommendedTrack: string, scores: Record<string, number>) => void`, `title?: string`, `description?: string`.
+- **`PipelineKanban`**: Multi-column candidate/deal pipeline board with keyboard-accessible cards (`Enter`/`Space`), column counts, tones (`"default" | "indigo" | "emerald" | "amber" | "rose" | "purple"`), and add-card actions.
+  - Props: `columns: KanbanColumn[]` (`{ id, title, count?, items: KanbanCardItem[], tone?, emptyMessage? }`), `onCardClick?: (item: KanbanCardItem, columnId: string) => void`, `onAddCard?: (columnId: string) => void`, `emptyMessage?: string`.
+- **`ProofOfWorkCard`** (alias: `MetricVerificationCard`): Single artifact proof card (`item: ProofOfWorkItem`).
+- **`MatchScoreGauge`**: Circular SVG score meter (`role="meter"`, props: `score`, `label?`, `sublabel?`, `size?`, `strokeWidth?`, `showGrade?`).
+- **`RadarSweep`**: Animated radar blip visualization (`size?`, `blips?: RadarBlip[]`, `isScanning?`, `statusText?`).
+- **`SalaryRangeDisplay`** (aliases: `MetricRangeDisplay`, `CompensationRangeDisplay`): Badge or card compensation display (`min?`, `max?`, `currencySymbol?`, `unit?`, `period?`, `label?`, `breakdown?`, `items?`, `variant?: "badge" | "card"`).
+
+### Recipes (`@abeta.dev/talent`)
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import {
+  ProofOfWorkCertificate,
+  CheckpointRunner,
+  DiagnosticQuiz,
+  PipelineKanban,
+  type CheckpointItem,
+  type KanbanColumn,
+} from "@abeta.dev/talent";
+
+export function TalentDemo() {
+  const [quizOpen, setQuizOpen] = useState(false);
+  const [checkpoints, setCheckpoints] = useState<CheckpointItem[]>([
+    { id: "cp-1", title: "Run unit test suite", command: "npm test", completed: true },
+    { id: "cp-2", title: "Attach verified commit SHA", evidenceRequired: true, hint: "Run git rev-parse HEAD" },
+  ]);
+
+  const columns: KanbanColumn[] = [
+    {
+      id: "screening",
+      title: "Screening",
+      tone: "indigo",
+      items: [{ id: "cand-1", title: "Ananya Verma", subtitle: "Staff Frontend Engineer", score: 94, tag: "React 19" }],
+    },
+    {
+      id: "offer",
+      title: "Offer",
+      tone: "emerald",
+      items: [{ id: "cand-2", title: "Rohan Mehta", subtitle: "Distributed Systems", scoreLabel: "Top 5%", tag: "Verified" }],
+    },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <CheckpointRunner
+        checkpoints={checkpoints}
+        onToggleCheckpoint={(id, evidence) =>
+          setCheckpoints((prev) =>
+            prev.map((cp) => (cp.id === id ? { ...cp, completed: !cp.completed, evidence } : cp))
+          )
+        }
+      />
+
+      <ProofOfWorkCertificate
+        certificateId="POW-2026-9042"
+        recipientName="Aarav Sharma"
+        recipientHandle="@aarav"
+        projectTitle="Multi-Tenant Vendor Portal Engine"
+        issuerName="Abeta Engineering Academy"
+        issueDate="2026-11-20"
+        skills={["React 19", "TypeScript", "Tailwind v4", "GST Engine"]}
+        verificationUrl="https://verify.abeta.dev/cert/POW-2026-9042"
+        showActions
+      />
+
+      <PipelineKanban
+        columns={columns}
+        onCardClick={(item, columnId) => console.log(item.id, columnId)}
+      />
+
+      <DiagnosticQuiz
+        open={quizOpen}
+        onOpenChange={setQuizOpen}
+        title="Engineering Track Diagnostic"
+        questions={[
+          {
+            id: "q-1",
+            title: "Which layer do you enjoy optimizing most?",
+            options: [
+              { label: "Design Systems & Accessibility", trackAffinity: "frontend", weight: 3 },
+              { label: "Distributed Consensus & Storage", trackAffinity: "systems", weight: 3 },
+            ],
+          },
+        ]}
+        onComplete={(track, scores) => console.log("Recommended:", track, scores)}
+      />
+    </div>
+  );
+}
+```
+
+---
+
+## 6. `@abeta.dev/auth` — Headless Session Engine & Auth UI
+
+### Entrypoints
+
+- **`@abeta.dev/auth/core`** *(pure TypeScript, zero React, zero `'use client'`)*:
+  - `AuthClient<TUser>`: Headless session state machine storing access tokens in memory only, with single-flight HttpOnly cookie refresh, epoch guards against stale login/logout races, CSRF token injection, and optional cross-tab `RefreshCoordinator`.
+  - `createAuthenticatedFetch<TUser>(auth, allowedOrigin, fetchImpl?)`: Origin-locked Bearer fetch wrapper with `redirect: 'error'` and at-most-once eligible retry on explicit `isAccessExpired(response)` + `replay()`.
+  - `AuthClientError` + types (`AuthClientOptions`, `AuthClientAdapter`, `AuthClientSession`, `AuthClientSnapshot`, `AuthClientStatus`, `CsrfProvider`, `RefreshCoordinator`, `AccessSessionPersistence`, `AuthCapabilities`, `AuthenticatedFetchClient`, `AuthenticatedFetchOptions`).
+- **`@abeta.dev/auth/react`** *(`'use client'`)*:
+  - Headless client bindings: `AuthClientProvider`, `useAuthClient`, `useAuthClientSnapshot`.
+  - Adapter-backed context & hooks: `AuthProvider`, `AuthContext`, `useAuth`, `useToken`, `useUser`, `useOAuth`.
+- **`@abeta.dev/auth`** *(`'use client'`, full package)*:
+  - Re-exports core + React hooks + UI components (`AuthCard`, `LoginForm`, `SignUpForm`, `ForgotPasswordForm`, `OtpForm`, `OAuthButton`, `OAuthButtonGroup`), `TokenManager`, `MockAuthAdapter`, `DEFAULT_MOCK_PASSWORD`, PKCE utilities (`generateOAuthState`, `generateCodeVerifier`, `generateCodeChallenge`, `isValidRedirectUrl`), `useClickBackpressure`, and OAuth icons (`GoogleIcon`, `LinkedInIcon`, `GitHubIcon`, `AppleIcon`, `MicrosoftIcon`, `EyeIcon`, `EyeOffIcon`, `SpinnerIcon`).
+- **`@abeta.dev/auth/core/use-click-backpressure`**: Standalone `useClickBackpressure` hook.
+
+### Recipe 1: Headless Cookie-Backed `AuthClient` + `createAuthenticatedFetch` + React Provider
+
+```tsx
+"use client";
+
+import { useEffect } from "react";
+import { AuthClient, createAuthenticatedFetch, type AuthClientAdapter, type CsrfProvider } from "@abeta.dev/auth/core";
+import { AuthClientProvider, useAuthClient, useAuthClientSnapshot } from "@abeta.dev/auth/react";
+
+const csrf: CsrfProvider = {
+  async getToken(signal) {
+    const res = await fetch("https://api.example.com/auth/csrf", { credentials: "include", signal });
+    const json = (await res.json()) as { csrfToken: string };
+    return json.csrfToken;
+  },
+};
+
+// Implement AuthClientAdapter against your backend endpoints (cookie-backed refresh, finite expiresAt ms)
+declare const adapter: AuthClientAdapter;
+
+export const authClient = new AuthClient({
+  adapter,
+  csrf,
+  refreshThresholdMs: 60_000,
+});
+
+export const apiClient = createAuthenticatedFetch(authClient, "https://api.example.com");
+
+export function AppAuthShell({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    void authClient.bootstrap();
+  }, []);
+
+  return <AuthClientProvider client={authClient}>{children}</AuthClientProvider>;
+}
+
+export function SessionHeader() {
+  const client = useAuthClient();
+  const snapshot = useAuthClientSnapshot();
+
+  return (
+    <div className="flex items-center justify-between gap-4 border-b px-4 py-3">
+      <div className="text-sm">
+        <span className="font-medium">{snapshot.session?.user.email ?? "Guest"}</span>
+        <span className="ml-2 text-xs text-muted-foreground">({snapshot.status})</span>
+      </div>
+      {snapshot.status === "authenticated" && (
+        <button type="button" onClick={() => void client.logout()} className="text-sm underline">
+          Sign out
+        </button>
+      )}
+    </div>
+  );
+}
+```
+
+### Recipe 2: Drop-In `AuthProvider` + `AuthCard`
+
+```tsx
+"use client";
+
+import { useMemo } from "react";
+import { AuthProvider, AuthCard, MockAuthAdapter } from "@abeta.dev/auth";
+
+export function SignInPage() {
+  const adapter = useMemo(() => new MockAuthAdapter(), []);
+
+  return (
+    <AuthProvider adapter={adapter}>
+      <div className="flex min-h-screen items-center justify-center p-6">
+        <AuthCard
+          initialMode="signIn"
+          providers={["google", "linkedin"]}
+          title="Vendor Portal"
+          subtitle="Sign in to manage purchase orders and settlements"
+          onSuccess={(session) => console.log("Signed in as:", session.user.email)}
+        />
+      </div>
+    </AuthProvider>
+  );
+}
+```
+
+---
+
+## 7. Behavioral Analytics & Legacy Omnibus (`@abeta.dev/react-libs`)
+
+- **Pure Analytics Engine (RSC/Server-Safe)**: `@abeta.dev/react-libs/analytics` (`initAnalytics`, `trackEvent`, `createAnalyticsEngine`, `ConsoleAdapter`, `HttpAdapter`, `GoogleAnalyticsAdapter`, `MixpanelAdapter`).
+- **React Analytics Bindings (`'use client'`)**: `@abeta.dev/react-libs/analytics/react` (`AnalyticsProvider`, `useAnalytics`, `TrackArea`, `PageViewTracker`).
+- **Legacy Omnibus (`@abeta.dev/react-libs`)**: Deprecated for greenfield apps in favor of `@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, and `@abeta.dev/auth`, while maintaining 100% backward compatibility for all legacy import paths.
+
+---
+
+## 8. Common Mistakes to Avoid (Checklist for AI Agents)
+
+1. **Tailwind v4 `@source`**: Never forget `@source "../node_modules/@abeta.dev/ui";` (and other installed scoped packages) when using `@import "@abeta.dev/ui/theme.css";`, or utility classes inside package components will not be emitted.
+2. **RSC Boundaries**: Do not import from `@abeta.dev/ui`, `@abeta.dev/india/react`, `@abeta.dev/talent`, or `@abeta.dev/auth/react` in a Next.js Server Component without a `'use client'` wrapper. Import pure validators/tax functions from `@abeta.dev/india` and `cn` from `@abeta.dev/ui/utils` directly in Server Components.
+3. **Exact Prop Names**:
+   - `UpiQrCard` & `generateUpiPayUri`: use `upiId`, NOT `payeeVpa`.
+   - `calculateGSTSplit`: capital `GST` and 3rd argument is `isIntraState` (`true` = CGST+SGST, `false` = IGST).
+   - `validateGSTIN` / `validatePAN` / `validateIFSC`: return `undefined` when valid, error string when invalid.
+   - `validateUpiId`: returns `{ isValid: boolean, error?: string }`, NOT a raw boolean.
+   - `PdfViewer`: use `file` prop (NOT `url`), imported from `@abeta.dev/ui/pdf`, and `onLoadSuccess` receives `numPages: number`.
+   - `ProofOfWorkCertificate`: requires `certificateId`, `recipientName`, and `projectTitle` (NOT `courseTitle`).
+   - `useAuthClientSnapshot()`: user lives at `snapshot.session?.user`, NOT `snapshot.user`.
+   - `useClickBackpressure(handler, opts)`: returns `{ execute, isPending, cancelCooldown, wrapHandler }`.
