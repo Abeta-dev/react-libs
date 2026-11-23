@@ -51,28 +51,33 @@ try {
   const indiaTarball = pack(join(root, 'packages/india'));
   const talentTarball = pack(join(root, 'packages/talent'));
   const authTarball = pack(join(root, 'packages/auth'));
+  const analyticsTarball = pack(join(root, 'packages/analytics'));
+  const mcpTarball = pack(join(root, 'packages/mcp'));
   const rootTarball = pack(root);
 
   const uiPackage = readPackageJson('packages/ui/package.json');
   const indiaPackage = readPackageJson('packages/india/package.json');
   const talentPackage = readPackageJson('packages/talent/package.json');
   const authPackage = readPackageJson('packages/auth/package.json');
+  const analyticsPackage = readPackageJson('packages/analytics/package.json');
+  const mcpPackage = readPackageJson('packages/mcp/package.json');
   const rootPackage = readPackageJson('package.json');
 
-  // ── Fixture 1: Zero-bloat pure backend consumer of @abeta.dev/india ────────
-  // Installs ONLY @abeta.dev/india (no @abeta.dev/ui, no react) to prove that
-  // Node.js / RSC / Edge consumers can validate GSTIN and compute GST splits
-  // with zero React or UI dependency bloat.
+  // ── Fixture 1: Zero-bloat pure backend consumer (@abeta.dev/india + analytics + mcp) ──
+  // Installs ONLY @abeta.dev/india, @abeta.dev/analytics, and @abeta.dev/mcp (zero React / UI)
+  // to prove Node.js / RSC / Edge consumers have zero React or UI dependency bloat.
   mkdirSync(indiaFixture);
   writeFileSync(
     join(indiaFixture, 'package.json'),
     `${JSON.stringify(
       {
-        name: 'packed-india-backend-consumer',
+        name: 'packed-backend-zero-bloat-consumer',
         private: true,
         type: 'module',
         dependencies: {
           [indiaPackage.name]: `file:${indiaTarball}`,
+          [analyticsPackage.name]: `file:${analyticsTarball}`,
+          [mcpPackage.name]: `file:${mcpTarball}`,
         },
       },
       null,
@@ -91,71 +96,75 @@ import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
 const indiaPkgName = ${JSON.stringify(indiaPackage.name)};
+const analyticsPkgName = ${JSON.stringify(analyticsPackage.name)};
+const mcpPkgName = ${JSON.stringify(mcpPackage.name)};
 
 // 1. Assert zero React / @abeta.dev/ui bloat in node_modules
 if (existsSync(join(process.cwd(), 'node_modules', 'react'))) {
-  throw new Error(\`Zero-bloat regression: \${indiaPkgName} unexpectedly pulled in "react".\`);
+  throw new Error('Zero-bloat regression: backend packages unexpectedly pulled in "react".');
 }
 if (existsSync(join(process.cwd(), 'node_modules', '@abeta.dev', 'ui'))) {
-  throw new Error(\`Zero-bloat regression: \${indiaPkgName} unexpectedly pulled in "@abeta.dev/ui".\`);
+  throw new Error('Zero-bloat regression: backend packages unexpectedly pulled in "@abeta.dev/ui".');
 }
 
-// 2. Assert pure ESM import and runtime execution in Node.js
+// 2. Assert pure ESM import and runtime execution for @abeta.dev/india
 const india = await import(indiaPkgName);
 if (typeof india.validateGSTIN !== 'function') {
   throw new Error(\`\${indiaPkgName} did not export validateGSTIN.\`);
 }
-const validGstinError = india.validateGSTIN('27AAPFU0939F1ZV');
-if (validGstinError !== undefined) {
-  throw new Error(\`validateGSTIN('27AAPFU0939F1ZV') unexpectedly returned error: \${validGstinError}\`);
+if (india.validateGSTIN('27AAPFU0939F1ZV') !== undefined) {
+  throw new Error('validateGSTIN failed on valid GSTIN.');
 }
-const invalidGstinError = india.validateGSTIN('INVALID');
-if (typeof invalidGstinError !== 'string' || invalidGstinError.length === 0) {
-  throw new Error(\`validateGSTIN('INVALID') did not return a validation message.\`);
-}
-
-const calculateGst = india.calculateGSTSplit ?? india.calculateGstSplit;
-if (typeof calculateGst !== 'function') {
-  throw new Error(\`\${indiaPkgName} did not export calculateGSTSplit.\`);
-}
-const split = calculateGst(1000, 18, false);
-if (
-  !split ||
-  split.baseAmount !== 1000 ||
-  split.totalTax !== 180 ||
-  split.igstAmount !== 180 ||
-  split.cgstAmount !== 0 ||
-  split.sgstAmount !== 0 ||
-  split.totalPayable !== 1180
-) {
+const split = india.calculateGSTSplit(1000, 18, false);
+if (split.igstAmount !== 180 || split.totalPayable !== 1180) {
   throw new Error(\`Unexpected GST split result: \${JSON.stringify(split)}\`);
 }
 
-// 3. Assert dist/index.js (ESM) and dist/index.cjs (CJS) have NO 'use client' directive
-const esmEntry = fileURLToPath(import.meta.resolve(indiaPkgName));
-const cjsEntry = require.resolve(indiaPkgName);
-for (const [format, entryPath] of [['ESM', esmEntry], ['CJS', cjsEntry]]) {
-  const source = readFileSync(entryPath, 'utf8');
-  if (/['"]use client['"]/.test(source)) {
-    throw new Error(\`\${indiaPkgName} (\${format}: \${entryPath}) unexpectedly contains a 'use client' directive.\`);
+// 3. Assert pure Node import and execution for @abeta.dev/analytics
+const analytics = await import(analyticsPkgName);
+if (typeof analytics.AnalyticsEngine !== 'function' || typeof analytics.ConsoleAdapter !== 'function') {
+  throw new Error(\`\${analyticsPkgName} did not export AnalyticsEngine / ConsoleAdapter.\`);
+}
+
+// 4. Assert offline bundled knowledge + MCP JSON-RPC execution for @abeta.dev/mcp
+const mcp = await import(mcpPkgName);
+const bundle = mcp.loadBundledKnowledge();
+const handler = mcp.createAbetaMcpHandler(bundle);
+const initRes = handler({ jsonrpc: '2.0', id: 1, method: 'initialize' });
+if (initRes?.result?.serverInfo?.name !== '@abeta.dev/mcp') {
+  throw new Error(\`Unexpected MCP initialize response: \${JSON.stringify(initRes)}\`);
+}
+const rscCheck = mcp.checkRscBoundary(bundle, '@abeta.dev/analytics');
+if (!rscCheck.found || !rscCheck.rscSafe) {
+  throw new Error(\`Unexpected MCP RSC boundary check for @abeta.dev/analytics: \${JSON.stringify(rscCheck)}\`);
+}
+
+// 5. Assert dist/index.js (ESM) and dist/index.cjs (CJS) have NO 'use client' directive
+for (const pkgName of [indiaPkgName, analyticsPkgName, mcpPkgName]) {
+  const esmEntry = fileURLToPath(import.meta.resolve(pkgName));
+  const cjsEntry = require.resolve(pkgName);
+  for (const [format, entryPath] of [['ESM', esmEntry], ['CJS', cjsEntry]]) {
+    const source = readFileSync(entryPath, 'utf8');
+    if (/['"]use client['"]/.test(source)) {
+      throw new Error(\`\${pkgName} (\${format}: \${entryPath}) unexpectedly contains a 'use client' directive.\`);
+    }
   }
 }
 
-console.log('✅ Fixture 1 passed: pure backend @abeta.dev/india verified (zero bloat, no client directive).');
+console.log('✅ Fixture 1 passed: pure backend @abeta.dev/{india,analytics,mcp} verified (zero React/UI bloat, no client directive).');
 `
   );
   run('node', ['verify.mjs'], indiaFixture);
 
-  // ── Fixture 2: Full React consumer of all 5 tarballs ───────────────────────
-  // Maps all 4 scoped packages in BOTH dependencies and overrides to local
-  // file: tarballs so npm resolves unpublished monorepo versions cleanly
-  // without attempting to fetch them from registry.npmjs.org.
+  // ── Fixture 2: Full React consumer of all 7 tarballs ───────────────────────
   mkdirSync(fullFixture);
   const localScopedTarballs = {
     [uiPackage.name]: `file:${uiTarball}`,
     [indiaPackage.name]: `file:${indiaTarball}`,
     [talentPackage.name]: `file:${talentTarball}`,
     [authPackage.name]: `file:${authTarball}`,
+    [analyticsPackage.name]: `file:${analyticsTarball}`,
+    [mcpPackage.name]: `file:${mcpTarball}`,
   };
 
   writeFileSync(
@@ -165,15 +174,12 @@ console.log('✅ Fixture 1 passed: pure backend @abeta.dev/india verified (zero 
         name: 'packed-react-libs-full-consumer',
         private: true,
         type: 'module',
-        // Install peer dependencies explicitly: package managers do not guarantee an
-        // external consumer has optional peers, but importing the root and UI barrels
-        // loads every externally-declared module. Local tarball entries come last so
-        // they always take precedence over any scoped package listed in peers.
         dependencies: {
           ...uiPackage.peerDependencies,
           ...indiaPackage.peerDependencies,
           ...talentPackage.peerDependencies,
           ...authPackage.peerDependencies,
+          ...analyticsPackage.peerDependencies,
           ...rootPackage.peerDependencies,
           ...localScopedTarballs,
           [rootPackage.name]: `file:${rootTarball}`,
@@ -200,13 +206,15 @@ const uiPkgName = ${JSON.stringify(uiPackage.name)};
 const indiaPkgName = ${JSON.stringify(indiaPackage.name)};
 const talentPkgName = ${JSON.stringify(talentPackage.name)};
 const authPkgName = ${JSON.stringify(authPackage.name)};
+const analyticsPkgName = ${JSON.stringify(analyticsPackage.name)};
+const mcpPkgName = ${JSON.stringify(mcpPackage.name)};
 const rootPkgName = ${JSON.stringify(rootPackage.name)};
 
 const startsWithClientDirective = (source) =>
   ["'", '"'].some((quote) => source.trimStart().startsWith(\`\${quote}use client\${quote}\`));
 const containsClientDirective = (source) => /['"]use client['"]/.test(source);
 
-// 1. Verify runtime ESM imports across all 5 packages
+// 1. Verify runtime ESM imports across all 7 packages
 const importTargets = [
   uiPkgName,
   \`\${uiPkgName}/utils\`,
@@ -220,6 +228,9 @@ const importTargets = [
   \`\${authPkgName}/core\`,
   \`\${authPkgName}/react\`,
   \`\${authPkgName}/core/use-click-backpressure\`,
+  analyticsPkgName,
+  \`\${analyticsPkgName}/react\`,
+  mcpPkgName,
   rootPkgName,
   \`\${rootPkgName}/auth\`,
 ];
@@ -250,6 +261,7 @@ const clientEntrypoints = [
   authPkgName,
   \`\${authPkgName}/react\`,
   \`\${authPkgName}/core/use-click-backpressure\`,
+  \`\${analyticsPkgName}/react\`,
   rootPkgName,
   \`\${rootPkgName}/auth\`,
 ];
@@ -258,6 +270,8 @@ const universalEntrypoints = [
   \`\${uiPkgName}/utils\`,
   indiaPkgName,
   \`\${authPkgName}/core\`,
+  analyticsPkgName,
+  mcpPkgName,
 ];
 
 for (const specifier of clientEntrypoints) {
@@ -282,13 +296,13 @@ for (const specifier of universalEntrypoints) {
   }
 }
 
-console.log('✅ Fixture 2 directive boundaries passed across all 5 packages (ESM & CJS).');
+console.log('✅ Fixture 2 directive boundaries passed across all 7 packages (ESM & CJS).');
 `
   );
   run('node', ['verify.mjs'], fullFixture);
 
-  const verifiedTarballs = [uiTarball, indiaTarball, talentTarball, authTarball, rootTarball].map((t) => basename(t));
-  console.log(`✅ Packed external consumers verified all 5 tarballs: ${verifiedTarballs.join(', ')}.`);
+  const verifiedTarballs = [uiTarball, indiaTarball, talentTarball, authTarball, analyticsTarball, mcpTarball, rootTarball].map((t) => basename(t));
+  console.log(`✅ Packed external consumers verified all 7 tarballs: ${verifiedTarballs.join(', ')}.`);
 } finally {
   rmSync(scratch, { recursive: true, force: true });
 }

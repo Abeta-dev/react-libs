@@ -1,9 +1,9 @@
 # Abeta React Ecosystem (`@abeta.dev/*`)
 
-> **Enterprise B2B Design System, India Statutory Compliance, Talent Verification & Headless Auth for React 19 / React 18.**  
-> Four modular, tree-shakeable npm packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`) — plus 100% backward-compatible legacy omnibus `@abeta.dev/react-libs` — built with Tailwind CSS v4, Radix UI, strict TypeScript, and explicit RSC / `'use client'` boundaries.
+> **Enterprise B2B Design System, India Statutory Compliance, Talent Verification, Headless Auth, Behavioral Analytics & MCP Server for React 19 / React 18.**  
+> Six modular, tree-shakeable npm packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`, `@abeta.dev/analytics`, `@abeta.dev/mcp`) — plus 100% backward-compatible legacy omnibus `@abeta.dev/react-libs` — built with Tailwind CSS v4, Radix UI, strict TypeScript, and explicit RSC / `'use client'` boundaries.
 
-[![Version](https://img.shields.io/badge/version-0.21.0-blue.svg)](https://www.npmjs.com/package/@abeta.dev/ui)
+[![Version](https://img.shields.io/badge/version-0.22.0-blue.svg)](https://www.npmjs.com/package/@abeta.dev/ui)
 [![CI](https://github.com/Abeta-dev/react-libs/actions/workflows/ci.yml/badge.svg)](https://github.com/Abeta-dev/react-libs/actions/workflows/ci.yml)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](#testing)
 [![React](https://img.shields.io/badge/react-19-blue)](https://react.dev)
@@ -25,9 +25,11 @@ Install only the domain slice your application requires — zero monolithic depe
 | [**`@abeta.dev/india`**](https://www.npmjs.com/package/@abeta.dev/india) | `npm i @abeta.dev/india` | **RSC & Server-Safe** `.` · **Client** `./react` | Zero-bloat Indian statutory validators (`validateGSTIN`, `validatePAN`, `validateIFSC`, `validateFSSAI`, `validatePincode`), `calculateGSTSplit` / `calculateTDS`, NPCI UPI URI engine (`generateUpiPayUri`, `validateUpiId`), Lakhs/Crores & WhatsApp utilities, plus interactive `AmountSummaryCardIndia` & `UpiQrCard` (`./react`). |
 | [**`@abeta.dev/talent`**](https://www.npmjs.com/package/@abeta.dev/talent) | `npm i @abeta.dev/talent` | **Client** `.` (`'use client'`) | `ProofOfWorkCertificate` (print-ready verifiable credentials), `CheckpointRunner`, `DiagnosticQuiz`, `PipelineKanban`, `ProofOfWorkCard`, `MatchScoreGauge`, `RadarSweep`, and `SalaryRangeDisplay`. |
 | [**`@abeta.dev/auth`**](https://www.npmjs.com/package/@abeta.dev/auth) | `npm i @abeta.dev/auth` | **Zero-React / Server** `./core` · **Client** `.`, `./react` | Headless `AuthClient` (in-memory access tokens, single-flight HttpOnly cookie refresh, CSRF, epoch invalidation), `createAuthenticatedFetch`, `AuthClientProvider`, `useAuthClientSnapshot`, `AuthCard`, `LoginForm`, `SignUpForm`, `OtpForm`, OAuth PKCE helpers, and `useClickBackpressure`. |
+| [**`@abeta.dev/analytics`**](https://www.npmjs.com/package/@abeta.dev/analytics) | `npm i @abeta.dev/analytics` | **RSC & Node-Safe** `.` · **Client** `./react` | Zero-bloat `AnalyticsEngine`, automatic PII sanitization, offline batching queue, adapters (`ConsoleAdapter`, `HttpAdapter`, `GoogleAnalyticsAdapter`, `MixpanelAdapter`), plus React `AnalyticsProvider`, `useAnalytics`, `TrackArea`, and `PageViewTracker`. |
+| [**`@abeta.dev/mcp`**](https://www.npmjs.com/package/@abeta.dev/mcp) | `npx -y @abeta.dev/mcp` | **Zero-Dep Node Stdio MCP** `.` | Offline-first Model Context Protocol server and SDK exposing 5 live tools (`abeta_list_packages`, `abeta_lookup_symbol`, `abeta_check_rsc_boundary`, `abeta_search_rag`, `abeta_traverse_context_graph`) and 4 resources for Claude, Cursor, Windsurf, and RAG/Context-Graph pipelines. |
 
 > [!NOTE]
-> **Legacy Omnibus (`@abeta.dev/react-libs`)**: `@abeta.dev/react-libs` is deprecated for new projects in favor of the four modular packages above, while preserving **100% backward compatibility** for all existing imports and subpaths. See [Migration Guide: Upgrading to v0.21.0](./MIGRATION.md#upgrading-to-v0210) and [Migrating to Modular Packages](./MIGRATION.md#migrating-from-abetadevreact-libs-to-modular-packages).
+> **Legacy Omnibus (`@abeta.dev/react-libs`)**: `@abeta.dev/react-libs` is deprecated for new projects in favor of the modular packages above (scheduled sunset `v1.0.0`, tracked in [`deprecations.json`](./deprecations.json)), while preserving **100% backward compatibility** throughout `0.x`. See [Migration Guide: Upgrading to v0.22.0](./MIGRATION.md#upgrading-to-v0220) and [Migrating to Modular Packages](./MIGRATION.md#migrating-from-abetadevreact-libs-to-modular-packages).
 
 ---
 

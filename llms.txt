@@ -1,8 +1,8 @@
 # Abeta React Ecosystem (`@abeta.dev/*`)
 
-> Enterprise React 19 / React 18 design system and domain monorepo built with Tailwind CSS v4, Radix UI primitives, strict TypeScript, and dual ESM/CJS outputs. Comprises four modular scoped packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`) plus the backward-compatible legacy omnibus `@abeta.dev/react-libs`.
+> Enterprise React 19 / React 18 design system and domain monorepo built with Tailwind CSS v4, Radix UI primitives, strict TypeScript, and dual ESM/CJS outputs. Comprises six modular scoped packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`, `@abeta.dev/analytics`, `@abeta.dev/mcp`) plus the backward-compatible legacy omnibus `@abeta.dev/react-libs`.
 
-- **Current Version**: `0.21.0`
+- **Current Version**: `0.22.0`
 - **Requirements**: React `^18.2.0 || ^19.0.0`, Node.js `>= 20.0.0`, TypeScript 5+
 - **Live Storybook**: https://abeta-dev.github.io/react-libs/
 - **Full Single-File AI Reference**: https://abeta-dev.github.io/react-libs/llms-full.txt
@@ -23,6 +23,9 @@ Install only the domain slices your application needs:
   - Exports: `ProofOfWorkCertificate`, `CheckpointRunner`, `DiagnosticQuiz`, `PipelineKanban`, `ProofOfWorkCard` (`MetricVerificationCard`), `MatchScoreGauge`, `RadarSweep`, `SalaryRangeDisplay` (`MetricRangeDisplay`, `CompensationRangeDisplay`).
 - **`@abeta.dev/auth`** (https://www.npmjs.com/package/@abeta.dev/auth): Backend-agnostic authentication engine and accessible auth UI with HttpOnly cookie refresh, single-flight mutex, CSRF, and RFC 7636 PKCE.
   - Entrypoints: `./core` (pure TypeScript, zero React, zero `'use client'`: `AuthClient`, `createAuthenticatedFetch`, `AuthClientError`), `./react` (`'use client'`: `AuthClientProvider`, `useAuthClient`, `useAuthClientSnapshot`, `AuthProvider`, `useAuth`, `useToken`, `useUser`, `useOAuth`), `.` (full client bundle adding `AuthCard`, `LoginForm`, `SignUpForm`, `ForgotPasswordForm`, `OtpForm`, `OAuthButton`, `OAuthButtonGroup`, `TokenManager`, `MockAuthAdapter`, `useClickBackpressure`, PKCE helpers, OAuth icons), and `./core/use-click-backpressure`.
+- **`@abeta.dev/analytics`** (https://www.npmjs.com/package/@abeta.dev/analytics): Zero-bloat behavioral analytics engine with automatic PII sanitization, offline batching, and pluggable adapters.
+  - Entrypoints: `.` (pure Node/RSC universal: `AnalyticsEngine`, `initAnalytics`, `getAnalyticsEngine`, `SessionManager`, `AnalyticsQueue`, `DomTracker`, `ConsoleAdapter`, `HttpAdapter`, `GoogleAnalyticsAdapter`, `MixpanelAdapter`) and `./react` (`'use client'`: `AnalyticsProvider`, `useAnalytics`, `TrackArea`, `PageViewTracker`).
+- **`@abeta.dev/mcp`** (https://www.npmjs.com/package/@abeta.dev/mcp): Zero-dependency Model Context Protocol (MCP) stdio server and SDK (`npx -y @abeta.dev/mcp`) exposing 5 tools (`abeta_list_packages`, `abeta_lookup_symbol`, `abeta_check_rsc_boundary`, `abeta_search_rag`, `abeta_traverse_context_graph`) and 4 resources (`abeta://llms.txt`, `abeta://registry.json`, `abeta://context-graph.json`, `abeta://rag-chunks.jsonl`).
 
 ## Styling Setup
 

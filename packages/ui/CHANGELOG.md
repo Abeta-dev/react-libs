@@ -5,6 +5,14 @@ All notable changes to `@abeta.dev/ui` are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.22.0] - 2026-11-23
+
+### Added
+- Added optional configurable `thresholds` prop (`MatchScoreThresholds`) to `MatchScoreGauge` (defaulting to `{ aPlus: 85, a: 70, b: 50 }`).
+
+### Changed
+- Enforced leaf-import hygiene and bundle-isolation CI checks (`scripts/check-leaf-imports.mjs`) and strict deprecation sunset registry (`deprecations.json`).
+
 ## [0.21.0] - 2026-11-20
 
 ### Added

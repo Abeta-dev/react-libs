@@ -1,6 +1,6 @@
 {
   "name": "@abeta.dev/india",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "India statutory validation, FinTech cards, GSTIN/PAN/IFSC, UPI QR generation, and bilingual support for React 19.",
   "keywords": [
     "india",
@@ -91,7 +91,7 @@
     "qrcode": "^1.5.4"
   },
   "peerDependencies": {
-    "@abeta.dev/ui": "^0.21.0",
+    "@abeta.dev/ui": "^0.22.0",
     "lucide-react": "^0.577.0",
     "react": "^18.2.0 || ^19.0.0",
     "react-dom": "^18.2.0 || ^19.0.0"
@@ -111,7 +111,7 @@
     }
   },
   "devDependencies": {
-    "@abeta.dev/ui": "^0.21.0",
+    "@abeta.dev/ui": "^0.22.0",
     "@types/qrcode": "^1.5.5",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",

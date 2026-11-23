@@ -392,6 +392,8 @@ function checkAiDiscoveryParity() {
     'skills/react-libs-india/SKILL.md',
     'skills/react-libs-talent/SKILL.md',
     'skills/react-libs-auth/SKILL.md',
+    'skills/react-libs-analytics/SKILL.md',
+    'skills/react-libs-mcp/SKILL.md',
     '.skills/react-libs/SKILL.md',
   ];
   for (const rel of skillFiles) {
@@ -437,6 +439,16 @@ function checkLeafImportsAndDeprecations() {
     pass('Strict deprecation window & sunset registry passed');
   } catch (err) {
     fail(`Deprecation window CI gate failed: ${err.message}`);
+  }
+
+  try {
+    execFileSync(process.execPath, [join(ROOT, 'scripts', 'check-examples.mjs')], {
+      cwd: ROOT,
+      stdio: 'inherit',
+    });
+    pass('Starter template export & specifier verification passed');
+  } catch (err) {
+    fail(`Starter template verification gate failed: ${err.message}`);
   }
 }
 

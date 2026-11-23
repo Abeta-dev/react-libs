@@ -5,6 +5,11 @@ All notable changes to `@abeta.dev/india` are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.22.0] - 2026-11-23
+
+### Changed
+- Verified pure server-safe packaging under the new Leaf-Import & Bundle-Isolation CI Gate (`scripts/check-leaf-imports.mjs`) and synchronized monorepo release version to `0.22.0`.
+
 ## [0.21.0] - 2026-11-20
 
 ### Changed

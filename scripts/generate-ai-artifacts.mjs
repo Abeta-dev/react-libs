@@ -79,6 +79,27 @@ const PACKAGE_DEFS = [
     ],
   },
   {
+    key: 'analytics',
+    dir: 'packages/analytics',
+    manifest: 'packages/analytics/package.json',
+    readme: 'packages/analytics/README.md',
+    skill: 'skills/react-libs-analytics/SKILL.md',
+    role: 'Zero-bloat behavioral analytics engine with pluggable adapters (Console, HTTP, Google Analytics, Mixpanel), automatic PII sanitization, offline batching, and optional React 18/19 hooks.',
+    barrels: [
+      { subpath: '.', file: 'packages/analytics/src/index.ts' },
+      { subpath: './react', file: 'packages/analytics/src/react/index.ts' },
+    ],
+  },
+  {
+    key: 'mcp',
+    dir: 'packages/mcp',
+    manifest: 'packages/mcp/package.json',
+    readme: 'packages/mcp/README.md',
+    skill: 'skills/react-libs-mcp/SKILL.md',
+    role: 'Zero-dependency stdio Model Context Protocol (MCP) server and programmatic query SDK for live symbol lookup, RSC boundary checking, RAG search, and JSON-LD context graph traversal.',
+    barrels: [{ subpath: '.', file: 'packages/mcp/src/index.ts' }],
+  },
+  {
     key: 'react-libs',
     dir: '.',
     manifest: 'package.json',
@@ -87,7 +108,7 @@ const PACKAGE_DEFS = [
     role: 'Legacy backward-compatible omnibus package re-exporting UI, India, Talent, Auth, and Analytics subpaths (deprecated for greenfield apps; scheduled sunset v1.0.0).',
     barrels: [
       { subpath: './analytics', file: 'src/lib/analytics/index.ts' },
-      { subpath: './analytics/react', file: 'src/lib/analytics/react/index.tsx' },
+      { subpath: './analytics/react', file: 'src/lib/analytics/react/index.ts' },
       { subpath: './utils', file: 'src/utils.ts' },
     ],
   },
@@ -109,6 +130,8 @@ function inferSubpathRuntime(pkgName, subpath) {
     subpath === './core' ||
     subpath === './analytics' ||
     (pkgName === '@abeta.dev/india' && subpath === '.') ||
+    (pkgName === '@abeta.dev/analytics' && subpath === '.') ||
+    (pkgName === '@abeta.dev/mcp' && subpath === '.') ||
     (pkgName === '@abeta.dev/react-libs' && subpath === './india')
   ) {
     return 'rsc-universal';

@@ -1,6 +1,6 @@
 {
   "name": "@abeta.dev/talent",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "Interactive assessment, candidate evaluation, checkpoint runners, and kanban pipeline UI for React 19.",
   "keywords": [
     "react",
@@ -67,7 +67,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@abeta.dev/ui": "^0.21.0",
+    "@abeta.dev/ui": "^0.22.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.577.0"
   },

@@ -84,4 +84,48 @@ if (typeof window !== 'undefined') {
       clearTimeout(id);
     };
   }
+
+  // Node 25+ enables experimental Web Storage without --localstorage-file, which
+  // leaves window.localStorage/sessionStorage missing `.clear`/`.setItem` in JSDOM.
+  // Install a spec-compliant Storage polyfill only when the native one is unusable.
+  const hasWorkingStorage = (s: unknown): s is Storage =>
+    Boolean(s && typeof (s as Storage).clear === 'function' && typeof (s as Storage).setItem === 'function');
+
+  if (!hasWorkingStorage(window.localStorage) || !hasWorkingStorage(window.sessionStorage)) {
+    const backingStores = new WeakMap<MemoryStorage, Map<string, string>>();
+    class MemoryStorage implements Storage {
+      constructor() {
+        backingStores.set(this, new Map<string, string>());
+      }
+      get length(): number {
+        return backingStores.get(this)?.size ?? 0;
+      }
+      clear(): void {
+        backingStores.get(this)?.clear();
+      }
+      getItem(key: string): string | null {
+        const val = backingStores.get(this)?.get(String(key));
+        return val === undefined ? null : val;
+      }
+      key(index: number): string | null {
+        if (index < 0) return null;
+        const keys = Array.from(backingStores.get(this)?.keys() ?? []);
+        return keys.at(index) ?? null;
+      }
+      removeItem(key: string): void {
+        backingStores.get(this)?.delete(String(key));
+      }
+      setItem(key: string, value: string): void {
+        backingStores.get(this)?.set(String(key), String(value));
+      }
+    }
+    const local = new MemoryStorage();
+    const session = new MemoryStorage();
+    Object.defineProperty(globalThis, 'Storage', { configurable: true, writable: true, value: MemoryStorage });
+    Object.defineProperty(window, 'Storage', { configurable: true, writable: true, value: MemoryStorage });
+    Object.defineProperty(window, 'localStorage', { configurable: true, writable: true, value: local });
+    Object.defineProperty(window, 'sessionStorage', { configurable: true, writable: true, value: session });
+    Object.defineProperty(globalThis, 'localStorage', { configurable: true, writable: true, value: local });
+    Object.defineProperty(globalThis, 'sessionStorage', { configurable: true, writable: true, value: session });
+  }
 }

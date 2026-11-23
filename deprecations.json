@@ -14,7 +14,7 @@
       "deprecatedSince": "0.20.0",
       "removeIn": "1.0.0",
       "status": "active",
-      "replacement": "@abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, @abeta.dev/auth",
+      "replacement": "@abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, @abeta.dev/auth, @abeta.dev/analytics",
       "migrationDoc": "MIGRATION.md#migrating-from-abetadevreact-libs-to-modular-packages",
       "fileGlobs": [
         "package.json",
@@ -25,7 +25,21 @@
         "src/india/components/*.tsx",
         "src/components/ui/**/*.tsx"
       ],
-      "notes": "Legacy omnibus package preserved for 100% backward compatibility through 0.x; scheduled for sunset in v1.0.0 once @abeta.dev/analytics is extracted."
+      "notes": "Legacy omnibus package preserved for 100% backward compatibility through 0.x; scheduled for sunset in v1.0.0."
+    },
+    {
+      "id": "legacy-analytics-subpath",
+      "scope": "subpath",
+      "symbol": "@abeta.dev/react-libs/analytics",
+      "deprecatedSince": "0.22.0",
+      "removeIn": "1.0.0",
+      "status": "active",
+      "replacement": "@abeta.dev/analytics and @abeta.dev/analytics/react",
+      "migrationDoc": "MIGRATION.md#migrating-from-abetadevreact-libs-to-modular-packages",
+      "fileGlobs": [
+        "src/lib/analytics/index.ts",
+        "src/lib/analytics/react/index.ts"
+      ]
     },
     {
       "id": "amount-summary-item-tax-rate-snake",

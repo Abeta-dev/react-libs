@@ -1,9 +1,9 @@
 ---
 name: react-libs-ui
-description: Implementation guide for @abeta.dev/ui (v0.21.0) — 111 accessible React 19 Tailwind CSS v4 + Radix UI components, 9 hooks, RSC-safe ./utils, isolated ./pdf, micro-bundles, and ./theme.css / ./style.css delivery.
+description: Implementation guide for @abeta.dev/ui (v0.22.0) — 111 accessible React 19 Tailwind CSS v4 + Radix UI components, 9 hooks, RSC-safe ./utils, isolated ./pdf, micro-bundles, and ./theme.css / ./style.css delivery.
 ---
 
-# `@abeta.dev/ui` Skill (`v0.21.0`)
+# `@abeta.dev/ui` Skill (`v0.22.0`)
 
 ## Installation
 

@@ -196,6 +196,20 @@ const SCOPED_CHECKS = [
     universalFiles: ['packages/auth/dist/core.js', 'packages/auth/dist/core.cjs'],
     cssFiles: [],
   },
+  {
+    pkg: '@abeta.dev/analytics',
+    distDir: 'packages/analytics/dist',
+    clientFiles: ['packages/analytics/dist/react/index.js', 'packages/analytics/dist/react/index.cjs'],
+    universalFiles: ['packages/analytics/dist/index.js', 'packages/analytics/dist/index.cjs'],
+    cssFiles: [],
+  },
+  {
+    pkg: '@abeta.dev/mcp',
+    distDir: 'packages/mcp/dist',
+    clientFiles: [],
+    universalFiles: ['packages/mcp/dist/index.js', 'packages/mcp/dist/index.cjs'],
+    cssFiles: [],
+  },
 ];
 
 for (const scope of SCOPED_CHECKS) {

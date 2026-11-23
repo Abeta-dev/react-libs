@@ -1,8 +1,8 @@
 # Abeta React Ecosystem (`@abeta.dev/*`) — Full AI & Developer Reference
 
-> Comprehensive single-file technical reference for LLM coding assistants, AI agents, and engineers integrating `@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`, and legacy `@abeta.dev/react-libs` (v0.21.0).
+> Comprehensive single-file technical reference for LLM coding assistants, AI agents, and engineers integrating `@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`, `@abeta.dev/analytics`, `@abeta.dev/mcp`, and legacy `@abeta.dev/react-libs` (v0.22.0).
 
-- **Version**: `0.21.0`
+- **Version**: `0.22.0`
 - **Runtime Requirements**: React `^18.2.0 || ^19.0.0`, Node.js `>= 20.0.0`, TypeScript 5+
 - **Module Formats**: Dual ESM (`import`) and CommonJS (`require`) with full `.d.ts` / `.d.cts` declarations
 - **Live Storybook**: https://abeta-dev.github.io/react-libs/
@@ -19,7 +19,9 @@
 | **`@abeta.dev/india`** | `npm i @abeta.dev/india` | `.` (zero-bloat pure TS) | `./react` | GSTIN/PAN/IFSC/FSSAI/Pincode validators, `calculateGSTSplit`, `calculateTDS`, NPCI UPI URIs, `AmountSummaryCardIndia`, `UpiQrCard` |
 | **`@abeta.dev/talent`** | `npm i @abeta.dev/talent` | — | `.` | `ProofOfWorkCertificate`, `CheckpointRunner`, `DiagnosticQuiz`, `PipelineKanban`, `ProofOfWorkCard`, `MatchScoreGauge`, `RadarSweep`, `SalaryRangeDisplay` |
 | **`@abeta.dev/auth`** | `npm i @abeta.dev/auth` | `./core` (zero React) | `.`, `./react`, `./core/use-click-backpressure` | Headless `AuthClient` (HttpOnly cookie refresh, single-flight mutex, CSRF, epochs), `createAuthenticatedFetch`, `AuthClientProvider`, `AuthCard`, forms, OAuth PKCE |
-| **`@abeta.dev/react-libs`** *(deprecated)* | `npm i @abeta.dev/react-libs` | `./utils`, `./india`, `./analytics` | `.`, `./india/react`, `./analytics/react`, `./pdf`, `./auth`, `./hooks/use-toast`, micro-bundles | 100% backward-compatible legacy omnibus re-export package |
+| **`@abeta.dev/analytics`** | `npm i @abeta.dev/analytics` | `.` (zero React) | `./react` | `AnalyticsEngine`, `initAnalytics`, `ConsoleAdapter`, `HttpAdapter`, `GoogleAnalyticsAdapter`, `MixpanelAdapter`, PII sanitization, `AnalyticsProvider`, `useAnalytics`, `TrackArea`, `PageViewTracker` |
+| **`@abeta.dev/mcp`** | `npx -y @abeta.dev/mcp` | `.` (zero-dep Node MCP) | — | Offline-first stdio MCP server & SDK exposing `abeta_list_packages`, `abeta_lookup_symbol`, `abeta_check_rsc_boundary`, `abeta_search_rag`, `abeta_traverse_context_graph` |
+| **`@abeta.dev/react-libs`** *(deprecated)* | `npm i @abeta.dev/react-libs` | `./utils`, `./india`, `./analytics` | `.`, `./india/react`, `./analytics/react`, `./pdf`, `./auth`, `./hooks/use-toast`, micro-bundles | 100% backward-compatible legacy omnibus re-export package (scheduled sunset `v1.0.0`) |
 
 ---
 

@@ -234,7 +234,7 @@ export const OtpForm: React.FC<OtpFormProps> = ({
             onChange={(e) => handleChange(idx, e.target.value)}
             onKeyDown={(e) => handleKeyDown(idx, e)}
             onPaste={handlePaste}
-            className="h-12 w-10 sm:w-12 text-center text-lg font-semibold rounded-md border border-neutral-300 bg-white text-neutral-900 shadow-xs focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 disabled:opacity-50"
+            className="h-12 w-10 sm:w-12 text-center text-lg font-semibold rounded-md border border-neutral-300 bg-white text-neutral-900 shadow-xs focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 disabled:opacity-50"
           />
         ))}
       </div>
@@ -243,7 +243,7 @@ export const OtpForm: React.FC<OtpFormProps> = ({
         type="button"
         disabled={isEffectiveSubmitting || digits.some((d) => d === '')}
         onClick={() => void debouncedSubmitCode(digits.join(''))}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
       >
         {isEffectiveSubmitting ? (
           <>
@@ -261,7 +261,7 @@ export const OtpForm: React.FC<OtpFormProps> = ({
           type="button"
           disabled={resendCooldown > 0 || isEffectiveSubmitting || isResendingPending}
           onClick={() => void debouncedResend()}
-          className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline disabled:text-neutral-400 disabled:no-underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
+          className="font-medium text-primary hover:text-primary/80 dark:text-primary hover:underline disabled:text-neutral-400 disabled:no-underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
         >
           {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend code'}
         </button>

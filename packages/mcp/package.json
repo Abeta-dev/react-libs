@@ -1,0 +1,73 @@
+{
+  "name": "@abeta.dev/mcp",
+  "version": "0.22.0",
+  "description": "Zero-dependency Model Context Protocol (MCP) server for @abeta.dev/* — live symbol lookup, RSC boundary checking, RAG recipe search, and JSON-LD context graph traversal.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "rag",
+    "context-graph",
+    "llms-txt",
+    "ai-agents",
+    "design-system",
+    "cursor",
+    "claude",
+    "typescript",
+    "abeta"
+  ],
+  "author": "abeta-dev <contact@abeta.dev>",
+  "license": "MIT",
+  "homepage": "https://abeta-dev.github.io/react-libs/",
+  "bugs": {
+    "url": "https://github.com/Abeta-dev/react-libs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abeta-dev/react-libs.git",
+    "directory": "packages/mcp"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "abeta-mcp": "./dist/cli.js"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "!dist/**/*.map",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
+}

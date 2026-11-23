@@ -57,6 +57,10 @@ const SERVER_PURE_BUNDLES = [
   'packages/india/dist/index.cjs',
   'packages/auth/dist/core.js',
   'packages/auth/dist/core.cjs',
+  'packages/analytics/dist/index.js',
+  'packages/analytics/dist/index.cjs',
+  'packages/mcp/dist/index.js',
+  'packages/mcp/dist/index.cjs',
   'dist/utils.js',
   'dist/utils.cjs',
   'dist/india/index.js',
@@ -100,7 +104,15 @@ function walkFiles(dir, out = []) {
 function checkSourceImports() {
   console.log('🔍 [1/2] Checking Source Leaf-Import Hygiene across packages/* and examples/*...');
 
-  const workspaceDirs = ['packages/ui/src', 'packages/india/src', 'packages/talent/src', 'packages/auth/src', 'examples'];
+  const workspaceDirs = [
+    'packages/ui/src',
+    'packages/india/src',
+    'packages/talent/src',
+    'packages/auth/src',
+    'packages/analytics/src',
+    'packages/mcp/src',
+    'examples',
+  ];
   const omnibusImportRe = /(?:from|import)\s+['"]@abeta\.dev\/react-libs['"/]/;
   const barrelReentryRe = /(?:from|import)\s+['"](?:\.\/index|\.\.\/index|\.\.\/\.\.\/index)['"]/;
 
@@ -154,6 +166,8 @@ function checkCompiledLeafBundles() {
 
   const esmReactRe = /from\s+['"]react(?:-dom)?['"/]/;
   const cjsReactRe = /require\(['"]react(?:-dom)?['"/]/;
+  const esmUiRe = /from\s+['"]@abeta\.dev\/ui['"/]/;
+  const cjsUiRe = /require\(['"]@abeta\.dev\/ui['"/]/;
   let serverChecked = 0;
   for (const relPath of SERVER_PURE_BUNDLES) {
     const fullPath = join(ROOT, relPath);
@@ -163,7 +177,7 @@ function checkCompiledLeafBundles() {
     }
     serverChecked++;
     const content = readFileSync(fullPath, 'utf8');
-    if (esmReactRe.test(content) || cjsReactRe.test(content) || content.includes('@abeta.dev/ui')) {
+    if (esmReactRe.test(content) || cjsReactRe.test(content) || esmUiRe.test(content) || cjsUiRe.test(content)) {
       fail(`${relPath} imports React/DOM or @abeta.dev/ui in a universal server-safe bundle!`);
     }
   }
