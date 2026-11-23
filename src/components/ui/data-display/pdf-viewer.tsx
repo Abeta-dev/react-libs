@@ -34,7 +34,7 @@ export interface PdfViewerProps {
 }
 
 /**
- * @deprecated Importing PdfViewer from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/pdf' is deprecated. Migrate to '@abeta.dev/ui' or dedicated viewer.
+ * @deprecated Importing PdfViewer from '@abeta.dev/react-libs' or '@abeta.dev/react-libs/pdf' is deprecated. Migrate to '@abeta.dev/ui/pdf'.
  */
 export function PdfViewer({
   file,

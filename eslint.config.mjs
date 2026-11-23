@@ -176,6 +176,45 @@ export default tseslint.config(
   // @ts-expect-error - sonarjs.configs is defined at runtime but missing from some type definitions
   sonarjs.configs?.recommended || {},
 
+  // ─── ADR-0007 Compatibility (exactOptionalPropertyTypes: true) ──────────────
+  {
+    rules: {
+      // TypeScript's exactOptionalPropertyTypes requires explicit `prop?: T | undefined`
+      // on public interfaces; sonarjs >= 4.2 flags this as redundant optional.
+      'sonarjs/no-redundant-optional': 'off',
+    },
+  },
+
+  // ─── Scoped Workspace Leaf-Import Hygiene ───────────────────────────────────
+  {
+    files: [
+      'packages/ui/src/**/*.{ts,tsx}',
+      'packages/india/src/**/*.{ts,tsx}',
+      'packages/talent/src/**/*.{ts,tsx}',
+      'packages/auth/src/**/*.{ts,tsx}',
+    ],
+    ignores: ['**/*.test.{ts,tsx}', '**/__tests__/**', '**/*.stories.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@abeta.dev/react-libs', '@abeta.dev/react-libs/*'],
+              message:
+                'Do not import the deprecated omnibus @abeta.dev/react-libs inside scoped packages. Import leaf modules or scoped packages directly.',
+            },
+            {
+              group: ['./index', '../index', '../../index'],
+              message:
+                'Avoid barrel re-entry inside scoped packages. Import sibling leaf modules directly to preserve tree-shaking and prevent circular drag.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   // ─── Component source: design token enforcement ────────────────────────────
   {
     files: [

@@ -110,7 +110,7 @@ export function VendorCheckout({
 
 ### 2. Vite + React 19 (Zero-Tailwind Option)
 
-No Tailwind CSS configuration needed — import the precompiled cascade-layered stylesheet (`@layer react-libs`) once in `src/main.tsx`:
+No Tailwind CSS configuration needed — import the precompiled cascade-layered stylesheet (`@layer abeta-ui`) once in `src/main.tsx`:
 
 ```bash
 npm install @abeta.dev/ui @abeta.dev/india @abeta.dev/talent
@@ -151,10 +151,22 @@ export function App() {
 - **Starter Templates**:
   - [`examples/nextjs-app-router`](./examples/nextjs-app-router) — Next.js App Router + Tailwind CSS v4 + RSC `@abeta.dev/india` + Client `@abeta.dev/ui`
   - [`examples/vite-react-19`](./examples/vite-react-19) — Vite + React 19 + zero-Tailwind `@abeta.dev/ui/style.css` + `@abeta.dev/india/react` + `@abeta.dev/talent`
-- **AI Coding Assistants (Cursor, Claude Code, Copilot, Gemini CLI, Windsurf)**:
+- **AI Coding Assistants, RAG Pipelines & External Context Graphs (Cursor, Claude Code, Copilot, Gemini CLI, LlamaIndex, LangChain, Neo4j, GraphRAG)**:
   - Concise index (`llmstxt.org`): [https://abeta-dev.github.io/react-libs/llms.txt](https://abeta-dev.github.io/react-libs/llms.txt) ([`public/llms.txt`](./public/llms.txt))
   - Complete single-file API & recipe reference: [https://abeta-dev.github.io/react-libs/llms-full.txt](https://abeta-dev.github.io/react-libs/llms-full.txt) ([`public/llms-full.txt`](./public/llms-full.txt))
+  - **Pre-chunked RAG Corpus (`JSONL`)**: [https://abeta-dev.github.io/react-libs/rag-chunks.jsonl](https://abeta-dev.github.io/react-libs/rag-chunks.jsonl) — URN-linked, SHA-256-stamped records ready for direct vector DB upsert (Pinecone, Weaviate, Qdrant, pgvector) with zero scraping.
+  - **External Context Graph (`JSON-LD`)**: [https://abeta-dev.github.io/react-libs/context-graph.json](https://abeta-dev.github.io/react-libs/context-graph.json) — typed nodes & edges (`packages -> subpaths -> symbols -> runtime boundaries -> deprecations -> ADRs -> skills`) keyed by canonical URNs (`urn:abeta:subpath:@abeta.dev/ui/button`, `urn:abeta:symbol:@abeta.dev/india:calculateGSTSplit`) so any app's import graph joins directly.
+  - **Machine Package Registry (`JSON`)**: [https://abeta-dev.github.io/react-libs/registry.json](https://abeta-dev.github.io/react-libs/registry.json) — compact machine catalog for CLIs, MCP servers, and IDEs.
   - Interactive Storybook & Living Workflows: [https://abeta-dev.github.io/react-libs/](https://abeta-dev.github.io/react-libs/)
+
+```ts
+// Connect @abeta.dev/* into your RAG vector DB or Context Graph in 5 lines:
+const chunks = (await fetch("https://abeta-dev.github.io/react-libs/rag-chunks.jsonl").then((r) => r.text()))
+  .trim().split("\n").map((line) => JSON.parse(line)); // { id, urn, package, subpath, runtime, symbols, content, sha256 }
+
+const graph = await fetch("https://abeta-dev.github.io/react-libs/context-graph.json").then((r) => r.json());
+// Join your codebase imports directly via `node.importPath` or `urn:abeta:subpath:<importPath>`
+```
 
 ---
 

@@ -6,6 +6,9 @@
 - **Requirements**: React `^18.2.0 || ^19.0.0`, Node.js `>= 20.0.0`, TypeScript 5+
 - **Live Storybook**: https://abeta-dev.github.io/react-libs/
 - **Full Single-File AI Reference**: https://abeta-dev.github.io/react-libs/llms-full.txt
+- **RAG Pre-Chunked Corpus (JSONL)**: https://abeta-dev.github.io/react-libs/rag-chunks.jsonl
+- **Context Graph (JSON-LD / GraphRAG)**: https://abeta-dev.github.io/react-libs/context-graph.json
+- **Machine Package Registry (JSON)**: https://abeta-dev.github.io/react-libs/registry.json
 - **Source Repository**: https://github.com/Abeta-dev/react-libs
 
 ## Modular Packages
