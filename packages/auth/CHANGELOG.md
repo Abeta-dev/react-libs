@@ -5,6 +5,12 @@ All notable changes to `@abeta.dev/auth` are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.22.0] - 2026-11-23
+
+### Changed
+- Migrated `LoginForm`, `SignUpForm`, `ForgotPasswordForm`, `OtpForm`, and `OAuthButton` from hardcoded indigo shades to semantic design tokens (`bg-primary`, `text-primary`, `focus:border-primary`, `ring-ring`) enforced by ESLint `design-tokens` rules.
+- Deduplicated `"use client"` banners in `dist/react.{js,cjs}` via `tsup` `onSuccess` hook.
+
 ## [0.21.0] - 2026-11-20
 
 ### Changed

@@ -3,6 +3,15 @@
 import * as React from "react";
 import { cn } from "../lib/utils";
 
+export interface MatchScoreThresholds {
+  /** Minimum score for Grade A+ (default: 85) */
+  aPlus?: number;
+  /** Minimum score for Grade A (default: 70) */
+  a?: number;
+  /** Minimum score for Grade B (default: 50) */
+  b?: number;
+}
+
 export interface MatchScoreGaugeProps extends React.HTMLAttributes<HTMLDivElement> {
   score: number; // 0 - 100
   label?: string;
@@ -10,6 +19,8 @@ export interface MatchScoreGaugeProps extends React.HTMLAttributes<HTMLDivElemen
   size?: number;
   strokeWidth?: number;
   showGrade?: boolean;
+  /** Optional custom score cutoffs for grade bands (default: { aPlus: 85, a: 70, b: 50 }) */
+  thresholds?: MatchScoreThresholds;
 }
 
 export function MatchScoreGauge({
@@ -19,6 +30,7 @@ export function MatchScoreGauge({
   size = 110,
   strokeWidth = 9,
   showGrade = true,
+  thresholds,
   className,
   ...props
 }: MatchScoreGaugeProps) {
@@ -27,15 +39,19 @@ export function MatchScoreGauge({
   const clamped = Math.min(100, Math.max(0, score));
   const strokeDashoffset = circumference - (clamped / 100) * circumference;
 
+  const aPlusMin = thresholds?.aPlus ?? 85;
+  const aMin = thresholds?.a ?? 70;
+  const bMin = thresholds?.b ?? 50;
+
   let color = "text-rose-500 stroke-rose-500";
   let grade = "C";
-  if (clamped >= 85) {
+  if (clamped >= aPlusMin) {
     color = "text-emerald-500 stroke-emerald-500";
     grade = "A+";
-  } else if (clamped >= 70) {
+  } else if (clamped >= aMin) {
     color = "text-indigo-500 stroke-indigo-500";
     grade = "A";
-  } else if (clamped >= 50) {
+  } else if (clamped >= bMin) {
     color = "text-amber-500 stroke-amber-500";
     grade = "B";
   }

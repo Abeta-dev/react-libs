@@ -10,7 +10,7 @@
     "removeIn": "abeta:removeIn"
   },
   "schemaVersion": "1.0.0",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "baseUrl": "https://abeta-dev.github.io/react-libs",
   "repository": "https://github.com/Abeta-dev/react-libs",
   "howToConnect": {
@@ -21,11 +21,11 @@
     "joinKey": "Join external app import specifiers (e.g. \"@abeta.dev/ui/button\", \"@abeta.dev/india\", \"@abeta.dev/auth/core\") directly to node.importPath or URN \"urn:abeta:subpath:<importPath>\" and \"urn:abeta:symbol:<package>:<symbol>\"."
   },
   "stats": {
-    "packages": 5,
-    "nodes": 725,
-    "edges": 789,
-    "ragChunks": 76,
-    "deprecations": 4,
+    "packages": 7,
+    "nodes": 785,
+    "edges": 849,
+    "ragChunks": 90,
+    "deprecations": 5,
     "adrs": 7
   },
   "nodes": [
@@ -33,7 +33,7 @@
       "id": "urn:abeta:ecosystem:react-libs",
       "type": "Ecosystem",
       "label": "@abeta.dev React Ecosystem",
-      "version": "0.21.0",
+      "version": "0.22.0",
       "homepage": "https://abeta-dev.github.io/react-libs/",
       "repository": "https://github.com/Abeta-dev/react-libs",
       "aiEndpoints": {
@@ -48,7 +48,7 @@
       "id": "urn:abeta:pkg:@abeta.dev/ui",
       "type": "Package",
       "name": "@abeta.dev/ui",
-      "version": "0.21.0",
+      "version": "0.22.0",
       "deprecated": false,
       "deprecationNotice": null,
       "description": "Accessible, high-performance React 19 UI component primitives built with Tailwind CSS v4 and Radix UI.",
@@ -87,7 +87,7 @@
       "runtime": "client",
       "rscSafe": false,
       "useClientRequired": true,
-      "symbolCount": 536
+      "symbolCount": 537
     },
     {
       "id": "urn:abeta:symbol:@abeta.dev/ui:Accordion",
@@ -2127,6 +2127,15 @@
       "id": "urn:abeta:symbol:@abeta.dev/ui:MatchScoreGauge",
       "type": "Symbol",
       "name": "MatchScoreGauge",
+      "package": "@abeta.dev/ui",
+      "importPath": "@abeta.dev/ui",
+      "runtime": "client",
+      "rscSafe": false
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/ui:MatchScoreThresholds",
+      "type": "Symbol",
+      "name": "MatchScoreThresholds",
       "package": "@abeta.dev/ui",
       "importPath": "@abeta.dev/ui",
       "runtime": "client",
@@ -4445,7 +4454,7 @@
       "id": "urn:abeta:skill:react-libs-ui",
       "type": "AgentSkill",
       "name": "react-libs-ui",
-      "description": "Implementation guide for @abeta.dev/ui (v0.21.0) — 111 accessible React 19 Tailwind CSS v4 + Radix UI components, 9 hooks, RSC-safe ./utils, isolated ./pdf, micro-bundles, and ./theme.css / ./style.css delivery.",
+      "description": "Implementation guide for @abeta.dev/ui (v0.22.0) — 111 accessible React 19 Tailwind CSS v4 + Radix UI components, 9 hooks, RSC-safe ./utils, isolated ./pdf, micro-bundles, and ./theme.css / ./style.css delivery.",
       "path": "skills/react-libs-ui/SKILL.md",
       "url": "https://github.com/Abeta-dev/react-libs/blob/main/skills/react-libs-ui/SKILL.md"
     },
@@ -4453,7 +4462,7 @@
       "id": "urn:abeta:pkg:@abeta.dev/india",
       "type": "Package",
       "name": "@abeta.dev/india",
-      "version": "0.21.0",
+      "version": "0.22.0",
       "deprecated": false,
       "deprecationNotice": null,
       "description": "India statutory validation, FinTech cards, GSTIN/PAN/IFSC, UPI QR generation, and bilingual support for React 19.",
@@ -4908,7 +4917,7 @@
       "id": "urn:abeta:skill:react-libs-india",
       "type": "AgentSkill",
       "name": "react-libs-india",
-      "description": "Implementation guide for @abeta.dev/india (v0.21.0) — zero-bloat RSC-safe India statutory validators (GSTIN, PAN, IFSC, FSSAI, Pincode, Phone, Bank), GST/TDS tax math, Lakhs/Crores formatting, NPCI UPI URIs, and @abeta.dev/india/react FinTech UI cards.",
+      "description": "Implementation guide for @abeta.dev/india (v0.22.0) — zero-bloat RSC-safe India statutory validators (GSTIN, PAN, IFSC, FSSAI, Pincode, Phone, Bank), GST/TDS tax math, Lakhs/Crores formatting, NPCI UPI URIs, and @abeta.dev/india/react FinTech UI cards.",
       "path": "skills/react-libs-india/SKILL.md",
       "url": "https://github.com/Abeta-dev/react-libs/blob/main/skills/react-libs-india/SKILL.md"
     },
@@ -4916,7 +4925,7 @@
       "id": "urn:abeta:pkg:@abeta.dev/talent",
       "type": "Package",
       "name": "@abeta.dev/talent",
-      "version": "0.21.0",
+      "version": "0.22.0",
       "deprecated": false,
       "deprecationNotice": null,
       "description": "Interactive assessment, candidate evaluation, checkpoint runners, and kanban pipeline UI for React 19.",
@@ -4955,7 +4964,7 @@
       "runtime": "client",
       "rscSafe": false,
       "useClientRequired": true,
-      "symbolCount": 32
+      "symbolCount": 33
     },
     {
       "id": "urn:abeta:symbol:@abeta.dev/talent:CheckpointItem",
@@ -5015,6 +5024,15 @@
       "id": "urn:abeta:symbol:@abeta.dev/talent:MatchScoreGauge",
       "type": "Symbol",
       "name": "MatchScoreGauge",
+      "package": "@abeta.dev/talent",
+      "importPath": "@abeta.dev/talent",
+      "runtime": "client",
+      "rscSafe": false
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/talent:MatchScoreThresholds",
+      "type": "Symbol",
+      "name": "MatchScoreThresholds",
       "package": "@abeta.dev/talent",
       "importPath": "@abeta.dev/talent",
       "runtime": "client",
@@ -5150,7 +5168,7 @@
       "id": "urn:abeta:skill:react-libs-talent",
       "type": "AgentSkill",
       "name": "react-libs-talent",
-      "description": "Implementation guide for @abeta.dev/talent (v0.21.0) — ProofOfWorkCertificate, CheckpointRunner, DiagnosticQuiz, PipelineKanban, ProofOfWorkCard, MatchScoreGauge, RadarSweep, and SalaryRangeDisplay for React 19.",
+      "description": "Implementation guide for @abeta.dev/talent (v0.22.0) — ProofOfWorkCertificate, CheckpointRunner, DiagnosticQuiz, PipelineKanban, ProofOfWorkCard, MatchScoreGauge, RadarSweep, and SalaryRangeDisplay for React 19.",
       "path": "skills/react-libs-talent/SKILL.md",
       "url": "https://github.com/Abeta-dev/react-libs/blob/main/skills/react-libs-talent/SKILL.md"
     },
@@ -5158,7 +5176,7 @@
       "id": "urn:abeta:pkg:@abeta.dev/auth",
       "type": "Package",
       "name": "@abeta.dev/auth",
-      "version": "0.21.0",
+      "version": "0.22.0",
       "deprecated": false,
       "deprecationNotice": null,
       "description": "Backend-agnostic React 19 authentication UI library with Google & LinkedIn 3PL, email/password, and concurrent-safe token refresh.",
@@ -5804,17 +5822,533 @@
       "id": "urn:abeta:skill:react-libs-auth",
       "type": "AgentSkill",
       "name": "react-libs-auth",
-      "description": "Implementation guide for @abeta.dev/auth (v0.21.0) — headless cookie-backed AuthClient (@abeta.dev/auth/core), React providers & hooks (@abeta.dev/auth/react), and accessible auth UI forms (@abeta.dev/auth) with single-flight refresh mutex, CSRF, and RFC 7636 PKCE.",
+      "description": "Implementation guide for @abeta.dev/auth (v0.22.0) — headless cookie-backed AuthClient (@abeta.dev/auth/core), React providers & hooks (@abeta.dev/auth/react), and accessible auth UI forms (@abeta.dev/auth) with single-flight refresh mutex, CSRF, and RFC 7636 PKCE.",
       "path": "skills/react-libs-auth/SKILL.md",
       "url": "https://github.com/Abeta-dev/react-libs/blob/main/skills/react-libs-auth/SKILL.md"
+    },
+    {
+      "id": "urn:abeta:pkg:@abeta.dev/analytics",
+      "type": "Package",
+      "name": "@abeta.dev/analytics",
+      "version": "0.22.0",
+      "deprecated": false,
+      "deprecationNotice": null,
+      "description": "Zero-bloat behavioral analytics engine with pluggable adapters (Console, HTTP, Google Analytics, Mixpanel), automatic PII sanitization, offline batching, and optional React 18/19 hooks.",
+      "role": "Zero-bloat behavioral analytics engine with pluggable adapters (Console, HTTP, Google Analytics, Mixpanel), automatic PII sanitization, offline batching, and optional React 18/19 hooks.",
+      "directory": "packages/analytics",
+      "keywords": [
+        "analytics",
+        "telemetry",
+        "tracking",
+        "pii-sanitization",
+        "dom-tracker",
+        "google-analytics",
+        "mixpanel",
+        "react",
+        "react-19",
+        "rsc",
+        "node",
+        "typescript",
+        "abeta"
+      ],
+      "engines": {
+        "node": ">=20.0.0"
+      },
+      "npmUrl": "https://www.npmjs.com/package/@abeta.dev/analytics",
+      "githubPackagesName": "@abeta-dev/analytics",
+      "docsUrl": "https://github.com/Abeta-dev/react-libs/blob/main/packages/analytics/README.md"
+    },
+    {
+      "id": "urn:abeta:subpath:@abeta.dev/analytics",
+      "type": "Subpath",
+      "package": "@abeta.dev/analytics",
+      "subpath": ".",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true,
+      "useClientRequired": false,
+      "symbolCount": 24
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:AnalyticsAdapter",
+      "type": "Symbol",
+      "name": "AnalyticsAdapter",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:AnalyticsEngine",
+      "type": "Symbol",
+      "name": "AnalyticsEngine",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:AnalyticsEvent",
+      "type": "Symbol",
+      "name": "AnalyticsEvent",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:AnalyticsQueue",
+      "type": "Symbol",
+      "name": "AnalyticsQueue",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:ComponentContext",
+      "type": "Symbol",
+      "name": "ComponentContext",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:ConsoleAdapter",
+      "type": "Symbol",
+      "name": "ConsoleAdapter",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:DomTracker",
+      "type": "Symbol",
+      "name": "DomTracker",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:GoogleAnalyticsAdapter",
+      "type": "Symbol",
+      "name": "GoogleAnalyticsAdapter",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:HttpAdapter",
+      "type": "Symbol",
+      "name": "HttpAdapter",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:MixpanelAdapter",
+      "type": "Symbol",
+      "name": "MixpanelAdapter",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:MixpanelClient",
+      "type": "Symbol",
+      "name": "MixpanelClient",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:PageContext",
+      "type": "Symbol",
+      "name": "PageContext",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:SessionManager",
+      "type": "Symbol",
+      "name": "SessionManager",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:generateUUID",
+      "type": "Symbol",
+      "name": "generateUUID",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:getAnalyticsEngine",
+      "type": "Symbol",
+      "name": "getAnalyticsEngine",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:initAnalytics",
+      "type": "Symbol",
+      "name": "initAnalytics",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:safeParseMetadata",
+      "type": "Symbol",
+      "name": "safeParseMetadata",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:subpath:@abeta.dev/analytics/react",
+      "type": "Subpath",
+      "package": "@abeta.dev/analytics",
+      "subpath": "./react",
+      "importPath": "@abeta.dev/analytics/react",
+      "runtime": "client",
+      "rscSafe": false,
+      "useClientRequired": true,
+      "symbolCount": 8
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:AnalyticsContextValue",
+      "type": "Symbol",
+      "name": "AnalyticsContextValue",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics/react",
+      "runtime": "client",
+      "rscSafe": false
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:AnalyticsProvider",
+      "type": "Symbol",
+      "name": "AnalyticsProvider",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics/react",
+      "runtime": "client",
+      "rscSafe": false
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:PageViewTracker",
+      "type": "Symbol",
+      "name": "PageViewTracker",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics/react",
+      "runtime": "client",
+      "rscSafe": false
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:TrackArea",
+      "type": "Symbol",
+      "name": "TrackArea",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics/react",
+      "runtime": "client",
+      "rscSafe": false
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/analytics:useAnalytics",
+      "type": "Symbol",
+      "name": "useAnalytics",
+      "package": "@abeta.dev/analytics",
+      "importPath": "@abeta.dev/analytics/react",
+      "runtime": "client",
+      "rscSafe": false
+    },
+    {
+      "id": "urn:abeta:skill:react-libs-analytics",
+      "type": "AgentSkill",
+      "name": "react-libs-analytics",
+      "description": "Use when adding behavioral analytics, telemetry adapters, PII sanitization, or React page/click tracking with @abeta.dev/analytics (v0.22.0).",
+      "path": "skills/react-libs-analytics/SKILL.md",
+      "url": "https://github.com/Abeta-dev/react-libs/blob/main/skills/react-libs-analytics/SKILL.md"
+    },
+    {
+      "id": "urn:abeta:pkg:@abeta.dev/mcp",
+      "type": "Package",
+      "name": "@abeta.dev/mcp",
+      "version": "0.22.0",
+      "deprecated": false,
+      "deprecationNotice": null,
+      "description": "Zero-dependency Model Context Protocol (MCP) server for @abeta.dev/* — live symbol lookup, RSC boundary checking, RAG recipe search, and JSON-LD context graph traversal.",
+      "role": "Zero-dependency stdio Model Context Protocol (MCP) server and programmatic query SDK for live symbol lookup, RSC boundary checking, RAG search, and JSON-LD context graph traversal.",
+      "directory": "packages/mcp",
+      "keywords": [
+        "mcp",
+        "model-context-protocol",
+        "rag",
+        "context-graph",
+        "llms-txt",
+        "ai-agents",
+        "design-system",
+        "cursor",
+        "claude",
+        "typescript",
+        "abeta"
+      ],
+      "engines": {
+        "node": ">=20.0.0"
+      },
+      "npmUrl": "https://www.npmjs.com/package/@abeta.dev/mcp",
+      "githubPackagesName": "@abeta-dev/mcp",
+      "docsUrl": "https://github.com/Abeta-dev/react-libs/blob/main/packages/mcp/README.md"
+    },
+    {
+      "id": "urn:abeta:subpath:@abeta.dev/mcp",
+      "type": "Subpath",
+      "package": "@abeta.dev/mcp",
+      "subpath": ".",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true,
+      "useClientRequired": false,
+      "symbolCount": 23
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:AbetaContextGraph",
+      "type": "Symbol",
+      "name": "AbetaContextGraph",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:AbetaDeprecationEntry",
+      "type": "Symbol",
+      "name": "AbetaDeprecationEntry",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:AbetaKnowledgeBundle",
+      "type": "Symbol",
+      "name": "AbetaKnowledgeBundle",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:AbetaPackageInfo",
+      "type": "Symbol",
+      "name": "AbetaPackageInfo",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:AbetaRegistry",
+      "type": "Symbol",
+      "name": "AbetaRegistry",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:AbetaSubpathInfo",
+      "type": "Symbol",
+      "name": "AbetaSubpathInfo",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:ContextGraphEdge",
+      "type": "Symbol",
+      "name": "ContextGraphEdge",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:ContextGraphNode",
+      "type": "Symbol",
+      "name": "ContextGraphNode",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:DEFAULT_REMOTE_BASE_URL",
+      "type": "Symbol",
+      "name": "DEFAULT_REMOTE_BASE_URL",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:JsonRpcRequest",
+      "type": "Symbol",
+      "name": "JsonRpcRequest",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:JsonRpcResponse",
+      "type": "Symbol",
+      "name": "JsonRpcResponse",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:MCP_RESOURCES",
+      "type": "Symbol",
+      "name": "MCP_RESOURCES",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:MCP_TOOLS",
+      "type": "Symbol",
+      "name": "MCP_TOOLS",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:RagChunk",
+      "type": "Symbol",
+      "name": "RagChunk",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:checkRscBoundary",
+      "type": "Symbol",
+      "name": "checkRscBoundary",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:createAbetaMcpHandler",
+      "type": "Symbol",
+      "name": "createAbetaMcpHandler",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:listPackages",
+      "type": "Symbol",
+      "name": "listPackages",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:loadBundledKnowledge",
+      "type": "Symbol",
+      "name": "loadBundledKnowledge",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:loadRemoteKnowledge",
+      "type": "Symbol",
+      "name": "loadRemoteKnowledge",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:lookupSymbol",
+      "type": "Symbol",
+      "name": "lookupSymbol",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:parseRagJsonl",
+      "type": "Symbol",
+      "name": "parseRagJsonl",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:searchRagChunks",
+      "type": "Symbol",
+      "name": "searchRagChunks",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/mcp:traverseContextGraph",
+      "type": "Symbol",
+      "name": "traverseContextGraph",
+      "package": "@abeta.dev/mcp",
+      "importPath": "@abeta.dev/mcp",
+      "runtime": "rsc-universal",
+      "rscSafe": true
+    },
+    {
+      "id": "urn:abeta:skill:react-libs-mcp",
+      "type": "AgentSkill",
+      "name": "react-libs-mcp",
+      "description": "Use when connecting AI agents, IDEs, RAG pipelines, or external context graphs to @abeta.dev/* via @abeta.dev/mcp (v0.22.0).",
+      "path": "skills/react-libs-mcp/SKILL.md",
+      "url": "https://github.com/Abeta-dev/react-libs/blob/main/skills/react-libs-mcp/SKILL.md"
     },
     {
       "id": "urn:abeta:pkg:@abeta.dev/react-libs",
       "type": "Package",
       "name": "@abeta.dev/react-libs",
-      "version": "0.21.0",
+      "version": "0.22.0",
       "deprecated": true,
-      "deprecationNotice": "@abeta.dev/react-libs is deprecated. Please migrate to the scoped packages: @abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, or @abeta.dev/auth.",
+      "deprecationNotice": "@abeta.dev/react-libs is deprecated. Please migrate to the scoped packages: @abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, @abeta.dev/auth, or @abeta.dev/analytics.",
       "description": "Production-grade, highly performant React 19 component library with strict TypeScript types, atomic exports, and zero dependency leakage.",
       "role": "Legacy backward-compatible omnibus package re-exporting UI, India, Talent, Auth, and Analytics subpaths (deprecated for greenfield apps; scheduled sunset v1.0.0).",
       "directory": ".",
@@ -6428,7 +6962,52 @@
       "runtime": "client",
       "rscSafe": false,
       "useClientRequired": true,
-      "symbolCount": 0
+      "symbolCount": 8
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/react-libs:AnalyticsContextValue",
+      "type": "Symbol",
+      "name": "AnalyticsContextValue",
+      "package": "@abeta.dev/react-libs",
+      "importPath": "@abeta.dev/react-libs/analytics/react",
+      "runtime": "client",
+      "rscSafe": false
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/react-libs:AnalyticsProvider",
+      "type": "Symbol",
+      "name": "AnalyticsProvider",
+      "package": "@abeta.dev/react-libs",
+      "importPath": "@abeta.dev/react-libs/analytics/react",
+      "runtime": "client",
+      "rscSafe": false
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/react-libs:PageViewTracker",
+      "type": "Symbol",
+      "name": "PageViewTracker",
+      "package": "@abeta.dev/react-libs",
+      "importPath": "@abeta.dev/react-libs/analytics/react",
+      "runtime": "client",
+      "rscSafe": false
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/react-libs:TrackArea",
+      "type": "Symbol",
+      "name": "TrackArea",
+      "package": "@abeta.dev/react-libs",
+      "importPath": "@abeta.dev/react-libs/analytics/react",
+      "runtime": "client",
+      "rscSafe": false
+    },
+    {
+      "id": "urn:abeta:symbol:@abeta.dev/react-libs:useAnalytics",
+      "type": "Symbol",
+      "name": "useAnalytics",
+      "package": "@abeta.dev/react-libs",
+      "importPath": "@abeta.dev/react-libs/analytics/react",
+      "runtime": "client",
+      "rscSafe": false
     },
     {
       "id": "urn:abeta:subpath:@abeta.dev/react-libs/hooks/use-toast",
@@ -6676,7 +7255,7 @@
       "id": "urn:abeta:skill:react-libs",
       "type": "AgentSkill",
       "name": "react-libs",
-      "description": "Umbrella router and integration guide for the Abeta React Ecosystem (@abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, @abeta.dev/auth, v0.21.0). Use when selecting scoped React 19 packages, configuring Tailwind CSS v4 themes, preserving RSC vs 'use client' boundaries, or running react-libs CI truth gates.",
+      "description": "Umbrella router and integration guide for the Abeta React Ecosystem (@abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, @abeta.dev/auth, v0.22.0). Use when selecting scoped React 19 packages, configuring Tailwind CSS v4 themes, preserving RSC vs 'use client' boundaries, or running react-libs CI truth gates.",
       "path": "skills/react-libs/SKILL.md",
       "url": "https://github.com/Abeta-dev/react-libs/blob/main/skills/react-libs/SKILL.md"
     },
@@ -6688,7 +7267,18 @@
       "deprecatedSince": "0.20.0",
       "removeIn": "1.0.0",
       "status": "active",
-      "replacement": "@abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, @abeta.dev/auth",
+      "replacement": "@abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, @abeta.dev/auth, @abeta.dev/analytics",
+      "migrationDoc": "https://github.com/Abeta-dev/react-libs/blob/main/MIGRATION.md#migrating-from-abetadevreact-libs-to-modular-packages"
+    },
+    {
+      "id": "urn:abeta:deprecation:legacy-analytics-subpath",
+      "type": "DeprecationWindow",
+      "label": "@abeta.dev/react-libs/analytics",
+      "scope": "subpath",
+      "deprecatedSince": "0.22.0",
+      "removeIn": "1.0.0",
+      "status": "active",
+      "replacement": "@abeta.dev/analytics and @abeta.dev/analytics/react",
       "migrationDoc": "https://github.com/Abeta-dev/react-libs/blob/main/MIGRATION.md#migrating-from-abetadevreact-libs-to-modular-packages"
     },
     {
@@ -7949,6 +8539,11 @@
     {
       "source": "urn:abeta:subpath:@abeta.dev/ui",
       "target": "urn:abeta:symbol:@abeta.dev/ui:MatchScoreGauge",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/ui",
+      "target": "urn:abeta:symbol:@abeta.dev/ui:MatchScoreThresholds",
       "relation": "exports_symbol"
     },
     {
@@ -9587,7 +10182,7 @@
       "source": "urn:abeta:pkg:@abeta.dev/india",
       "target": "urn:abeta:pkg:@abeta.dev/ui",
       "relation": "optional_peer",
-      "range": "^0.21.0"
+      "range": "^0.22.0"
     },
     {
       "source": "urn:abeta:skill:react-libs-india",
@@ -9638,6 +10233,11 @@
     {
       "source": "urn:abeta:subpath:@abeta.dev/talent",
       "target": "urn:abeta:symbol:@abeta.dev/talent:MatchScoreGauge",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/talent",
+      "target": "urn:abeta:symbol:@abeta.dev/talent:MatchScoreThresholds",
       "relation": "exports_symbol"
     },
     {
@@ -9714,7 +10314,7 @@
       "source": "urn:abeta:pkg:@abeta.dev/talent",
       "target": "urn:abeta:pkg:@abeta.dev/ui",
       "relation": "depends_on",
-      "range": "^0.21.0"
+      "range": "^0.22.0"
     },
     {
       "source": "urn:abeta:skill:react-libs-talent",
@@ -10222,6 +10822,269 @@
     },
     {
       "source": "urn:abeta:ecosystem:react-libs",
+      "target": "urn:abeta:pkg:@abeta.dev/analytics",
+      "relation": "contains_package"
+    },
+    {
+      "source": "urn:abeta:pkg:@abeta.dev/analytics",
+      "target": "urn:abeta:subpath:@abeta.dev/analytics",
+      "relation": "exports_subpath",
+      "runtime": "rsc-universal"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:AnalyticsAdapter",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:AnalyticsEngine",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:AnalyticsEvent",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:AnalyticsQueue",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:ComponentContext",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:ConsoleAdapter",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:DomTracker",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:GoogleAnalyticsAdapter",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:HttpAdapter",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:MixpanelAdapter",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:MixpanelClient",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:PageContext",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:SessionManager",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:generateUUID",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:getAnalyticsEngine",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:initAnalytics",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:safeParseMetadata",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:pkg:@abeta.dev/analytics",
+      "target": "urn:abeta:subpath:@abeta.dev/analytics/react",
+      "relation": "exports_subpath",
+      "runtime": "client"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics/react",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:AnalyticsContextValue",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics/react",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:AnalyticsProvider",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics/react",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:PageViewTracker",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics/react",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:TrackArea",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/analytics/react",
+      "target": "urn:abeta:symbol:@abeta.dev/analytics:useAnalytics",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:skill:react-libs-analytics",
+      "target": "urn:abeta:pkg:@abeta.dev/analytics",
+      "relation": "skill_covers"
+    },
+    {
+      "source": "urn:abeta:ecosystem:react-libs",
+      "target": "urn:abeta:pkg:@abeta.dev/mcp",
+      "relation": "contains_package"
+    },
+    {
+      "source": "urn:abeta:pkg:@abeta.dev/mcp",
+      "target": "urn:abeta:subpath:@abeta.dev/mcp",
+      "relation": "exports_subpath",
+      "runtime": "rsc-universal"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:AbetaContextGraph",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:AbetaDeprecationEntry",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:AbetaKnowledgeBundle",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:AbetaPackageInfo",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:AbetaRegistry",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:AbetaSubpathInfo",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:ContextGraphEdge",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:ContextGraphNode",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:DEFAULT_REMOTE_BASE_URL",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:JsonRpcRequest",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:JsonRpcResponse",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:MCP_RESOURCES",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:MCP_TOOLS",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:RagChunk",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:checkRscBoundary",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:createAbetaMcpHandler",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:listPackages",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:loadBundledKnowledge",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:loadRemoteKnowledge",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:lookupSymbol",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:parseRagJsonl",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:searchRagChunks",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/mcp",
+      "target": "urn:abeta:symbol:@abeta.dev/mcp:traverseContextGraph",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:skill:react-libs-mcp",
+      "target": "urn:abeta:pkg:@abeta.dev/mcp",
+      "relation": "skill_covers"
+    },
+    {
+      "source": "urn:abeta:ecosystem:react-libs",
       "target": "urn:abeta:pkg:@abeta.dev/react-libs",
       "relation": "contains_package"
     },
@@ -10555,6 +11418,31 @@
       "runtime": "client"
     },
     {
+      "source": "urn:abeta:subpath:@abeta.dev/react-libs/analytics/react",
+      "target": "urn:abeta:symbol:@abeta.dev/react-libs:AnalyticsContextValue",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/react-libs/analytics/react",
+      "target": "urn:abeta:symbol:@abeta.dev/react-libs:AnalyticsProvider",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/react-libs/analytics/react",
+      "target": "urn:abeta:symbol:@abeta.dev/react-libs:PageViewTracker",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/react-libs/analytics/react",
+      "target": "urn:abeta:symbol:@abeta.dev/react-libs:TrackArea",
+      "relation": "exports_symbol"
+    },
+    {
+      "source": "urn:abeta:subpath:@abeta.dev/react-libs/analytics/react",
+      "target": "urn:abeta:symbol:@abeta.dev/react-libs:useAnalytics",
+      "relation": "exports_symbol"
+    },
+    {
       "source": "urn:abeta:pkg:@abeta.dev/react-libs",
       "target": "urn:abeta:subpath:@abeta.dev/react-libs/hooks/use-toast",
       "relation": "exports_subpath",
@@ -10690,7 +11578,7 @@
       "source": "urn:abeta:pkg:@abeta.dev/react-libs",
       "target": "urn:abeta:pkg:@abeta.dev/auth",
       "relation": "depends_on",
-      "range": "0.21.0"
+      "range": "0.22.0"
     },
     {
       "source": "urn:abeta:skill:react-libs",
@@ -10730,6 +11618,11 @@
       "target": "urn:abeta:pkg:@abeta.dev/auth",
       "relation": "deprecated_in_favor_of",
       "removeIn": "1.0.0"
+    },
+    {
+      "source": "urn:abeta:ecosystem:react-libs",
+      "target": "urn:abeta:deprecation:legacy-analytics-subpath",
+      "relation": "enforces_deprecation"
     },
     {
       "source": "urn:abeta:ecosystem:react-libs",

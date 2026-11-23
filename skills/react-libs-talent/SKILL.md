@@ -1,9 +1,9 @@
 ---
 name: react-libs-talent
-description: Implementation guide for @abeta.dev/talent (v0.21.0) — ProofOfWorkCertificate, CheckpointRunner, DiagnosticQuiz, PipelineKanban, ProofOfWorkCard, MatchScoreGauge, RadarSweep, and SalaryRangeDisplay for React 19.
+description: Implementation guide for @abeta.dev/talent (v0.22.0) — ProofOfWorkCertificate, CheckpointRunner, DiagnosticQuiz, PipelineKanban, ProofOfWorkCard, MatchScoreGauge, RadarSweep, and SalaryRangeDisplay for React 19.
 ---
 
-# `@abeta.dev/talent` Skill (`v0.21.0`)
+# `@abeta.dev/talent` Skill (`v0.22.0`)
 
 ## Installation
 

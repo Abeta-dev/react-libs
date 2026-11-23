@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "homepage": "https://abeta-dev.github.io/react-libs/",
   "repository": "https://github.com/Abeta-dev/react-libs",
   "aiEndpoints": {
@@ -13,7 +13,7 @@
   "packages": [
     {
       "name": "@abeta.dev/ui",
-      "version": "0.21.0",
+      "version": "0.22.0",
       "deprecated": false,
       "description": "Accessible, high-performance React 19 UI component primitives built with Tailwind CSS v4 and Radix UI.",
       "role": "Primary accessible React 18/19 + Tailwind CSS v4 + Radix UI design system (111 primitives, dual CSS delivery, isolated ./pdf viewer, 18 leaf micro-bundles).",
@@ -101,7 +101,7 @@
           "runtime": "client",
           "useClientRequired": true,
           "rscSafe": false,
-          "symbolCount": 536,
+          "symbolCount": 537,
           "symbols": [
             "Accordion",
             "AccordionContent",
@@ -374,6 +374,7 @@
             "MaskOptions",
             "MatchScoreGauge",
             "MatchScoreGaugeProps",
+            "MatchScoreThresholds",
             "Menubar",
             "MenubarCheckboxItem",
             "MenubarContent",
@@ -898,7 +899,7 @@
     },
     {
       "name": "@abeta.dev/india",
-      "version": "0.21.0",
+      "version": "0.22.0",
       "deprecated": false,
       "description": "India statutory validation, FinTech cards, GSTIN/PAN/IFSC, UPI QR generation, and bilingual support for React 19.",
       "role": "Zero-bloat India statutory compliance engine (GSTIN, PAN, IFSC, FSSAI, Pincode, GST split, TDS, Lakhs/Crores, NPCI UPI URIs) with optional React FinTech standee cards.",
@@ -910,7 +911,7 @@
       "peerDependencies": [
         {
           "name": "@abeta.dev/ui",
-          "range": "^0.21.0",
+          "range": "^0.22.0",
           "optional": true
         },
         {
@@ -1008,7 +1009,7 @@
     },
     {
       "name": "@abeta.dev/talent",
-      "version": "0.21.0",
+      "version": "0.22.0",
       "deprecated": false,
       "description": "Interactive assessment, candidate evaluation, checkpoint runners, and kanban pipeline UI for React 19.",
       "role": "Talent assessment, verifiable credentials, print-optimized ProofOfWorkCertificate, CheckpointRunner, DiagnosticQuiz, and hiring pipeline UI.",
@@ -1041,7 +1042,7 @@
           "runtime": "client",
           "useClientRequired": true,
           "rscSafe": false,
-          "symbolCount": 32,
+          "symbolCount": 33,
           "symbols": [
             "CheckpointItem",
             "CheckpointRunner",
@@ -1054,6 +1055,7 @@
             "KanbanColumn",
             "MatchScoreGauge",
             "MatchScoreGaugeProps",
+            "MatchScoreThresholds",
             "MetricRangeBreakdownItem",
             "MetricRangeDisplay",
             "MetricRangeDisplayProps",
@@ -1081,7 +1083,7 @@
     },
     {
       "name": "@abeta.dev/auth",
-      "version": "0.21.0",
+      "version": "0.22.0",
       "deprecated": false,
       "description": "Backend-agnostic React 19 authentication UI library with Google & LinkedIn 3PL, email/password, and concurrent-safe token refresh.",
       "role": "Security-first headless AuthClient (HttpOnly cookie refresh mutex, CSRF, cross-tab sync, createAuthenticatedFetch) plus React bindings and auth UI forms.",
@@ -1263,8 +1265,134 @@
       ]
     },
     {
+      "name": "@abeta.dev/analytics",
+      "version": "0.22.0",
+      "deprecated": false,
+      "description": "Zero-bloat behavioral analytics engine with pluggable adapters (Console, HTTP, Google Analytics, Mixpanel), automatic PII sanitization, offline batching, and optional React 18/19 hooks.",
+      "role": "Zero-bloat behavioral analytics engine with pluggable adapters (Console, HTTP, Google Analytics, Mixpanel), automatic PII sanitization, offline batching, and optional React 18/19 hooks.",
+      "directory": "packages/analytics",
+      "npmUrl": "https://www.npmjs.com/package/@abeta.dev/analytics",
+      "githubPackagesName": "@abeta-dev/analytics",
+      "docsUrl": "https://github.com/Abeta-dev/react-libs/blob/main/packages/analytics/README.md",
+      "skillPath": "skills/react-libs-analytics/SKILL.md",
+      "peerDependencies": [
+        {
+          "name": "react",
+          "range": "^18.2.0 || ^19.0.0",
+          "optional": true
+        },
+        {
+          "name": "react-dom",
+          "range": "^18.2.0 || ^19.0.0",
+          "optional": true
+        }
+      ],
+      "subpaths": [
+        {
+          "subpath": ".",
+          "importPath": "@abeta.dev/analytics",
+          "runtime": "rsc-universal",
+          "useClientRequired": false,
+          "rscSafe": true,
+          "symbolCount": 24,
+          "symbols": [
+            "AnalyticsAdapter",
+            "AnalyticsConfig",
+            "AnalyticsEngine",
+            "AnalyticsEvent",
+            "AnalyticsQueue",
+            "AnalyticsQueueOptions",
+            "ComponentContext",
+            "ConsoleAdapter",
+            "ConsoleAdapterOptions",
+            "DomTracker",
+            "DomTrackerOptions",
+            "GoogleAnalyticsAdapter",
+            "GoogleAnalyticsAdapterOptions",
+            "HttpAdapter",
+            "HttpAdapterOptions",
+            "MixpanelAdapter",
+            "MixpanelAdapterOptions",
+            "MixpanelClient",
+            "PageContext",
+            "SessionManager",
+            "generateUUID",
+            "getAnalyticsEngine",
+            "initAnalytics",
+            "safeParseMetadata"
+          ]
+        },
+        {
+          "subpath": "./react",
+          "importPath": "@abeta.dev/analytics/react",
+          "runtime": "client",
+          "useClientRequired": true,
+          "rscSafe": false,
+          "symbolCount": 8,
+          "symbols": [
+            "AnalyticsContextValue",
+            "AnalyticsProvider",
+            "AnalyticsProviderProps",
+            "PageViewTracker",
+            "PageViewTrackerProps",
+            "TrackArea",
+            "TrackAreaProps",
+            "useAnalytics"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@abeta.dev/mcp",
+      "version": "0.22.0",
+      "deprecated": false,
+      "description": "Zero-dependency Model Context Protocol (MCP) server for @abeta.dev/* — live symbol lookup, RSC boundary checking, RAG recipe search, and JSON-LD context graph traversal.",
+      "role": "Zero-dependency stdio Model Context Protocol (MCP) server and programmatic query SDK for live symbol lookup, RSC boundary checking, RAG search, and JSON-LD context graph traversal.",
+      "directory": "packages/mcp",
+      "npmUrl": "https://www.npmjs.com/package/@abeta.dev/mcp",
+      "githubPackagesName": "@abeta-dev/mcp",
+      "docsUrl": "https://github.com/Abeta-dev/react-libs/blob/main/packages/mcp/README.md",
+      "skillPath": "skills/react-libs-mcp/SKILL.md",
+      "peerDependencies": [],
+      "subpaths": [
+        {
+          "subpath": ".",
+          "importPath": "@abeta.dev/mcp",
+          "runtime": "rsc-universal",
+          "useClientRequired": false,
+          "rscSafe": true,
+          "symbolCount": 23,
+          "symbols": [
+            "AbetaContextGraph",
+            "AbetaDeprecationEntry",
+            "AbetaKnowledgeBundle",
+            "AbetaPackageInfo",
+            "AbetaRegistry",
+            "AbetaSubpathInfo",
+            "ContextGraphEdge",
+            "ContextGraphNode",
+            "DEFAULT_REMOTE_BASE_URL",
+            "JsonRpcRequest",
+            "JsonRpcResponse",
+            "MCP_RESOURCES",
+            "MCP_TOOLS",
+            "RagChunk",
+            "checkRscBoundary",
+            "createAbetaMcpHandler",
+            "listPackages",
+            "loadBundledKnowledge",
+            "loadRemoteKnowledge",
+            "lookupSymbol",
+            "parseRagJsonl",
+            "searchRagChunks",
+            "traverseContextGraph"
+          ]
+        }
+      ]
+    },
+    {
       "name": "@abeta.dev/react-libs",
-      "version": "0.21.0",
+      "version": "0.22.0",
       "deprecated": true,
       "description": "Production-grade, highly performant React 19 component library with strict TypeScript types, atomic exports, and zero dependency leakage.",
       "role": "Legacy backward-compatible omnibus package re-exporting UI, India, Talent, Auth, and Analytics subpaths (deprecated for greenfield apps; scheduled sunset v1.0.0).",
@@ -1452,8 +1580,17 @@
           "runtime": "client",
           "useClientRequired": true,
           "rscSafe": false,
-          "symbolCount": 0,
-          "symbols": []
+          "symbolCount": 8,
+          "symbols": [
+            "AnalyticsContextValue",
+            "AnalyticsProvider",
+            "AnalyticsProviderProps",
+            "PageViewTracker",
+            "PageViewTrackerProps",
+            "TrackArea",
+            "TrackAreaProps",
+            "useAnalytics"
+          ]
         },
         {
           "subpath": "./hooks/use-toast",
@@ -1664,7 +1801,7 @@
       "deprecatedSince": "0.20.0",
       "removeIn": "1.0.0",
       "status": "active",
-      "replacement": "@abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, @abeta.dev/auth",
+      "replacement": "@abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, @abeta.dev/auth, @abeta.dev/analytics",
       "migrationDoc": "MIGRATION.md#migrating-from-abetadevreact-libs-to-modular-packages",
       "fileGlobs": [
         "package.json",
@@ -1675,7 +1812,21 @@
         "src/india/components/*.tsx",
         "src/components/ui/**/*.tsx"
       ],
-      "notes": "Legacy omnibus package preserved for 100% backward compatibility through 0.x; scheduled for sunset in v1.0.0 once @abeta.dev/analytics is extracted."
+      "notes": "Legacy omnibus package preserved for 100% backward compatibility through 0.x; scheduled for sunset in v1.0.0."
+    },
+    {
+      "id": "legacy-analytics-subpath",
+      "scope": "subpath",
+      "symbol": "@abeta.dev/react-libs/analytics",
+      "deprecatedSince": "0.22.0",
+      "removeIn": "1.0.0",
+      "status": "active",
+      "replacement": "@abeta.dev/analytics and @abeta.dev/analytics/react",
+      "migrationDoc": "MIGRATION.md#migrating-from-abetadevreact-libs-to-modular-packages",
+      "fileGlobs": [
+        "src/lib/analytics/index.ts",
+        "src/lib/analytics/react/index.ts"
+      ]
     },
     {
       "id": "amount-summary-item-tax-rate-snake",

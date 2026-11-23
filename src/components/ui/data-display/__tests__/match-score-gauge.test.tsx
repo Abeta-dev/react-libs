@@ -113,4 +113,17 @@ describe("MatchScoreGauge", () => {
     expect(meter).toHaveAttribute("aria-label", "Custom Resume Compatibility");
     expect(meter).toHaveClass("custom-gauge-class");
   });
+
+  it("supports custom grade thresholds via the thresholds prop", () => {
+    const { rerender } = render(
+      <MatchScoreGauge score={82} thresholds={{ aPlus: 90, a: 80, b: 60 }} />
+    );
+    expect(screen.getByText("Grade A")).toBeInTheDocument();
+
+    rerender(<MatchScoreGauge score={91} thresholds={{ aPlus: 90, a: 80, b: 60 }} />);
+    expect(screen.getByText("Grade A+")).toBeInTheDocument();
+
+    rerender(<MatchScoreGauge score={55} thresholds={{ aPlus: 90, a: 80, b: 60 }} />);
+    expect(screen.getByText("Grade C")).toBeInTheDocument();
+  });
 });

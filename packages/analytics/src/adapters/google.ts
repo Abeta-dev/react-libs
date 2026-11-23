@@ -1,0 +1,76 @@
+import type { AnalyticsAdapter, AnalyticsEvent } from "../types";
+
+export interface GoogleAnalyticsAdapterOptions {
+  measurementId?: string | undefined;
+}
+
+declare global {
+  interface Window {
+    gtag?: (command: string, ...args: unknown[]) => void;
+    dataLayer?: unknown[][];
+  }
+}
+
+export class GoogleAnalyticsAdapter implements AnalyticsAdapter {
+  public name = "google_analytics";
+  private measurementId?: string | undefined;
+
+  constructor(options: GoogleAnalyticsAdapterOptions = {}) {
+    this.measurementId = options.measurementId;
+  }
+
+  private gtag(command: string, ...args: unknown[]): void {
+    if (typeof window !== "undefined") {
+      if (typeof window.gtag === "function") {
+        window.gtag(command, ...args);
+      } else if (Array.isArray(window.dataLayer)) {
+        window.dataLayer.push([command, ...args]);
+      }
+    }
+  }
+
+  public track(event: AnalyticsEvent): void {
+    if (event.eventName === "page_view") {
+      this.gtag("event", "page_view", {
+        page_location: event.page.url,
+        page_path: event.page.path,
+        page_title: event.page.title,
+        page_id: event.pageId,
+        session_id: event.sessionId,
+        send_to: this.measurementId,
+        ...event.metadata,
+      });
+      return;
+    }
+
+    this.gtag("event", event.eventName, {
+      event_category: event.component?.type ?? "ui_interaction",
+      event_label: event.component?.name ?? event.component?.id,
+      component_id: event.component?.id,
+      component_type: event.component?.type,
+      interaction: event.component?.interaction,
+      interaction_count: event.component?.interactionCount,
+      page_id: event.pageId,
+      session_id: event.sessionId,
+      send_to: this.measurementId,
+      ...event.metadata,
+    });
+  }
+
+  public trackBatch(events: AnalyticsEvent[]): void {
+    events.forEach((event) => this.track(event));
+  }
+
+  public identify(userId: string, traits?: Record<string, unknown>): void {
+    this.gtag("set", {
+      user_id: userId,
+      user_properties: traits,
+    });
+  }
+
+  public reset(): void {
+    this.gtag("set", {
+      user_id: null,
+    });
+  }
+}

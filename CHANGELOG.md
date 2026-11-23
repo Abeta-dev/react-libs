@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.22.0] - 2026-11-23
+
+### Added
+- Dedicated `@abeta.dev/analytics` scoped workspace package (`packages/analytics`) with pure Node/RSC core (`AnalyticsEngine`, `initAnalytics`, `getAnalyticsEngine`, `SessionManager`, `AnalyticsQueue`, `DomTracker`, `ConsoleAdapter`, `HttpAdapter`, `GoogleAnalyticsAdapter`, `MixpanelAdapter`) and `'use client'` React bindings (`AnalyticsProvider`, `useAnalytics`, `TrackArea`, `PageViewTracker`) under `@abeta.dev/analytics/react`.
+- Zero-dependency `@abeta.dev/mcp` Model Context Protocol (MCP) stdio server and SDK (`packages/mcp`) exposing 5 tools (`abeta_list_packages`, `abeta_lookup_symbol`, `abeta_check_rsc_boundary`, `abeta_search_rag`, `abeta_traverse_context_graph`) and 4 resources (`abeta://llms.txt`, `abeta://registry.json`, `abeta://context-graph.json`, `abeta://rag-chunks.jsonl`) with bundled offline knowledge and `--remote` live mode.
+- Machine-readable RAG and Context-Graph artifacts generated zero-drift by `scripts/generate-ai-artifacts.mjs` (`public/context-graph.json`, `public/rag-chunks.jsonl`, and `public/registry.json`), plus portable agent skills `skills/react-libs-analytics/SKILL.md` and `skills/react-libs-mcp/SKILL.md`.
+- Automated CI guardrails: leaf-import hygiene and bundle-isolation gate (`scripts/check-leaf-imports.mjs`), strict deprecation window sunset gate (`deprecations.json` + `scripts/check-deprecations.mjs`), and starter-template verification gate (`scripts/check-examples.mjs`).
+- Configurable `thresholds` prop (`MatchScoreThresholds`) on `MatchScoreGauge` (defaulting to `{ aPlus: 85, a: 70, b: 50 }` for 100% backward compatibility).
+
+### Changed
+- Migrated `@abeta.dev/auth` form components (`LoginForm`, `SignUpForm`, `ForgotPasswordForm`, `OtpForm`, `OAuthButton`) from hardcoded indigo palette utilities to semantic design tokens (`bg-primary`, `text-primary`, `focus:border-primary`, `ring-ring`) and expanded ESLint `design-tokens` enforcement to `packages/auth/src/components/`.
+- Upgraded GitHub Actions workflows to Node 24-native majors (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/upload-artifact@v7`, `actions/upload-pages-artifact@v5`, `actions/deploy-pages@v5`, `github/codeql-action/*@v4`) and synchronized all 7 packages to `0.22.0`.
+
 ## [0.21.0] - 2026-11-20
 
 ### Added

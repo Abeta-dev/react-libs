@@ -1,9 +1,9 @@
 ---
 name: react-libs-india
-description: Implementation guide for @abeta.dev/india (v0.21.0) — zero-bloat RSC-safe India statutory validators (GSTIN, PAN, IFSC, FSSAI, Pincode, Phone, Bank), GST/TDS tax math, Lakhs/Crores formatting, NPCI UPI URIs, and @abeta.dev/india/react FinTech UI cards.
+description: Implementation guide for @abeta.dev/india (v0.22.0) — zero-bloat RSC-safe India statutory validators (GSTIN, PAN, IFSC, FSSAI, Pincode, Phone, Bank), GST/TDS tax math, Lakhs/Crores formatting, NPCI UPI URIs, and @abeta.dev/india/react FinTech UI cards.
 ---
 
-# `@abeta.dev/india` Skill (`v0.21.0`)
+# `@abeta.dev/india` Skill (`v0.22.0`)
 
 ## Installation
 

@@ -41,6 +41,7 @@ function getProviderConfig(provider: OAuthProvider) {
     return {
       name: 'LinkedIn',
       icon: LinkedInIcon,
+      // eslint-disable-next-line design-tokens/no-hardcoded-colors -- Official LinkedIn OAuth brand guideline color
       brandClasses: 'bg-[#0A66C2] hover:bg-[#095196] text-white border-transparent shadow-xs',
     };
   }
@@ -49,6 +50,7 @@ function getProviderConfig(provider: OAuthProvider) {
       name: 'GitHub',
       icon: GitHubIcon,
       brandClasses:
+        // eslint-disable-next-line design-tokens/no-hardcoded-colors -- Official GitHub OAuth brand guideline color
         'bg-[#24292F] hover:bg-[#1f2328] text-white border-transparent shadow-xs dark:bg-[#24292F] dark:hover:bg-[#1f2328]',
     };
   }
@@ -106,7 +108,7 @@ export const OAuthButton = React.forwardRef<HTMLButtonElement, OAuthButtonProps>
     const isEffectiveLoading = isLoading || isPending;
 
     const baseClasses =
-      'inline-flex items-center justify-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 select-none';
+      'inline-flex items-center justify-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 select-none';
 
     let variantClasses =
       'border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-800 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:bg-neutral-800 shadow-xs';

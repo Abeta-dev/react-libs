@@ -1,9 +1,9 @@
 ---
 name: react-libs
-description: Umbrella router and integration guide for the Abeta React Ecosystem (@abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, @abeta.dev/auth, v0.21.0). Use when selecting scoped React 19 packages, configuring Tailwind CSS v4 themes, preserving RSC vs 'use client' boundaries, or running react-libs CI truth gates.
+description: Umbrella router and integration guide for the Abeta React Ecosystem (@abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, @abeta.dev/auth, v0.22.0). Use when selecting scoped React 19 packages, configuring Tailwind CSS v4 themes, preserving RSC vs 'use client' boundaries, or running react-libs CI truth gates.
 ---
 
-# `react-libs` Umbrella Skill (`v0.21.0`)
+# `react-libs` Umbrella Skill (`v0.22.0`)
 
 Monorepo packages (`npm` `@abeta.dev/*` & GitHub Packages `@abeta-dev/*`, React `^18.2.0 || ^19.0.0`, Tailwind CSS v4, Node.js `>= 20.0.0`).
 

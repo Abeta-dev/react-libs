@@ -220,7 +220,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
             }
           }}
           placeholder="Jane Doe"
-          className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
+          className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
         />
       </div>
 
@@ -249,7 +249,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
             }
           }}
           placeholder="name@example.com"
-          className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
+          className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
         />
       </div>
 
@@ -279,7 +279,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
               }
             }}
             placeholder="At least 8 characters"
-            className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 pr-12 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
+            className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 pr-12 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
           />
           <button
             type="button"
@@ -347,7 +347,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
             }
           }}
           placeholder="Repeat password"
-          className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
+          className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
         />
       </div>
 
@@ -366,18 +366,18 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
               clearError();
             }
           }}
-          className="mt-0.5 h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500 dark:border-neutral-700 dark:bg-neutral-900"
+          className="mt-0.5 h-4 w-4 rounded border-neutral-300 text-primary focus:ring-ring dark:border-neutral-700 dark:bg-neutral-900"
         />
         <label
           htmlFor={termsId}
           className="ml-2 block text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed"
         >
           I agree to the{' '}
-          <a href={safeTermsUrl} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1">
+          <a href={safeTermsUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1">
             Terms of Service
           </a>{' '}
           and{' '}
-          <a href={safePrivacyUrl} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1">
+          <a href={safePrivacyUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1">
             Privacy Policy
           </a>
         </label>
@@ -387,7 +387,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
         type="submit"
         disabled={isSubmitting}
         aria-busy={isSubmitting}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
       >
         {isSubmitting ? (
           <>
@@ -405,7 +405,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
           <button
             type="button"
             onClick={onSignInClick}
-            className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
+            className="font-medium text-primary hover:text-primary/80 dark:text-primary hover:underline rounded-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
           >
             Sign in
           </button>

@@ -77,22 +77,28 @@ jobs:
         run: |
           echo "🔨 Compiling monorepo packages in dependency order..."
 
-          echo "📦 [1/5] Building @abeta.dev/ui (packages/ui)..."
+          echo "📦 [1/7] Building @abeta.dev/ui (packages/ui)..."
           npm run --workspace=packages/ui build
 
-          echo "📦 [2/5] Building @abeta.dev/india (packages/india)..."
+          echo "📦 [2/7] Building @abeta.dev/india (packages/india)..."
           npm run --workspace=packages/india build
 
-          echo "📦 [3/5] Building @abeta.dev/talent (packages/talent)..."
+          echo "📦 [3/7] Building @abeta.dev/talent (packages/talent)..."
           npm run --workspace=packages/talent build
 
-          echo "📦 [4/5] Building @abeta.dev/auth (packages/auth)..."
+          echo "📦 [4/7] Building @abeta.dev/auth (packages/auth)..."
           npm run --workspace=packages/auth build
 
-          echo "📦 [5/5] Building root @abeta.dev/react-libs..."
+          echo "📦 [5/7] Building @abeta.dev/analytics (packages/analytics)..."
+          npm run --workspace=packages/analytics build
+
+          echo "📦 [6/7] Building @abeta.dev/mcp (packages/mcp)..."
+          npm run --workspace=packages/mcp build
+
+          echo "📦 [7/7] Building root @abeta.dev/react-libs..."
           npm run build
 
-          echo "✅ All 5 packages built successfully."
+          echo "✅ All 7 packages built successfully."
 
       - name: Verify Packed External Consumers
         run: npm run verify:packed-consumers
@@ -114,6 +120,9 @@ jobs:
 
       - name: Verify Strict Deprecation Windows
         run: npm run check:deprecations
+
+      - name: Verify Starter Templates (examples/*)
+        run: npm run check:examples
 
       - name: Assure Test Coverage Checks
         run: npm run test
@@ -185,6 +194,34 @@ jobs:
             echo "✅ Successfully published ${AUTH_NAME}@${AUTH_VERSION} to npm."
           fi
 
+      - name: Publish @abeta.dev/analytics package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          ANALYTICS_NAME=$(node -p "require('./packages/analytics/package.json').name")
+          ANALYTICS_VERSION=$(node -p "require('./packages/analytics/package.json').version")
+          if npm view "${ANALYTICS_NAME}@${ANALYTICS_VERSION}" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
+            echo "ℹ️  ${ANALYTICS_NAME}@${ANALYTICS_VERSION} already exists on npm; leaving untouched."
+          else
+            echo "🚀 Publishing ${ANALYTICS_NAME}@${ANALYTICS_VERSION} to npm..."
+            npm publish -w packages/analytics --access public --tag latest --provenance
+            echo "✅ Successfully published ${ANALYTICS_NAME}@${ANALYTICS_VERSION} to npm."
+          fi
+
+      - name: Publish @abeta.dev/mcp package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          MCP_NAME=$(node -p "require('./packages/mcp/package.json').name")
+          MCP_VERSION=$(node -p "require('./packages/mcp/package.json').version")
+          if npm view "${MCP_NAME}@${MCP_VERSION}" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
+            echo "ℹ️  ${MCP_NAME}@${MCP_VERSION} already exists on npm; leaving untouched."
+          else
+            echo "🚀 Publishing ${MCP_NAME}@${MCP_VERSION} to npm..."
+            npm publish -w packages/mcp --access public --tag latest --provenance
+            echo "✅ Successfully published ${MCP_NAME}@${MCP_VERSION} to npm."
+          fi
+
       - name: Publish root package (@abeta.dev/react-libs)
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -240,6 +277,8 @@ jobs:
               { dir: "packages/india", isWorkspace: true },
               { dir: "packages/talent", isWorkspace: true },
               { dir: "packages/auth", isWorkspace: true },
+              { dir: "packages/analytics", isWorkspace: true },
+              { dir: "packages/mcp", isWorkspace: true },
               { dir: ".", isWorkspace: false }
             ];
 
@@ -289,7 +328,7 @@ jobs:
           # 4. @abeta-dev/auth
           # 5. @abeta-dev/react-libs (root)
 
-          PKGS=("packages/ui" "packages/india" "packages/talent" "packages/auth" ".")
+          PKGS=("packages/ui" "packages/india" "packages/talent" "packages/auth" "packages/analytics" "packages/mcp" ".")
 
           for PKG_DIR in "${PKGS[@]}"; do
             PKG_JSON="${PKG_DIR}/package.json"

@@ -43,6 +43,8 @@ try {
     { manifest: 'packages/ui/package.json', changelog: 'packages/ui/CHANGELOG.md' },
     { manifest: 'packages/india/package.json', changelog: 'packages/india/CHANGELOG.md' },
     { manifest: 'packages/talent/package.json', changelog: 'packages/talent/CHANGELOG.md' },
+    { manifest: 'packages/analytics/package.json', changelog: 'packages/analytics/CHANGELOG.md' },
+    { manifest: 'packages/mcp/package.json', changelog: 'packages/mcp/CHANGELOG.md' },
   ];
 
   for (const pkg of scopedPackages) {

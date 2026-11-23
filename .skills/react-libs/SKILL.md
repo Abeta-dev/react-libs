@@ -5,7 +5,7 @@ description: Discover, import, build, and verify @abeta.dev React 19 UI primitiv
 
 # react-libs Agent Skill
 
-Use this skill when developing, testing, importing, or auditing components from the `@abeta.dev` ecosystem (v0.21.0). This covers the four modular packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`) and the 100% backward-compatible legacy omnibus package `@abeta.dev/react-libs`.
+Use this skill when developing, testing, importing, or auditing components from the `@abeta.dev` ecosystem (v0.22.0). This covers the four modular packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`) and the 100% backward-compatible legacy omnibus package `@abeta.dev/react-libs`.
 
 - **AI Reference Docs**: `public/llms.txt` (`https://abeta-dev.github.io/react-libs/llms.txt`) and `public/llms-full.txt` (`https://abeta-dev.github.io/react-libs/llms-full.txt`).
 - **Starter Templates**: `examples/nextjs-app-router` (Next.js App Router + Tailwind v4) and `examples/vite-react-19` (Vite + React 19 zero-Tailwind).

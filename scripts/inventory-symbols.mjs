@@ -54,7 +54,26 @@ export function getExportedSymbols() {
     'src/utils.ts',
     'src/hooks/use-toast.ts',
     'src/components/ui/pdf-viewer.tsx',
+    'packages/ui/src/index.ts',
+    'packages/india/src/index.ts',
+    'packages/talent/src/index.ts',
+    'packages/talent/src/components/match-score-gauge.tsx',
     'packages/auth/src/index.ts',
+    'packages/analytics/src/index.ts',
+    'packages/analytics/src/engine.ts',
+    'packages/analytics/src/session.ts',
+    'packages/analytics/src/queue.ts',
+    'packages/analytics/src/dom-tracker.ts',
+    'packages/analytics/src/adapters/console.ts',
+    'packages/analytics/src/adapters/http.ts',
+    'packages/analytics/src/adapters/google.ts',
+    'packages/analytics/src/adapters/mixpanel.ts',
+    'packages/analytics/src/react/provider.tsx',
+    'packages/analytics/src/react/track-area.tsx',
+    'packages/analytics/src/react/page-tracker.tsx',
+    'packages/mcp/src/index.ts',
+    'packages/mcp/src/knowledge.ts',
+    'packages/mcp/src/server.ts',
   ];
 
   for (const rel of barrelFiles) {
@@ -76,6 +95,14 @@ export function getExportedSymbols() {
           symbols.add(sym);
         }
       }
+    }
+
+    // Parse direct declarations: export class/function/const/interface/type Name
+    const declMatches = content.matchAll(
+      /export\s+(?:async\s+function|function|const|class|interface|type)\s+([A-Za-z0-9_]+)/g
+    );
+    for (const m of declMatches) {
+      symbols.add(m[1]);
     }
 
     // Parse export * from "./path/to/component"

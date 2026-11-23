@@ -133,6 +133,9 @@ jobs:
       - name: Verify Strict Deprecation Windows
         run: npm run check:deprecations
 
+      - name: Verify Starter Templates (examples/*)
+        run: npm run check:examples
+
   # ── 4. Validate Aggregate (Satisfies Branch Protection Check) ───────────────
   validate:
     name: validate

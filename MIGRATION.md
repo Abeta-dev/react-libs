@@ -25,6 +25,16 @@ This guide documents architectural evolutions, modular package adoption, and ver
 | **India React Components** | `import { AmountSummaryCardIndia, UpiQrCard } from "@abeta.dev/react-libs/india/react"` | `import { AmountSummaryCardIndia, UpiQrCard } from "@abeta.dev/india/react"` |
 | **Talent & Verification** | `import { ProofOfWorkCertificate, CheckpointRunner } from "@abeta.dev/react-libs"` | `import { ProofOfWorkCertificate, CheckpointRunner } from "@abeta.dev/talent"` |
 | **Authentication & Roles** | `import { useAuth, AuthProvider } from "@abeta.dev/react-libs/auth"` | `import { useAuth, AuthProvider } from "@abeta.dev/auth"` |
+| **Behavioral Analytics (Core & React)** | `import { initAnalytics } from "@abeta.dev/react-libs/analytics"` | `import { initAnalytics } from "@abeta.dev/analytics"` (`./react` for hooks) |
+
+---
+
+## Upgrading to v0.22.0
+
+1. **Adopt Standalone `@abeta.dev/analytics`:** Replace `@abeta.dev/react-libs/analytics` and `@abeta.dev/react-libs/analytics/react` with `@abeta.dev/analytics` and `@abeta.dev/analytics/react` (legacy subpaths remain backward-compatible until `v1.0.0`, tracked in `deprecations.json`).
+2. **Connect AI Tools & RAG via `@abeta.dev/mcp`:** Register `npx -y @abeta.dev/mcp` in Cursor, Claude Desktop, or Windsurf for zero-setup symbol lookup, RSC boundary checking, RAG search, and JSON-LD context graph traversal.
+3. **Optional `MatchScoreGauge` Custom Thresholds:** Pass `thresholds={{ aPlus: 90, a: 80, b: 60 }}` if your product uses custom scoring bands (defaults remain `85 / 70 / 50`).
+4. **Semantic Tokens in `@abeta.dev/auth`:** Auth forms now inherit `--primary` and `--ring` CSS tokens directly from `@abeta.dev/ui/theme.css` (zero breaking prop changes).
 
 ### Migration Steps
 

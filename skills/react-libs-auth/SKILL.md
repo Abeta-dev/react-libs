@@ -1,9 +1,9 @@
 ---
 name: react-libs-auth
-description: Implementation guide for @abeta.dev/auth (v0.21.0) — headless cookie-backed AuthClient (@abeta.dev/auth/core), React providers & hooks (@abeta.dev/auth/react), and accessible auth UI forms (@abeta.dev/auth) with single-flight refresh mutex, CSRF, and RFC 7636 PKCE.
+description: Implementation guide for @abeta.dev/auth (v0.22.0) — headless cookie-backed AuthClient (@abeta.dev/auth/core), React providers & hooks (@abeta.dev/auth/react), and accessible auth UI forms (@abeta.dev/auth) with single-flight refresh mutex, CSRF, and RFC 7636 PKCE.
 ---
 
-# `@abeta.dev/auth` Skill (`v0.21.0`)
+# `@abeta.dev/auth` Skill (`v0.22.0`)
 
 ## Installation
 

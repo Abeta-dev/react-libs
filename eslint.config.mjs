@@ -198,6 +198,8 @@ export default tseslint.config(
       'packages/india/src/**/*.{ts,tsx}',
       'packages/talent/src/**/*.{ts,tsx}',
       'packages/auth/src/**/*.{ts,tsx}',
+      'packages/analytics/src/**/*.{ts,tsx}',
+      'packages/mcp/src/**/*.{ts,tsx}',
     ],
     ignores: ['**/*.test.{ts,tsx}', '**/__tests__/**', '**/*.stories.{ts,tsx}'],
     rules: {
@@ -230,6 +232,7 @@ export default tseslint.config(
       'packages/ui/**/*.{ts,tsx}',
       'packages/india/**/*.{ts,tsx}',
       'packages/talent/**/*.{ts,tsx}',
+      'packages/auth/src/components/**/*.{ts,tsx}',
     ],
     plugins: {
       'design-tokens': {

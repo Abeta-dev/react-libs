@@ -171,7 +171,7 @@ export const ComponentDirectory: Story = {
           </div>
           <div className="flex flex-wrap gap-2 pt-4">
             {[
-              { label: 'v0.21.0', accent: true },
+              { label: 'v0.22.0', accent: true },
               { label: '120 components' },
               { label: '6-Tier Architecture' },
               { label: '3 Living Workflows' },

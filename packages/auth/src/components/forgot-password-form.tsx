@@ -129,7 +129,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
             type="button"
             disabled={cooldownSeconds > 0 || isEffectiveSubmitting}
             onClick={(e) => void debouncedSubmit(e)}
-            className="w-full min-h-[32px] py-1.5 text-xs font-medium text-indigo-600 hover:text-indigo-500 disabled:text-neutral-400 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
+            className="w-full min-h-[32px] py-1.5 text-xs font-medium text-primary hover:text-primary/80 disabled:text-neutral-400 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
           >
             {cooldownSeconds > 0
               ? `Resend available in ${cooldownSeconds}s`
@@ -199,7 +199,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
             }
           }}
           placeholder="name@example.com"
-          className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
+          className="w-full rounded-md border border-neutral-300 bg-white px-3.5 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 shadow-xs"
         />
       </div>
 
@@ -207,7 +207,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
         type="submit"
         disabled={isEffectiveSubmitting}
         aria-busy={isEffectiveSubmitting}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
       >
         {isEffectiveSubmitting ? (
           <>
@@ -223,7 +223,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
         <button
           type="button"
           onClick={onBackToSignIn}
-          className="w-full min-h-[32px] py-1.5 text-center text-xs font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
+          className="w-full min-h-[32px] py-1.5 text-center text-xs font-medium text-primary hover:text-primary/80 dark:text-primary hover:underline rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
         >
           Back to sign in
         </button>

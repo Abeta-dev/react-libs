@@ -1,6 +1,6 @@
 {
   "name": "@abeta.dev/ui",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "Accessible, high-performance React 19 UI component primitives built with Tailwind CSS v4 and Radix UI.",
   "keywords": [
     "react",
