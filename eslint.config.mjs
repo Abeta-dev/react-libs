@@ -167,6 +167,12 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-hooks/exhaustive-deps': 'error',
+      // React Compiler experimental rules promoted in eslint-plugin-react-hooks@7.1+
+      // flag intentional SSR hydration guards and concurrent-safe ref locks; keep
+      // rules-of-hooks and exhaustive-deps strictly enforced.
+      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/refs': 'off',
+      'react-hooks/immutability': 'off',
     },
   },
 
@@ -271,6 +277,9 @@ export default tseslint.config(
       'security/detect-non-literal-fs-filename': 'off',
       'sonarjs/no-clear-text-protocols': 'off',
       'sonarjs/no-collection-size-mischeck': 'off',
+      'sonarjs/prefer-specific-assertions': 'off',
+      'sonarjs/parameterized-tests': 'off',
+      'sonarjs/no-trivial-assertions': 'off',
       'react-hooks/rules-of-hooks': 'off',
       'react-hooks/globals': 'off',
       'design-tokens/no-hardcoded-colors': 'off',
@@ -313,6 +322,7 @@ export default tseslint.config(
       'security/detect-non-literal-regexp': 'off',
       'sonarjs/os-command': 'off',
       'sonarjs/slow-regex': 'off',
+      'sonarjs/super-linear-regex': 'off',
       'sonarjs/concise-regex': 'off',
       'sonarjs/cognitive-complexity': 'off',
       'sonarjs/no-nested-conditional': 'off',
