@@ -1,0 +1,73 @@
+{
+  "$schema": "https://abeta-dev.github.io/react-libs/schemas/deprecations.schema.json",
+  "schemaVersion": 1,
+  "policy": {
+    "minMinorWindow": 2,
+    "allowMajorRemoval": true,
+    "description": "Every @deprecated package, subpath, export, or prop must declare a deprecatedSince version, a removeIn sunset version (at least 2 minor releases or the next major version ahead), a concrete replacement, and a MIGRATION.md anchor. CI fails if an untracked @deprecated tag is introduced or if package.json reaches removeIn while status remains active."
+  },
+  "entries": [
+    {
+      "id": "omnibus-react-libs-package",
+      "scope": "package",
+      "symbol": "@abeta.dev/react-libs",
+      "deprecatedSince": "0.20.0",
+      "removeIn": "1.0.0",
+      "status": "active",
+      "replacement": "@abeta.dev/ui, @abeta.dev/india, @abeta.dev/talent, @abeta.dev/auth",
+      "migrationDoc": "MIGRATION.md#migrating-from-abetadevreact-libs-to-modular-packages",
+      "fileGlobs": [
+        "package.json",
+        "src/index.ts",
+        "src/auth/index.ts",
+        "src/india/index.ts",
+        "src/india/react/index.ts",
+        "src/india/components/*.tsx",
+        "src/components/ui/**/*.tsx"
+      ],
+      "notes": "Legacy omnibus package preserved for 100% backward compatibility through 0.x; scheduled for sunset in v1.0.0 once @abeta.dev/analytics is extracted."
+    },
+    {
+      "id": "amount-summary-item-tax-rate-snake",
+      "scope": "prop",
+      "symbol": "AmountSummaryItem.tax_rate",
+      "deprecatedSince": "0.18.0",
+      "removeIn": "1.0.0",
+      "status": "active",
+      "replacement": "AmountSummaryItem.taxRate",
+      "migrationDoc": "MIGRATION.md#upgrading-to-v0210",
+      "fileGlobs": [
+        "packages/ui/src/data-display/amount-summary-card.tsx",
+        "src/components/ui/data-display/amount-summary-card.tsx"
+      ]
+    },
+    {
+      "id": "amount-summary-card-transport-cost",
+      "scope": "prop",
+      "symbol": "AmountSummaryCardProps.transportCost",
+      "deprecatedSince": "0.18.0",
+      "removeIn": "1.0.0",
+      "status": "active",
+      "replacement": "AmountSummaryCardProps.shippingCost",
+      "migrationDoc": "MIGRATION.md#upgrading-to-v0210",
+      "fileGlobs": [
+        "packages/ui/src/data-display/amount-summary-card.tsx",
+        "src/components/ui/data-display/amount-summary-card.tsx"
+      ]
+    },
+    {
+      "id": "amount-summary-card-tds-percentage",
+      "scope": "prop",
+      "symbol": "AmountSummaryCardProps.tdsPercentage",
+      "deprecatedSince": "0.18.0",
+      "removeIn": "1.0.0",
+      "status": "active",
+      "replacement": "AmountSummaryCardProps.withholdingPercentage",
+      "migrationDoc": "MIGRATION.md#upgrading-to-v0210",
+      "fileGlobs": [
+        "packages/ui/src/data-display/amount-summary-card.tsx",
+        "src/components/ui/data-display/amount-summary-card.tsx"
+      ]
+    }
+  ]
+}

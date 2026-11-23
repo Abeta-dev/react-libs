@@ -231,5 +231,4 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
     </form>
   );
 };
-// eslint-disable-next-line sonarjs/no-hardcoded-passwords -- React component displayName contains 'Password'
-ForgotPasswordForm.displayName = 'ForgotPasswordForm';
+ForgotPasswordForm.displayName = ForgotPasswordForm.name;

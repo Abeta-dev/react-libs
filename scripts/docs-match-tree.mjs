@@ -29,7 +29,7 @@
 
 import { existsSync, openSync, readSync, closeSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { execSync } from 'node:child_process';
+import { execFileSync, execSync } from 'node:child_process';
 import { verifyChangelogSymbols, verifyReadmeComponents } from './inventory-symbols.mjs';
 import { verifyDocsMetrics } from './measure-metrics.mjs';
 
@@ -404,6 +404,40 @@ function checkAiDiscoveryParity() {
       pass(`${rel} exists and aligns with v${targetVersion}`);
     }
   }
+
+  try {
+    execFileSync(process.execPath, [join(ROOT, 'scripts', 'generate-ai-artifacts.mjs'), '--check'], {
+      cwd: ROOT,
+      stdio: 'inherit',
+    });
+    pass('RAG chunks, context-graph.json, and registry.json are zero-drift synchronized');
+  } catch (err) {
+    fail(`AI / RAG / Context-Graph artifacts drifted out of sync: ${err.message}`);
+  }
+}
+
+// ── Check H: Automated Leaf-Import Hygiene & Strict Deprecation Windows ─────
+function checkLeafImportsAndDeprecations() {
+  console.log('\n🔍 [Check H] Verifying Leaf-Import Isolation & Strict Deprecation Windows...');
+  try {
+    execFileSync(process.execPath, [join(ROOT, 'scripts', 'check-leaf-imports.mjs')], {
+      cwd: ROOT,
+      stdio: 'inherit',
+    });
+    pass('Leaf-import hygiene & compiled bundle isolation passed');
+  } catch (err) {
+    fail(`Leaf-import CI gate failed: ${err.message}`);
+  }
+
+  try {
+    execFileSync(process.execPath, [join(ROOT, 'scripts', 'check-deprecations.mjs')], {
+      cwd: ROOT,
+      stdio: 'inherit',
+    });
+    pass('Strict deprecation window & sunset registry passed');
+  } catch (err) {
+    fail(`Deprecation window CI gate failed: ${err.message}`);
+  }
 }
 
 // ── Run All Truth Gate Checks ───────────────────────────────────────────────
@@ -417,6 +451,7 @@ function runTruthGate() {
   checkSymbolInventory();
   checkMeasuredMetrics();
   checkAiDiscoveryParity();
+  checkLeafImportsAndDeprecations();
 
   console.log('\n─────────────────────────────────────────────────────────────────');
   if (hasFailure) {

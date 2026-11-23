@@ -127,6 +127,12 @@ jobs:
       - name: Verify Module Directives & Universal Packaging
         run: node scripts/verify-directives.mjs
 
+      - name: Verify Leaf-Import Hygiene & Bundle Isolation
+        run: npm run check:leaf-imports
+
+      - name: Verify Strict Deprecation Windows
+        run: npm run check:deprecations
+
   # ── 4. Validate Aggregate (Satisfies Branch Protection Check) ───────────────
   validate:
     name: validate
