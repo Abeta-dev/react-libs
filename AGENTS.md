@@ -1,37 +1,35 @@
 # AGENTS.md — Master Agent & Engineering Handbook
 
 > **Universal Multi-Agent Engineering Architecture & CI Invariant Standards**  
-> **Repository:** `@abeta.dev/react-libs` (Omnibus) & Modular Workspace Packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`)  
+> **Repository:** `@abeta.dev/react-libs` (Omnibus) & Modular Workspace Packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`, `@abeta.dev/analytics`, `@abeta.dev/mcp`)  
 > **Target Framework:** React 19 / React 18, Tailwind CSS v4, Radix UI Primitives, Node.js `>= 20.0.0`
 
 ---
 
 ## 1. Executive Architecture Overview
 
-This repository is organized as a high-performance **npm workspace monorepo** containing four domain-scoped modular packages plus a legacy omnibus root package. Every AI coding agent (Claude Code, Gemini CLI, Cursor, GitHub Copilot, Antigravity) must adhere to the structural boundaries, export maps, and quality invariants established below.
+This repository is organized as a high-performance **npm workspace monorepo** containing six domain-scoped modular packages plus a legacy omnibus root package (7 published packages total). Every AI coding agent (Claude Code, Gemini CLI, Cursor, GitHub Copilot, Antigravity) must adhere to the structural boundaries, export maps, and quality invariants established below.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                               @abeta.dev Monorepo Matrix                               │
+│                            @abeta.dev Monorepo Matrix (7 Packages)                     │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                        │
 │  ┌──────────────────────────┐  ┌──────────────────────────┐  ┌──────────────────────┐  │
 │  │     @abeta.dev/ui        │  │     @abeta.dev/india     │  │   @abeta.dev/talent  │  │
 │  │    (packages/ui)         │  │    (packages/india)      │  │  (packages/talent)   │  │
-│  │  111 Accessible Primitives│  │  GST, PAN, UPI, Invoicing│  │  Quiz, Certificate,  │  │
+│  │  111 Accessible Primitives│ │  GST, PAN, UPI, Invoicing│  │  Quiz, Certificate,  │  │
 │  │  Tailwind v4 + Radix UI  │  │  FinTech Standee Cards   │  │  Checkpoint Runners  │  │
 │  └─────────────┬────────────┘  └─────────────┬────────────┘  └──────────┬───────────┘  │
 │                │                             │                          │              │
-│                └──────────────────────┬──────┴──────────────────────────┘              │
-│                                       ▼                                                │
-│                         ┌──────────────────────────┐                                   │
-│                         │     @abeta.dev/auth      │                                   │
-│                         │     (packages/auth)      │                                   │
-│                         │  Headless Client + React │                                   │
-│                         │  HttpOnly Cookies + CSRF │                                   │
-│                         └─────────────┬────────────┘                                   │
-│                                       │                                                │
-│                                       ▼                                                │
+│  ┌─────────────┴────────────┐  ┌─────────────┴────────────┐  ┌──────────┴───────────┐  │
+│  │     @abeta.dev/auth      │  │   @abeta.dev/analytics   │  │    @abeta.dev/mcp    │  │
+│  │    (packages/auth)       │  │   (packages/analytics)   │  │    (packages/mcp)    │  │
+│  │  Headless Client + React │  │  Pure Engine + React     │  │  Zero-Dep Offline    │  │
+│  │  HttpOnly Cookies + CSRF │  │  GA4 / Mixpanel / HTTP   │  │  MCP Server + SDK    │  │
+│  └─────────────┬────────────┘  └─────────────┬────────────┘  └──────────┬───────────┘  │
+│                └─────────────────────────────┼──────────────────────────┘              │
+│                                              ▼                                         │
 │                     ┌───────────────────────────────────┐                              │
 │                     │       @abeta.dev/react-libs       │                              │
 │                     │       (Repository Root '.')       │                              │
@@ -79,20 +77,32 @@ This repository is organized as a high-performance **npm workspace monorepo** co
   * `@abeta.dev/auth/react`: React client providers and hooks (`AuthClientProvider`, `useAuthClient`, `useAuthClientSnapshot`, `AuthProvider`, `useAuth`, `useToken`, `useUser`, `useOAuth`).
   * `@abeta.dev/auth` (root): Full client bundle including UI components (`AuthCard`, `LoginForm`, `SignUpForm`, `ForgotPasswordForm`, `OtpForm`, `OAuthButton`, `OAuthButtonGroup`), `TokenManager`, `MockAuthAdapter`, RFC 7636 PKCE utilities, and `useClickBackpressure`.
 
-### 5. `@abeta.dev/react-libs` (Repository Root `.`)
+### 5. `@abeta.dev/analytics` (`packages/analytics`)
+* **Role**: Zero-bloat behavioral analytics, offline event batching, DOM tracking, and pluggable vendor adapters.
+* **Subpaths**:
+  * `.` (`@abeta.dev/analytics`) — **RSC & Node-Safe (Zero React Runtime)**: `AnalyticsEngine`, `AnalyticsQueue`, `SessionManager`, `DomTracker`, `ConsoleAdapter`, `HttpAdapter`, `GoogleAnalyticsAdapter`, `MixpanelAdapter`, and `AnalyticsAdapter` types.
+  * `./react` (`@abeta.dev/analytics/react`) — **Client Components** (`'use client'`): `AnalyticsProvider`, `useAnalytics`, `TrackArea`, `PageViewTracker`.
+
+### 6. `@abeta.dev/mcp` (`packages/mcp`)
+* **Role**: Zero-dependency offline-first stdio MCP server (`abeta-mcp`) and TypeScript SDK for AI coding agents, RAG pipelines, and context-graph consumers.
+* **Capabilities**: Bundles `llms.txt`, `registry.json`, `context-graph.json`, and `rag-chunks.jsonl` offline (with optional `--remote` mode) and exposes 5 tools (`abeta_list_packages`, `abeta_lookup_symbol`, `abeta_check_rsc_boundary`, `abeta_search_rag`, `abeta_traverse_context_graph`) plus 4 MCP resources (`abeta://llms.txt`, `abeta://registry.json`, `abeta://context-graph.json`, `abeta://rag-chunks.jsonl`).
+
+### 7. `@abeta.dev/react-libs` (Repository Root `.`)
 * **Role**: Omnibus backward-compatibility package.
-* **Deprecation Notice**: While marked deprecated to guide greenfield projects to modular scoped packages, all legacy import paths are strictly preserved and tested with **zero breaking changes**:
+* **Deprecation Notice**: Formally tracked in `deprecations.json` (sunset `v1.0.0`) to guide greenfield projects to modular scoped packages, while preserving all legacy import paths with **zero breaking changes**:
   * `@abeta.dev/react-libs` (Root barrel)
   * `@abeta.dev/react-libs/utils` (Pure server-safe utilities)
   * `@abeta.dev/react-libs/india` & `@abeta.dev/react-libs/india/react`
-  * `@abeta.dev/react-libs/analytics` & `@abeta.dev/react-libs/analytics/react`
+  * `@abeta.dev/react-libs/analytics` & `@abeta.dev/react-libs/analytics/react` (`@deprecated` → `@abeta.dev/analytics`)
   * `@abeta.dev/react-libs/pdf` (Client-only PDF viewer isolating `pdfjs-dist`)
   * `@abeta.dev/react-libs/hooks/use-toast`
   * `@abeta.dev/react-libs/auth`
   * Micro-bundle subpaths: `/button`, `/dialog`, `/card`, `/badge`, `/input`, `/data-table`, `/charts`, `/command`, `/drawer`, `/carousel`, `/calendar`, `/date-picker`, `/form`.
 
-### 6. AI Discovery & Runnable Starter Templates
-* **`public/llms.txt` & `public/llms-full.txt`**: Machine-readable LLM indexes following `llmstxt.org`, published at `https://abeta-dev.github.io/react-libs/llms.txt` and `https://abeta-dev.github.io/react-libs/llms-full.txt`. Keep signatures synchronized whenever public component props or subpaths change.
+### 8. AI Discovery, RAG, Context Graph & Runnable Starter Templates
+* **`public/llms.txt` & `public/llms-full.txt`**: Machine-readable LLM indexes following `llmstxt.org`, published at `https://abeta-dev.github.io/react-libs/llms.txt` and `https://abeta-dev.github.io/react-libs/llms-full.txt`.
+* **`public/context-graph.json`, `public/rag-chunks.jsonl`, & `public/registry.json`**: Zero-drift machine-readable context graph, pre-chunked RAG JSONL corpus, and package registry generated via `npm run generate:ai-artifacts` and enforced in `docs-match-tree.mjs`.
+* **8 Portable Agent Skills**: `skills/react-libs/SKILL.md`, `skills/react-libs-{ui,india,talent,auth,analytics,mcp}/SKILL.md`, and `.skills/react-libs/SKILL.md`.
 * **`examples/nextjs-app-router`**: Minimal Next.js App Router + Tailwind CSS v4 starter demonstrating `@abeta.dev/ui/theme.css`, RSC `@abeta.dev/india`, and client `@abeta.dev/ui` + `@abeta.dev/india/react`.
 * **`examples/vite-react-19`**: Minimal Vite + React 19 starter demonstrating zero-Tailwind `@abeta.dev/ui/style.css`, `@abeta.dev/india/react`, and `@abeta.dev/talent`.
 
@@ -148,14 +158,19 @@ Every pull request, commit, and agent operation is validated against six immutab
 | Command | Purpose |
 | :--- | :--- |
 | `npm run build` | Builds packages/auth, wipes root dist, compiles ESM/CJS bundles via tsup, and compiles Tailwind v4 CSS. |
-| `npm run build:packages` | Compiles all four workspace packages (`@abeta.dev/ui`, `@abeta.dev/india`, `@abeta.dev/talent`, `@abeta.dev/auth`). |
+| `npm run build:packages` | Compiles all six scoped workspace packages (`@abeta.dev/{ui,india,talent,auth,analytics,mcp}`). |
 | `npm run test` | Executes full Vitest test suite with V8 coverage report and json output. |
-| `npm run check:truth` | Executes CI Truth Gate (`scripts/docs-match-tree.mjs`), validating versions, directives, attw, and inventory. |
+| `npm run check:truth` | Executes CI Truth Gate (`scripts/docs-match-tree.mjs`), validating versions, directives, attw, inventory, RAG/context-graph drift, leaf imports, deprecations, and examples. |
+| `npm run check:types-packages` | Runs zero-`--ignore-rules` `attw` across all six scoped workspace packages. |
+| `npm run check:leaf-imports` | Enforces leaf-import isolation and server bundle purity across all workspaces and examples. |
+| `npm run check:deprecations` | Validates every `@deprecated` symbol against `deprecations.json` sunset windows. |
+| `npm run check:examples` | Verifies starter templates (`examples/*`) dependencies and `@abeta.dev/*` import specifiers. |
+| `npm run generate:ai-artifacts` | Regenerates `public/{context-graph.json,rag-chunks.jsonl,registry.json}` (`--check` for CI drift check). |
 | `npm run check:size` | Executes bundle size budget check against all built artifacts. |
 | `npm run check:directives` | Verifies `'use client'` presence in client bundles and total absence in universal modules. |
 | `npm run check:ssr` | Runs SSR hydration smoke tests (`src/__tests__/ssr-smoke.test.tsx`). |
 | `npm run check:types` | Runs `tsc --noEmit` across root TypeScript configuration. |
-| `npm run lint` | Runs ESLint with zero-warning tolerance (`--max-warnings 0`). |
+| `npm run lint` | Runs ESLint with zero-warning tolerance (`--max-warnings 0`), including `design-tokens` on `packages/auth/src/components/`. |
 | `npm run lint:fix` | Automatically fixes autofixable ESLint and formatting issues. |
 | `npm run storybook` | Starts local Storybook dev server on port 6006. |
 | `npm run build-storybook` | Compiles static Storybook documentation into `storybook-static/`. |
