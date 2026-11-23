@@ -13,7 +13,7 @@
 # Build root omnibus library and compile Tailwind CSS v4
 npm run build
 
-# Build all four scoped workspace packages (@abeta.dev/ui, /india, /talent, /auth)
+# Build all six scoped workspace packages (@abeta.dev/{ui,india,talent,auth,analytics,mcp})
 npm run build:packages
 
 # Rebuild only Tailwind CSS v4 theme and utility bundle
@@ -82,11 +82,14 @@ When writing new features, components, or bugfixes, always identify the appropri
 | **`@abeta.dev/ui`** | `packages/ui` | Full accessible Tailwind v4 + Radix UI design system (111 primitives, hooks, formatters, `PdfViewer`, CSS theme & precompiled bundle). | `@abeta.dev/ui`, `./utils`, `./pdf`, `./hooks/use-toast`, `./theme.css`, `./style.css`, micro-bundles (`./button`, `./card`, etc.) |
 | **`@abeta.dev/india`** | `packages/india` | Zero-bloat India statutory tax (`calculateGSTSplit`, `calculateTDS`), GSTIN/PAN/IFSC/FSSAI validators, NPCI UPI URIs, and regional cards. | `@abeta.dev/india` (RSC/Server), `@abeta.dev/india/react` (Client) |
 | **`@abeta.dev/talent`** | `packages/talent` | `ProofOfWorkCertificate`, `CheckpointRunner`, `DiagnosticQuiz`, `PipelineKanban`, `ProofOfWorkCard`, `MatchScoreGauge`, `RadarSweep`, `SalaryRangeDisplay`. | `@abeta.dev/talent` |
-| **`@abeta.dev/auth`** | `packages/auth` | Headless `AuthClient`, `createAuthenticatedFetch`, HttpOnly cookie refresh, CSRF protection, React providers, and Auth UI (`AuthCard`, `LoginForm`, etc.). | `@abeta.dev/auth/core` (Zero-React), `@abeta.dev/auth/react`, `@abeta.dev/auth` |
-| **`@abeta.dev/react-libs`** | `.` (root) | Omnibus umbrella package preserving 100% backward compatibility for all legacy consumer imports. | `@abeta.dev/react-libs`, `@abeta.dev/react-libs/*` |
+| **`@abeta.dev/auth`** | `packages/auth` | Headless `AuthClient`, `createAuthenticatedFetch`, HttpOnly cookie refresh, CSRF protection, React providers, and semantic-token Auth UI (`AuthCard`, `LoginForm`, etc.). | `@abeta.dev/auth/core` (Zero-React), `@abeta.dev/auth/react`, `@abeta.dev/auth` |
+| **`@abeta.dev/analytics`** | `packages/analytics` | Pure Node/RSC behavioral `AnalyticsEngine`, offline `AnalyticsQueue`, `SessionManager`, `DomTracker`, vendor adapters (`ConsoleAdapter`, `HttpAdapter`, `GoogleAnalyticsAdapter`, `MixpanelAdapter`), and React hooks/trackers. | `@abeta.dev/analytics` (RSC/Node), `@abeta.dev/analytics/react` (Client) |
+| **`@abeta.dev/mcp`** | `packages/mcp` | Zero-dependency offline-first stdio MCP server (`abeta-mcp`) and SDK exposing 5 tools (`abeta_list_packages`, `abeta_lookup_symbol`, `abeta_check_rsc_boundary`, `abeta_search_rag`, `abeta_traverse_context_graph`) and 4 resources. | `@abeta.dev/mcp` (Node SDK), `npx @abeta.dev/mcp` (stdio CLI) |
+| **`@abeta.dev/react-libs`** | `.` (root) | Omnibus umbrella package preserving 100% backward compatibility for all legacy consumer imports (formal sunset tracked in `deprecations.json`). | `@abeta.dev/react-libs`, `@abeta.dev/react-libs/*` |
 
-### AI Discovery & Starter Templates
+### AI Discovery, RAG, Context Graph & Starter Templates
 - **`public/llms.txt` & `public/llms-full.txt`**: Machine-readable LLM indexes published alongside Storybook (`https://abeta-dev.github.io/react-libs/llms.txt`).
+- **`public/context-graph.json`, `public/rag-chunks.jsonl`, & `public/registry.json`**: Zero-drift context graph, RAG JSONL corpus, and package registry regenerated via `npm run generate:ai-artifacts`.
 - **`examples/nextjs-app-router`**: Minimal Next.js App Router + Tailwind v4 starter (`@abeta.dev/ui/theme.css`, RSC `@abeta.dev/india`, client `@abeta.dev/ui`).
 - **`examples/vite-react-19`**: Minimal Vite + React 19 zero-Tailwind starter (`@abeta.dev/ui/style.css`, `@abeta.dev/india/react`, `@abeta.dev/talent`).
 

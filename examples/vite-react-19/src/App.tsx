@@ -63,7 +63,7 @@ export function App() {
                 Zero-Tailwind setup powered by precompiled @abeta.dev/ui/style.css
               </CardDescription>
             </div>
-            <Badge variant="secondary">v0.21.0</Badge>
+            <Badge variant="secondary">v0.22.0</Badge>
           </div>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">

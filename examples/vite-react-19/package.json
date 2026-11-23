@@ -9,9 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@abeta.dev/india": "^0.21.0",
-    "@abeta.dev/talent": "^0.21.0",
-    "@abeta.dev/ui": "^0.21.0",
+    "@abeta.dev/india": "^0.22.0",
+    "@abeta.dev/talent": "^0.22.0",
+    "@abeta.dev/ui": "^0.22.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

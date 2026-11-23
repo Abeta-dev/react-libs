@@ -28,22 +28,25 @@ As a Gemini CLI or Antigravity agent operating in this repository, you must obse
 
 ## 2. Monorepo Structure & Package Invariants
 
-The repository consists of 4 domain packages under `packages/*` and an omnibus root package:
+The repository consists of 6 domain packages under `packages/*` and an omnibus root package (7 published packages total):
 
 ```
 react-libs/
 ├── packages/
-│   ├── ui/       # @abeta.dev/ui (Full design system, ./pdf, ./hooks/use-toast, ./theme.css, ./style.css)
-│   ├── india/    # @abeta.dev/india (Zero-bloat GSTIN/PAN/IFSC/UPI domain & FinTech React cards)
-│   ├── talent/   # @abeta.dev/talent (ProofOfWorkCertificate, CheckpointRunner, DiagnosticQuiz, PipelineKanban)
-│   └── auth/     # @abeta.dev/auth (Headless AuthClient, createAuthenticatedFetch, CSRF, AuthCard)
+│   ├── ui/        # @abeta.dev/ui (Full design system, ./pdf, ./hooks/use-toast, ./theme.css, ./style.css)
+│   ├── india/     # @abeta.dev/india (Zero-bloat GSTIN/PAN/IFSC/UPI domain & FinTech React cards)
+│   ├── talent/    # @abeta.dev/talent (ProofOfWorkCertificate, CheckpointRunner, DiagnosticQuiz, MatchScoreGauge, PipelineKanban)
+│   ├── auth/      # @abeta.dev/auth (Headless AuthClient, createAuthenticatedFetch, CSRF, semantic-token AuthCard)
+│   ├── analytics/ # @abeta.dev/analytics (Pure Node/RSC AnalyticsEngine + 'use client' ./react hooks/trackers)
+│   └── mcp/       # @abeta.dev/mcp (Zero-dependency offline-first stdio MCP server & SDK: abeta-mcp)
 ├── examples/
 │   ├── nextjs-app-router/ # Next.js App Router + Tailwind v4 (@abeta.dev/ui/theme.css) + RSC @abeta.dev/india
 │   └── vite-react-19/     # Vite + React 19 zero-Tailwind (@abeta.dev/ui/style.css) + @abeta.dev/india + @abeta.dev/talent
-├── public/       # Static Storybook assets including llms.txt & llms-full.txt (https://abeta-dev.github.io/react-libs/llms.txt)
-├── src/          # Root omnibus implementation (100% backward compatibility surface)
-├── scripts/      # Truth gates and CI verification scripts
-└── dist/         # Production build artifacts (ESM, CJS, DTS, CSS)
+├── public/        # Static Storybook assets: llms.txt, llms-full.txt, context-graph.json, rag-chunks.jsonl, registry.json
+├── skills/        # 7 modular Agent Skills (+ .skills/react-libs/SKILL.md)
+├── src/           # Root omnibus implementation (100% backward compatibility surface)
+├── scripts/       # Truth gates, leaf-import gate, deprecation window gate, starter check, & AI artifact generator
+└── dist/          # Production build artifacts (ESM, CJS, DTS, CSS)
 ```
 
 ### Module Directives, CSS Delivery & Universal Packaging
@@ -86,17 +89,21 @@ Gemini and Antigravity agents must never bypass or disable CI truth gates. The f
 
 ```bash
 # Build packages
-npm run build:packages  # Build all workspace packages
-npm run build           # Build root omnibus package and compile Tailwind v4 CSS
+npm run build:packages    # Build all 6 scoped workspace packages
+npm run build             # Build root omnibus package and compile Tailwind v4 CSS
 
 # Test & Validate
-npm run test            # Run full Vitest suite with coverage
-npm run check:truth     # Run CI Truth Gate
-npm run check:size      # Verify bundle size limits
-npm run check:directives# Verify 'use client' boundaries
-npm run check:ssr       # Run SSR smoke tests
-npm run lint            # Run ESLint (zero warnings allowed)
-npm run check:types     # Run TypeScript type check
+npm run test              # Run full Vitest suite with coverage
+npm run check:truth       # Run CI Truth Gate (Checks A–H: versions, directives, attw, inventory, RAG/graph, leaf-imports, deprecations, examples)
+npm run check:types-packages # Verify zero-ignore-rules attw across all 6 scoped packages
+npm run check:leaf-imports# Verify leaf-import isolation & zero heavy-peer/UI server leaks
+npm run check:deprecations# Verify deprecations.json sunset windows
+npm run check:examples    # Verify examples/* deps & @abeta.dev/* import specifiers
+npm run check:size        # Verify bundle size limits
+npm run check:directives  # Verify 'use client' boundaries
+npm run check:ssr         # Run SSR smoke tests
+npm run lint              # Run ESLint (zero warnings allowed)
+npm run check:types       # Run TypeScript type check
 ```
 
 ---
