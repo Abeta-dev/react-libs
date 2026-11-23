@@ -20,7 +20,6 @@ export interface MockAdapterOptions {
   initialUsers?: AuthUser[] | undefined;
 }
 
-// eslint-disable-next-line sonarjs/no-hardcoded-passwords
 export const DEFAULT_MOCK_PASSWORD = 'Password123!';
 
 /**
